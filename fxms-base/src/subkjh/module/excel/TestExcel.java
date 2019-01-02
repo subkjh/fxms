@@ -32,7 +32,7 @@ public class TestExcel {
 		System.out.println(System.currentTimeMillis() - ptime);
 		ptime = System.currentTimeMillis();
 
-		excel.export("a.xlsx");
+		excel.export("tmp/a.xlsx");
 
 		System.out.println(System.currentTimeMillis() - ptime);
 	}

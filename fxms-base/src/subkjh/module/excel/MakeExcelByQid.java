@@ -28,7 +28,7 @@ public class MakeExcelByQid implements DaoListener {
 		DbTrans tran = database.createDbTrans("deploy/conf/sql/test-excel-list.xml");
 		MakeExcelByQid c = new MakeExcelByQid(-1);
 		c.addAlias("시도호", "시도\n호");
-		c.makeExcel(tran, "QID_SELECT_EXCEL_LIST", null, "test", "excel-test-qid.xlsx");
+		c.makeExcel(tran, "QID_SELECT_EXCEL_LIST", null, "test", "tmp/excel-test-qid.xlsx");
 	}
 
 	private Map<String, String> columnAliasMap;

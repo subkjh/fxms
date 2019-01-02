@@ -64,7 +64,7 @@ public class MakeExcelList extends MakeExcel {
 
 		}
 
-		c.close("excel-test-list.xlsx");
+		c.close("tmp/excel-test-list.xlsx");
 	}
 
 	/** 컬럼 수 */
