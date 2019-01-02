@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_CODE_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	
+				A.CD_TYPE
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'CODE' and CD_CODE = A.CD_TYPE )
+										as 'S200_CD_TYPE_NAME'
+				, A.CD_CODE				as 'S150_CD_CODE'
+				, A.CD_NAME				as 'S200_CD_NAME'
+				, A.CD_DESCR			as 'S300_CD_DESCR'
+				, A.USE_YN				as 'Y80_USE_YN'
+				, A.CD_EDIT_YN
+				, A.VAL1
+				, A.VAL2
+				, A.VAL3
+				, A.VAL4
+				, A.VAL5
+				, A.VAL6
+		from 	FX_CD_CODE A
+		where	A.CD_EDIT_YN = 'Y' 
+		]]>
+
+		<test var="cdType"> and A.CD_TYPE = $cdType</test>
+
+		<![CDATA[
+		order  by A.CD_NAME
+		]]>
+	</select>
+
+
+</queries>
+

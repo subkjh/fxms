@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_INLO_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.INLO_FNAME			as 'S300_INLO_FNAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'INLO_TYPE' and CD_CODE = A.INLO_TYPE )
+										as 'S180_INLO_TYPE_NAME'
+				, A.INLO_TYPE			as 'S150_INLO_TYPE'
+				, A.INLO_NAME			as 'S180_INLO_NAME'
+				, ( select INLO_NAME from FX_CF_INLO B where B.INLO_NO = A.UPPER_INLO_NO ) 
+										as 'S180_UPPER_INLO_NAME'
+				, ( select count(1) from FX_MO_CONTAINER C where C.INLO_NO = A.INLO_NO )
+										as 'N80_CONTAINER_COUNT'
+				, A.CHG_DATE			as 'D100_CHG_DATE'
+				, A.CHG_USER_NO			
+				, A.INLO_NO
+				, A.UPPER_INLO_NO
+		from 	FX_CF_INLO A
+		where	1 = 1
+		]]>
+
+		<test var="inloType"> and A.INLO_TYPE = $inloType </test>
+		<test var="upperInloNo"> and A.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = $upperInloNo ) </test>
+		<test var="userNo"> and A.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) ) </test>
+
+		<![CDATA[
+		order  by A.INLO_FNAME
+		]]>
+	</select>
+
+</queries>
+

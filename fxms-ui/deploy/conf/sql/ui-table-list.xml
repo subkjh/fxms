@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_TABLE_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	C.TAB_NAME			as 'S180_TAB_NAME'
+				, C.TAB_COMMENT		as 'S300_TAB_COMMENT'
+				, C.REG_DATE		as 'D150_REG_DATE'
+		from 	FX_TAB C
+		where	RESERVED_YN = 'N'
+		]]>
+		<![CDATA[
+		order  by C.TAB_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_COLUMN_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	C.TAB_NAME			as 'S120_TAB_NAME'
+				, C.COL_NAME		as 'S200_COL_NAME'
+				, C.COL_TYPE		as 'H0_COL_TYPE'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'COL_TYPE' and CD_CODE = C.COL_TYPE)
+									as 'S120_COL_TYPE_NAME'		
+				, C.COL_SIZE		as 'N100_COL_SIZE'
+				, C.NULLABLE_YN		as 'Y30_NULLABLE_YN'
+				, C.COL_COMMENT		as 'S400_COL_COMMENT'
+				, C.DEF_VALUE		as 'S100_DEF_VALUE'
+				, C.UPDATEBLE_YN	as 'Y30_UPDATEBLE_YN'
+				, C.SEQ_NAME		as 'S100_SEQ_NAME'
+				, 'FX_TAB_COL'		as 'H0_REPOSITORY'
+		from 	FX_TAB_COL C
+		where   1 = 1
+		]]>
+
+		<test var="tabName"> and C.TAB_NAME = $tabName </test>
+
+		<![CDATA[
+		order  by C.COL_NO
+				, C.COL_NAME
+		]]>
+	</select>
+
+
+	<select id="SELECT_INDEX_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	C.TAB_NAME				as 'S120_TAB_NAME'
+				, C.IDX_NAME			as 'S200_IDX_NAME'
+				, C.IDX_TYPE			as 'H0_IDX_TYPE'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'IDX_TYPE' and CD_CODE = C.IDX_TYPE)
+										as 'S120_IDX_TYPE_NAME'		
+				, C.COL_NAME_LIST		as 'S200_COL_NAME_LIST'
+				, C.FK_TAB_NAME			as 'S100_FK_TAB_NAME'
+				, C.FK_COL_NAME_LIST	as 'S200_FK_COL_NAME_LIST'
+				, 'FX_TAB_IDX'			as 'H0_REPOSITORY'
+		from 	FX_TAB_IDX C
+		where   1 = 1
+		]]>
+
+		<test var="tabName"> and C.TAB_NAME = $tabName </test>
+
+		<![CDATA[
+		order  by C.IDX_NAME
+		]]>
+	</select>
+
+
+
+</queries>
+

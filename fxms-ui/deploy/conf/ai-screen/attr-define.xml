@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE attributes [
+
+<!ELEMENT attributes (attr-list*, attr*) >
+
+<!ELEMENT attr (para*)>
+<!ATTLIST attr id CDATA #REQUIRED >
+<!ATTLIST attr text CDATA #REQUIRED >
+<!ATTLIST attr type CDATA #REQUIRED >
+<!ATTLIST attr screen-tag CDATA  #IMPLIED >
+<!ATTLIST attr value CDATA  #IMPLIED >
+<!ATTLIST attr post-attr CDATA  #IMPLIED >
+
+<!ELEMENT para (#PCDATA) >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #REQUIRED >
+
+]>
+
+<attributes>
+
+	<attr id="clearYn" text="미해제" type="string" value="N" screen-tag="경보" />
+	<attr id="clearYn" text="해제" type="string" value="Y" screen-tag="경보" />
+	<attr id="clearYn" text="모든" type="string" value="" screen-tag="경보" />
+
+	<attr id="ipAddress" text="IP주소" type="string" screen-tag="장비,경보">
+		<para name="moClass" value="NE" />
+	</attr>
+
+	<attr id="alarmNo" text="경보번호" type="numeric" />
+	<attr id="userName" text="운용자" type="string" />
+	<attr id="diagTitle" text="망구성도" type="string" />
+
+	<attr id="containerId" text="컨테이너ID" type="alpha-numeric" />
+	<attr id="containerId" text="컨테이너" type="alpha-numeric" />
+	<attr id="equipId" text="장비아이디" type="alpha-numeric" />
+	<attr id="moNo" text="관리번호" type="numeric" />
+	<attr id="moName" text="관리대상명" type="string" />
+	
+	<attr id="moName" text="장비명" type="string">
+		<para name="moClass" value="NE" />
+	</attr>
+	
+	<attr id="ifName" text="인터페이스명" type="string">
+		<para name="moClass" value="IF" />
+	</attr>
+
+	<attr id="modelName" text="장비,모델" type="string">
+	</attr>
+
+	<attr id="equipTidVal" text="장비TID" type="string" />
+	<attr id="equipTidVal" text="장비티아디" type="string" />
+	<attr id="ifIdxNum" text="인터페이스번호" type="number" />
+	<attr id="portNum" text="포트번호" type="number" />
+	<attr id="dablCd" text="장애코드" type="string" />
+	<attr id="equipUsgCd" text="CMTS" type="string" value="aaa" post-attr="equipNm" />
+	<attr id="equipUsgCd" text="교환기" type="string" value="bbb" post-attr="equipNm" />
+
+	<attr id="tpoCd" text="동작분배센터" type="string" value="M123123" />
+	<attr id="hasWarning" text="장애,있는" type="string" value="Y" />
+
+
+</attributes>

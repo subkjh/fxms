@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_ALARM_CFG_MEM_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	
+				C.ALCD_NAME				as 'S150_ALCD_NAME'
+				, C.ALCD_DESCR			as 'S150_ALCD_DESCR'
+				, B.ALARM_LEVEL			as 'A100_ALARM_LEVEL'
+				, B.USE_YN				as 'S100_USE_YN'
+				, B.COMPARE_VAL			as 'S100_COMPARE_VAL'
+				
+				, B.REPEAT_TIMES		as 'H0_REPEAT_TIMES'
+				, B.VERIFIER_VALUE		as 'H0_VERIFIER_VALUE'
+				, A.ALARM_CFG_NO		as 'H0_ALARM_CFG_NO'
+				, B.ALCD_NO				as 'H0_ALCD_NO'
+
+		from 	FX_AL_CFG A
+				, FX_AL_CFG_MEM B
+				, FX_AL_CODE C
+		where	A.ALARM_CFG_NO = B.ALARM_CFG_NO
+		and		B.ALCD_NO = C.ALCD_NO
+		]]>
+
+		<test var="alarmCfgNo"> and A.ALARM_CFG_NO = $alarmCfgNo  </test>
+
+		<![CDATA[
+		order  by C.ALCD_NAME
+		]]>
+
+	</select>
+
+	<select id="SELECT_ALARM_CFG_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	
+				A.ALARM_CFG_NAME		as 'S150_ALARM_CFG_NAME'
+				, A.ALARM_CFG_DESCR		as 'S200_ALARM_CFG_DESCR'
+				, ( select CD_NAME FROM FX_CD_CODE where CD_TYPE = 'MO_CLASS' and CD_CODE = A.MO_CLASS )
+										as 'S100_MO_CLASS_NAME'
+										
+				, A.BASIC_CFG_YN		as 'S100_BASIC_CFG_YN'
+
+				, ( select count(1) from FX_AL_CFG_MEM where ALARM_CFG_NO = A.ALARM_CFG_NO ) 
+										as 'N80_MEM_CNT'
+
+				, ( select count(1) from FX_MO where ALARM_CFG_NO = A.ALARM_CFG_NO ) 
+										as 'N80_MO_CNT'
+										
+				, ( select USER_NAME from FX_UR_USER where USER_NO = A.CHG_USER_NO)
+										as 'S100_CHG_USER_NAME'
+				, A.CHG_DATE			as 'D150_CHG_DATE'
+										
+				, A.ALARM_CFG_NO		as 'H0_ALARM_CFG_NO'
+				, A.MO_CLASS			as 'H0_MO_CLASS'
+
+		from 	FX_AL_CFG A
+		where	1 = 1
+		]]>
+
+		<test var="moClass"> and A.MO_CLASS = $moClass </test>
+		
+		<![CDATA[
+		order  by A.ALARM_CFG_NAME
+		]]>
+		
+	</select>
+</queries>
+

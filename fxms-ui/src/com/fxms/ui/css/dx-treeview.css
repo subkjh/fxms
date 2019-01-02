@@ -1,0 +1,25 @@
+.root{
+    -fx-background-color: transparent;
+}
+.tree-view, .tree-cell {
+    -fx-background-color: transparent ;
+    -fx-text-fill: lightcyan;
+}
+.tree-cell:expanded, .tree-cell:sub-tree-item {
+    -fx-background-color: transparent ;
+}
+.tree-cell:selected {
+    -fx-font-weight: bold ;
+    -fx-background-color: yellow ;
+    -fx-text-fill: black ;
+}
+
+.tree-cell {
+    -fx-padding: 2.0 2.0 2.0 2.0;
+    -fx-background-color: transparent ;
+}
+
+.tree-cell:sub-tree-item {
+    -fx-padding: 2.0 2.0 2.0 2.0 ;
+    -fx-background-color: transparent ;
+}

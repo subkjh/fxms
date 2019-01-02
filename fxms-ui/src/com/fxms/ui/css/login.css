@@ -1,0 +1,53 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+-fx-background-color: darkslateblue;
+-fx-opacity: 0.95;
+}
+
+.progress-bar .bar {
+-fx-background-insets: 1 1 2 1;
+-fx-padding: 0.3em;
+}
+
+.check-box {
+-fx-text-fill: white;
+}
+
+#login-title {
+-fx-font-size: 18.0px;
+-fx-font-weight: bold;
+-fx-text-fill: white;
+-fx-background-color: linear-gradient(blue, darkslateblue);
+-fx-alignment: CENTER;
+}
+
+.label {
+-fx-font-size: 12.0px;
+-fx-font-weight: bold;
+-fx-text-fill: aliceblue;
+}
+
+.text-field {
+    -fx-background-color: white;
+}
+
+.text-field:focused {
+    -fx-background-color: yellow;
+}
+
+.button {
+-fx-text-fill: white;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+-fx-background-color: black;
+/*
+-fx-background-color: linear-gradient(#61a2b1, #2A5058);
+-fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.6) , 5.0, 0.0 , 0.0 , 1.0 );
+ */
+-fx-label-padding: 0.0 8.0 0.0 8.0;
+}
+
+.button:hover {
+-fx-background-color: darkblue ;
+}

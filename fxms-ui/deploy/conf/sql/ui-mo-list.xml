@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_CONTAINER_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	C.MNG_YN			as 'M30_MNG_YN'
+				, A.INLO_FNAME		as 'S200_INLO_FNAME'
+				, B.CONTAINER_ID	as 'S200_CONTAINER_ID'
+				, B.CONTAINER_TYPE	as 'S200_CONTAINER_TYPE'
+				, ( select ALARM_CFG_NAME from FX_AL_CFG where ALARM_CFG_NO = C.ALARM_CFG_NO)
+									as 'S200_ALARM_CFG_NAME'			
+				, GW.MO_NAME		as 'S200_GW_MO_NAME'
+				, GW.MO_NO			as 'H0_GW_MO_NO'
+				, B.INSTALL_YMD		as 'D100_INSTALL_YMD'
+				, B.INLO_MEMO		as 'S400_INLO_MEMO'
+				, A.INLO_NO			
+				, B.MO_NO			
+				, C.MO_NAME			
+				, C.ALARM_CFG_NO	
+				, C.MO_CLASS		
+		from 	FX_CF_INLO A
+				, FX_MO_CONTAINER B	
+					left join FX_MO GW on GW.MO_NO = B.GW_MO_NO
+				, FX_MO C
+		where	A.INLO_NO = B.INLO_NO
+		and		B.MO_NO = C.MO_NO
+		]]>
+
+		<test var="containerType"> and B.CONTAINER_TYPE = $containerType </test>
+		<test var="containerId"> and B.CONTAINER_ID like $containerId  </test>
+		<test var="hasWarning"> and C.MO_NO in ( select MO_NO from FX_AL_CUR )</test>
+		<test var="userNo"> and B.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) ) </test>
+
+		
+		<![CDATA[
+		order  by A.INLO_FNAME
+			, B.CONTAINER_ID
+		]]>
+	</select>
+
+
+	<select id="SELECT_PBR_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	D.MNG_YN			as 'M30_MNG_YN'
+				, A.INLO_FNAME		as 'S200_INLO_FNAME'
+				, B.CONTAINER_ID	as 'S120_CONTAINER_ID'
+				, B.CONTAINER_TYPE	as 'S120_CONTAINER_TYPE'
+				, D.MO_NAME			as 'S150_PBR'
+				, C.PBR_TYPE		as 'S100_PBR_TYPE'
+				, ( select ALARM_CFG_NAME from FX_AL_CFG where ALARM_CFG_NO = D.ALARM_CFG_NO)
+									as 'S200_ALARM_CFG_NAME'	
+				, B.INLO_MEMO		as 'S400_INLO_MEMO'
+				, A.INLO_NO			as 'H0_INNL_NO'
+				, D.MO_NO			as 'H0_MO_NO'
+				, D.MO_NAME			as 'H0_MO_NAME'
+				, D.MO_CLASS		as 'H0_MO_CLASS'
+				, D.ALARM_CFG_NO	as 'H0_ALARM_CFG_NO'
+		from 	FX_CF_INLO A
+				, FX_MO_CONTAINER B
+				, FB_MO_PBR C	
+				, FX_MO D
+		where	A.INLO_NO = B.INLO_NO
+		and		B.CONTAINER_ID = C.CONTAINER_ID
+		and		D.MO_NO = C.MO_NO
+		]]>
+
+		<test var="pbrType"> and C.PBR_TYPE = $pbrType </test>
+		<test var="containerId"> and B.CONTAINER_ID like $containerId  </test>
+		<test var="containerType"> and B.CONTAINER_TYPE = $containerType </test>
+		<test var="hasWarning"> and D.MO_NO in ( select MO_NO from FX_AL_CUR )</test>
+		<test var="userNo"> and B.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) ) </test>
+
+		<![CDATA[
+		order  by A.INLO_FNAME
+			, B.CONTAINER_ID
+			, D.MO_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_SENSOR_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	C.MNG_YN			as 'M30_MNG_YN'
+				, A.INLO_FNAME		as 'S200_INLO_FNAME'
+				, C.MO_NO			
+				, B.CONTAINER_ID	as 'S120_CONTAINER_ID'
+				, B.CONTAINER_TYPE	as 'S120_CONTAINER_TYPE'
+				, C.MO_ANAME		as 'S120_MO_ANAME'
+				, D.DEVICE_ID_IN_GW	as 'S200_DEVICE_ID_IN_GW'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'DEVICE_TYPE' and CD_CODE = D.DEVICE_TYPE )				
+									as 'S150_DEVICE_TYPE_NAME'
+				, ( select MO_NAME from FX_MO where MO_NO = C.UPPER_MO_NO )
+									as 'S200_UPPER_MO_NAME'
+				, ( select MO_NAME from FX_MO where MO_NO = D.GW_MO_NO )
+									as 's200_GW_NAME'
+				, C.MO_NAME			
+				, C.MO_CLASS		
+
+		from 	FX_CF_INLO A
+				, FX_MO_CONTAINER B
+				, FX_MO C
+				, FX_MO_DEVICE D
+		where	A.INLO_NO = B.INLO_NO
+		and		B.MO_NO = C.UPPER_MO_NO
+		and		D.MO_NO = C.MO_NO
+		]]>
+
+		<test var="deviceType"> and D.DEVICE_TYPE = $deviceType </test>
+		<test var="containerId"> and B.CONTAINER_ID like $containerId  </test>
+		<test var="hasWarning"> and C.MO_NO in ( select MO_NO from FX_AL_CUR )</test>
+		<test var="userNo"> and B.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) ) </test>
+
+		<![CDATA[
+		order  by A.INLO_FNAME
+			, B.CONTAINER_ID
+			, D.DEVICE_ID_IN_GW
+		]]>
+	</select>
+
+	<select id="SELECT_GW_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	C.MNG_YN			as 'M30_MNG_YN'
+				, A.INLO_FNAME		as 'S200_INLO_FNAME'
+				, C.MO_NAME			as 'S200_GW_NAME'
+				, B.GW_TYPE			as 'S120_GW_TYPE'
+				, B.GW_IPADDR		as 'S120_GW_IPADDR'
+				, B.GW_PORT			as 'N80_GW_PORT'
+				, B.GW_VER			as 'S100_GW_VER'
+				, B.INLO_MEMO		as 'S200_GW_INLO_MEMO'
+				, C.MO_CLASS
+				, C.MO_NO
+				, C.MO_NAME
+				, C.MO_TYPE
+				, C.ALARM_CFG_NO
+				, B.INLO_NO
+		from 	FX_MO_GW B
+					left join FX_CF_INLO A on A.INLO_NO = B.INLO_NO
+				, FX_MO C
+		where	B.MO_NO = C.MO_NO
+		]]>
+		<test var="userNo"> and B.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) ) </test>
+
+		<![CDATA[
+		order  by A.INLO_FNAME
+			, C.MO_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_MO_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.MNG_YN			as 'M30_MGN_YN'
+				, A.MO_NAME			as 'S200_MO_NAME'
+				, A.MO_ANAME		as 'S200_MO_ANAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'MO_CLASS' and CD_CODE = A.MO_CLASS )				
+									as 'S150_MO_CLASS_NAME'				
+				, ( select MO_NAME from FX_MO where MO_NO = A.UPPER_MO_NO )				
+									as 'S150_UPPER_MO_NAME'				
+				, A.MO_TYPE			as 'S100_MO_TYPE'
+				, A.MO_MEMO			as 'S150_MO_MEMO'
+				, ( select ALARM_CFG_NAME from FX_AL_CFG where ALARM_CFG_NO = A. ALARM_CFG_NO)
+									as 'S200_ALARM_CFG_NAME'
+				, A.MO_NO			as 'H0_MO_NO'
+				, A.MO_CLASS		as 'H0_MO_CLASS'
+
+		from 	FX_MO A
+		where	1 = 1
+		]]>
+
+		<test var="alarmCfgNo"> and A.ALARM_CFG_NO = $alarmCfgNo </test>
+		<test var="modelNo"> and A.MO_NO in ( select MO_NO from FN_MO_NE where MODEL_NO = $modelNo ) </test>
+		<test var="hasWarning"> and A.MO_NO in ( select MO_NO from FX_AL_CUR )</test>
+	
+	
+		<![CDATA[
+		order  by A.MO_NAME
+		]]>
+	</select>
+	
+	<select id="SELECT_MO_OP_HST_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.MO_NAME			as 'S180_MO_NAME'
+				, A.MO_HST_NM		as 'S120_MO_HST_NM'
+				, A.ATTR_NM			as 'S180_ATTR_NM'
+				, if ( A.MO_HST_CD = 'U', A.ATTR_BF_VAL, '')
+									as 'S150_ATTR_BF_VAL'
+				, if ( A.MO_HST_CD = 'U', A.ATTR_AF_VAL, '')
+									as 'S150_ATTR_AF_VAL'
+				, ( select USER_NAME from FX_UR_USER U where U.USER_NO = A.REG_USER_NO ) 
+									as 'S120_USER_NAME'	
+				, A.REG_DATE		as 'D150_REG_DATE'
+				, if ( A.MO_HST_CD != 'U', A.ATTR_AF_VAL, '')		
+									as 'S150_MEMO'
+		from 	FX_HST_MO A
+		where	1 = 1
+		]]>
+
+		<test var="startDate"><![CDATA[ and cast(A.REG_DATE / 1000000 as UNSIGNED) >= $startDate ]]></test>
+		<test var="endDate"><![CDATA[ and cast(A.REG_DATE / 1000000 as UNSIGNED) <= $endDate ]]></test>
+		<test var="moName"><![CDATA[ and A.MO_NAME like $moName ]]></test>
+		<test var="attrNm"><![CDATA[ and A.ATTR_NM like $attrNm ]]></test>
+		<test var="moHstCd"><![CDATA[ and A.MO_HST_CD = $moHstCd ]]></test>
+
+		<![CDATA[
+		order  by A.REG_DATE
+		]]>
+	</select>
+
+</queries>
+

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_NE_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	MO.MNG_YN				as 'M30_MNG_YN'
+				, NE.IP_ADDRESS			as 'S120_IP_ADDRESS'
+				, MO.MO_NAME			as 'S120_MO_NAME'
+				, MO.MO_ANAME			as 'S120_MO_ANAME'
+				, MDL.MODEL_NAME		as 'S150_MODEL_NAME'
+				, MDL.DEV_TYPE			as 'S150_DEV_TYPE_NAME'
+				, C.INLO_FNAME			as 'S200_INLO_FNAME'
+				, NE.INSTALL_YMD		as 'D100_INSTALL_YMD'
+				
+				, ( select ALARM_CFG_NAME from FX_AL_CFG where ALARM_CFG_NO = MO.ALARM_CFG_NO)
+									as 'S200_ALARM_CFG_NAME'	
+									
+				, NE.PING_POLL_YN		as 'Y30_POLL_PING'
+				, if( NE.PING_POLL_YN = 'Y', NE.POLL_CYCLE_PING, 0)		
+										as 'N40_POLL_CYCLE_PING'
+				, NE.SNMPPING_POLL_YN	as 'Y30_POLL_SNMP'
+				, if( NE.SNMPPING_POLL_YN = 'Y', NE.POLL_CYCLE_SNMP, 0)		
+										as 'N40_POLL_CYCLE_SNMP'
+				, NE.CONF_AUTO_SYNC_YN	as 'Y30_CONF_AUTO_SYNC_YN'
+				, NE.SYSLOG_RECV_YN		as 'Y30_SYSLOG_RECV_YN'
+				, NE.TRAP_RECV_YN		as 'Y30_TRAP_RECV_YN'
+				, NE.BGP_RECV_YN		as 'Y30_BGP_RECV_YN'
+				, NE.FLOW_RECV_YN		as 'Y30_FLOW_RECV_YN'
+				, MO.MO_CLASS
+				, NE.MO_NO
+				, MO.ALARM_CFG_NO
+		from 	FN_MO_NE NE
+					left join FX_CF_INLO C on C.INLO_NO = NE.INLO_NO
+					left join FX_CF_MODEL MDL on MDL.MODEL_NO = NE.MODEL_NO
+				, FX_MO MO
+		where	NE.MO_NO = MO.MO_NO
+		]]>
+
+		<test var="devType"> and MDL.DEV_TYPE = $devType </test>
+		<test var="modelNo"> and MDL.MODEL_NO = $modelNo  </test>
+		<test var="ipAddress"> and NE.IP_ADDRESS like $ipAddress  </test>
+		<test var="moName"> and MO.MO_NAME like $moName  </test>
+
+		<![CDATA[
+		order  by NE.IP_ADDRESS	
+		]]>
+	</select>
+
+	<select id="SELECT_TRAFFIC_LIST" resultMap="RESULT_OBJECT_ARRAY">
+
+		<test var="psType" equals="raw">
+		<![CDATA[
+		select	C.INLO_FNAME			as 'S200_INLO_FNAME'
+				, NEST.SYS_NAME			as 'S120_SYS_NAME'
+				, NE.IP_ADDRESS			as 'S120_IP_ADDRESS'
+				, MO.MO_NAME			as 'S120_MO_NAME'
+				, INTF.IF_INDEX			as 'N100_IF_INDEX'
+				, V.PS_DATE				as 'D120_PS_DATE'
+				, V.IF_SPEED_QOS		as 'F100_IF_SPEED_QOS'
+				, V.IF_IN_BYTES			as 'F100_IF_IN_BYTES'	
+				, V.IF_IN_BPS			as 'F100_IF_IN_BPS'
+				, V.IF_IN_PACKETS		as 'F100_IF_IN_PACKETS'
+				, V.IF_OUT_BYTES		as 'F100_IF_OUT_BYTES'
+				, V.IF_OUT_BPS			as 'F100_IF_OUT_BPS'
+				, V.IF_OUT_PACKETS		as 'F100_IF_OUT_PACKETS'
+		from 	FN_MO_IF INTF
+				, FN_MO_NE NE
+					left join FX_CF_INLO C on C.INLO_NO = NE.INLO_NO
+					left join FN_NE_STATUS NEST on NEST.MO_NO = NE.MO_NO
+				, FX_MO MO
+				, FX_V_IFTRF_RAW_#psDate V
+		where	NE.MO_NO = MO.UPPER_MO_NO
+		and		INTF.MO_NO = MO.MO_NO
+		and		V.MO_NO = MO.MO_NO
+		
+		]]>
+
+			<test var="upperMoNo"> and NE.MO_NO = $upperMoNo </test>
+			<test var="moNo"> and MO.MO_NO = $moNo </test>
+
+		<![CDATA[
+		order  by V.PS_DATE desc
+				, NEST.SYS_NAME
+				, INTF.IF_INDEX	
+		]]>
+		</test>
+
+		<test var="psType" equals="min5">
+		<![CDATA[
+		select	C.INLO_FNAME			as 'S200_INLO_FNAME'
+				, NEST.SYS_NAME			as 'S120_SYS_NAME'
+				, NE.IP_ADDRESS			as 'S120_IP_ADDRESS'
+				, MO.MO_NAME			as 'S120_MO_NAME'
+				, INTF.IF_INDEX			as 'N100_IF_INDEX'
+				, V.PS_DATE				as 'D120_PS_DATE'
+				, V.IF_SPEED_QOS_AVG		as 'F100_IF_SPEED_QOS'
+				, V.IF_IN_BYTES_SUM			as 'F100_IF_IN_BYTES'	
+				, V.IF_IN_BPS_AVG			as 'F100_IF_IN_BPS'
+				, V.IF_IN_PACKETS_SUM		as 'F100_IF_IN_PACKETS'
+				, V.IF_OUT_BYTES_SUM		as 'F100_IF_OUT_BYTES'
+				, V.IF_OUT_BPS_AVG			as 'F100_IF_OUT_BPS'
+				, V.IF_OUT_PACKETS_SUM		as 'F100_IF_OUT_PACKETS'
+		from 	FN_MO_IF INTF
+				, FN_MO_NE NE
+					left join FX_CF_INLO C on C.INLO_NO = NE.INLO_NO
+					left join FN_NE_STATUS NEST on NEST.MO_NO = NE.MO_NO
+				, FX_MO MO
+				, FX_V_IFTRF_5M_#psDate V
+		where	NE.MO_NO = MO.UPPER_MO_NO
+		and		INTF.MO_NO = MO.MO_NO
+		and		V.MO_NO = MO.MO_NO
+		
+		]]>
+
+			<test var="upperMoNo"> and NE.MO_NO = $upperMoNo </test>
+			<test var="moNo"> and MO.MO_NO = $moNo </test>
+
+		<![CDATA[
+		order  by V.PS_DATE desc
+				, NEST.SYS_NAME
+				, INTF.IF_INDEX	
+		]]>
+		</test>
+
+	</select>
+
+
+	<select id="SELECT_NETWORK_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.NET_NAME				as 'S200_NET_NAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'TOPOLOGY_TYPE' and CD_CODE = A.TOPOLOGY_TYPE )
+										as 'S180_TOPOLOGY_TYPE_NAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'BW_CODE' and CD_CODE = A.BW_CODE )
+										as 'S180_BW_CODE_NAME'
+				, C.INLO_FNAME			as 'S200_INLO_FNAME'
+				, ( select count(1) from FN_NET_ITEM I where I.NET_NO = A.NET_NO )
+										as 'N100_NET_ITEM_COUNT'
+				, A.NET_DESCR			as 'S420_NET_DESCR'
+				, A.REG_DATE			as 'D100_REG_DATE'
+				
+				, A.NET_NO
+				, A.TOPOLOGY_TYPE
+				, A.BW_CODE
+				, A.INLO_NO
+		from 	FN_NET A
+					left join FX_CF_INLO C on C.INLO_NO = A.INLO_NO
+		where	1 = 1
+		]]>
+
+		<test var="netName"> and A.NET_NAME like $netName </test>
+		<test var="topologyType"> and A.TOPOLOGY_TYPE = $topologyType </test>
+		<test var="bwCode"> and A.BW_CODE = $bwCode </test>
+
+		<![CDATA[
+		order  by A.NET_NAME	
+		]]>
+	</select>
+
+</queries>
+

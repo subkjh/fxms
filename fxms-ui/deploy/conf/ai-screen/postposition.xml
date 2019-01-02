@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<screens>
+
+
+	<command id="show" text="띄워줘" />
+	<command id="show" text="보여" />
+	<command id="show" text="나타내줘" />
+
+	<postposition text="을" />
+	<postposition text="를" />
+	<postposition text="에서" />
+	<postposition text="에" />
+	<postposition text="인" />
+	<postposition text="이고" />
+	<postposition text="이" />
+	<postposition text="가" />
+	<postposition text="라" />
+	<postposition text="줘" />
+	<postposition text="다" />
+	<postposition text="의" />
+	<postposition text="한" />
+	<postposition text="하게" />
+
+
+	<attr-term id="startDate" text="일주일" type="date-day" value="7" />
+	<attr-term id="startDate" text="하루" type="date-day" value="1" />
+	<attr-term id="startDate" text="일일" type="date-day" value="1" />
+	<attr-term id="startDate" text="이틀" type="date-day" value="2" />
+	<attr-term id="startDate" text="이일" type="date-day" value="2" />
+	<attr-term id="startDate" text="사흘" type="date-day" value="3" />
+	<attr-term id="startDate" text="삼일" type="date-day" value="3" />
+	<attr-term id="startDate" text="한달" type="date-month" value="1" />
+	<attr-term id="startDate" text="지난달" type="date-month" value="-1" />
+	<attr-term id="startDate" text="이번달" type="date-month" value="0" />
+	<attr-term id="startDate" text="어제" type="date-yesterday" value="-1" />
+	<attr-term id="startDate" text="그제" type="date-yesterday" value="-2" />
+	<attr-term id="startDate" text="오늘" type="date-today" value="0" />
+
+	<attr-term id="startDate" text="시간" type="date-hour" />
+	<attr-term id="startDate" text="분" type="date-minute" />
+	<attr-term id="startDate" text="일" type="date-day" />
+	<attr-term id="startDate" text="개월" type="date-month" />
+
+	<attr-count id="count" text="건" />
+	<attr-count id="count" text="개" />
+
+	<attr-order text="최근" value="-1" />
+	<attr-order text="마지막" value="-1" />
+	<attr-order text="지난" value="-1" />
+	<attr-order text="전" value="-1" />
+	<attr-order text="후" value="1" />
+
+</screens>

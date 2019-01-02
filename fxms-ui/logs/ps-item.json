@@ -1,0 +1,385 @@
+[
+	{
+		"psCode": "IfInUsage",
+		"psName": "IfInUsage",
+		"psUnit": "%",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutPackets",
+		"psName": "IfOutPackets",
+		"psUnit": "Packets",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutPps",
+		"psName": "IfOutPps",
+		"psUnit": "Pps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "CO2",
+		"psName": "CO2 주입량",
+		"psUnit": "cc / min",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "DEVICE",
+		"moType": "CO2"
+	},
+	{
+		"psCode": "NeIcmpStatus",
+		"psName": "장비 ICMP 상태",
+		"psUnit": "state",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 1.0,
+		"valMin": 0.0,
+		"moClass": "NE",
+		"moType": ""
+	},
+	{
+		"psCode": "PUMP_ONOFF",
+		"psName": "펌프 On/Off",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "HUMI",
+		"psName": "습도",
+		"psUnit": "%",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "DEVICE",
+		"moType": "HUMI"
+	},
+	{
+		"psCode": "IfOperStatus",
+		"psName": "IF 운용 상태",
+		"psUnit": "state",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 9.0,
+		"valMin": 0.0,
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfIcmpStatus",
+		"psName": "IF ICMP 상태",
+		"psUnit": "state",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 1.0,
+		"valMin": 0.0,
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "DOOR_STATE",
+		"psName": "Door State",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutUsage",
+		"psName": "IfOutUsage",
+		"psUnit": "%",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "COST",
+		"psName": "매지비용",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutErrors",
+		"psName": "IfOutErrors",
+		"psUnit": "Errors",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInPackets",
+		"psName": "IfInPackets",
+		"psUnit": "Packets",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInPpsUnicast",
+		"psName": "IfInPpsUnicast",
+		"psUnit": "Pps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "CO2_REMAIN",
+		"psName": "CO2 잔유량",
+		"psUnit": "cc / min",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "ASTAZAN",
+		"psName": "아스타잔틴 함유율",
+		"psUnit": "%",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "IpIcmpStatus",
+		"psName": "IP ICMP 상태",
+		"psUnit": "state",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 1.0,
+		"valMin": 0.0,
+		"moClass": "IP",
+		"moType": ""
+	},
+	{
+		"psCode": "BIOMASS_OUT",
+		"psName": "바이오매스 측정량",
+		"psUnit": "g/L",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInErrors",
+		"psName": "IfInErrors",
+		"psUnit": "Errors",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfAdminStatus",
+		"psName": "IF 관리 상태",
+		"psUnit": "state",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 9.0,
+		"valMin": 0.0,
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutBytes",
+		"psName": "IfOutBytes",
+		"psUnit": "Bytes",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfSpeedQos",
+		"psName": "IfSpeedQos",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "PUMP_HZ",
+		"psName": "펌프 Hz",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInDps",
+		"psName": "IfInDps",
+		"psUnit": "Dps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInEps",
+		"psName": "IfInEps",
+		"psUnit": "Eps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "LED",
+		"psName": "Light Intensity",
+		"psUnit": "Lux",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "ILLUMI",
+		"psName": "조도",
+		"psUnit": "lux",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "DEVICE",
+		"moType": "ILLUMI"
+	},
+	{
+		"psCode": "IfInBps",
+		"psName": "IfInBps",
+		"psUnit": "Bps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutPpsNonunicast",
+		"psName": "IfOutPpsNonunicast",
+		"psUnit": "Pps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "NeIcmpEchoTime",
+		"psName": "장비 ICMP 응답시간",
+		"psUnit": "ms",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 1.0,
+		"valMin": 0.0,
+		"moClass": "NE",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutDps",
+		"psName": "IfOutDps",
+		"psUnit": "Dps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutEps",
+		"psName": "IfOutEps",
+		"psUnit": "Eps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfOutBps",
+		"psName": "IfOutBps",
+		"psUnit": "Bps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "TEMP",
+		"psName": "온도",
+		"psUnit": "℃",
+		"psGroup": "",
+		"computeFormula": "",
+		"valMax": 60.0,
+		"valMin": 10.0,
+		"moClass": "DEVICE",
+		"moType": "TEMP"
+	},
+	{
+		"psCode": "IfOutPpsUnicast",
+		"psName": "IfOutPpsUnicast",
+		"psUnit": "Pps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInPpsNonunicast",
+		"psName": "IfInPpsNonunicast",
+		"psUnit": "Pps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "PH",
+		"psName": "pH",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "DEVICE",
+		"moType": "PH"
+	},
+	{
+		"psCode": "BIOMASS_IN",
+		"psName": "바이오매스 접종량",
+		"psUnit": "",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInBytes",
+		"psName": "IfInBytes",
+		"psUnit": "Bytes",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	},
+	{
+		"psCode": "IfInPps",
+		"psName": "IfInPps",
+		"psUnit": "Pps",
+		"psGroup": "",
+		"computeFormula": "",
+		"moClass": "IF",
+		"moType": ""
+	}
+]

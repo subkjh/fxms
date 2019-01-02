@@ -1,0 +1,560 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+	-fx-color-critical : #f26a6a;
+    -fx-color-critical-border: #f8aeae;
+    -fx-color-critical-text: #effa86;
+	
+	-fx-color-major : #f2c16a;
+    -fx-color-major-border: #f6d498;
+    -fx-color-major-text: #215968;
+   
+	-fx-color-minor : #f9f5ad;
+    -fx-color-minor-border: #f6fe86;
+    -fx-color-minor-text: #8081B6;
+
+	-fx-color-warning : #d9f9b9;	
+    -fx-color-warning-border: #bcf583;
+    -fx-color-warning-text: #7f7f7f;
+    
+    -fx-color-main: #044390;
+    
+ -fx-background-color: transparent;
+
+}
+
+
+/*
+ ************************************************************************************************** basic component
+ * 
+ */
+ .button {
+-fx-text-fill: white;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+-fx-background-color:  -fx-color-main;
+-fx-label-padding: 0.0 8.0 0.0 8.0;
+}
+
+.button:hover {
+-fx-background-color: yellow;
+}
+
+
+.information-node {
+-fx-text-fill: steelblue;
+-fx-font-size: 14.0px;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+}
+
+ 
+
+.message {
+-fx-text-fill: steelblue;
+-fx-font-size: 11.0px;
+-fx-font-family: "맑은고딕";
+}
+
+
+.work-result-ok {
+-fx-text-fill: steelblue;
+-fx-alignment: CENTER;
+}
+
+.work-result-fail {
+-fx-text-fill: salmon;
+-fx-alignment: CENTER;
+}
+
+.progress-bar .bar {
+    -fx-background-insets: 2.0 2.0 4.0 2.0;
+    -fx-padding: 0.4em;
+}
+
+/**
+ * 관리화면 Pane
+ */
+
+#mx-main-pane{
+ -fx-background-color: transparent;
+}
+
+/**
+ * 관리화면 Pane
+ */
+
+#dx-main-pane > .viewport{	
+	/*
+ -fx-background-image: url("image/background/test.jpg");
+ -fx-background-size: cover ;
+ */
+}
+
+.scroll-pane .viewport {
+  -fx-background-color: transparent;
+}
+
+/*
+ * DX 화면에서 마우스가 컴포넌트위에 올때 컴포넌트에 대한 설명을 보이는 라벨에 대한 CSS
+ */
+.dx-node-selected {
+-fx-text-fill: white;
+-fx-font-size: 12.0px;
+-fx-font-family: "맑은고딕";
+-fx-background-color: darkslategray ;
+-fx-opacity: 0.7;
+}
+
+.dx-node-status-label {
+-fx-text-fill: yellow;
+-fx-font-size: 24.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+.dx-node-data-count-menu {
+-fx-opacity: 0.5;
+-fx-background-color: aliceblue ;
+}
+
+.dx-node-data-count-menu-top {
+-fx-text-fill: bisque;
+-fx-font-size: 8.0px;
+-fx-font-family: "맑은고딕";
+-fx-alignment: top-left;
+}
+
+.dx-node-data-count-menu-center-number {
+-fx-text-fill: white;
+-fx-font-size: 28.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-border-width: 1.0;
+-fx-background-color: black;
+-fx-label-padding: 0.0 8.0 0.0 8.0;
+-fx-border-radius: 15.0;
+}
+
+.dx-node-data-count-menu-center-text {
+-fx-text-fill: royalblue ;
+-fx-font-size: 14.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-alignment: center;
+-fx-text-alignment: center;
+-fx-background-color: transparent;
+}
+
+.dx-node-data-count-menu-bottom {
+-fx-text-fill: royalblue ;
+-fx-font-size: 14.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-alignment: center;
+-fx-text-alignment: center;
+}
+
+
+/*
+ * DX에서 장애수신 소켓이 끊긴 경우 보여주는 메시지용
+ */
+#dx-error-dialog {
+-fx-background-color: lightgreen;
+-fx-font-size: 24.0px;
+-fx-font-weight: bold;
+-fx-border-style: solid inside;
+-fx-border-width: 2.0;
+-fx-border-insets: 5.0;
+-fx-border-radius: 15.0;
+-fx-border-color: blue;
+}
+
+#dx-node-alarm-receiver-status {
+-fx-font-size: 16.0px;
+-fx-text-fill: yellow;
+-fx-font-family: "Arial Black";
+}
+
+
+
+.dx-message {
+-fx-text-fill: -fx-color-main ;
+-fx-font-size: 14.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-background-color:yellow;
+-fx-opacity: 0.7;
+
+}
+
+/*
+ ************************************************************************************************** diagram
+ */
+ 
+.diagram-node-base {
+}
+
+ 
+.diagram-node-base-removed {
+	-fx-background-color:darkgray;	
+}
+
+ 
+/*
+ ************************************************************************************************** chart
+ */
+
+/*
+.default-color0.chart-bar {
+    -fx-bar-fill: powderblue ;
+    -fx-opacity: 0.9; 
+}
+    
+.default-color1.chart-bar { 
+    -fx-bar-fill: skyblue; 
+    -fx-opacity: 0.9;
+}
+
+
+
+.chart-bar {
+    -fx-background-color: rgba(0.0,168.0,355.0,0.05);
+    -fx-border-color: rgba(0.0,168.0,355.0,0.3) rgba(0.0,168.0,355.0,0.3) 
+        transparent rgba(0.0,168.0,355.0,0.3);
+    -fx-background-radius: 0.0;
+    -fx-background-position: left center;
+}
+
+
+
+ .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+ */
+
+/*
+ ************************************************************************************************** fx-window 
+ */
+.fx-window-title-bar {
+-fx-background-color:-fx-color-main ;
+}
+
+.fx-window-title {
+-fx-text-fill: white ;
+-fx-font-size: 16.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-alignment: center-left;
+-fx-text-alignment: left;
+}
+
+.fx-window-title-msg {
+-fx-text-fill: lightgray ;
+-fx-font-size: 12.0px;
+-fx-font-family: "맑은고딕";
+-fx-alignment: center-right;
+-fx-text-alignment: right;
+}
+
+.fx-window-close {
+-fx-border-color: yellow;
+-fx-background-color: yellow;
+}
+
+.fx-window-close:hover {
+-fx-background-color: blue ;
+}
+
+
+.fx-window-button {
+-fx-text-fill: white;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+-fx-background-color:  -fx-color-main;
+-fx-label-padding: 0.0 8.0 0.0 8.0;
+}
+
+.fx-window-button:hover {
+-fx-background-color: yellow;
+}
+
+.fx-inner-window-close {
+-fx-background-color: powderblue;
+-fx-label-padding: 0.0 4.0 0.0 4.0;
+-fx-opacity: 0.9;
+}
+.fx-inner-window-close:hover {
+-fx-background-color: yellow;
+}
+
+.fx-inner-window-title {
+-fx-text-fill: -fx-color-main;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+-fx-font-size: 14.0px;
+-fx-background-color: transparent;
+-fx-label-padding: 0.0 4.0 0.0 4.0;
+}
+
+.fx-inner-window-title-bar {
+-fx-background-color: powderblue ;
+}
+
+.fx-window-loading {
+-fx-background-color: skyblue;
+-fx-opacity: 0.5;
+}
+
+.fx-window-alert-error {
+-fx-text-fill: red ;
+-fx-font-size: 14.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+.fx-window-alert-ok {
+-fx-text-fill: darkblue ;
+-fx-font-size: 14.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+/*
+ ************************************************************************************************** editor
+ */
+
+.editor-group {
+-fx-font-size: 14.0px;
+-fx-font-family: "맑은고딕";
+-fx-text-fill: midnightblue ;
+}
+
+/* 에디터 라벨 */
+.editor-item {
+-fx-font-size: 11.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-text-fill: darkslategrey ;
+}
+
+/* 에디터 라벨(Not Null)*/
+.editor-item-not-null {
+-fx-font-size: 11.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+-fx-text-fill: red ;
+}
+
+
+/**
+ * 
+ * Managed Object
+ * 
+ */
+ 
+.mo-class-container {
+-fx-font-size: 14.0px;
+}
+
+.mo-class-pbr {
+-fx-font-size: 12.0px;
+}
+
+.mo-class-device {
+-fx-font-size: 10.0px;
+}
+
+
+
+.has-context-menu {
+-fx-effect: innershadow( three-pass-box , rgba(0.0,0.0,0.0,0.7) , 6.0, 0.0 , 0.0 , 2.0 );
+}
+
+.search-button {
+-fx-text-fill: white;
+-fx-font-size: 11.0px;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+-fx-background-color: linear-gradient(#61a2b1, #2A5058);
+-fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.6) , 5.0, 0.0 , 0.0 , 1.0 );
+
+}
+
+.search-button:hover {
+-fx-background-color: linear-gradient(#2A5058, #61a2b1);
+}
+
+
+.mo-info {
+-fx-text-fill: royalblue ;
+-fx-font-size: 11.0px;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+}
+
+.ps-info {
+-fx-text-fill: rosybrown ;
+-fx-font-size: 11.0px;
+-fx-font-family: "맑은고딕";
+}
+
+.ps-value {
+-fx-text-fill: rosybrown ;
+-fx-font-size: 24.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+
+.show-detail-title {
+-fx-text-fill: rosybrown ;
+-fx-underline: true;
+-fx-font-size: 16.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+.show-detail-item {
+-fx-text-fill: royalblue ;
+-fx-font-size: 11.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+.show-detail-value {
+-fx-text-fill: black ;
+-fx-font-size: 11.0px;
+-fx-font-weight: bold;
+-fx-font-family: "맑은고딕";
+}
+
+
+.text-renderer {
+-fx-text-fill: darkslateblue ;
+-fx-font-size: 11.0px;
+-fx-font-family: "맑은고딕";
+-fx-font-weight: bold;
+-fx-background-color: lightgrey ;
+-fx-pref-width: 200.0px;	
+}
+
+/*
+ * 
+ * ALARM
+ * 
+ */
+
+.alarm-level-1 {
+-fx-background-color: -fx-color-critical;
+-fx-text-fill: -fx-color-critical-text;
+-fx-font-size: 12.0px;
+-fx-font-family: "맑은고딕";
+}
+
+.alarm-level-1-text {
+-fx-text-fill: -fx-color-critical;
+}
+
+.alarm-level-2 {
+-fx-background-color: -fx-color-major;
+-fx-text-fill: -fx-color-major-text;
+-fx-font-size: 12.0px;
+-fx-font-family: "맑은고딕";
+}
+.alarm-level-2-text {
+-fx-text-fill: -fx-color-major;
+}
+
+.alarm-level-3 {
+-fx-background-color: -fx-color-minor;
+-fx-text-fill: -fx-color-minor-text;
+-fx-font-size: 12.0px;
+-fx-font-family: "맑은고딕";
+}
+.alarm-level-3-text {
+-fx-text-fill: -fx-color-minor;
+}
+
+.alarm-level-4 {
+-fx-background-color: -fx-color-warning;
+-fx-text-fill: -fx-color-warning-text;
+-fx-font-size: 12.0px;
+-fx-font-family: "맑은고딕";
+}
+
+.alarm-level-4-text {
+-fx-text-fill: -fx-color-warning;
+}
+
+
+
+
+.alarm-count-all {
+-fx-font-size: 36.0px;
+-fx-font-family: "Arial Black";
+-fx-text-fill: yellow ;
+-fx-effect: innershadow( three-pass-box , rgba(0.0,0.0,0.0,0.7) , 6.0, 0.0 , 0.0 , 2.0 );
+}
+
+
+.alarm-critical-acked {
+-fx-background-color: -fx-color-critical;
+-fx-opacity: 0.6;
+}
+
+.alarm-critical-cur {
+-fx-background-color: -fx-color-critical;
+-fx-opacity: 0.9;
+}
+
+.alarm-critical-cleared {
+-fx-background-color: -fx-color-critical;
+-fx-opacity: 0.35;
+}
+
+.alarm-major-acked {
+-fx-background-color: -fx-color-major;
+-fx-opacity: 0.6;
+-fx-alignment: center;
+}
+
+.alarm-major-cur {
+-fx-background-color: -fx-color-major;
+-fx-opacity: 0.9;
+-fx-alignment: center;
+}
+
+.alarm-major-cleared {
+-fx-background-color: -fx-color-major;
+-fx-opacity: 0.35;
+-fx-alignment: center;
+}
+
+.alarm-minor-acked {
+-fx-background-color: -fx-color-minor;
+-fx-opacity: 0.6;
+}
+.alarm-minor-cur {
+-fx-background-color: -fx-color-minor;
+-fx-opacity: 0.9;
+}
+
+.alarm-minor-cleared {
+-fx-background-color: -fx-color-minor;
+-fx-opacity: 0.35;
+}
+
+.alarm-warning-acked {
+-fx-background-color: -fx-color-warning;
+-fx-opacity: 0.6;
+}
+.alarm-warning-cur {
+-fx-background-color: -fx-color-warning;
+-fx-opacity: 0.9;
+}
+.alarm-warning-cleared {
+-fx-background-color: -fx-color-warning;
+-fx-opacity: 0.35;
+}

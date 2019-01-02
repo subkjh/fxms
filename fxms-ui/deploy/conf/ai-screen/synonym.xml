@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE synonym-list [
+
+<!ELEMENT synonym-list (synonym*) >
+
+<!ELEMENT synonym (#PCDATA) >
+<!ATTLIST synonym text CDATA #REQUIRED >
+
+]>
+
+<synonym-list>
+
+	<synonym text="목록,리스트,list" />
+	<synonym text="화면,UI" />
+
+</synonym-list>

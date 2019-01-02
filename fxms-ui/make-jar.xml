@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project fxms-ui">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    <property name="dir.jarfile" value="${dir.buildfile}/bin"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/fxms.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="FX.MS.UI"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.buildfile}/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/SUBKJH-DEV/.p2/pool/plugins/org.eclipse.fx.ide.css.jfx8_3.0.0.201705220750.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/deploy/libext/gson/gson-2.8.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/fxms-all/deploy/lib/fxms-ws.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/fxms-all/deploy/libext/websocket/java-websocket-1.3.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/deploy/libext/xml/jdom.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/fxms-parser/deploy/lib/fxms-ai-screen.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/deploy/libext/fxms/fxms-client.jar"/>
+        </jar>
+    </target>
+</project>

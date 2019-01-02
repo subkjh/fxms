@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="fxms-ui.jar" name="fxms-ui">
+
+	<property file="build.properties" />
+
+	<!-- set global properties for this build -->
+	<property location="." name="project.dir" />
+	<property location="${project.dir}/classes" name="classes.dir" />
+	<property location="${project.dir}/src" name="src.dir" />
+	<property location="${project.dir}/javadoc" name="javadoc.dir" />
+	<property location="${project.dir}/deploy" name="deploy.dir" />
+	<property location="${project.dir}/deploy/conf" name="conf.dir" />
+	<property location="${project.dir}/deploy/conf/sql" name="sql.dir" />
+	<property location="${project.dir}/deploy/javadoc" name="javadoc.dir" />
+	<property location="${deploy.dir}/libext" name="libext.dir" />
+	<property location="${deploy.dir}/lib" name="lib.dir" />
+	<property location="C:/Java/jdk1.8.0_31/bin" name="java.bin" />
+
+
+	<property location="../fxms-test/deploy" name="fxms-test.deploy.dir" />
+	<property location="../fxms-all/deploy" name="fxms-all.deploy.dir" />
+
+	<!-- sets the standard DSTAMP, make output directory -->
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<target name="print-version">
+		<echo>Java/JVM version: ${ant.java.version}</echo>
+		<echo>Java/JVM detail version: ${java.version}</echo>
+	</target>
+
+	<path id="project.class.path">
+		<pathelement path="${project.dir}" />
+		<pathelement path="${conf.dir}" />
+		<fileset dir="${libext.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target depends="init" name="compile">
+		<javac debug="true" destdir="${classes.dir}" encoding="UTF-8" fork="yes" memoryMaximumSize="256m">
+			<src path="${src.dir}/" />
+			<classpath refid="project.class.path" />
+			<classpath>
+				<pathelement path="${classes.dir}" />
+				<fileset dir="${libext.dir}/">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="clean">
+		<echo message="remove all from ${classes.dir}">
+		</echo>
+		<delete failonerror="false">
+			<fileset dir="${classes.dir}" />
+		</delete>
+		<echo message="remove all from ${lib.dir}">
+		</echo>
+		<delete failonerror="false">
+			<fileset dir="${lib.dir}" />
+		</delete>
+	</target>
+
+	<target name="rebuild">
+		<antcall target="clean" />
+		<antcall target="print-version" />
+		<antcall target="compile" />
+		<antcall target="copy_key" />
+	</target>
+
+
+
+
+	<target name="copy_sql">
+		<copydir dest="${classes.dir}/subkjh/bas/dao/utils" src="${sql.dir}">
+		</copydir>
+	</target>
+
+
+	<target name="fxms-ui.jar">
+
+		<antcall target="copy_sql" />
+
+		<jar destfile="${lib.dir}/fxms-ui.jar" update="false">
+			<fileset dir="${classes.dir}">
+				<include name="com/fxms/**/*" />
+				<include name="subkjh/**/*" />
+				<include name="FX/**/*" />
+			</fileset>
+		</jar>
+
+	</target>
+
+</project>
+
+
+

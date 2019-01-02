@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_USER_OP_HST_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	
+				A.SRT_DATE				as 'D150_SRT_DATE'
+				, A.USER_NO				as 'H0_USER_NO'
+				, A.USER_NAME			as 'S150_USER_NAME'
+				, A.OP_NAME				as 'S200_OP_NAME'
+				, if(A.RET_NO = 0, 'ok', 'fail')
+										as 'O50_RET_NO'
+				, A.RET_MSG				as 'S200_RET_MSG'
+				, A.IN_PARA				as 'S500_IN_PARA'
+		from 	FX_UR_LOG A
+		where	1 = 1
+		]]>
+
+		<test var="opDate"> and cast(A.SRT_DATE / 1000000 as UNSIGNED) = $opDate </test>
+		<test var="opStartDate"><![CDATA[ and cast(A.SRT_DATE / 1000000 as UNSIGNED) >= $opStartDate ]]></test>
+		<test var="opEndDate"><![CDATA[ and cast(A.SRT_DATE / 1000000 as UNSIGNED) <= $opEndDate ]]></test>
+		<test var="opName"> and A.USER_NAME = $opName  </test>
+		<test var="userName"> and A.USER_NAME = $userName  </test>
+		<test var="sessionId"> and A.SESSION_ID = $sessionId  </test>
+
+		<![CDATA[
+		order  by A.SRT_DATE desc
+		]]>
+	</select>
+
+	<select id="SELECT_USER_LOGIN_HST_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.USER_NO				as 'H0_USER_NO'
+				, A.SESSION_ID			as 'H0_SESSION_ID'
+				, B.USER_NAME			as 'S120_USER_NAME'
+				, A.LOGIN_DATE			as 'D150_LOGIN_DATE'
+				, A.LOGOUT_DATE			as 'D150_LOGOUT_DATE'
+				, A.IP_ADDR				as 'S150_IP_ADDR'
+				, ( select count(1) from FX_UR_LOG where SESSION_ID = A.SESSION_ID )
+										as 'N100_OP_CNT'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'LOG_STATUS_CODE' and CD_CODE = A.LOG_STATUS_CODE )
+										as 'S100_REMARKS'
+		from 	FX_UR_ALOG A
+				, FX_UR_USER B
+		where	A.USER_NO = B.USER_NO
+		]]>
+
+		<test var="loginDate"> and cast(A.LOGIN_DATE / 1000000 as UNSIGNED) = $loginDate </test>
+		<test var="loginStartDate"><![CDATA[ and cast(A.LOGIN_DATE / 1000000 as UNSIGNED) >= $loginStartDate ]]></test>
+		<test var="loginEndDate"><![CDATA[ and cast(A.LOGIN_DATE / 1000000 as UNSIGNED) <= $loginEndDate ]]></test>
+
+		<test var="userName"> and B.USER_NAME = $userName  </test>
+
+		<![CDATA[
+		order  by A.LOGIN_DATE desc
+		]]>
+	</select>
+
+	<select id="SELECT_USER_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.USER_NO				as 'H0_USER_NO'
+				, A.USER_ID				as 'S150_USER_ID'
+				, A.USER_NAME			as 'S200_USER_NAME'
+				, G.UGRP_NAME			as 'S200_UGRP_NAME'
+				, A.TEL_NO				as 'S150_TEL_NO'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'USER_TYPE' and CD_CODE = A.USER_TYPE )
+										as 'S150_USER_TYPE_NAME'
+				, ( select INLO_NAME from FX_CF_INLO where INLO_NO = A.MNG_INLO_NO )
+										as 'S150_COMPANY_NAME'
+				, A.USE_SRT_YMD			as 'D100_USE_SRT_YMD'
+				, A.USE_END_YMD			as 'D100_USE_END_YMD'
+				, A.USER_TYPE			as 'H0_USER_TYPE'
+				, A.UGRP_NO				as 'H0_UGRP_NO'
+				, A.MNG_INLO_NO			as 'H0_MNG_INLO_NO'
+		from 	FX_UR_USER A
+				, FX_UR_UGRP G
+		where	A.UGRP_NO = G.UGRP_NO
+		and		G.RESERVED_YN = 'N'
+		]]>
+		<test var="ugrpNo"> and A.UGRP_NO = $ugrpNo  </test>
+
+	</select>
+
+	<select id="SELECT_USER_GROUP_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.UGRP_NO				as 'H0_USER_GROUP_NO'
+				, A.UGRP_NAME			as 'S150_USER_GROUP_NAME'
+				, ( select count(1) from FX_UR_USER U where U.UGRP_NO = A.UGRP_NO)
+										as 'N100_USER_COUNT'
+				, A.UGRP_DESCR			as 'S400_USER_GROUP_DESCR'
+		from 	FX_UR_UGRP A
+		where	A.RESERVED_YN = 'N'
+		]]>
+	</select>
+
+	<select id="SELECT_TREE_ATTR_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.TREE_NO				as 'H0_TREE_NO'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'NE_FIELD' and CD_CODE = A.JAVA_FIELD_NAME )
+										as 'S100_FIELD_NAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'STRING_METHOD' and CD_CODE = A.STRING_METHOD )
+										as 'S100_STRING_METHOD_NAME'
+				, A.STRING_VALUE		as 'S100_STRING_VALUE'
+				, A.JAVA_FIELD_NAME		as 'H0_JAVA_FIELD_NAME'
+				, A.STRING_METHOD		as 'H0_STRING_METHOD'
+		from 	FX_UR_TREE_ATTR A
+		where	A.TREE_NO = $treeNo
+		
+		]]>
+	</select>
+
+	<select id="SELECT_USER_NEW_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.USER_ID				as 'S150_USER_ID'
+				, A.USER_NAME			as 'S150_USER_NAME'
+				, A.USER_MAIL			as 'S200_USER_MAIL'
+				, A.TEL_NO				as 'S200_TEL_NO'
+				, A.INLO_NAME			as 'S250_INLO_NAME'
+				, A.REG_DATE			as 'D150_REG_DATE'
+				, A.PROCESS_USER_NO		as 'S100_PROCESS_USER_NAME'
+				, A.PROCESS_DATE		as 'D150_PROCESS_DATE'
+				, A.PROCESS_REASON		as 'S300_PROCESS_REASON'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'PROCESS_STATE' and CD_CODE = A.PROCESS_STATE )
+										as 'S100_PROCESS_STATE_NAME'
+				, A.PROCESS_USER_NO	
+				, A.PROCESS_STATE
+		from 	FX_UR_NEW A
+		where	1 = 1
+		]]>
+
+		<test var="regStartDate"><![CDATA[ and cast(A.REG_DATE / 1000000 as UNSIGNED) >= $regStartDate ]]></test>
+		<test var="regEndDate"><![CDATA[ and cast(A.REG_DATE / 1000000 as UNSIGNED) <= $regEndDate ]]></test>
+		<test var="userName"> and A.USER_NAME = $userName  </test>
+		<test var="processState"> and A.PROCESS_STATE = $processState  </test>
+		
+		<![CDATA[
+		order by A.REG_DATE desc
+		]]>
+
+	</select>
+
+</queries>
+

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "alarm-cfg",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "alarm-code",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "chart",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "code",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "location",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "mo",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "op-code",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "ps-item",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "user",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "user-properties",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "user-ui",
+		"doneDate": 20180626000000
+	},
+	{
+		"dataType": "var",
+		"doneDate": 20180626000000
+	}
+]

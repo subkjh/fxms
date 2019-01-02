@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_ALARM_HST_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	
+				A.CLEAR_YN				as 'U20_St'
+				, A.ALARM_LEVEL			as 'A20_Lv'
+				, A.OCU_DATE			as 'D150_OCU_DATE'
+				, A.MO_NAME				as 'S200_MO_NAME'
+				, A.ALCD_NAME			as 'S150_ALCD_NAME'
+				, A.ALARM_MSG			as 'S300_ALARM_MSG'
+				, A.MO_INSTANCE			AS 'S100_MO_INSTANCE'
+				
+				, A.COMPARE_VALUE		as 'S100_COMPARE_VALUE'
+				, A.PS_VALUE			as 'S100_PS_VALUE'
+				
+				, A.UPPER_MO_NAME		as 'S200_UPPER_MO_NAME'
+				, A.INLO_NAME			as 'S150_INLO_NAME'
+				, A.ACK_DATE			as 'D150_ACK_DATE'
+				, A.CLEAR_DATE			as 'D150_CLEAR_DATE'
+				, A.REASON_REG_DATE		as 'D150_REASON_REG_DATE'
+				, A.REASON_NAME			as 'S100_REASON_NAME'
+				, A.REASON_MEMO			as 'S200_REASON_MEMO'
+
+				, A.ALARM_NO			
+				, A.ALCD_NO
+				, A.MO_NO
+				, A.ALARM_LEVEL	
+				, A.UPPER_MO_NO	
+				, A.INLO_NO	
+				, A.ACK_USER_NO	
+				, A.REASON_REG_USER_NO
+				, A.CLEAR_YN	
+
+		from 	FX_AL_HST A
+		where	1 = 1
+		]]>
+
+		<test var="startDate" equals="null">
+			<test var="ocuDate"> and cast(A.OCU_DATE / 1000000 as UNSIGNED) = $ocuDate </test>
+		</test>
+
+		<test var="startDate"><![CDATA[ and A.OCU_DATE >= $startDate ]]></test>
+		<test var="endDate"><![CDATA[ and A.OCU_DATE <= $endDate ]]></test>
+		<test var="clearYn"> and A.CLEAR_YN = $clearYn  </test>
+		<test var="alcdNo"> and A.ALCD_NO = $alcdNo  </test>
+		<test var="upperMoNo"> and A.UPPER_MO_NO = $moNo </test>
+		<test var="upperMoNo" equals="null">
+			<test var="moNo"> and ( A.MO_NO = $moNo or A.UPPER_MO_NO = $moNo ) </test>
+		</test>
+
+		<test var="moNo" equals="null">
+			<test var="moName"> and ( A.MO_NAME = $moName or A.UPPER_MO_NAME = $moName ) </test>
+		</test>
+		<test var="userNo"> and A.UPPER_MO_NO in ( select MO_NO from FX_UR_MO where USER_NO = $userNo ) </test>
+
+		<![CDATA[
+		order  by A.OCU_DATE desc
+		]]>
+
+	</select>
+
+	<select id="SELECT_ALARM_ST_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.ST_DATE						as 'D150_OCU_DATE'
+				, A.ALCD_NO
+				, B.ALCD_DESCR					as 'S300_ALCD_DESCR'
+				, sum(A.ALARM_COUNT)			as 'N150_ALARM_COUNT'
+				, count(distinct A.MO_NO)		as 'N100_MO_COUNT'
+		from 	FX_AL_ST A
+					left join FX_AL_CODE B on A.ALCD_NO = B.ALCD_NO
+		where	1 = 1
+		]]>
+
+		<test var="startDate"><![CDATA[ and A.ST_DATE >= $startDate ]]></test>
+		<test var="endDate"><![CDATA[ and A.ST_DATE <= $endDate ]]></test>
+		<test var="alcdNo"> and A.ALCD_NO = $alcdNo  </test>
+
+		<![CDATA[
+		group by A.ST_DATE
+				, A.ALCD_NO
+				, B.ALCD_DESCR
+		order by A.ST_DATE desc
+		]]>
+
+	</select>
+
+</queries>
+

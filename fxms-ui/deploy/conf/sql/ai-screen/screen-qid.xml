@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+	<select id="SELECT_SCREEN_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+		select
+    			a.OP_HINT      		as text     /* 화면명 */ 
+    			, a.OP_NAME				as id 		/* 화면weburl */ 
+  		from 	FX_CD_OP a 						/* 화면목록 */ 
+		where 	a.USE_YN = 'Y'
+		and		a.OP_DESCR is not null
+		]]>
+	</select>
+
+
+</queries>
+

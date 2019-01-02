@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE screens [
+
+<!ELEMENT screens (screen-list*,screen*,rename-para*) >
+
+<!ELEMENT screen (#PCDATA)>
+<!ATTLIST screen id CDATA #REQUIRED >
+<!ATTLIST screen text CDATA #REQUIRED >
+
+<!ELEMENT rename-para (rename*) >
+<!ATTLIST rename-para screen-id CDATA #REQUIRED >
+
+<!ELEMENT rename (#PCDATA) >
+<!ATTLIST rename src CDATA #REQUIRED >
+<!ATTLIST rename dst CDATA #REQUIRED >
+
+]>
+
+<screens>
+
+	<screen-list qid="SELECT_SCREEN_LIST" />
+
+	<screen id="mo-tree-show" text="관리,대상,정보" />
+	<screen id="mo-tree-show" text="관리,번호,정보" />
+	<screen id="mo-tree-show" text="장비,정보" />
+
+	<screen id="ps-mo-view" text="챠트" />
+	<screen id="ps-mo-if-view" text="트래픽,챠트" />
+	<screen id="dx-diagram" text="망,구성도" />
+
+	<rename-para screen-id="alarm-hst-list">
+		<!--
+			<rename src="startDate" dst="ocuDate" />
+		-->
+	</rename-para>
+
+</screens>

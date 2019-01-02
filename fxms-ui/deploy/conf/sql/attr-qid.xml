@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_ATTR" javaClass="fxms.bas.vo.Attr">
+		<result attr="setAttrId()" field="ATTR_ID" />
+		<result attr="setAttrText()" field="ATTR_TEXT" />
+	</resultMap>
+
+	<select id="SELECT_OPCODE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	OP_NO 		as ATTR_ID
+				, OP_TITLE	as ATTR_TEXT
+		from 	FX_CD_OP
+		where 	USE_YN = 'Y'
+		and		OP_TYPE in ( 2, 3, 4, 5 )
+		order by SEQ_BY
+				, OP_TITLE
+		]]>
+	</select>
+
+	<select id="SELECT_OPNAME_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	OP_NAME 	as ATTR_ID
+				, OP_DESCR	as ATTR_TEXT
+		from 	FX_CD_OP
+		order by SEQ_BY
+				, OP_DESCR
+		]]>
+	</select>
+
+	<select id="SELECT_ALARMCODE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	ALCD_NO 		as ATTR_ID
+				, ALCD_DESCR	as ATTR_TEXT
+		from 	FX_AL_CODE
+		order by ALCD_DESCR
+		]]>
+	</select>
+
+	<select id="SELECT_CODE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	CD_CODE 		as ATTR_ID
+				, CD_NAME 		as ATTR_TEXT
+		from 	FX_CD_CODE
+		where	CD_TYPE = $cdType
+		and		USE_YN = 'Y'
+		order by SEQ_BY
+				, CD_NAME
+		]]>
+	</select>
+
+
+
+	<select id="SELECT_GW_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select	MO_NO			as ATTR_ID
+				, MO_NAME		as ATTR_TEXT
+		from	FX_MO
+		where	MO_CLASS = 'GW'
+		order by MO_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_CONTAINER_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select	MO_NO				as ATTR_ID
+				, CONTAINER_ID		as ATTR_TEXT
+		from	FX_MO_CONTAINER
+		where	1=1
+		]]>
+
+		<test var="userNo"><![CDATA[
+				and		INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) )  
+		 ]]></test>
+		
+		<![CDATA[
+		order by CONTAINER_ID
+		]]>
+
+	</select>
+
+	<select id="SELECT_FXSERVICE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select	MO_NO			as ATTR_ID
+				, MO_NAME		as ATTR_TEXT
+		from	FX_MO
+		where	MO_CLASS = 'FXSERVICE'
+		order by MO_NAME
+		]]>
+	</select>
+
+
+	<select id="SELECT_CONTAINER_ID_LIST" resultMap="RESULT_ATTR">
+
+		<![CDATA[
+		select	CONTAINER_ID			as ATTR_ID
+				, CONTAINER_ID			as ATTR_TEXT
+		from	FX_MO_CONTAINER
+		where	1=1
+		]]>
+
+		<test var="userNo"><![CDATA[
+				and		INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) )  
+		 ]]></test>
+
+		<![CDATA[
+		order by CONTAINER_ID
+		]]>
+
+	</select>
+
+
+	<select id="SELECT_COMPANY_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	INLO_NO 		as ATTR_ID
+				, INLO_NAME 	as ATTR_TEXT
+		from 	FX_CF_INLO 
+		where 	INLO_TYPE = 'COMPANY' 
+		order by INLO_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_ALARM_CFG_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	ALARM_CFG_NO 		as ATTR_ID
+				, ALARM_CFG_NAME 	as ATTR_TEXT
+		from 	FX_AL_CFG 
+		]]>
+
+		<test var="moClass"><![CDATA[ where	MO_CLASS = $moClass ]]></test>
+		
+		<![CDATA[
+		order by BASIC_CFG_YN desc
+				, ALARM_CFG_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_USER_GROUP_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	UGRP_NO 		as ATTR_ID
+				, UGRP_NAME 	as ATTR_TEXT
+		from 	FX_UR_UGRP 
+		where	RESERVED_YN = 'N'
+		order by UGRP_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_USER_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	USER_NO 		as ATTR_ID
+				, USER_NAME 	as ATTR_TEXT
+		from 	FX_UR_USER
+		order by USER_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_DIAGRAM_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	DIAG_NO 		as ATTR_ID
+				, DIAG_TITLE 	as ATTR_TEXT
+		from 	FX_DI_MAIN
+		where	1 = 1
+		]]>
+
+		<test var="userNo">and USER_NO = $userNo</test>
+
+		<![CDATA[
+		order by DIAG_TITLE
+		]]>
+	</select>
+
+	<select id="SELECT_MODEL_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	MODEL_NO 		as ATTR_ID
+				, MODEL_NAME 	as ATTR_TEXT
+		from 	FX_CF_MODEL
+		where	MODEL_NAME is not null
+		order by MODEL_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_MS_IPADDR_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	MS_IPADDR 		as ATTR_ID
+				, MS_IPADDR 	as ATTR_TEXT
+		from 	FX_MO_FXSERVER
+		order by MS_IPADDR
+		]]>
+	</select>
+
+	<select id="SELECT_TREE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	TREE_NO 		as ATTR_ID
+				, TREE_NAME 	as ATTR_TEXT
+		from 	FX_UR_TREE
+		where	1 = 1
+		]]>
+
+		<test var="userNo">and USER_NO = $userNo</test>
+
+		<![CDATA[
+		order by TREE_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_LOCATION_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	inlo_no as ATTR_ID
+				, inlo_fname as ATTR_TEXT 
+		from 	FX_CF_INLO
+		order by inlo_fname
+		]]>
+	</select>
+
+	<select id="SELECT_COLUMN_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	COL_NAME 	as ATTR_ID
+				, COL_NAME 	as ATTR_TEXT 
+		from 	FX_TAB_COL
+		where	TAB_NAME = $tabName
+		]]>
+	</select>
+
+
+	<select id="SELECT_CD_TYPE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	CD_CODE 		as ATTR_ID
+				, CD_NAME 		as ATTR_TEXT
+		from 	FX_CD_CODE
+		where	CD_TYPE = 'CODE'
+		and		USE_YN = 'Y'
+		]]>
+
+		<test var="cdEditYn">and CD_EDIT_YN = $cdEditYn</test>
+		
+		<![CDATA[
+		order by SEQ_BY
+				, CD_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_NE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select	MO_NO				as ATTR_ID
+				, IP_ADDRESS		as ATTR_TEXT
+		from	FN_MO_NE
+		where	1=1
+		]]>
+
+		<test var="userNo"><![CDATA[
+				and		INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) )  
+		 ]]></test>
+		
+		<![CDATA[
+		order by IP_ADDRESS
+		]]>
+
+	</select>
+
+	<select id="SELECT_NETWORK_LIST" resultMap="RESULT_ATTR">
+
+		<![CDATA[
+		select	NET_NO			as ATTR_ID
+				, NET_NAME			as ATTR_TEXT
+		from	FN_NET
+		where	1=1
+		]]>
+
+		<test var="userNo"><![CDATA[
+				and		INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) )  
+		 ]]></test>
+
+		<![CDATA[
+		order by NET_NAME
+		]]>
+
+	</select>
+
+
+	<select id="SELECT_NE_IF_LIST" resultMap="RESULT_ATTR">
+
+		<![CDATA[
+		select	A.MO_NO			as ATTR_ID
+				, B.IF_NAME		as ATTR_TEXT
+		from	FN_MO_IF B
+				, FX_MO A
+		where	A.MO_NO = B.MO_NO
+		]]>
+
+		<test var="upperMoNo">
+			and A.UPPER_MO_NO = $upperMoNo
+		</test>
+
+		<![CDATA[
+		order by B.IF_INDEX
+		]]>
+
+	</select>
+
+</queries>
+

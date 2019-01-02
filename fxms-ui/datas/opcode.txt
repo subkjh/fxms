@@ -1,0 +1,246 @@
+mo	1000	Managed Object
+mo-list	1001	Show Managed Objects
+mo-container-list	1011	컨테이너 목록
+mo-gw-list	1021	게이트웨이 목록
+mo-pbr-list	1031	PBR 목록
+mo-sensor-list	1041	센서 목록
+mo-ne-list	1051	장비 목록
+mo-detail-show	1301	Show Mo Detail
+mo-container-detail-show	1311	Show Container Detail
+mo-gw-detail-show	1321	Show Gateway Detail
+mo-pbr-detail-show	1331	Show PBR Detail
+mo-ne-status-show	1341	네트워크 장비 상태 조회
+mo-tree-show	1351	관리대상 구성내역 조회
+mo-chart-show	1361	Show Status Chart
+mo-if-detail-show	1371	Show Network Interface
+mo-op-hst-list	1501	관리대상 운용이력 조회
+mo-add	1003	관리대상 등록
+mo-container-add	1013	컨테이너 등록
+mo-gw-add	1023	게이트웨이 등록
+mo-pbr-add	1033	PBR 등록
+mo-ne-add	1043	네트워크 장비 등록
+mo-update	1004	
+mo-attr-mng-update	1014	관리여부 변경
+mo-attr-alarm-cfg-update	1024	경보조건 변경
+mo-attr-alias-update	1034	화면표시명 변경
+mo-container-update	1044	컨테이너 수정
+mo-gw-update	1054	게이트웨이 수정
+mo-pbr-update	1064	PBR 수정
+mo-ne-update	1074	네트워크 장비 수정
+mo-if-update	1084	네트워크 인터페이스 수정
+mo-device-update	1094	디바이스 수정
+mo-delete	1005	
+mo-container-delete	1015	컨테이너 삭제
+mo-gw-delete	1025	게이트웨이 삭제
+mo-pbr-delete	1035	PBR 삭제
+mo-ne-delete	1045	네트워크 장비 삭제
+mo-container	1010	컨테이너 관리
+mo-pbr	1020	PBR 관리
+mo-gw	1030	GW 관리
+mo-sensor	1040	센서 관리
+mo-ne	1050	장비 관리
+		
+mo-chlid-grid-ne	1401	네트워크장비 구성 그리드
+mo-child-grid-container	1411	컨테이너 구성 그리드
+mo-child-grid	1421	MO 구성 그리드
+		
+		
+		
+dx	2000	메뉴
+dx-group-alarm	2901	경보
+dx-group-config	2902	구성
+dx-group-private	2903	개인
+dx-group-operation	2904	운용
+dx-group-ps	2905	성능
+dx-group-etc	2906	기타
+dx-editor-ui	2001	화면 배치 편집
+dx-diagram	2101	다이아그램
+dx-alarm-count-chart	2102	알람카운트챠트
+dx-view-ps	2103	성능조회
+dx-alarm-cur-list	2104	현재경보리스트
+dx-alarm-cur-box	2105	현재경보박스
+dx-alarm-count-pie	2106	경보건수
+dx-link-status	2107	실시간연결상태
+dx-ps-status	2108	상태조회
+dx-menu-containers	2201	MO컨테이너관리
+dx-menu-sensors	2202	MO센서관리
+dx-menu-gateways	2203	MO게이트웨이관리
+dx-menu-pbr	2204	MOPBR관리
+dx-menu-login-hst	2205	운용자로그인이력조회
+dx-menu-user-op-hst	2206	운용자운용이력조회
+dx-menu-user	2207	운용자관리
+dx-menu-web	2208	웹 화면 열기
+dx-menu-location	2209	설치위치(Tree)
+dx-menu-my-account	2210	암호변경
+dx-menu-mo-tree	2211	관리대상 트리
+dx-menu-alarm-cfg	2212	경보조건관리
+dx-menu-alarm-list	2213	경보조회
+dx-menu-ps-view	2214	상태이력챠트조회
+dx-menu-mo-op-hst	2215	관리,대상,변경,이력
+dx-menu-diagram-editor	2216	다이아그램편집
+dx-menu-my-info	2217	내정보 수정
+dx-menu-ne	2218	MO장비관리
+dx-menu-clock	2219	시간
+dx-menu-alarm-count	2220	현재경보건수
+dx-menu-alarm-chart	2221	현재경보챠트
+dx-menu-fx-tree	2222	운용자트리
+dx-menu-data-manager	2223	데이터관리자
+dx-menu-event-monitor	2224	이벤트 발생 흐름
+dx-menu-event-monitor2	2225	이벤트 발생 표시
+dx-menu-tree-show	2226	내 트리 보기
+dx-menu-tree-edit	2227	내 트리 편집
+dx-menu-text	2228	단순 문자열
+dx-menu-image	2229	이미지
+dx-menu-location-list	2230	설치위치(리스트)
+dx-menu-reload-code	2231	코드리로딩
+dx-menu-view-ui-log	2232	UI로그
+dx-menu-model-list	2234	관리대상 모델 관리
+dx-menu-code	2235	코드 관리
+dx-menu-rtps-view	2236	실시간 성능 조회
+dx-menu-op-tree	2237	기능권한관리
+dx-menu-al_st	2238	경보통계조회
+dx-system-time	2239	시스템시간
+dx-menu-network-list	2240	네트워크관리
+alarm	3000	경보관리
+alarm-cfg-list	3001	경보조건 관리
+alarm-hst-list	3011	경보이력 조회
+alarm-detail-show	3021	경보 상세 조회
+alarm-cfg-applied-mo-list	3031	경보조건 적용 관리대상 조회
+alarm-cfg-mem-list	3041	경보조건 항목 조회
+alarm-cfg-add	3003	새로운 경보조건 등록
+alarm-cfg-mem-add	3013	경보조건 항목 추가
+alarm-cfg-copy	3023	경보조건 복사
+alarm-cfg-info-add	3033	기본정보등록
+alarm-cfg-info-update	3034	기본정보수정
+alarm-cfg-update	3004	경보조건 수정
+alarm-ack	3014	경보 인지
+alarm-clear	3024	경보 해제
+alarm-cfg-delete	3005	경보조건 삭제
+alarm-cfg-mem-delete	3015	경보조건 항목 삭제
+alarm-hst-mo-list	3051	최근 3일간 경보 발생 이력
+alarm-stat-list	3101	경보 통계 조회
+alarm-list	3061	경보 내역
+location	4000	
+location-list-view	4001	Show Location List
+location-list	4002	설치위치 관리
+location-add	4003	설치위치 등록
+location-update	4004	설치위치 수정
+location-delete	4005	설치위치 삭제
+location-tree-view	4011	설치위치 트리 조회
+location-company-add	4013	회사(설치위치) 등록
+location-plant-add	4023	공장(설치위치) 등록
+model	4100	
+model-list-view	4101	
+model-mo-list	4111	선택한 모델의 관리대상 조회
+model-list-select	4102	관리대상 모델 관리
+model-add	4103	관리대상 모델 등록
+model-update	4104	관리대상 모델 수정
+model-delete	4105	관리대상 모델 삭제
+network	4200	네트워크관리
+network-list-view	4201	네트워크관리
+network-list-select	4202	네트워크조회
+network-add	4203	네트워크추가
+network-update	4204	네트워크수정
+network-delete	4205	네트워크삭제
+network-item-set	4214	네트워크구성설정
+		
+		
+		
+		
+		
+ps	5000	성능
+ps-item-list	5001	Show PS Items
+ps-item-add	5002	Add New PS Item
+ps-item-update	5003	Update PS Item
+ps-item-delete	5004	Delete PS Item
+ps-view	5101	Show PS Datas
+ps-mo-view	5102	Show PS Datas
+ps-mo-if-view	5103	Show PS Datas
+ps-nms	5200	네트워크 트래픽 조회
+ps-nms-traffic-view	5201	트래픽 조회
+dx-nms-traffic-view	5206	트래픽 조회
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+diagram	6000	Diagram
+diagram-list	6002	다이아그램목록조회
+diagram-get	6012	다이아그램조회
+diagram-set	6004	다이아그램설정
+diagram-box-edit	6001	다이아그램박스편집
+diagram-text-edit	6011	다이아그램텍스트편집
+diagram-mo-edit	6021	다이아그램MO편집
+diagram-line-edit	6031	다이아그램라인편집
+diagram-sub-edit	6041	다이아그램서브편집
+diagram-inlo-edit	6051	다이아그램설치위치
+diagram-status-edit	6061	다이아그램상태편집
+diagram-edit	6071	다이아그램편집
+diagram-image-edit	6081	다이아그램이미지편집
+diagram-network-edit	6091	다이아그램네트워크편집
+operation	8000	운용
+user	8100	Users
+user-list	8101	운용자 관리
+user-add	8103	새로운 운용자 등록
+user-update	8104	선택 운용자 수정
+user-delete	8105	선택 운용자 삭제
+user-pwd-change	8114	운용자 암호 변경
+user-my-change	8124	내 정보 변경
+user-ui-get	8102	운용자 설정 화면 조회
+user-ui-set	8134	운용자 화면 설정
+user-log-list	8111	운용 이력 조회
+user-alog-list	8121	로그인 이력 조회
+user-log-a-session-list	8141	운용 이력 조회
+user-new-apply	8144	계정 신청
+user-new-list	8131	계정 신청 목록
+user-new-ok	8154	신청 계정 승인
+user-new-reject	8164	신청 계정 반려
+user-group	8200	
+user-group-list	8201	운용자 그룹 관리
+user-group-add	8203	새로운 운용자그룹 등록
+user-group-update	8204	운용자그룹 수정
+user-group-del	8205	운용자그룹 삭제
+tree	8300	
+tree-add	8303	세부트리 추가
+tree-update	8304	운용자 트리 수정
+tree-delete	8305	운용자 트리 삭제
+tree-get-list	8302	운용자 트리 목록 조회
+tree-get-items	8312	운용자 트리 내용 조회
+tree-attr-list	8301	운용자 트리 조건 화면
+tree-attr-add-mo	8313	운용자 트리 조건 추가
+tree-attr-add-location	8323	운용자 트리 조건 추가
+tree-attr-del	8315	운용자 트리 조건 삭제
+tree-top-add	8333	그룹트리 추가
+user-op	8400	운용코드
+user-op-tree	8401	운용코드 트리
+user-op-change	8404	운용코드 권한 변경
+etc	9000	System Configuration
+etc-snmp-config-edit	9001	Edit Snmp Configuration
+etc-web-open	9002	Open Web
+etc-table	9100	FX TABLE
+etc-table-ui	9101	Show Repositories
+etc-table-column-ui	9111	Show Repository Attributes
+etc-table-index-ui	9121	Show Repository Keys
+etc-table-get	9102	Get Repositories
+etc-table-add	9103	Add New Repository
+etc-table-column-add	9113	Add New Repository Attribute
+etc-table-index-add	9123	Add New Repository Key
+etc-table-create	9133	Create Repository
+etc-table-update	9104	Update Repository
+etc-table-column-update	9114	Update Repository Attribute
+etc-table-index-update	9124	Update Repository Key
+etc-table-delete	9105	Delete Repository
+etc-table-column-delete	9115	Delete Repository Attribute
+etc-table-index-delete	9125	Delete Repository Key
+code	9200	코드
+code-list	9202	코드관리
+code-add	9203	코드 추가
+code-update	9204	코드 수정
+code-delete	9205	코드 삭제
+main	10000	메인 화면

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_OBJECT_ARRAY" javaClass="java.lang.Object" />
+
+	<select id="SELECT_MODEL_LIST" resultMap="RESULT_OBJECT_ARRAY">
+		<![CDATA[
+		select	A.MODEL_NAME			as 'S300_MODEL_NAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'DEV_TYPE' and CD_CODE = A.DEV_TYPE )
+										as 'S180_DEV_TYPE_NAME'
+				, ( select CD_NAME from FX_CD_CODE where CD_TYPE = 'MODEL_CLASS' and CD_CODE = A.MODEL_CLASS )
+										as 'S180_MODEL_CLASS_NAME'
+				, A.VENDOR_NAME			as 'S150_VENDOR_NAME'
+				, A.MODEL_ID_VAL		as 'S300_MODEL_ID_VAL'
+				, A.CHG_DATE			as 'D100_CHG_DATE'
+				, ( select count(1) from FN_MO_NE C where C.MODEL_NO = A.MODEL_NO )
+							as 'N80_MO_COUNT'
+				, A.DEV_TYPE			
+				, A.MODEL_CLASS			
+				, A.MODEL_NO
+		from 	FX_CF_MODEL A
+		where	1 = 1
+		]]>		
+
+		<test var="modelName"> and A.MODEL_NAME like $modelName </test>
+		<test var="devType"> and A.DEV_TYPE = $devType </test>
+		<test var="modelClass"> and A.MODEL_CLASS = $modelClass </test>
+		<test var="vendorName"> and A.VENDOR_NAME like $vendorName  </test>
+
+		<![CDATA[
+		order  by A.MODEL_NAME
+		]]>
+	</select>
+
+</queries>
+

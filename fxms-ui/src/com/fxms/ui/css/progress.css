@@ -1,0 +1,15 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+	/*
+-fx-background-image: url("image/background.jpg");
+  */
+
+-fx-background-color: darkslateblue;
+}
+
+.label {
+-fx-font-size: 12.0px;
+-fx-font-weight: bold;
+-fx-text-fill: aliceblue;
+}

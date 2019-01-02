@@ -1,0 +1,46 @@
+.default-color0.chart-area-symbol { -fx-background-color: lightgreen, green; }
+.default-color1.chart-area-symbol { -fx-background-color: powderblue, blue; }
+.default-color2.chart-area-symbol { -fx-background-color: #dda0dd, #d8bfd855; }
+ 
+.default-color0.chart-series-area-line { -fx-stroke: lightgreen; }
+.default-color1.chart-series-area-line { -fx-stroke: powderblue; }
+.default-color2.chart-series-area-line { -fx-stroke: #dda0dd; }
+ 
+.default-color0.chart-series-area-fill 
+{ 
+	-fx-fill: lightgreen; 
+	-fx-opacity: 0.75; 
+}
+.default-color1.chart-series-area-fill {
+	-fx-fill: powderblue;
+	-fx-opacity: 0.75; 
+}
+.default-color2.chart-series-area-fill { -fx-fill: #d8bfd855; }
+
+.onHover{
+    -fx-background-color: ORANGE;
+}
+
+.default-color0.chart-bar {
+    -fx-bar-fill: lightgreen  ;
+    -fx-opacity: 0.95; 
+    /*visibility:hidden;*/
+}
+
+.default-color1.chart-bar { 
+    -fx-bar-fill: powderblue ; 
+    -fx-opacity: 0.95;
+}
+
+/* 그래프 배경 */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+
+
+.chart-message {
+-fx-text-fill: steelblue;
+-fx-font-size: 24.0px;
+-fx-font-family: "맑은고딕";
+}

@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<lang-list>
+
+	<lang class="SELECT_ALARM_HST_LIST" name="MO_NAME" text="발생대상" />
+	<lang class="SELECT_USER_OP_HST_LIST" name="RET_NO" text="처리결과" />
+
+	<lang-class class="SELECT_USER_LOGIN_HST_LIST">
+		<lang name="OP_CNT" text="운용건수" />
+		<lang name="REMARKS" text="비고" />
+	</lang-class>
+
+<lang name="ACCESS_UGRP_NAME" text="권한운용자그룹" />
+
+
+	<!--
+
+		table columns
+
+	-->
+	<lang name="CD_TYPE" text="코드분류" />
+<lang name="CD_CODE" text="코드" />
+<lang name="CD_NAME" text="코드명" />
+<lang name="CD_DESCR" text="설명" />
+<lang name="CD_FLAG" text="코드플래그" />
+<lang name="VAL1" text="값1" />
+<lang name="VAL2" text="값2" />
+<lang name="VAL3" text="값3" />
+<lang name="VAL4" text="값4" />
+<lang name="VAL5" text="값5" />
+<lang name="VAL6" text="값6" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="USE_YN" text="사용여부" />
+<lang name="CHK_QRY" text="사용중여부 확인 쿼리" />
+<lang name="FILL_QRY" text="채울쿼리" />
+<lang name="OP_NO" text="기능번호" />
+<lang name="OP_NAME" text="기능명" />
+<lang name="UPPER_OP_NO" text="상위기능번호" />
+<lang name="OP_URI" text="기능URI" />
+<lang name="OP_METHOD" text="기능메소드" />
+<lang name="UI_JAVA_CLASS" text="화면자바클래스" />
+<lang name="UI_WIDTH" text="화면폭" />
+<lang name="UI_HEIGHT" text="화면높이" />
+<lang name="OP_TITLE" text="기능타이틀" />
+<lang name="BUTTON_TEXT" text="버튼텍스트" />
+<lang name="OP_DESCR" text="기능설명" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="MNG_DIV" text="관리구분" />
+<lang name="OP_TYPE" text="기능구분" />
+<lang name="USE_YN" text="사용여부" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="OK_MSG" text="성공메시지" />
+<lang name="ERR_MSG" text="오류메시지" />
+<lang name="OP_NO" text="기능번호" />
+<lang name="ATTR_GROUP" text="속성그룹명" />
+<lang name="ATTR_DISP" text="속성화면명" />
+<lang name="ATTR_NAME" text="속성명" />
+<lang name="ATTR_TYPE" text="속성종류" />
+<lang name="ATTR_DEFAULT_VALUE" text="속성기본값" />
+<lang name="ATTR_VALUE_LIST" text="속성값목록" />
+<lang name="PROMPT_TEXT" text="프롬프트텍스트" />
+<lang name="READ_ONLY_YN" text="읽기전용여부" />
+<lang name="NULLABLE_YN" text="NULL 가능여부" />
+<lang name="USE_YN" text="사용여부" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="CONTAINER_TYPE" text="컨테이너종류" />
+<lang name="MO_NAME" text="디바이스명" />
+<lang name="MO_CLASS" text="디바이스분류" />
+<lang name="MODEL_NO" text="모델번호" />
+<lang name="SEQ_NAME" text="시퀀스명" />
+<lang name="INC_BY" text="증가" />
+<lang name="VALUE_MIN" text="최소값" />
+<lang name="VALUE_MAX" text="최대값" />
+<lang name="VALUE_NEXT" text="다음값" />
+<lang name="IS_CYCLE" text="순환여부" />
+<lang name="TAB_NAME" text="테이블명" />
+<lang name="TAB_COMMENT" text="테이블코멘트" />
+<lang name="RESERVED_YN" text="예약여부" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="TAB_NAME" text="테이블명" />
+<lang name="COL_NAME" text="컬럼명" />
+<lang name="COL_TYPE" text="컬럼타입" />
+<lang name="COL_SIZE" text="컬럼크기" />
+<lang name="NULLABLE_YN" text="NULL가능여부" />
+<lang name="COL_COMMENT" text="컬럼코멘트" />
+<lang name="DEF_VALUE" text="디폴트값" />
+<lang name="UPDATEBLE_YN" text="업데이트가능여부" />
+<lang name="SEQ_NAME" text="시퀀스명" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="" text="수정일시" />
+<lang name="COL_NO" text="컬럼순서" />
+<lang name="TAB_NAME" text="테이블명" />
+<lang name="IDX_NAME" text="인덱스명" />
+<lang name="IDX_TYPE" text="인덱스타입" />
+<lang name="COL_NAME_LIST" text="컬럼명목록" />
+<lang name="FK_TAB_NAME" text="연결테이블명" />
+<lang name="FK_COL_NAME_LIST" text="연결테이블컬럼명" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="VAR_GNAME" text="변수그룹명" />
+<lang name="VAR_NAME" text="변수명" />
+<lang name="VAR_ANAME" text="변수별칭" />
+<lang name="VAR_DESCR" text="변수설명" />
+<lang name="VAR_FTYPE" text="변수유형" />
+<lang name="VAR_FTYPE_BASE" text="변수값범위" />
+<lang name="VAR_VALUE" text="변수설정값" />
+<lang name="VAR_MEMO" text="변수메모사항" />
+<lang name="VAR_FLAG" text="변수플래그" />
+<lang name="IS_USE" text="사용여부" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="CHG_USER_NO" text="수정운용자번호" />
+<lang name="INLO_NO" text="설치위치번호" />
+<lang name="UPPER_INLO_NO" text="상위설치위치번호" />
+<lang name="INLO_NAME" text="설치위치명" />
+<lang name="INLO_FNAME" text="설치위치전체명" />
+<lang name="INLO_TYPE" text="설치위치종류(코드집)" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="INLO_FLAG" text="설치위치플래그" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="INLO_NO" text="위치번호" />
+<lang name="INLO_TYPE" text="설치위치종류(코드집)" />
+<lang name="MEM_INLO_NO" text="위치번호(하위)" />
+<lang name="MEM_DEPTH" text="상속깊이" />
+<lang name="MODEL_NO" text="모델번호" />
+<lang name="MODEL_NAME" text="모델명" />
+<lang name="DEV_TYPE" text="장비종류" />
+<lang name="VENDOR_NAME" text="제조사명" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="MS_NAME" text="관리서버명" />
+<lang name="MS_IPADDR" text="관리서버주소" />
+<lang name="MS_DESCR" text="관리서버설명" />
+<lang name="MAX_MO_COUNT" text="최대관할MO수" />
+<lang name="CUR_MO_COUNT" text="현재관할MO수" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="SERVICE_NAME" text="서비스명" />
+<lang name="SERVICE_DESCR" text="서비스설명" />
+<lang name="MS_IPADDR" text="관리서버주소" />
+<lang name="SERVICE_STATUS" text="서비스상태" />
+<lang name="STATUS_CHG_DATE" text="서비스상태변경일시" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="LN_ID" text="회선ID" />
+<lang name="LN_NAME" text="회선명" />
+<lang name="LN_TYPE" text="회선종류(코드집)" />
+<lang name="LN_DESCR" text="회선설명" />
+<lang name="MST_MO_NO" text="마스터MO관리번호" />
+<lang name="SRT_MO_NO" text="시작MO관리번호" />
+<lang name="END_MO_NO" text="종단MO관리번호" />
+<lang name="MEM_SIZE" text="구성크기" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="MO_NO" text="MO번호" />
+<lang name="MO_NAME" text="MO명" />
+<lang name="MO_ANAME" text="MO표시명" />
+<lang name="MO_CLASS" text="MO분류 " />
+<lang name="MO_TYPE" text="MO종류" />
+<lang name="MNG_YN" text="관리여부" />
+<lang name="UPPER_MO_NO" text="상위MO번호" />
+<lang name="OWNER_MO_NO" text="소유MO번호" />
+<lang name="ALARM_CFG_NO" text="경보조건번호" />
+<lang name="MO_MEMO" text="관리대상메모" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="MO_NO" text="장치관리번호" />
+<lang name="MS_NAME" text="관리서버명" />
+<lang name="MS_IPADDR" text="관리서버주소" />
+<lang name="MS_DESCR" text="관리서버설명" />
+<lang name="MAX_MO_COUNT" text="최대관할MO수" />
+<lang name="CUR_MO_COUNT" text="현재관할MO수" />
+<lang name="MO_NO" text="장치관리번호" />
+<lang name="SERVICE_NAME" text="서비스명" />
+<lang name="SERVICE_JAVA_CLASS" text="서비스자바클래스" />
+<lang name="MS_IPADDR" text="관리서버주소" />
+<lang name="SERVICE_DESCR" text="서비스설명" />
+<lang name="SERVICE_STATUS" text="서비스상태" />
+<lang name="START_DATE" text="시작일시" />
+<lang name="STATUS_CHG_DATE" text="서비스상태변경일시" />
+<lang name="ALCD_NO" text="경보코드번호" />
+<lang name="ALCD_NAME" text="경보코드명" />
+<lang name="ALCD_ANAME" text="경보코드표시명" />
+<lang name="ALCD_DESCR" text="경보설명" />
+<lang name="ALCD_GROUP" text="경보그룹" />
+<lang name="ALCD_FLAG" text="경보플래그" />
+<lang name="ALARM_MSG" text="경보메시지" />
+<lang name="TARGET_MO_CLASS" text="대상MO분류" />
+<lang name="AUTO_CLEAR_SEC" text="자동해제시간(초) " />
+<lang name="ALARM_LEVEL" text="기본경보등급" />
+<lang name="COMPARE_CODE" text="비교조건" />
+<lang name="PS_CODE" text="성능상태코드" />
+<lang name="REG_USER_NO" text="등록운용자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="ALARM_CFG_NO" text="경보조건번호" />
+<lang name="ALARM_CFG_NAME" text="경보조건명" />
+<lang name="ALARM_CFG_DESCR" text="경보조건설명" />
+<lang name="MO_CLASS" text="MO분류" />
+<lang name="BASIC_CFG_YN" text="기본경보조건여부" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="ALARM_CFG_NO" text="경보조건번호" />
+<lang name="VERIFIER_VALUE" text="검증자값" />
+<lang name="ALCD_NO" text="경보코드" />
+<lang name="ALARM_LEVEL" text="경보등급" />
+<lang name="USE_YN" text="사용여부" />
+<lang name="COMPARE_VAL" text="비교값" />
+<lang name="REPEAT_TIMES" text="연속일치회수" />
+<lang name="VERIFIER_JAVA_CLASS" text="검증자자바클래스" />
+<lang name="TREAT_NAME" text="경보조치코드명" />
+<lang name="ALARM_NO" text="경보발생번호" />
+<lang name="ALARM_KEY" text="경보구분고유값" />
+<lang name="ALCD_NO" text="경보코드번호" />
+<lang name="ALCD_NAME" text="경보명" />
+<lang name="ALARM_CLASS" text="경보분류" />
+<lang name="ALARM_LEVEL" text="경보등급" />
+<lang name="ALARM_MSG" text="경보메세지" />
+<lang name="COMPARE_VALUE" text="비교값" />
+<lang name="PS_VALUE" text="조회된값" />
+<lang name="PS_CODE" text="상태값번호" />
+<lang name="PS_DATE" text="상태수집일시" />
+<lang name="PS_NAME" text="상태값명" />
+<lang name="MO_NO" text="MO번호" />
+<lang name="MO_NAME" text="MO명" />
+<lang name="MO_ANAME" text="MO표시명" />
+<lang name="MO_INSTANCE" text="MO인스턴스" />
+<lang name="MO_CLASS" text="MO분류 " />
+<lang name="UPPER_MO_NO" text="상위MO번호" />
+<lang name="UPPER_MO_NAME" text="상위MO명" />
+<lang name="UPPER_MO_ANAME" text="상위MO표시명" />
+<lang name="INLO_NO" text="설치위치번호" />
+<lang name="INLO_NAME" text="설치위치명" />
+<lang name="MODEL_NO" text="모델번호" />
+<lang name="MODEL_NAME" text="모델명" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="OCU_DATE" text="발생일시" />
+<lang name="ACK_DATE" text="확인일시" />
+<lang name="ACK_USER_NO" text="확인운용자번호" />
+<lang name="REASON_REG_DATE" text="경보원인등록일시" />
+<lang name="REASON_REG_USER_NO" text="경보원인등록운용자번호" />
+<lang name="REASON_NO" text="경보원인번호" />
+<lang name="REASON_NAME" text="경보원인명" />
+<lang name="REASON_MEMO" text="경보원인메모" />
+<lang name="IP_ADDR" text="IP주소(장비)" />
+<lang name="CHG_DATE" text="변경일시" />
+<lang name="TREAT_NAME" text="경보조치코드명" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="ALARM_NO" text="경보발생번호" />
+<lang name="ALARM_KEY" text="경보구분고유값" />
+<lang name="ALCD_NO" text="경보코드" />
+<lang name="ALCD_NAME" text="경보명" />
+<lang name="ALARM_CLASS" text="경보분류" />
+<lang name="ALARM_LEVEL" text="경보등급" />
+<lang name="ALARM_MSG" text="경보메세지" />
+<lang name="COMPARE_VALUE" text="비교값" />
+<lang name="PS_VALUE" text="조회된값" />
+<lang name="PS_CODE" text="상태값번호" />
+<lang name="PS_NAME" text="상태값명" />
+<lang name="PS_DATE" text="상태수집일시" />
+<lang name="MO_NO" text="MO번호" />
+<lang name="MO_NAME" text="MO명" />
+<lang name="MO_ANAME" text="MO표시명" />
+<lang name="MO_INSTANCE" text="MO인스턴스" />
+<lang name="MO_CLASS" text="MO분류 " />
+<lang name="UPPER_MO_NO" text="상위MO번호" />
+<lang name="UPPER_MO_NAME" text="상위MO명" />
+<lang name="UPPER_MO_ANAME" text="상위MO표시명" />
+<lang name="INLO_NO" text="설치위치번호" />
+<lang name="INLO_NAME" text="설치위치명" />
+<lang name="MODEL_NO" text="모델번호" />
+<lang name="MODEL_NAME" text="모델명" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="OCU_DATE" text="발생일시" />
+<lang name="ACK_DATE" text="확인일시" />
+<lang name="ACK_USER_NO" text="확인운용자번호" />
+<lang name="REASON_REG_DATE" text="경보원인등록일시" />
+<lang name="REASON_REG_USER_NO" text="경보원인등록운용자번호" />
+<lang name="REASON_NO" text="경보원인번호" />
+<lang name="REASON_NAME" text="경보원인명" />
+<lang name="REASON_MEMO" text="경보원인메모" />
+<lang name="IP_ADDR" text="IP주소(장비)" />
+<lang name="CHG_DATE" text="변경일시" />
+<lang name="TREAT_NAME" text="경보조치코드명" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="CLEAR_YN" text="경보해제여부" />
+<lang name="CLEAR_DATE" text="경보해제일시" />
+<lang name="CLEAR_USER_NO" text="경보해제운용자번호" />
+<lang name="CLEAR_RSN_NO" text="경보해제원인번호" />
+<lang name="CLEAR_RSN_NAME" text="경보해제원인명" />
+<lang name="CLEAR_MEMO" text="경보해제메모" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="ALARM_CFG_NO" text="경보조건번호" />
+<lang name="ALARM_CFG_NAME" text="경보조건명" />
+<lang name="ALARM_CFG_DESCR" text="경보조건설명" />
+<lang name="MO_CLASS" text="MO분류" />
+<lang name="BASIC_CFG_YN" text="기본경보조건여부" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="ALARM_CFG_NO" text="경보조건번호" />
+<lang name="VERIFIER_VALUE" text="검증자값" />
+<lang name="ALCD_NO" text="경보코드" />
+<lang name="ALARM_LEVEL" text="경보등급" />
+<lang name="USE_YN" text="사용여부" />
+<lang name="COMPARE_VAL" text="비교값" />
+<lang name="REPEAT_TIMES" text="연속일치회수" />
+<lang name="VERIFIER_JAVA_CLASS" text="검증자자바클래스" />
+<lang name="TREAT_NAME" text="경보조치코드명" />
+<lang name="PS_CODE" text="상태값번호" />
+<lang name="PS_NAME" text="상태값명" />
+<lang name="PS_TABLE" text="데이터베이스테이블명" />
+<lang name="PS_COLUMN" text="데이터베이스컬럼명" />
+<lang name="PS_FORMAT" text="상태값포맷" />
+<lang name="PS_FLAG" text="성능플래그" />
+<lang name="PS_UNIT" text="성능단위" />
+<lang name="PS_GROUP" text="성능그룹" />
+<lang name="COMPUTE_FORMULA" text="계산식" />
+<lang name="USE_YN" text="사용여부" />
+<lang name="INSTANCE_YN" text="인스턴스존재여부" />
+<lang name="UPDATE_FILTER" text="업데이트필터" />
+<lang name="READ_FUNC" text="읽기함수" />
+<lang name="MO_TABLE" text="MO테이블" />
+<lang name="MO_COLUMN" text="MO컬럼" />
+<lang name="MO_DATE_COLUMN" text="MO컬럼일시" />
+<lang name="STAT_FUNCS" text="통계함수" />
+<lang name="STAT_DATE" text="통계시간" />
+<lang name="VAL_NULL" text="NULL의미값" />
+<lang name="VAL_MAX" text="최대값" />
+<lang name="VAL_MIN" text="최소값" />
+<lang name="VAL_DEF" text="화면설정기본값" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="PS_CODE_2ND" text="2차상태값번호" />
+<lang name="MO_CLASS" text="수집MO분류" />
+<lang name="MO_TYPE" text="수집MO종류" />
+<lang name="MAKE_REQ_NO" text="생성요청번호" />
+<lang name="PS_TABLE" text="테이블명" />
+<lang name="PS_TYPE" text="자료종류" />
+<lang name="PS_DATE" text="생성할 일시" />
+<lang name="MAKE_POSSIBLE_DATE" text="생성가능일시" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="MAKE_REQ_NO" text="생성요청번호" />
+<lang name="PS_TABLE" text="테이블명" />
+<lang name="PS_TYPE" text="자료종류" />
+<lang name="PS_DATE" text="생성할 일시" />
+<lang name="START_DATE" text="생성시작일시" />
+<lang name="END_DATE" text="생성종료일시" />
+<lang name="MAKE_STATE" text="생성상태" />
+<lang name="ROW_SIZE" text="생성건수" />
+<lang name="RET_MSG" text="결과메시지" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="MO_NO" text="컨테이너관리번호" />
+<lang name="CLLT_DATE" text="수집일시" />
+<lang name="MO_INSTANCE" text="MO인스턴스" />
+<lang name="TEMP" text="온도" />
+<lang name="PH" text="pH" />
+<lang name="CO2" text="CO2 주입량" />
+<lang name="PUMP_ONOFF" text="펌프 On/Off" />
+<lang name="PUMP_HZ" text="펌프 Hz" />
+<lang name="LED" text="Light Intensity" />
+<lang name="BIOMASS_OUT" text="바이오매스 측정량" />
+<lang name="ASTAZAN" text="아스타잔틴 함유율" />
+<lang name="BIOMASS_IN" text="바이오매스 접종량" />
+<lang name="COST" text="매지비용" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="UGRP_NAME" text="운용자그룹명" />
+<lang name="UGRP_DESCR" text="운용자그룹설명" />
+<lang name="UGRP_FLAG" text="운용자그룹플래그" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="USER_ID" text="로그인ID" />
+<lang name="USER_NAME" text="운용자명" />
+<lang name="USER_PASSWD" text="운용자 암호" />
+<lang name="USER_MAIL" text="운용자 메일" />
+<lang name="USER_TYPE" text="운용자 유형" />
+<lang name="USER_FLAG" text="운용자 플래그" />
+<lang name="TEL_NO" text="전화번호" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="MNG_INLO_NO" text="관리설치위치번호" />
+<lang name="USE_SRT_YMD" text="사용가능일자(시작)" />
+<lang name="USE_END_YMD" text="사용가능일자(종료)" />
+<lang name="ACCS_NETWORK" text="접근가능 네트워크" />
+<lang name="ACCS_NETMASK" text="접근가능 넷마스크" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="UGRP_NO" text="운용자그룹번호" />
+<lang name="OP_NO" text="운용번호" />
+<lang name="REG_USER_NO" text="등록운용자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="REG_MEMO" text="등록사유" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="OP_NO" text="운용번호" />
+<lang name="REG_USER_NO" text="등록운용자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="REG_MEMO" text="등록사유" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="MO_NO" text="관리대상번호" />
+<lang name="REG_USER_NO" text="등록운용자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="REG_MEMO" text="등록사유" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="SESSION_ID" text="세션ID" />
+<lang name="LOGIN_DATE" text="로그인일시" />
+<lang name="LOGOUT_DATE" text="로그아웃일시" />
+<lang name="IP_ADDR" text="접속IP주소" />
+<lang name="LOG_STATUS_CODE" text="로그상태코드" />
+<lang name="OP_SEQNO" text="작업일련번호" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="USER_NAME" text="운용자명" />
+<lang name="SESSION_ID" text="세션ID" />
+<lang name="OP_NO" text="운용번호" />
+<lang name="OP_NAME" text="기능명" />
+<lang name="OP_OBJ_TYPE" text="작업객체종류" />
+<lang name="OP_OBJ_NO" text="작업객체관리번호" />
+<lang name="OP_OBJ_NAME" text="작업객체명" />
+<lang name="RET_NO" text="결과번호" />
+<lang name="RET_MSG" text="결과내용" />
+<lang name="SRT_DATE" text="시작일시" />
+<lang name="END_DATE" text="종료일시" />
+<lang name="IN_PARA" text="입력인수" />
+<lang name="OUT_RET" text="출력결과" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="USER_PASSWD" text="운용자암호" />
+<lang name="USE_SRT_DATE" text="사용시작일시" />
+<lang name="USE_END_DATE" text="사용종료일시" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="PROPERTY_NAME" text="속성명" />
+<lang name="PROPERTY_VALUE" text="속성값" />
+<lang name="CHG_DATE" text="수정일자" />
+<lang name="TREE_NO" text="폴더관리번호" />
+<lang name="UPPER_TREE_NO" text="상위트리번호" />
+<lang name="TREE_NAME" text="폴더명" />
+<lang name="TARGET_MO_CLASS" text="대상MO분류 " />
+<lang name="INLO_TYPE" text="설치위치종류(코드집)" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="ORDER_BY" text="정렬순서" />
+<lang name="CHG_DATE" text="수정일자" />
+<lang name="TREE_NO" text="폴더관리번호" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="JAVA_FIELD_NAME" text="객체자바필드명" />
+<lang name="STRING_METHOD" text="String 비교 메소드" />
+<lang name="STRING_VALUE" text="String 메소드 파라메터" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="DATA_TYPE" text="객체분류" />
+<lang name="DONE_DATE" text="완료일시" />
+<lang name="DATA_COUNT" text="처리건수" />
+<lang name="ATTR_CD" text="속성코드" />
+<lang name="ATTR_NM" text="속성명" />
+<lang name="TBL_NM" text="테이블명" />
+<lang name="COL_NM" text="컬럼명" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="MO_NO" text="관리대상번호" />
+<lang name="MO_NAME" text="MO명" />
+<lang name="MO_HST_CD" text="MO변경구분코드" />
+<lang name="MO_HST_NM" text="MO변경구분명" />
+<lang name="ATTR_CD" text="속성코드" />
+<lang name="ATTR_NM" text="속성명" />
+<lang name="ATTR_BF_VAL" text="이전속성값" />
+<lang name="ATTR_AF_VAL" text="이후속성값" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="ST_DATE" text="통계일자" />
+<lang name="MO_NO" text="MO번호" />
+<lang name="ALCD_NO" text="경보코드번호" />
+<lang name="INLO_NO" text="설치위치번호" />
+<lang name="MODEL_NO" text="모델번호" />
+<lang name="LEVEL1_COUNT" text="등급1건수" />
+<lang name="LEVEL2_COUNT" text="등급2건수" />
+<lang name="LEVEL3_COUNT" text="등급3건수" />
+<lang name="LEVEL4_COUNT" text="등급4건수" />
+<lang name="ETC_COUNT" text="기타건수" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="ST_DATE" text="통계일자" />
+<lang name="HH" text="MO번호" />
+<lang name="ALCD_NO" text="경보코드번호" />
+<lang name="LEVEL1_COUNT" text="등급1건수" />
+<lang name="LEVEL2_COUNT" text="등급2건수" />
+<lang name="LEVEL3_COUNT" text="등급3건수" />
+<lang name="LEVEL4_COUNT" text="등급4건수" />
+<lang name="ETC_COUNT" text="기타건수" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHART_ID" text="챠트ID" />
+<lang name="CHART_NAME" text="챠트명" />
+<lang name="MO_CLASS" text="MO분류 " />
+<lang name="MO_TYPE" text="MO종류" />
+<lang name="PS_CODES" text="상태값번호" />
+<lang name="PS_TYPE" text="자료종류" />
+<lang name="DATA_RANGE" text="데이터범위" />
+<lang name="CHART_JAVA_CLASS" text="챠트자바클래스" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="UI_GROUP_NO" text="화면그룹번호" />
+<lang name="UI_GROUP_NAME" text="화면ID" />
+<lang name="VISIBLE_YN" text="표시여부" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="CHG_DATE" text="수정일자" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="UI_GROUP_NO" text="화면그룹번호" />
+<lang name="UI_NO" text="화면ID" />
+<lang name="UI_TITLE" text="화면타이틀" />
+<lang name="UI_STYLE" text="화면스타일" />
+<lang name="UI_X" text="화면X좌표" />
+<lang name="UI_Y" text="화면Y좌표" />
+<lang name="UI_WIDTH" text="화면폭" />
+<lang name="UI_HEIGHT" text="화면높이" />
+<lang name="OP_NO" text="운용번호" />
+<lang name="VISIBLE_YN" text="표시여부" />
+<lang name="SEQ_BY" text="정렬순서" />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="UI_GROUP_NO" text="화면그룹번호" />
+<lang name="UI_NO" text="화면ID" />
+<lang name="PROPERTY_NAME" text="속성명" />
+<lang name="PROPERTY_VALUE" text="속성값" />
+<lang name="DIAG_NO" text="챠트명" />
+<lang name="DIAG_TITLE" text="MO분류 " />
+<lang name="USER_NO" text="운용자번호" />
+<lang name="OP_NO" text="운용번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="DIAG_NO" text="챠트명" />
+<lang name="DIAG_NODE_NO" text="다이아그램노드번호" />
+<lang name="DIAG_NODE_TYPE" text="다이아그램노드유형" />
+<lang name="DIAG_NODE_X" text="다이아그램노드X좌표" />
+<lang name="DIAG_NODE_Y" text="다이아그램노드Y좌표" />
+<lang name="DIAG_NODE_WIDTH" text="다이아그램노드넓이" />
+<lang name="DIAG_NODE_HEIGHT" text="다이아그램노드높이" />
+<lang name="DIAG_NO" text="챠트명" />
+<lang name="DIAG_NODE_NO" text="다이아그램노드번호" />
+<lang name="LINK_DIAG_NODE_NO1" text="연결다이아그램노드번호1" />
+<lang name="LINK_DIAG_NODE_NO2" text="연결다이아그램노드번호2" />
+<lang name="DIAG_NO" text="챠트명" />
+<lang name="DIAG_NODE_NO" text="다이아그램노드번호" />
+<lang name="PROPERTY_NAME" text="속성명" />
+<lang name="PROPERTY_VALUE" text="속성값" />
+<lang name="MO_NO" text="컨테이너 관리번호" />
+<lang name="CONTAINER_ID" text="컨테이너 ID" />
+<lang name="CONTAINER_TYPE" text="컨테이너 종류" />
+<lang name="INLO_NO" text="컨테이너 설치위치번호" />
+<lang name="INLO_MEMO" text="설치위치메모" />
+<lang name="GW_MO_NO" text="GW관리번호" />
+<lang name="INSTALL_YMD" text="설치일자" />
+<lang name="MO_NO" text="PBR 관리번호" />
+<lang name="PBR_TYPE" text="PBR 유형" />
+<lang name="CONTAINER_ID" text="컨테이너 ID" />
+<lang name="MO_NO" text="관리번호" />
+<lang name="GW_TYPE" text="GW 종류" />
+<lang name="GW_IPADDR" text="GW IP주소" />
+<lang name="GW_PORT" text="GW 포트" />
+<lang name="GW_VER" text="GW 버전" />
+<lang name="MANAGER_IPADDR" text="매니저 IP주소" />
+<lang name="MANAGER_PORT" text="매니저 포트" />
+<lang name="MS_IPADDR" text="관리서버IP주소" />
+<lang name="INLO_NO" text="설치위치번호" />
+<lang name="INLO_MEMO" text="설치위치메모" />
+<lang name="MO_NO" text="장치관리번호" />
+<lang name="DEVICE_TYPE" text="장치유형" />
+<lang name="DEVICE_IPADDR" text="IP주소" />
+<lang name="GW_MO_NO" text="GW관리번호" />
+<lang name="DEVICE_ID_IN_GW" text="GW용 장치ID" />
+<lang name="LAST_CTRL_VAL" text="최종제어값" />
+<lang name="LAST_CTRL_DATE" text="최종제어값적용일시" />
+<lang name="BATCH_NO" text="배치번호" />
+<lang name="BATCH_ID" text="배치ID" />
+<lang name="PRDC_CODE" text="대표생산품코드" />
+<lang name="COMPANY_INLO_NO" text="회사설치위치번호" />
+<lang name="CUR_N_DAYS" text="현재차수" />
+<lang name="BATCH_SRT_DATE" text="배치시작일시" />
+<lang name="BATCH_END_DATE" text="배치종료일시" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="BATCH_NO" text="배치번호" />
+<lang name="N_DAYS" text="차수" />
+<lang name="PBR_MO_NO" text="PBR 관리번호" />
+<lang name="ALARM_CFG_NO" text="래시피관리번호" />
+<lang name="DAYS_MEMO" text="차수메모" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="BATCH_NO" text="배치번호" />
+<lang name="N_DAYS" text="차수" />
+<lang name="MTRL_CODE" text="원자재코드" />
+<lang name="MTRL_AMT" text="원자재량" />
+<lang name="MTRL_UCST" text="원자재단가" />
+<lang name="IN_MEMO" text="투입메모" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="BATCH_NO" text="배치번호" />
+<lang name="N_DAYS" text="차수" />
+<lang name="PRDC_CODE" text="생산품코드" />
+<lang name="OUT_AMT" text="생산량" />
+<lang name="OUT_MEMO" text="생산메모" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="BATCH_NO" text="배치번호" />
+<lang name="N_DAYS" text="차수" />
+<lang name="SENSOR_MO_NO" text="센서MO번호" />
+<lang name="PS_CODE" text="상태값번호" />
+<lang name="PS_DATE" text="상태값일시" />
+<lang name="PS_VAL" text="상태값" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="COMPANY_INLO_NO" text="회사설치위치번호" />
+<lang name="PRDC_CODE" text="생산품코드" />
+<lang name="PRDC_NM" text="생산품명" />
+<lang name="PRDC_DESCR" text="생산품설명" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="COMPANY_INLO_NO" text="회사설치위치번호" />
+<lang name="MTRL_CODE" text="원자재코드" />
+<lang name="MTRL_NAME" text="원자재명" />
+<lang name="MTRL_DESCR" text="원자재설명" />
+<lang name="MTRL_UNIT" text="원자재단위" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="COMPANY_INLO_NO" text="회사설치위치번호" />
+<lang name="MTRL_CODE" text="원자재코드" />
+<lang name="UNIT_PRICE" text="구입단가" />
+<lang name="IN_AMOUNT" text="구입량" />
+<lang name="BUY_USER_NO" text="구입운용자" />
+<lang name="BUY_DATE" text="구입일자" />
+<lang name="START_TIME" text="사용시작일자" />
+<lang name="STOCK_AMOUNT" text="재고량" />
+<lang name="END_TIME" text="사용종료일자" />
+<lang name="REG_USER_NO" text="등록운영자번호" />
+<lang name="REG_DATE" text="등록일시" />
+<lang name="CHG_USER_NO" text="수정운영자번호" />
+<lang name="CHG_DATE" text="수정일시" />
+<lang name="MO_NO" text="NE관리번호" />
+<lang name="IP_ADDRESS" text="IP주소" />
+<lang name="IP_ADDRESS2" text="IP주소2" />
+<lang name="MODEL_NO" text="장비모델코드 " />
+<lang name="CATEGORY_CD" text="카테고리코드" />
+<lang name="INLO_NO" text="컨테이너 설치위치번호" />
+<lang name="INLO_MEMO" text="설치위치메모" />
+<lang name="NET_TYPE" text="망유형" />
+<lang name="CONTACT_NAME" text="연락처(담당자명)" />
+<lang name="CONTACT_TELNO" text="연락처(전화번호)" />
+<lang name="NODE_MEMO" text="노드메모장" />
+<lang name="NODE_ID_EXTRA" text="외부노드ID" />
+<lang name="INSTALL_YMD" text="설치일자" />
+<lang name="SYSLOG_RECV_YN" text="SYSLOG수신여부(Y|N)" />
+<lang name="TRAP_RECV_YN" text="TRAP수신여부(Y|N)" />
+<lang name="PING_POLL_YN" text="PING 확인여부(Y|N)" />
+<lang name="SNMPPING_POLL_YN" text="SNMPPING 확인여부(Y|N)" />
+<lang name="CONF_AUTO_SYNC_YN" text="구성자동갱신여부" />
+<lang name="BGP_RECV_YN" text="BGP수신여부" />
+<lang name="FLOW_RECV_YN" text="FLOW수신여부" />
+<lang name="POLL_CYCLE_SNMP" text="SNMP폴링주기(초)" />
+<lang name="POLL_CYCLE_PING" text="PING폴링주기(초)" />
+<lang name="SNMP_STRING" text="SNMP 정보" />
+<lang name="TELNET_STRING" text="TELNET 정보" />
+<lang name="BGP_STRING" text="BGP 정보" />
+<lang name="FLOW_STRING" text="FLOW 정보" />
+<lang name="MS_IPADDR" text="관리서버IP주소" />
+<lang name="USER_DATA" text="기타데이터" />
+<lang name="MO_NO" text="장비카드관리번호" />
+<lang name="CARD_ID" text="카드ID" />
+<lang name="CARD_DESCR" text="카드설명" />
+<lang name="CARD_MODEL_NAME" text="카드모델설명" />
+<lang name="CARD_TYPE" text="모델카드" />
+<lang name="PORT_COUNT" text="포트수" />
+<lang name="SERIAL_NO" text="시리얼번호" />
+<lang name="UPPER_SLOT_NO" text="상위슬롯번호" />
+<lang name="SLOT_NO" text="슬롯번호" />
+<lang name="CHASSIS_ID" text="샤시스ID" />
+<lang name="VER_FW" text="FW버전" />
+<lang name="VER_SW" text="SW버전" />
+<lang name="SNMP_INDEX" text="SNMP 인덱스" />
+<lang name="MO_NO" text="인터페이스관리번호" />
+<lang name="IF_INDEX" text="인터페이스인덱스" />
+<lang name="IF_NAME" text="IF_NAME" />
+<lang name="IF_ALIAS" text="IF_ALIAS" />
+<lang name="IF_DESCR" text="IF_DESCR" />
+<lang name="IF_SPEED_QOS" text="IF_SPEED" />
+<lang name="IF_SPEED" text="IF_SPEED" />
+<lang name="IF_TYPE" text="IF_TYPE" />
+<lang name="IF_LAST_CHANGE" text="IF_LAST_CHANGE" />
+<lang name="IF_STATUS_ADMIN" text="관리상태" />
+<lang name="IF_STATUS_OPER" text="연결상태" />
+<lang name="IF_NETMASK" text="IF_NETMASK" />
+<lang name="BW_CODE" text="대역폭코드 " />
+<lang name="BW_CODE_QOS" text="대역폭코드(QoS)" />
+<lang name="IP_ADDRESS" text="IP주소" />
+<lang name="MAC_ADDRESS" text="MAC주소" />
+<lang name="BIT64_YN" text="64비트인터페이스여부" />
+<lang name="CARD_ID" text="카드ID" />
+<lang name="PORT_NO" text="포트번호" />
+<lang name="CHASSIS_ID" text="샤시스ID" />
+<lang name="FLOW_RECV_YN" text="FLOW수신여부" />
+<lang name="FLOW_STRING" text="FLOW 정보" />
+<lang name="STATUS_ICMP" text="ICMP PING 상태" />
+<lang name="STATUS_ICMP_CHG_DATE" text="변경일시(ICMP상태)" />
+<lang name="MO_NO" text="NE관리번호" />
+<lang name="SYS_NAME" text="SysName" />
+<lang name="SYS_DESCR" text="SysDescr" />
+<lang name="SYS_OBJECT_ID" text="SysObjectID" />
+<lang name="SYS_LOCATION" text="SysLocation" />
+<lang name="SYS_UPTIME" text="SysUptime" />
+<lang name="SYS_SERVICES" text="SysServices" />
+<lang name="SYS_UPTIME_CHG_DATE" text="SysUptime변경일시" />
+<lang name="STATUS_ICMP" text="ICMP PING 상태" />
+<lang name="STATUS_SNMP" text="SNMP PING 상태 " />
+<lang name="STATUS_ICMP_CHG_DATE" text="변경일시(ICMP상태)" />
+<lang name="STATUS_SNMP_CHG_DATE" text="변경일시(SNMP상태)" />
+<lang name="VER_SW" text="Version ( SW )" />
+<lang name="VER_FW" text="Version ( FW )" />
+<lang name="VER_HW" text="Version ( HW )" />
+<lang name="TRAP_LAST_DATE" text="TRAP최근수신일시" />
+<lang name="SYSLOG_LAST_DATE" text="SYSLOG최근수신일시" />
+<lang name="CONF_SYNC_DATE" text="구성동기일시" />
+
+
+
+</lang-list>
+
