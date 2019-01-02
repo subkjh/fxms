@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT-com.fxms.nms.mo.pmo.IpPmo" javaClass="com.fxms.nms.mo.pmo.IpPmo">
+		<result attr="setMoNo()" field="MO_NO" />
+		<result attr="setMoName()" field="MO_NAME" />
+		<result attr="setMoAname()" field="MO_ANAME" />
+		<result attr="setMoClass()" field="MO_CLASS" />
+		<result attr="setUpperMoNo()" field="UPPER_MO_NO" />
+		<result attr="setAlarmCfgNo()" field="ALARM_CFG_NO" />
+
+		<result attr="setIpAddress()" field="IP_ADDRESS" />
+		<result attr="setPollingCycle()" field="POLLING_CYCLE" />
+	</resultMap>
+
+	<select id="SELECT-CLASS-com.fxms.nms.mo.pmo.IpPmo" resultMap="RESULT-com.fxms.nms.mo.pmo.IpPmo">
+		<![CDATA[
+		select	T1.MO_NO
+				, T1.MO_NAME
+				, T1.MO_ANAME
+				, T1.MO_CLASS
+				, T1.MNG_YN
+				, T1.UPPER_MO_NO
+				, T1.ALARM_CFG_NO			
+				
+				, T2.IP_ADDRESS
+				, T2.SEC_POLLING_PING		as POLLING_CYCLE
+				
+		from	FX_MO			T1
+				, FN_MO_NE 	T2
+		where	T1.MO_NO = T2.MO_NO
+		and		T1.MNG_YN = 'Y'
+		and		T2.PING_POLL_YN = 'Y'
+		and		T2.IP_ADDRESS is not null
+		]]>
+
+		<test var="msIpaddr"> and ( T2.MS_IPADDR in ( $msIpaddr ) or T2.MS_IPADDR is null ) </test>
+		<test var="moNo"> and T1.MO_NO = $moNo </test>
+		
+		<![CDATA[
+			union all
+		]]>
+	
+		<![CDATA[
+		select	T1.MO_NO
+				, T1.MO_NAME
+				, T1.MO_ANAME
+				, T1.MO_CLASS
+				, T1.MNG_YN
+				, T1.UPPER_MO_NO
+				, T1.ALARM_CFG_NO			
+				
+				, T3.IP_ADDRESS
+				, T2.SEC_POLLING_PING		as POLLING_CYCLE
+				
+		from	FX_MO		T1
+				, FN_MO_NE 	T2
+				, FN_MO_IF 	T3
+		where	T1.UPPER_MO_NO = T2.MO_NO
+		and		T1.MO_NO = T3.MO_NO
+		and		T1.MNG_YN = 'Y'
+		and		T2.PING_POLL_YN = 'Y'
+		and		T3.IP_ADDRESS is not null
+		]]>
+	
+		
+		<test var="msIpaddr"> and ( T2.MS_IPADDR in ( $msIpaddr ) or T2.MS_IPADDR is null ) </test>
+		<test var="moNo"> and T1.MO_NO = $moNo </test>
+
+	</select>
+
+</queries>
+
