@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<command-list>
+	<command service="NbService" cmd="./bin/startNb.sh" run="true" autoRestart="true" />
+	<command service="UiService" cmd="./bin/startUi.sh" run="true" autoRestart="true" />
+	<command service="CrpService" cmd="./bin/startCrp.sh" run="true" autoRestart="true" />
+</command-list>

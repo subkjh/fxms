@@ -1,0 +1,39 @@
+{
+	"result": 
+	{
+		"memList": 
+		[
+			{
+				"alarmCfgNo": 10140,
+				"verifierValue": "all",
+				"alcdNo": 22110,
+				"useYn": true,
+				"compareVal": 11.0,
+				"repeatTimes": 1,
+				"alarmLevel": 1
+			},
+
+			{
+				"alarmCfgNo": 10140,
+				"verifierValue": "all",
+				"alcdNo": 22110,
+				"useYn": true,
+				"compareVal": 22.0,
+				"repeatTimes": 1,
+				"alarmLevel": 4
+			}
+		],
+
+		"alarmCfgNo": 10140,
+		"alarmCfgName": "경보조건#9",
+		"moClass": "MO",
+		"basicCfgYn": false,
+		"regUserNo": 1,
+		"regDate": 20180109145828,
+		"chgUserNo": 0,
+		"chgDate": 0
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515477508300
+}

@@ -1,0 +1,10 @@
+{
+	"seqno": 1515476832205,
+	"method": "get-alarm-hst",
+	"parameters": 
+	{
+		"moNo": 530000
+	},
+
+	"session-id": "FX-1515476932581-BIO"
+}

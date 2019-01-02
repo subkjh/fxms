@@ -1,0 +1,24 @@
+{
+	"seqno": 1515485620626,
+	"method": "update-mo",
+	"parameters": 
+	{
+		"regUserNo": 0,
+		"moClass": "PBR",
+		"mngYn": true,
+		"syncDate": 0,
+		"regDate": 0,
+		"moName": "test-pbr-20180109171340",
+		"upperMoNo": 0,
+		"chgUserNo": 0,
+		"moNo": 1000043,
+		"moAname": "test-pbr-20180109171340",
+		"syncUserNo": 0,
+		"pbrType": "Red",
+		"chgDate": 0,
+		"status": "raw",
+		"alarmCfgNo": 1000
+	},
+
+	"session-id": "FX-1515485721367-BIO"
+}

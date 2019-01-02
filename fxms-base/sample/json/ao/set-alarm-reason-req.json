@@ -1,0 +1,13 @@
+{
+	"seqno": 1515479547456,
+	"method": "set-alarm-reason",
+	"parameters": 
+	{
+		"reasonName": "테스트",
+		"reasonMemo": "개발테스트",
+		"alarmNo": "10077700",
+		"reasonNo": "100"
+	},
+
+	"session-id": "FX-1515479648024-BIO"
+}

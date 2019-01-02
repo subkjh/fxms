@@ -1,0 +1,10 @@
+{
+	"seqno": 1515479067492,
+	"method": "ack-alarm",
+	"parameters": 
+	{
+		"alarmNo": "10077700"
+	},
+
+	"session-id": "FX-1515479168074-BIO"
+}

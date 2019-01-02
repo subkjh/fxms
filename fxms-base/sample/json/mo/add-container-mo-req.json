@@ -1,0 +1,26 @@
+{
+	"seqno": 1515484116615,
+	"method": "add-mo",
+	"parameters": 
+	{
+		"regUserNo": 0,
+		"inloNo": 200020,
+		"moClass": "CONTAINER",
+		"containerType": "JB",
+		"mngYn": true,
+		"syncDate": 0,
+		"regDate": 0,
+		"moName": "test-container-20180109164836",
+		"upperMoNo": 0,
+		"chgUserNo": 0,
+		"moNo": 0,
+		"moAname": "test-container-20180109164836",
+		"inloMemo": "용산",
+		"syncUserNo": 0,
+		"chgDate": 0,
+		"status": "raw",
+		"alarmCfgNo": 1000
+	},
+
+	"session-id": "FX-1515484217317-BIO"
+}

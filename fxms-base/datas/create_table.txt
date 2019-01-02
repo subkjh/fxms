@@ -1,0 +1,20 @@
+4.2.1.	배치테이블(FB_BATCH)
+System	FxMS	Author	김종훈	Date	2018.01.30
+TBL Name	FB_BATCH	Comment	배치테이블
+Comment	COL Name	Data Type	Nullable	Default	Note
+배치번호	BATCH_NO	Number(19,0)	No		Sequence FX_SEQ_BATCHNO
+배치ID	BATCH_ID	Varchar2(10)	No		
+대표생산품코드	PRDC_CODE	Varchar2(20)	No		
+회사설치위치번호	COMPANY_INLO_NO	Number(9,0)	No		
+현재차수	CUR_N_DAYS	Number(5, 0)	Yes	0	
+배치시작일시	BATCH_SRT_DATE	Number(14,0)	No	0	
+배치종료일시	BATCH_END_DATE	Number(14,0)	No	0	
+등록운영자번호	REG_USER_NO	Number(9,0)	Yes	0	
+등록일시	REG_DATE	Number(14,0)	Yes		
+수정운영자번호	CHG_USER_NO	Number(9,0)	Yes	0	
+수정일시	CHG_DATE	Number(14,0)	Yes		
+Index Name	Type	COLs
+FB_BATCH__PK	PK	BATCH_NO
+FB_BATCH__UK	UK	BATCH_ID
+배치상태 = 일차
+

@@ -1,0 +1,19 @@
+{
+	"result": 
+	{
+		"inloNo": 200050,
+		"upperInloNo": -1,
+		"inloName": "YRDY",
+		"inloFname": "Y",
+		"inloType": "COMPANY",
+		"ugrpNo": 0,
+		"inloFlag": "",
+		"regUserNo": 1,
+		"regDate": 20180109162018,
+		"chgUserNo": 0,
+		"chgDate": 0
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515482559338
+}

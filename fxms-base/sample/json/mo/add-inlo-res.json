@@ -1,0 +1,18 @@
+{
+	"result": 
+	{
+		"inloNo": 200020,
+		"upperInloNo": -1,
+		"inloName": "Thingspire",
+		"inloFname": "Thingspire",
+		"inloType": "COMPANY",
+		"ugrpNo": 0,
+		"regUserNo": 1,
+		"regDate": 20180109160037,
+		"chgUserNo": 0,
+		"chgDate": 0
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515481237334
+}

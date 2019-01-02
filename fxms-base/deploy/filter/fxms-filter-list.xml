@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<!-- alarm treat filter -->
+	<java-class name="LogTreatFilter" class="fxms.bas.alarm.treat.LogTreatFilter">
+	</java-class>
+
+	<!-- 경보가 발생했을 때 메일을 보내는 TreatFilter -->
+	<java-class name="sendmail" class="fxms.bas.alarm.treat.AlarmSendFilter">
+	</java-class>
+
+	<java-class name="AlarmStMaker" class="fxms.biz.cron.StMaker" service="AppService">
+		<para name="schedule" value="0 2 * * *" />
+		<para name="run-init" value="false" />
+		<para name="file" value="default/st-maker.xml" />
+		<para name="qid" value="DELETE_ALARM_ST" />
+		<para name="qid" value="DELETE_ALARM_ST_HH" />
+		<para name="qid" value="MAKE_ALARM_ST" />
+		<para name="qid" value="MAKE_ALARM_ST_HH" />
+	</java-class>
+
+</class-list>

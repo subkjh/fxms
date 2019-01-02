@@ -1,0 +1,28 @@
+{
+	"seqno": 1515486183713,
+	"method": "add-mo",
+	"parameters": 
+	{
+		"gwIpaddr": "10.0.0.1",
+		"regUserNo": 0,
+		"inloNo": 200020,
+		"moClass": "GW",
+		"gwPort": 4242,
+		"mngYn": true,
+		"syncDate": 0,
+		"regDate": 0,
+		"moName": "test-gw-20180109172303",
+		"upperMoNo": 0,
+		"chgUserNo": 0,
+		"moNo": 0,
+		"moAname": "test-gw-20180109172303",
+		"gwType": "TSDB",
+		"inloMemo": "용산",
+		"syncUserNo": 0,
+		"chgDate": 0,
+		"status": "raw",
+		"alarmCfgNo": 1000
+	},
+
+	"session-id": "FX-1515486284238-BIO"
+}

@@ -1,0 +1,26 @@
+{
+	"result": {
+		"pbrType": "Test",
+		"containerId": "JB-CON-001",
+		"moNo": 1040205,
+		"moName": "PBR-7",
+		"moAname": "PBR-7",
+		"moClass": "PBR",
+		"mngYn": true,
+		"upperMoNo": 1000124,
+		"alarmCfgNo": 0,
+		"regUserNo": 1005,
+		"regDate": 20180608092439,
+		"chgUserNo": 1005,
+		"chgDate": 0,
+		"syncUserNo": 0,
+		"syncDate": 0,
+		"alarmLevel": -1,
+		"eventType": "mo",
+		"status": "added"
+	},
+	"is-ok": "Y",
+	"seqno": 1528417472470,
+	"method": "add-mo",
+	"next-seqno": 1528417479587
+}

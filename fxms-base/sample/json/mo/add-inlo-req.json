@@ -1,0 +1,19 @@
+{
+	"seqno": 1515481237191,
+	"method": "add-inlo",
+	"parameters": 
+	{
+		"inloFname": "Thingspire",
+		"regUserNo": 0,
+		"inloNo": 0,
+		"inloName": "Thingspire",
+		"ugrpNo": 0,
+		"regDate": 0,
+		"inloType": "COMPANY",
+		"upperInloNo": -1,
+		"chgDate": 0,
+		"chgUserNo": 0
+	},
+
+	"session-id": "FX-1515481337823-BIO"
+}

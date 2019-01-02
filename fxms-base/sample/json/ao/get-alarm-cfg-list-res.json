@@ -1,0 +1,175 @@
+{
+	"result": 
+	[
+		{
+			"memList": 
+			[
+				{
+					"alarmCfgNo": 10070,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 11.0,
+					"repeatTimes": 1,
+					"alarmLevel": 1,
+					"treatName": ""
+				},
+
+				{
+					"alarmCfgNo": 10070,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 22.0,
+					"repeatTimes": 1,
+					"alarmLevel": 4,
+					"treatName": ""
+				}
+			],
+
+			"alarmCfgNo": 10070,
+			"alarmCfgName": "경보조건#10070",
+			"alarmCfgDescr": "",
+			"moClass": "MO",
+			"basicCfgYn": false,
+			"regUserNo": 0,
+			"regDate": 0,
+			"chgUserNo": 1,
+			"chgDate": 20180109150049
+		},
+
+		{
+			"alarmCfgNo": 10080,
+			"alarmCfgName": "경보조건#0",
+			"alarmCfgDescr": "",
+			"moClass": "MO",
+			"basicCfgYn": false,
+			"regUserNo": 1,
+			"regDate": 20180108172612,
+			"chgUserNo": 0,
+			"chgDate": 0
+		},
+
+		{
+			"memList": 
+			[
+				{
+					"alarmCfgNo": 10100,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 11.0,
+					"repeatTimes": 1,
+					"alarmLevel": 1,
+					"treatName": ""
+				},
+
+				{
+					"alarmCfgNo": 10100,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 22.0,
+					"repeatTimes": 1,
+					"alarmLevel": 4,
+					"treatName": ""
+				}
+			],
+
+			"alarmCfgNo": 10100,
+			"alarmCfgName": "경보조건#2",
+			"alarmCfgDescr": "",
+			"moClass": "MO",
+			"basicCfgYn": false,
+			"regUserNo": 1,
+			"regDate": 20180109102652,
+			"chgUserNo": 0,
+			"chgDate": 0
+		},
+
+		{
+			"memList": 
+			[
+				{
+					"alarmCfgNo": 10140,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 11.0,
+					"repeatTimes": 1,
+					"alarmLevel": 1,
+					"treatName": ""
+				},
+
+				{
+					"alarmCfgNo": 10140,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 22.0,
+					"repeatTimes": 1,
+					"alarmLevel": 4,
+					"treatName": ""
+				}
+			],
+
+			"alarmCfgNo": 10140,
+			"alarmCfgName": "경보조건#9",
+			"alarmCfgDescr": "",
+			"moClass": "MO",
+			"basicCfgYn": false,
+			"regUserNo": 1,
+			"regDate": 20180109145828,
+			"chgUserNo": 0,
+			"chgDate": 0
+		},
+
+		{
+			"memList": 
+			[
+				{
+					"alarmCfgNo": 10130,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 11.0,
+					"repeatTimes": 1,
+					"alarmLevel": 1,
+					"treatName": ""
+				},
+
+				{
+					"alarmCfgNo": 10130,
+					"verifierJavaClass": "",
+					"verifierValue": "all",
+					"alcdNo": 22110,
+					"useYn": true,
+					"compareVal": 22.0,
+					"repeatTimes": 1,
+					"alarmLevel": 4,
+					"treatName": ""
+				}
+			],
+
+			"alarmCfgNo": 10130,
+			"alarmCfgName": "경보조건#8",
+			"alarmCfgDescr": "",
+			"moClass": "MO",
+			"basicCfgYn": false,
+			"regUserNo": 1,
+			"regDate": 20180109132913,
+			"chgUserNo": 0,
+			"chgDate": 0
+		}
+	],
+
+	"is-ok": "Y",
+	"next-seqno": 1515477782442
+}

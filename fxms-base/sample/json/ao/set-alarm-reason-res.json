@@ -1,0 +1,14 @@
+{
+	"result": 
+	{
+		"alarmNo": 10077700,
+		"reasonRegDate": 20180109153227,
+		"reasonRegUserNo": 1,
+		"reasonNo": 100,
+		"reasonName": "테스트",
+		"reasonMemo": "개발테스트"
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515479548031
+}

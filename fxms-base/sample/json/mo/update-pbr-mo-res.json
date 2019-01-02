@@ -1,0 +1,26 @@
+{
+	"result": 
+	{
+		"pbrType": "Red",
+		"moNo": 1000043,
+		"moName": "test-pbr-20180109171340",
+		"moAname": "test-pbr-20180109171340",
+		"moClass": "PBR",
+		"mngYn": true,
+		"upperMoNo": 0,
+		"alarmCfgNo": 1000,
+		"regUserNo": 0,
+		"regDate": 0,
+		"chgUserNo": 1,
+		"chgDate": 20180109171340,
+		"syncUserNo": 0,
+		"syncDate": 0,
+		"status": "changed",
+		"path": "ExtService"
+	},
+
+	"is-ok": "Y",
+	"seqno": 1515485620626,
+	"method": "update-mo",
+	"next-seqno": 1515485620765
+}

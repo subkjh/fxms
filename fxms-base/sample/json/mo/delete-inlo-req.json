@@ -1,0 +1,10 @@
+{
+	"seqno": 1515482559229,
+	"method": "delete-inlo",
+	"parameters": 
+	{
+		"inloNo": 200050
+	},
+
+	"session-id": "FX-1515482659896-BIO"
+}

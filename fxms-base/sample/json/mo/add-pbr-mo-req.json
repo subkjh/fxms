@@ -1,0 +1,15 @@
+{
+	"seqno": "1528417472470",
+	"method": "add-mo",
+	"parameters": {
+		"moAname": "PBR-7",
+		"moClass": "PBR",
+		"mngYn": true,
+		"pbrType": "Test",
+		"moName": "PBR-7",
+		"containerId": "JB-CON-001",
+		"upperMoNo": 1000124,
+		"alarmCfgNo": 0
+	},
+	"session-id": "FX-1528417472462-BIO"
+}

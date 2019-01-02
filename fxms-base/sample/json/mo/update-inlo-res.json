@@ -1,0 +1,19 @@
+{
+	"result": 
+	{
+		"inloNo": 200020,
+		"upperInloNo": -1,
+		"inloName": "띵스파이어",
+		"inloFname": "띵스파이어",
+		"inloType": "COMPANY",
+		"ugrpNo": 0,
+		"inloFlag": "",
+		"regUserNo": 1,
+		"regDate": 20180109160037,
+		"chgUserNo": 1,
+		"chgDate": 20180109161342
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515482022650
+}

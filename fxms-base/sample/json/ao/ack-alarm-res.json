@@ -1,0 +1,20 @@
+{
+	"result": 
+	{
+		"alarmNo": 10077700,
+		"alarmKey": "530000_11001",
+		"alcdNo": 11001,
+		"moNo": 530000,
+		"moInstance": "",
+		"upperMoNo": 0,
+		"alarmLevel": 2,
+		"ocuMsdate": 1515478083540,
+		"ackMsdate": 20180109152427,
+		"ackUserNo": 1,
+		"status": "raw",
+		"path": "ExtService"
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515479067669
+}

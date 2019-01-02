@@ -1,0 +1,19 @@
+{
+	"seqno": 1515481809235,
+	"method": "update-inlo",
+	"parameters": 
+	{
+		"inloFname": "띵스파이어",
+		"regUserNo": 0,
+		"inloNo": 200020,
+		"inloName": "띵스파이어",
+		"ugrpNo": 0,
+		"regDate": 0,
+		"inloType": "COMPANY",
+		"upperInloNo": -1,
+		"chgDate": 0,
+		"chgUserNo": 0
+	},
+
+	"session-id": "FX-1515481909883-BIO"
+}

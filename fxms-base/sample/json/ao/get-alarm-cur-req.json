@@ -1,0 +1,11 @@
+{
+	"seqno": 1515476832054,
+	"method": "get-alarm-cur",
+	"parameters": 
+	{
+		"moNo": "530000",
+		"alcdNo": "11001"
+	},
+
+	"session-id": "FX-1515476932581-BIO"
+}

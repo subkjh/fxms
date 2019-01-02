@@ -1,0 +1,44 @@
+{
+	"result": 
+	[
+		{
+			"alarmNo": 10077698,
+			"alarmKey": "530000_11001",
+			"alcdNo": 11001,
+			"alcdName": "NOT_RESPONSE_ON_PS_COLLECT",
+			"alarmClass": "",
+			"alarmLevel": 2,
+			"alarmMsg": "수집요청 응답 없음",
+			"compareValue": 0.0,
+			"psValue": 0.0,
+			"psCode": "",
+			"psDate": 0,
+			"moNo": 530000,
+			"moName": "소노넷_TEST_GW#2",
+			"moInstance": "",
+			"moClass": "GW",
+			"upperMoNo": 0,
+			"upperMoName": "",
+			"inloNo": 0,
+			"inloName": "",
+			"modelNo": 0,
+			"modelName": "",
+			"regMsdate": 1515476221957,
+			"ocuMsdate": 1515476221957,
+			"ackMsdate": 0,
+			"ackUserNo": 0,
+			"reasonRegDate": 0,
+			"reasonRegUserNo": 0,
+			"reasonNo": 0,
+			"reasonName": "",
+			"reasonMemo": "",
+			"ipAddr": "",
+			"chgDate": 0,
+			"treatName": "",
+			"ugrpNo": 0
+		}
+	],
+
+	"is-ok": "Y",
+	"next-seqno": 1515476832205
+}

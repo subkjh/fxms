@@ -1,0 +1,39 @@
+{
+	"result": 
+	{
+		"memList": 
+		[
+			{
+				"alarmCfgNo": 10070,
+				"verifierValue": "all",
+				"alcdNo": 22110,
+				"useYn": true,
+				"compareVal": 11.0,
+				"repeatTimes": 1,
+				"alarmLevel": 1
+			},
+
+			{
+				"alarmCfgNo": 10070,
+				"verifierValue": "all",
+				"alcdNo": 22110,
+				"useYn": true,
+				"compareVal": 22.0,
+				"repeatTimes": 1,
+				"alarmLevel": 4
+			}
+		],
+
+		"alarmCfgNo": 10070,
+		"alarmCfgName": "경보조건#10070",
+		"moClass": "MO",
+		"basicCfgYn": false,
+		"regUserNo": 0,
+		"regDate": 0,
+		"chgUserNo": 1,
+		"chgDate": 20180109150049
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515477649658
+}

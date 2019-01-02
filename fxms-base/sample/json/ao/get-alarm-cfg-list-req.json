@@ -1,0 +1,10 @@
+{
+	"seqno": 1515477782312,
+	"method": "get-alarm-cfg-list",
+	"parameters": 
+	{
+		"moClass": "MO"
+	},
+
+	"session-id": "FX-1515477882855-BIO"
+}

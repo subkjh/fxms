@@ -1,0 +1,28 @@
+{
+	"result": 
+	{
+		"containerType": "JB",
+		"inloNo": 200020,
+		"inloMemo": "용산",
+		"moNo": 1000037,
+		"moName": "test-container-20180109164836",
+		"moAname": "test-container-20180109164836",
+		"moClass": "CONTAINER",
+		"mngYn": true,
+		"upperMoNo": 0,
+		"alarmCfgNo": 1000,
+		"regUserNo": 1,
+		"regDate": 20180109164836,
+		"chgUserNo": 0,
+		"chgDate": 0,
+		"syncUserNo": 0,
+		"syncDate": 0,
+		"status": "added",
+		"path": "ExtService"
+	},
+
+	"is-ok": "Y",
+	"seqno": 1515484116615,
+	"method": "add-mo",
+	"next-seqno": 1515484116871
+}

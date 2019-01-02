@@ -1,0 +1,10 @@
+{
+	"seqno": 1515477876219,
+	"method": "delete-alarm-cfg",
+	"parameters": 
+	{
+		"alarmCfgNo": 10140
+	},
+
+	"session-id": "FX-1515477976771-BIO"
+}

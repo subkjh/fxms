@@ -1,0 +1,30 @@
+{
+	"result": 
+	{
+		"gwType": "TSDB",
+		"gwIpaddr": "10.0.0.1",
+		"gwPort": 4242,
+		"inloNo": 200020,
+		"inloMemo": "용산",
+		"moNo": 1000044,
+		"moName": "test-gw-20180109172303",
+		"moAname": "test-gw-20180109172303",
+		"moClass": "GW",
+		"mngYn": true,
+		"upperMoNo": 0,
+		"alarmCfgNo": 1000,
+		"regUserNo": 1,
+		"regDate": 20180109172304,
+		"chgUserNo": 0,
+		"chgDate": 0,
+		"syncUserNo": 0,
+		"syncDate": 0,
+		"status": "added",
+		"path": "ExtService"
+	},
+
+	"is-ok": "Y",
+	"seqno": 1515486183713,
+	"method": "add-mo",
+	"next-seqno": 1515486189738
+}

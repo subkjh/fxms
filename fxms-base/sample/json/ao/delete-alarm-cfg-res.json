@@ -1,0 +1,17 @@
+{
+	"result": 
+	{
+		"alarmCfgNo": 10140,
+		"alarmCfgName": "경보조건#9",
+		"alarmCfgDescr": "",
+		"moClass": "MO",
+		"basicCfgYn": false,
+		"regUserNo": 1,
+		"regDate": 20180109145828,
+		"chgUserNo": 0,
+		"chgDate": 0
+	},
+
+	"is-ok": "Y",
+	"next-seqno": 1515477876353
+}

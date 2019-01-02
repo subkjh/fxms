@@ -1,0 +1,40 @@
+{
+	"seqno": 1515477508153,
+	"method": "add-alarm-cfg",
+	"parameters": 
+	{
+		"regUserNo": 0,
+		"moClass": "MO",
+		"alarmCfgName": "경보조건#9",
+		"memList": 
+		[
+			{
+				"alarmCfgNo": 9,
+				"verifierValue": "all",
+				"alcdNo": 22110,
+				"useYn": true,
+				"compareVal": 11.0,
+				"repeatTimes": 1,
+				"alarmLevel": 1
+			},
+
+			{
+				"alarmCfgNo": 9,
+				"verifierValue": "all",
+				"alcdNo": 22110,
+				"useYn": true,
+				"compareVal": 22.0,
+				"repeatTimes": 1,
+				"alarmLevel": 4
+			}
+		],
+
+		"regDate": 0,
+		"basicCfgYn": false,
+		"chgDate": 0,
+		"chgUserNo": 0,
+		"alarmCfgNo": 9
+	},
+
+	"session-id": "FX-1515477608697-BIO"
+}
