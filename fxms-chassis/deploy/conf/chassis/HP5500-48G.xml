@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# HP5500-48G
+		############################################################################################
+	-->
+
+	<chassis_def img="device1.png" width="876" height="86" name="HP5500-48G">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="HP5500-48G" />
+
+		<item x="30" y="18" moClass="INTERFACE" field="ifIndex" value="1" tag="180" />
+		<item x="30" y="45" moClass="INTERFACE" field="ifIndex" value="2" />
+		<item x="59" y="18" moClass="INTERFACE" field="ifIndex" value="3" tag="180" />
+		<item x="59" y="45" moClass="INTERFACE" field="ifIndex" value="4" />
+		<item x="88" y="18" moClass="INTERFACE" field="ifIndex" value="5" tag="180" />
+		<item x="88" y="45" moClass="INTERFACE" field="ifIndex" value="6" />
+		<item x="117" y="18" moClass="INTERFACE" field="ifIndex" value="7" tag="180" />
+		<item x="117" y="45" moClass="INTERFACE" field="ifIndex" value="8" />
+		<item x="146" y="18" moClass="INTERFACE" field="ifIndex" value="9" tag="180" />
+		<item x="146" y="45" moClass="INTERFACE" field="ifIndex" value="10" />
+		<item x="175" y="18" moClass="INTERFACE" field="ifIndex" value="11" tag="180" />
+		<item x="175" y="45" moClass="INTERFACE" field="ifIndex" value="12" />
+		<item x="204" y="18" moClass="INTERFACE" field="ifIndex" value="13" tag="180" />
+		<item x="204" y="45" moClass="INTERFACE" field="ifIndex" value="14" />
+		<item x="233" y="18" moClass="INTERFACE" field="ifIndex" value="15" tag="180" />
+		<item x="233" y="45" moClass="INTERFACE" field="ifIndex" value="16" />
+		<item x="269" y="18" moClass="INTERFACE" field="ifIndex" value="17" tag="180" />
+		<item x="269" y="45" moClass="INTERFACE" field="ifIndex" value="18" />
+		<item x="298" y="18" moClass="INTERFACE" field="ifIndex" value="19" tag="180" />
+		<item x="298" y="45" moClass="INTERFACE" field="ifIndex" value="20" />
+		<item x="327" y="18" moClass="INTERFACE" field="ifIndex" value="21" tag="180" />
+		<item x="327" y="45" moClass="INTERFACE" field="ifIndex" value="22" />
+		<item x="356" y="18" moClass="INTERFACE" field="ifIndex" value="23" tag="180" />
+		<item x="356" y="45" moClass="INTERFACE" field="ifIndex" value="24" />
+		<item x="385" y="18" moClass="INTERFACE" field="ifIndex" value="25" tag="180" />
+		<item x="385" y="45" moClass="INTERFACE" field="ifIndex" value="26" />
+		<item x="414" y="18" moClass="INTERFACE" field="ifIndex" value="27" tag="180" />
+		<item x="414" y="45" moClass="INTERFACE" field="ifIndex" value="28" />
+		<item x="443" y="18" moClass="INTERFACE" field="ifIndex" value="29" tag="180" />
+		<item x="443" y="45" moClass="INTERFACE" field="ifIndex" value="30" />
+		<item x="472" y="18" moClass="INTERFACE" field="ifIndex" value="31" tag="180" />
+		<item x="472" y="45" moClass="INTERFACE" field="ifIndex" value="32" />
+		<item x="508" y="18" moClass="INTERFACE" field="ifIndex" value="33" tag="180" />
+		<item x="508" y="45" moClass="INTERFACE" field="ifIndex" value="34" />
+		<item x="537" y="18" moClass="INTERFACE" field="ifIndex" value="35" tag="180" />
+		<item x="537" y="45" moClass="INTERFACE" field="ifIndex" value="36" />
+		<item x="566" y="18" moClass="INTERFACE" field="ifIndex" value="37" tag="180" />
+		<item x="566" y="45" moClass="INTERFACE" field="ifIndex" value="38" />
+		<item x="595" y="18" moClass="INTERFACE" field="ifIndex" value="39" tag="180" />
+		<item x="595" y="45" moClass="INTERFACE" field="ifIndex" value="40" />
+		<item x="624" y="18" moClass="INTERFACE" field="ifIndex" value="41" tag="180" />
+		<item x="624" y="45" moClass="INTERFACE" field="ifIndex" value="42" />
+		<item x="653" y="18" moClass="INTERFACE" field="ifIndex" value="43" tag="180" />
+		<item x="653" y="45" moClass="INTERFACE" field="ifIndex" value="44" />
+		<item x="682" y="18" moClass="INTERFACE" field="ifIndex" value="45" tag="180" />
+		<item x="682" y="45" moClass="INTERFACE" field="ifIndex" value="46" />
+		<item x="711" y="18" moClass="INTERFACE" field="ifIndex" value="47" tag="180" />
+		<item x="711" y="45" moClass="INTERFACE" field="ifIndex" value="48" />
+
+		<item x="750" y="12" text="12,Arial,HP5500-48G-HI" />
+	</chassis_def>
+
+</chassis_def_list>

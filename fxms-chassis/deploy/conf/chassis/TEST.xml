@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+
+	<!--
+		############################################################################################
+		# TEST
+		############################################################################################
+	-->
+
+	<chassis_def img="switch_16u.jpg" name="HP5500-48G">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="HP5500-48G" />
+
+		<item x="22" y="10" name="empty_card.jpg">
+			<attr moClass="CARD" field="slotNo" value="1" />
+		</item>
+
+		<item x="22" y="50" name="empty_card.jpg">
+			<attr moClass="CARD" field="slotNo" value="1" />
+		</item>
+
+		<item x="22" y="90" name="empty_card.jpg">
+			<attr moClass="CARD" field="slotNo" value="4" />
+		</item>
+
+		<item x="22" y="130" name="empty_card.jpg">
+			<attr moClass="CARD" field="slotNo" value="3" />
+		</item>
+
+	</chassis_def>
+
+<!-- 
+	<chassis_def img="cardType_aaa.jpg" name="cardType_aaa">
+
+		<attr moClass="CARD" field="slotNo" value="1" />
+
+		<item x="22" y="23">
+			<attr moClass="INTERFACE" field="ifIndex" value="1" />
+		</item>
+		<item x="68" y="23">
+			<attr moClass="INTERFACE" field="ifIndex" value="2" />
+		</item>
+		<item x="114" y="23">
+			<attr moClass="INTERFACE" field="ifIndex" value="3" />
+		</item>
+		<item x="160" y="23">
+			<attr moClass="INTERFACE" field="ifIndex" value="4" />
+		</item>
+
+	</chassis_def>
+	-->
+
+</chassis_def_list>

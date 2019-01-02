@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+
+	<!--
+		############################################################################################
+		# HP5120-48G
+		############################################################################################
+	-->
+
+	<chassis_def img="device1.png" width="930" height="86" name="HP5120-48G">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="HP5120-48G" />
+
+		<item x="30" y="18" moClass="INTERFACE" field="ifIndex" value="2" tag="180" />
+		<item x="30" y="45" moClass="INTERFACE" field="ifIndex" value="1" />
+		<item x="60" y="18" moClass="INTERFACE" field="ifIndex" value="4" tag="180" />
+		<item x="60" y="45" moClass="INTERFACE" field="ifIndex" value="3" />
+		<item x="90" y="18" moClass="INTERFACE" field="ifIndex" value="6" tag="180" />
+		<item x="90" y="45" moClass="INTERFACE" field="ifIndex" value="5" />
+		<item x="120" y="18" moClass="INTERFACE" field="ifIndex" value="8" tag="180" />
+		<item x="120" y="45" moClass="INTERFACE" field="ifIndex" value="7" />
+		<item x="150" y="18" moClass="INTERFACE" field="ifIndex" value="10" tag="180" />
+		<item x="150" y="45" moClass="INTERFACE" field="ifIndex" value="9" />
+		<item x="180" y="18" moClass="INTERFACE" field="ifIndex" value="12" tag="180" />
+		<item x="180" y="45" moClass="INTERFACE" field="ifIndex" value="11" />
+		<item x="210" y="18" moClass="INTERFACE" field="ifIndex" value="14" tag="180" />
+		<item x="210" y="45" moClass="INTERFACE" field="ifIndex" value="13" />
+		<item x="240" y="18" moClass="INTERFACE" field="ifIndex" value="16" tag="180" />
+		<item x="240" y="45" moClass="INTERFACE" field="ifIndex" value="15" />
+		<item x="277" y="18" moClass="INTERFACE" field="ifIndex" value="18" tag="180" />
+		<item x="277" y="45" moClass="INTERFACE" field="ifIndex" value="17" />
+		<item x="307" y="18" moClass="INTERFACE" field="ifIndex" value="20" tag="180" />
+		<item x="307" y="45" moClass="INTERFACE" field="ifIndex" value="19" />
+		<item x="337" y="18" moClass="INTERFACE" field="ifIndex" value="22" tag="180" />
+		<item x="337" y="45" moClass="INTERFACE" field="ifIndex" value="21" />
+		<item x="367" y="18" moClass="INTERFACE" field="ifIndex" value="24" tag="180" />
+		<item x="367" y="45" moClass="INTERFACE" field="ifIndex" value="23" />
+		<item x="397" y="18" moClass="INTERFACE" field="ifIndex" value="26" tag="180" />
+		<item x="397" y="45" moClass="INTERFACE" field="ifIndex" value="25" />
+		<item x="427" y="18" moClass="INTERFACE" field="ifIndex" value="28" tag="180" />
+		<item x="427" y="45" moClass="INTERFACE" field="ifIndex" value="27" />
+		<item x="457" y="18" moClass="INTERFACE" field="ifIndex" value="30" tag="180" />
+		<item x="457" y="45" moClass="INTERFACE" field="ifIndex" value="29" />
+		<item x="487" y="18" moClass="INTERFACE" field="ifIndex" value="32" tag="180" />
+		<item x="487" y="45" moClass="INTERFACE" field="ifIndex" value="31" />
+		<item x="524" y="18" moClass="INTERFACE" field="ifIndex" value="34" tag="180" />
+		<item x="524" y="45" moClass="INTERFACE" field="ifIndex" value="33" />
+		<item x="554" y="18" moClass="INTERFACE" field="ifIndex" value="36" tag="180" />
+		<item x="554" y="45" moClass="INTERFACE" field="ifIndex" value="35" />
+		<item x="584" y="18" moClass="INTERFACE" field="ifIndex" value="38" tag="180" />
+		<item x="584" y="45" moClass="INTERFACE" field="ifIndex" value="37" />
+		<item x="614" y="18" moClass="INTERFACE" field="ifIndex" value="40" tag="180" />
+		<item x="614" y="45" moClass="INTERFACE" field="ifIndex" value="39" />
+		<item x="644" y="18" moClass="INTERFACE" field="ifIndex" value="42" tag="180" />
+		<item x="644" y="45" moClass="INTERFACE" field="ifIndex" value="41" />
+		<item x="674" y="18" moClass="INTERFACE" field="ifIndex" value="44" tag="180" />
+		<item x="674" y="45" moClass="INTERFACE" field="ifIndex" value="43" />
+		<item x="704" y="18" moClass="INTERFACE" field="ifIndex" value="46" tag="180" />
+		<item x="704" y="45" moClass="INTERFACE" field="ifIndex" value="45" />
+		<item x="734" y="18" moClass="INTERFACE" field="ifIndex" value="48" tag="180" />
+		<item x="734" y="45" moClass="INTERFACE" field="ifIndex" value="47" />
+
+
+	<!--
+		############################################################################################
+		# HP5120-48G : sfp port
+		############################################################################################
+	-->		
+		<item x="784" y="55" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="49" /> 
+		</item>
+		<item x="818" y="55" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="50" /> 
+		</item>
+		<item x="852" y="55" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="51" /> 
+		</item>
+		<item x="886" y="55" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="52" /> 
+		</item>
+		
+		
+	<!--
+		############################################################################################
+		# HP5120-48G : etc
+		############################################################################################
+	-->			
+		<item x="784" y="15" name="console" />
+		<item x="830" y="10" text="12,Arial,HP5120-48G-EI" />
+	</chassis_def>
+
+
+</chassis_def_list>

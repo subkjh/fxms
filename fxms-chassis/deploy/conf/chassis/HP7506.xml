@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# HP7506 : 14U
+		############################################################################################
+	-->
+	
+	<!--
+		############################################################################################
+		# HP7506 Power Image define.
+		############################################################################################
+	-->
+	<chassis_def img="power_on.png" width="384" height="232" name="power_on">
+		<attr moClass="CARD" field="cardType" value="powerSupply" />
+	</chassis_def>
+	<chassis_def img="power_off.png" width="384" height="232" name="power_off" />
+
+
+	<!--
+		############################################################################################
+		# HP7506 Slot Configuration
+		############################################################################################
+	-->
+	<chassis_def img="device.png" width="896" height="1056" name="HP7506">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="HP7506" />
+
+		<item x="10" y="10" name="card_empty" moClass="CARD" field="chassisId" value="Slot0" />
+		<item x="10" y="100" name="card_empty" moClass="CARD" field="chassisId" value="Slot1" />
+		<item x="10" y="190" name="card_empty" moClass="CARD" field="chassisId" value="Slot2" />
+		<item x="10" y="280" name="card_empty" moClass="CARD" field="chassisId" value="Slot3" />
+		<item x="10" y="370" name="card_empty" moClass="CARD" field="chassisId" value="Slot4" />
+		<item x="10" y="460" name="card_empty" moClass="CARD" field="chassisId" value="Slot5" />
+		<item x="10" y="550" name="card_empty" moClass="CARD" field="chassisId" value="Slot6" />
+		<item x="10" y="640" name="card_empty" moClass="CARD" field="chassisId" value="Slot7" />
+
+		<item x="10" y="730" name="separator" />
+		<!-- power supply unit -->
+	    <item x="50" y="780" name="power_off" moClass="CARD" field="chassisId" value="Slot8" />
+		<item x="488" y="780" name="power_off" moClass="CARD" field="chassisId" value="Slot9" />
+		
+		
+	</chassis_def>
+
+
+
+
+	<!--
+		############################################################################################
+		# HP 48-Port Gig-T A7500 Module JD210A
+		############################################################################################
+	-->
+	<chassis_def img="card_on.png" width="876" height="86" name="JD210A">
+
+		<attr moClass="CARD" field="cardModelName" value="HP 48-Port Gig-T A7500 Module JD210A" />
+		<item x="36" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port1" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="36" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port2" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="68" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port3" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="68" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port4" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="100" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port5" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="100" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port6" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="132" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port7" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="132" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port8" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="164" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port9" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="164" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port10" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="196" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port11" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="196" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port12" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="228" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port13" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="228" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port14" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="260" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port15" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="260" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port16" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="312" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port17" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="312" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port18" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+		<item x="344" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port19" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="344" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port20" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="376" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port21" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="376" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port22" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="408" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port23" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="408" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port24" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="440" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port25" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="440" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port26" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="472" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port27" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="472" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port28" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="504" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port29" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="504" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port30" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="536" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port31" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="536" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port32" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="588" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port33" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="588" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port34" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="620" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port35" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="620" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port36" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="652" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port37" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="652" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port38" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="684" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port39" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="684" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port40" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="716" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port41" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="716" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port42" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="748" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port43" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="748" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port44" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="780" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port45" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="780" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port46" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="812" y="18"  tag="180" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port47" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="812" y="45"   >
+			<attr moClass="INTERFACE" field="chassisId" value="Port48" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+	</chassis_def>
+
+
+	<!--
+		############################################################################################
+		# HP 384 Gbps Fabric A7500 Module JD194B
+		############################################################################################
+	-->
+	<chassis_def img="card_on.png" width="876" height="86" name="JD194B">
+
+		<attr moClass="CARD" field="cardModelName" value="HP 384 Gbps Fabric A7500 Module JD194B" />
+
+		<item x="420" y="26" name="console" />
+
+		<item x="480" y="30" imgGroup="mge">
+			<attr moClass="INTERFACE" field="chassisId" value="Port0" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+	</chassis_def>
+
+
+	<!--
+		############################################################################################
+		# HP A7500 8 port 10G SFP+ Module JF290A
+		############################################################################################
+	-->
+
+	<chassis_def img="card_on.png" width="876" height="86" name="JF290A">
+		<attr moClass="CARD" field="cardModelName" value="HP A7500 8 port 10G SFP+ Module JF290A" />
+
+		<item x="66" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port1" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="166" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port2" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="266" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port3" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="366" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port4" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="466" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port5" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="566" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port6" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="666" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port7" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="766" y="32" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port8" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+	</chassis_def>
+
+	<!--
+		############################################################################################
+		# HP 24-Port GbE SFP A7500 Module JD203B
+		############################################################################################
+	-->
+	<chassis_def img="card_on.png" width="876" height="86" name="JD203B">
+
+		<attr moClass="CARD" field="cardModelName" value="HP 24-Port GbE SFP A7500 Module JD203B" />
+
+		<item x="224" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port1" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="224" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port2" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="258" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port3" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="258" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port4" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="292" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port5" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="292" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port6" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="326" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port7" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="326" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port8" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="360" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port9" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="360" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port10" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="394" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port11" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="394" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port12" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="448" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port13" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="448" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port14" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="482" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port15" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="482" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port16" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="516" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port17" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="516" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port18" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="550" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port19" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="550" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port20" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="584" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port21" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="584" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port22" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="618" y="18" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port23" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+
+		<item x="618" y="45" name="sfp_unlink" imgGroup="sfp">
+			<attr moClass="INTERFACE" field="chassisId" value="Port24" />
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" />
+		</item>
+	</chassis_def>
+</chassis_def_list>

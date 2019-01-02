@@ -1,0 +1,26 @@
+<!ELEMENT chassis_def (attr*, item*) >
+<!ATTLIST chassis_def img CDATA #REQUIRED >
+<!ATTLIST chassis_def name CDATA #REQUIRED >
+<!ATTLIST chassis_def width CDATA #IMPLIED >
+<!ATTLIST chassis_def height CDATA #IMPLIED >
+
+<!ELEMENT attr EMPTY >
+<!ATTLIST attr moClass CDATA #REQUIRED >
+<!ATTLIST attr field CDATA #REQUIRED >
+<!ATTLIST attr value CDATA #REQUIRED >
+<!ATTLIST attr result (true|false) #IMPLIED >
+<!ATTLIST attr method (contains|endsWith|equals|equalsIgnoreCase|matches|startsWith) #IMPLIED >
+
+<!ELEMENT item (attr*) >
+<!ATTLIST item x CDATA #REQUIRED >
+<!ATTLIST item y CDATA #REQUIRED >
+<!ATTLIST item width CDATA #IMPLIED >
+<!ATTLIST item height CDATA #IMPLIED >
+<!ATTLIST item text CDATA #IMPLIED >
+<!ATTLIST item name CDATA #IMPLIED >
+<!ATTLIST item moClass CDATA #IMPLIED >
+<!ATTLIST item field CDATA #IMPLIED >
+<!ATTLIST item value CDATA #IMPLIED >
+<!ATTLIST item imgGroup CDATA #IMPLIED >
+<!ATTLIST item tag (0|90|180|270) #IMPLIED >
+

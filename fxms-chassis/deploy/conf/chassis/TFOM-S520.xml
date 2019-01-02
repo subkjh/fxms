@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# TFOM-S520
+		############################################################################################
+		
+		  /* AID:STATE,RACK,SHELF,UNIT-TYPE,REAL-TYPE */
+   "PSU.A,NORMAL(ACT):RACK1,SHELF1,TPSU(-48),TPSU(-48)"
+   "PSU.B,OUT:RACK1,SHELF1,TPSU(-48),==="
+   "MCU.A,NORMAL(ACT):RACK1,SHELF1,TMCU,TMCU"
+   "MCU.B,OUT:RACK1,SHELF1,TMCU,==="
+   "OIU.A,NORMAL(ACT):RACK1,SHELF1,TOIU4,TOIU4"
+   "OIU.B,NORMAL(ACT):RACK1,SHELF1,TOIU4,TOIU4"
+   "FU1.A,OUT:RACK1,SHELF1,TOHU1,==="
+   "FU1.B,OUT:RACK1,SHELF1,TOHU1,==="
+   "FU2.A,OUT:RACK1,SHELF1,TDS1U,==="
+   "FU2.B,OUT:RACK1,SHELF1,TDS1U,==="
+   "FU3.A,===:RACK1,SHELF1,===,==="
+   "FU3.B,===:RACK1,SHELF1,===,==="
+   "FU4.A,OUT:RACK1,SHELF1,TESU-T8,==="
+   "FU4.B,===:RACK1,SHELF1,===,==="
+   "FU5.A,NORMAL(ACT):RACK1,SHELF1,TESU-T4,TESU-T4"
+   "FU5.B,===:RACK1,SHELF1,===,==="
+   "FU6.A,OUT:RACK1,SHELF1,TDS3U,==="
+   "FU6.B,OUT:RACK1,SHELF1,TDS3U,==="
+	-->
+
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TDS1U_nor.png" name="TDS1U">
+		<attr moClass="CARD" field="cardType" value="TDS1U" />
+	</chassis_def>
+		<chassis_def img="TFOM-S520/shelf_S520_UNIT_TDS3U_A_nor.png" name="TDS3U_A">
+		<attr moClass="CARD" field="cardType" value="TDS3U-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TDS3U_nor.png" name="TDS3U">
+		<attr moClass="CARD" field="cardType" value="TDS3U" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TEIU_F4_nor.png" name="TEIU_F4">
+		<attr moClass="CARD" field="cardType" value="TEIU-F4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TEIU_F8_nor.png" name="TEIU_F8">
+		<attr moClass="CARD" field="cardType" value="TEIU-F8" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TEIU_T4_nor.png" name="TEIU_T4">
+		<attr moClass="CARD" field="cardType" value="TEIU-T4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TEIU_T8_nor.png" name="TEIU_T8">
+		<attr moClass="CARD" field="cardType" value="TEIU-T8" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TESU_F4_nor.png" name="TESU_F4">
+		<attr moClass="CARD" field="cardType" value="TESU-F4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TESU_F8_nor.png" name="TESU_F8">
+		<attr moClass="CARD" field="cardType" value="TESU-F8" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TESU_T4_nor.png" name="TESU_T4">
+		<attr moClass="CARD" field="cardType" value="TESU-T4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TESU_T8_nor.png" name="TESU_T8">
+		<attr moClass="CARD" field="cardType" value="TESU-T8" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TMCU_nor.png" name="TMCU">
+		<attr moClass="CARD" field="cardType" value="TMCU" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TOHU1_nor.png" name="TOHU1">
+		<attr moClass="CARD" field="cardType" value="TOHU1" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TOIU1_A_nor.png" name="TOIU1_A">
+		<attr moClass="CARD" field="cardType" value="TOIU1-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TOIU4_nor.png" name="TOIU4">
+		<attr moClass="CARD" field="cardType" value="TOIU4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TPU_24_nor.png" name="TPU_24">
+		<attr moClass="CARD" field="cardType" value="TPSU(+24)" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TPU_48_nor.png" name="TPU_48">
+		<attr moClass="CARD" field="cardType" value="TPSU(-48)" />
+	</chassis_def>
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_TPU_AC_nor.png" name="TPU_AC">
+		<attr moClass="CARD" field="cardType" value="TPSU(AC)" />
+	</chassis_def>	
+
+	<chassis_def img="TFOM-S520/shelf_S520_UNIT_SHELF.png" width="641" height="275" name="TFOM-S520">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="TFOM-S520" />
+
+		<item x="1" y="2" moClass="CARD" field="chassisId" value="PSU.A" />
+		<item x="65" y="2" moClass="CARD" field="chassisId" value="PSU.B" />
+		<item x="129" y="2" moClass="CARD" field="chassisId" value="MCU.A" />
+		<item x="161" y="2" moClass="CARD" field="chassisId" value="MCU.B" />
+
+		<item x="193" y="2" moClass="CARD" field="chassisId" value="FU1.A" />
+		<item x="225" y="2" moClass="CARD" field="chassisId" value="FU1.B" />
+		<item x="257" y="2" moClass="CARD" field="chassisId" value="FU2.A" />
+		<item x="289" y="2" moClass="CARD" field="chassisId" value="FU2.B" />
+		<item x="321" y="2" moClass="CARD" field="chassisId" value="FU3.A" />
+		<item x="353" y="2" moClass="CARD" field="chassisId" value="FU3.B" />
+
+		<item x="385" y="2" moClass="CARD" field="chassisId" value="OIU.A" />
+		<item x="417" y="2" moClass="CARD" field="chassisId" value="OIU.B" />
+
+		<item x="449" y="2" moClass="CARD" field="chassisId" value="FU4.A" />
+		<item x="481" y="2" moClass="CARD" field="chassisId" value="FU4.B" />
+		<item x="513" y="2" moClass="CARD" field="chassisId" value="FU5.A" />
+		<item x="545" y="2" moClass="CARD" field="chassisId" value="FU5.B" />
+		<item x="577" y="2" moClass="CARD" field="chassisId" value="FU6.A" />
+		<item x="609" y="2" moClass="CARD" field="chassisId" value="FU6.B" />
+
+	</chassis_def>
+
+</chassis_def_list>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# TFOM-S5500
+		############################################################################################
+
+		 /* AID:STATE,RACK,SHELF,UNIT-TYPE,REAL-TYPE */
+   "SCU.A,NORMAL(ACT):RACK1,SHELF1,SCU-A,SCU-A"
+   "SCU.B,OUT:RACK1,SHELF1,SCU-A,==="
+   "SCXU.A,NORMAL(ACT):RACK1,SHELF1,SCXU20,SCXU20"
+   "SCXU.B,OUT:RACK1,SHELF1,SCXU20,==="
+   "FU1.A,OUT:RACK1,SHELF1,OSIU1,==="
+   "FU1.B,OUT:RACK1,SHELF1,OSIU1,==="
+   "FU2.A,===:RACK1,SHELF1,===,==="
+   "FU2.B,NORMAL(ACT):RACK1,SHELF1,FESU-TA,FESU-TA"
+   "FU3.A,NORMAL(ACT):RACK1,SHELF1,OSIU16-A,OSIU16-A"
+   "FU3.B,OUT:RACK1,SHELF1,OSIU16-A,==="
+   "FU4.A,NORMAL(ACT):RACK1,SHELF1,OSIU64-X,OSIU64-X"
+   "FU4.B,NORMAL(ACT):RACK1,SHELF1,OSIU64-X,OSIU64-X"
+   "FU5.A,NORMAL(ACT):RACK1,SHELF1,OSIU64-X,OSIU64-X"
+   "FU5.B,NORMAL(ACT):RACK1,SHELF1,OSIU64-X,OSIU64-X"
+   "FU6.A,NORMAL(ACT):RACK1,SHELF1,GESU-T4B,GESU-T4B"
+   "FU6.B,===:RACK1,SHELF1,===,==="
+   "FU7.A,OUT:RACK1,SHELF1,GESU-X2,==="
+   "FU7.B,===:RACK1,SHELF1,===,==="
+   "FU8.A,NORMAL(ACT):RACK1,SHELF1,TDIU3-B,TDIU3-B"
+   "FU8.B,NORMAL(ACT):RACK1,SHELF1,TDIU3-B,TDIU3-B"
+   "OBU.1,===:RACK1,SHELF1,===,==="
+   "OBU.2,===:RACK1,SHELF1,===,==="
+   "OBU.3,===:RACK1,SHELF1,===,==="
+   "OBU.4,===:RACK1,SHELF1,===,==="
+	-->
+
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_feiu_f_nor.png" name="FEIU_F">
+		<attr moClass="CARD" field="cardType" value="FEIU-F" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_feiu_t_nor.png" name="FEIU_T">
+		<attr moClass="CARD" field="cardType" value="FEIU-T" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_fesu_f_nor.png" name="FESU_F">
+		<attr moClass="CARD" field="cardType" value="FESU-FA" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_fesu_t_nor.png" name="FESU_T">
+		<attr moClass="CARD" field="cardType" value="FESU-TA" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500shelf_s510_unit_geiu_x2_nor.png" name="GEIU_X2">
+		<attr moClass="CARD" field="cardType" value="GEIU-X2" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_geiu_x4_nor.png" name="GEIU_X4">
+		<attr moClass="CARD" field="cardType" value="GEIU-X4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_gesu_t4b_nor.png" name="GESU_T4B">
+		<attr moClass="CARD" field="cardType" value="GESU-T4B" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_gesu_x2_nor.png" name="GESU_X2">
+		<attr moClass="CARD" field="cardType" value="GESU-X2" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_gesu_x4_nor.png" name="GESU_X4">
+		<attr moClass="CARD" field="cardType" value="GESU-X4" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_gesu_x4b_nor.png" name="GESU_X4B">
+		<attr moClass="CARD" field="cardType" value="GESU-X4B" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_gesu_x10_nor.png" name="GESU_X10">
+		<attr moClass="CARD" field="cardType" value="GESU-X10" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_obu_nor.png" name="OBU">
+		<attr moClass="CARD" field="cardType" value="OBU" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_osiu1_nor.png" name="OSIU1">
+		<attr moClass="CARD" field="cardType" value="OSIU1" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_osiu4_nor.png" name="OSIU4">
+		<attr moClass="CARD" field="cardType" value="OSIU4-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_osiu16_nor.png" name="OSIU16">
+		<attr moClass="CARD" field="cardType" value="OSIU16-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_osiu64_t_nor.png" name="OSIU64_T">
+		<attr moClass="CARD" field="cardType" value="OSIU64-T" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_osiu64_x_nor.png" name="OSIU64_X">
+		<attr moClass="CARD" field="cardType" value="OSIU64-X" />
+	</chassis_def>	
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_scu_nor.png" name="SCU">
+		<attr moClass="CARD" field="cardType" value="SCU-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_scxu20_a_nor.png" name="SCXU20_A">
+		<attr moClass="CARD" field="cardType" value="SCXU20-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_scxu20_b_nor.png" name="SCXU20_B">
+		<attr moClass="CARD" field="cardType" value="SCXU20-B" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_scxu20_nor.png" name="SCXU20">
+		<attr moClass="CARD" field="cardType" value="SCXU20" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_tdiu1_nor.png" name="TDIU1">
+		<attr moClass="CARD" field="cardType" value="TDIU1" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_tdiu1b_nor.png" name="TDIU1B">
+		<attr moClass="CARD" field="cardType" value="TDIU1-B" />
+	</chassis_def>
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_tdiu3_nor.png" name="TDIU3">
+		<attr moClass="CARD" field="cardType" value="TDIU3" />
+	</chassis_def>	
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_tdiu3b_nor.png" name="TDIU3B">
+		<attr moClass="CARD" field="cardType" value="TDIU3-B" />
+	</chassis_def>
+
+<!-- 이미지 없음. 
+CMSB
+NVSB
+DS1SBA
+DS1SBB-X4
+DS3SBA
+DS3SBB
+
+ -->
+
+	<chassis_def img="TFOM-S5500/shelf_s510_unit_shelf.png" width="640" height="324" name="TFOM-S5500">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="TFOM-S5500" />
+
+		<item x="0" y="2" moClass="CARD" field="chassisId" value="SCU.A" />
+		<item x="32" y="2" moClass="CARD" field="chassisId" value="SCU.B" />
+		
+		<item x="64" y="2" moClass="CARD" field="chassisId" value="FU1.A" />
+		<item x="96" y="2" moClass="CARD" field="chassisId" value="FU1.B" />
+		<item x="128" y="2" moClass="CARD" field="chassisId" value="FU2.A" />
+		<item x="160" y="2" moClass="CARD" field="chassisId" value="FU2.B" />
+		<item x="192" y="2" moClass="CARD" field="chassisId" value="FU3.A" />
+		<item x="224" y="2" moClass="CARD" field="chassisId" value="FU3.B" />
+		<item x="256" y="2" moClass="CARD" field="chassisId" value="FU4.A" />
+		<item x="288" y="2" moClass="CARD" field="chassisId" value="FU4.B" />
+		
+		<item x="320" y="2" moClass="CARD" field="chassisId" value="SCXU.A" />
+		<item x="352" y="2" moClass="CARD" field="chassisId" value="SCXU.B" />
+		
+		<item x="384" y="2" moClass="CARD" field="chassisId" value="FU5.A" />
+		<item x="416" y="2" moClass="CARD" field="chassisId" value="FU5.B" />
+		<item x="448" y="2" moClass="CARD" field="chassisId" value="FU6.A" />
+		<item x="480" y="2" moClass="CARD" field="chassisId" value="FU6.B" />
+		<item x="512" y="2" moClass="CARD" field="chassisId" value="FU7.A" />
+		<item x="544" y="2" moClass="CARD" field="chassisId" value="FU7.B" />
+		<item x="576" y="2" moClass="CARD" field="chassisId" value="FU8.A" />
+		<item x="608" y="2" moClass="CARD" field="chassisId" value="FU8.B" />
+
+	</chassis_def>
+
+</chassis_def_list>

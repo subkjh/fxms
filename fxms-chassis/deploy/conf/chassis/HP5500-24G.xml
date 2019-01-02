@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# HP5500-24G
+		############################################################################################
+	-->
+
+	<chassis_def img="device1.png" width="900" height="86" name="HP5500-24G">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="HP5500-24G" />
+
+			<item x="30" y="18" moClass="INTERFACE" field="ifIndex"  value="1" tag="180"/> 
+			<item x="30" y="45" moClass="INTERFACE" field="ifIndex"  value="2" /> 
+			<item x="64" y="18" moClass="INTERFACE" field="ifIndex"  value="3" tag="180"/> 
+			<item x="64" y="45" moClass="INTERFACE" field="ifIndex"  value="4" /> 
+			<item x="98" y="18" moClass="INTERFACE" field="ifIndex"  value="5" tag="180"/> 
+			<item x="98" y="45" moClass="INTERFACE" field="ifIndex"  value="6" /> 
+			<item x="132" y="18" moClass="INTERFACE" field="ifIndex"  value="7" tag="180"/> 
+			<item x="132" y="45" moClass="INTERFACE" field="ifIndex"  value="8" /> 
+			<item x="166" y="18" moClass="INTERFACE" field="ifIndex"  value="9" tag="180"/> 
+			<item x="166" y="45" moClass="INTERFACE" field="ifIndex"  value="10" /> 
+			<item x="200" y="18" moClass="INTERFACE" field="ifIndex"  value="11" tag="180"/> 
+			<item x="200" y="45" moClass="INTERFACE" field="ifIndex"  value="12" /> 
+			<item x="264" y="18" moClass="INTERFACE" field="ifIndex"  value="13" tag="180"/> 
+			<item x="264" y="45" moClass="INTERFACE" field="ifIndex"  value="14" /> 
+			<item x="298" y="18" moClass="INTERFACE" field="ifIndex"  value="15" tag="180"/> 
+			<item x="298" y="45" moClass="INTERFACE" field="ifIndex"  value="16" /> 
+			<item x="332" y="18" moClass="INTERFACE" field="ifIndex"  value="17" tag="180"/> 
+			<item x="332" y="45" moClass="INTERFACE" field="ifIndex"  value="18" /> 
+			<item x="366" y="18" moClass="INTERFACE" field="ifIndex"  value="19" tag="180"/> 
+			<item x="366" y="45" moClass="INTERFACE" field="ifIndex"  value="20" /> 
+			<item x="400" y="18" moClass="INTERFACE" field="ifIndex"  value="21" tag="180"/> 
+			<item x="400" y="45" moClass="INTERFACE" field="ifIndex"  value="22" /> 
+			<item x="434" y="18" moClass="INTERFACE" field="ifIndex"  value="23" tag="180"/> 
+			<item x="434" y="45" moClass="INTERFACE" field="ifIndex"  value="24" /> 
+	<!--
+		############################################################################################
+		# HP5500-24G : sfp port
+		############################################################################################
+	-->		
+		<item x="500" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="25" /> 
+		</item>
+		<item x="534" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="26" /> 
+		</item>
+		<item x="568" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="27" /> 
+		</item>
+		<item x="602" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="28" /> 
+		</item>
+	
+		<item x="652" y="45" moClass="INTERFACE" field="ifIndex"  value="30" tag="180"/> 
+		<item x="686" y="45" moClass="INTERFACE" field="ifIndex"  value="31" tag="180"/> 
+	
+		<item x="740" y="45" moClass="INTERFACE" field="ifIndex"  value="29" tag="180"/> 
+		<item x="776" y="45" name="console" />
+		<item x="800" y="12" text="12,Arial,HP5500-24G-HI" />
+	</chassis_def>
+
+</chassis_def_list>

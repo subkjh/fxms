@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# TFOM-FM700
+		############################################################################################
+		
+		 /*AID:STATE,RACK,SHELF,UNIT-TYPE,REAL-TYPE */
+   "MCU.A:NORMAL,RACK1,SHELF1,EMCU,MCU-B"
+   "MCU.B:OUT,RACK1,SHELF1,EMCU,MCU-B"
+   "CTU.A:NORMAL,RACK1,SHELF1,CTU,CTU-B"
+   "CTU.B:NORMAL,RACK1,SHELF1,CTU,CTU-B"
+   "S1.A:OUT,RACK1,SHELF1,STM64U,==="
+   "S1.B:OUT,RACK1,SHELF1,STM64U,==="
+   "S2.A:OUT,RACK1,SHELF1,STM64U,==="
+   "S2.B:OUT,RACK1,SHELF1,STM64U,==="
+   "S3.A:MISMATCH,RACK1,SHELF1,STM16U,STM64U-XFP-A"
+   "S3.B:OUT,RACK1,SHELF1,STM16U,==="
+   "S4.A:OUT,RACK1,SHELF1,BLANK,==="
+   "S4.B:OUT,RACK1,SHELF1,HESU-GB8E,==="
+   "S5.A:OUT,RACK1,SHELF1,LESU-FX12E,==="
+   "S5.B:OUT,RACK1,SHELF1,LESU-FX12E,==="
+   "S6.A:OUT,RACK1,SHELF1,STM1U,==="
+   "S6.B:OUT,RACK1,SHELF1,STM1U,==="
+   "S7.A:OUT,RACK1,SHELF1,STM1U,==="
+   "S7.B:NORMAL,RACK1,SHELF1,STM1U,STM1U"
+   "S8.A:OUT,RACK1,SHELF1,STM1U,==="
+   "S8.B:OUT,RACK1,SHELF1,STM1U,==="
+   "S9.A:NORMAL,RACK1,SHELF1,STM1U,STM1U"
+   "S9.B:NORMAL,RACK1,SHELF1,STM1U,STM1U"
+   "S10.A:OUT,RACK1,SHELF1,DS1U,==="
+   "S10.B:OUT,RACK1,SHELF1,DS1U,==="
+   "S11.A:OUT,RACK1,SHELF1,DS3U,==="
+   "S11.B:OUT,RACK1,SHELF1,DS3U,==="
+;]
+		
+	-->
+	<chassis_def img="TFOM-FM700/CTU_Nor.png" name="CTU">
+		<attr moClass="CARD" field="cardType" value="CTU" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/DS1U_Nor.png" name="DS1U">
+		<attr moClass="CARD" field="cardType" value="DS1U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/DS3U_A_Nor.png" name="DS3U_A">
+		<attr moClass="CARD" field="cardType" value="DS3U-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/DS3U_Nor.png" name="DS3U">
+		<attr moClass="CARD" field="cardType" value="DS3U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/HESU_GB_8E_Nor.png" name="HESU_GB8E">
+		<attr moClass="CARD" field="cardType" value="HESU-GB8E" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/HEU_GB_8_Nor.png" name="HEU_GB">
+		<attr moClass="CARD" field="cardType" value="HEU-GB8" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/LESU_FX_12E_Nor.png" name="LESU_FX12E">
+		<attr moClass="CARD" field="cardType" value="LESU-FX12E" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/LESU_GB_4_Nor.png" name="LESU_GB">
+		<attr moClass="CARD" field="cardType" value="LESU-GB4" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/LESU_TX_12E_Nor.png" name="LESU_TX12E">
+		<attr moClass="CARD" field="cardType" value="LESU-TX12E" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/M13U_Nor.png" name="M13U">
+		<attr moClass="CARD" field="cardType" value="M13U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/MCU_CMP_Nor.png" name="MCU_CMP">
+		<attr moClass="CARD" field="cardType" value="MCU-CMP" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/MCU_ULMP_Nor.png" name="MCU_ULMP">
+		<attr moClass="CARD" field="cardType" value="MCU-ULMP" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/RPRU_A_Nor.png" name="RPRU_A">
+		<attr moClass="CARD" field="cardType" value="RPRU-A" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/RPRU_B_Nor.png" name="RPRU_B">
+		<attr moClass="CARD" field="cardType" value="RPRU-B" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM1U_Nor.png" name="STM1U">
+		<attr moClass="CARD" field="cardType" value="STM1U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM4U_Nor.png" name="STM4U">
+		<attr moClass="CARD" field="cardType" value="STM4U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM16U_2_Nor.png" name="STM16U_2">
+		<attr moClass="CARD" field="cardType" value="STM16U-2" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM16U_8_Nor.png" name="STM16U_8">
+		<attr moClass="CARD" field="cardType" value="STM16U-8" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM16U_Nor.png" name="STM16U">
+		<attr moClass="CARD" field="cardType" value="STM16U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM64U_1_Nor.png" name="STM64U_1">
+		<attr moClass="CARD" field="cardType" value="STM64U-1" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/STM64U_Nor.png" name="STM64U">
+		<attr moClass="CARD" field="cardType" value="STM64U" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/MCU_Nor.png" name="MCU">
+		<attr moClass="CARD" field="cardType" value="MCU" />
+	</chassis_def>
+	<chassis_def img="TFOM-FM700/MCU_Nor.png" name="EMCU">
+		<attr moClass="CARD" field="cardType" value="EMCU" />
+	</chassis_def>
+	
+	
+	<chassis_def img="TFOM-FM700/ShelfBack.png" width="861" height="652" name="TFOM-FM700">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="TFOM-FM700" />
+
+		<item x="8" y="12" moClass="CARD" field="chassisId" value="MCU.A" />
+		<item x="68" y="12" moClass="CARD" field="chassisId" value="MCU.B" />
+		<item x="128" y="12" moClass="CARD" field="chassisId" value="S1.A" />
+		<item x="188" y="12" moClass="CARD" field="chassisId" value="S1.B" />
+		<item x="248" y="12" moClass="CARD" field="chassisId" value="S2.A" />
+		<item x="308" y="12" moClass="CARD" field="chassisId" value="S2.B" />
+		
+		<item x="368" y="12" moClass="CARD" field="chassisId" value="CTU.A" />
+		<item x="428" y="12" moClass="CARD" field="chassisId" value="CTU.B" />
+
+		<item x="488" y="12" moClass="CARD" field="chassisId" value="S3.A" />
+		<item x="548" y="12" moClass="CARD" field="chassisId" value="S3.B" />
+		<item x="608" y="12" moClass="CARD" field="chassisId" value="S4.A" />
+		<item x="668" y="12" moClass="CARD" field="chassisId" value="S4.B" />
+		<item x="728" y="12" moClass="CARD" field="chassisId" value="S5.A" />
+		<item x="788" y="12" moClass="CARD" field="chassisId" value="S5.B" />
+		
+		<item x="128" y="331" moClass="CARD" field="chassisId" value="S6.A" />
+		<item x="188" y="331" moClass="CARD" field="chassisId" value="S6.B" />
+		<item x="248" y="331" moClass="CARD" field="chassisId" value="S7.A" />
+		<item x="308" y="331" moClass="CARD" field="chassisId" value="S7.B" />
+		<item x="368" y="331" moClass="CARD" field="chassisId" value="S8.A" />
+		<item x="428" y="331" moClass="CARD" field="chassisId" value="S8.B" />
+		<item x="488" y="331" moClass="CARD" field="chassisId" value="S9.A" />
+		<item x="548" y="331" moClass="CARD" field="chassisId" value="S9.B" />
+		<item x="608" y="331" moClass="CARD" field="chassisId" value="S10.A" />
+		<item x="668" y="331" moClass="CARD" field="chassisId" value="S10.B" />
+		<item x="728" y="331" moClass="CARD" field="chassisId" value="S11.A" />
+		<item x="788" y="331" moClass="CARD" field="chassisId" value="S11.B" />
+
+	</chassis_def>
+
+</chassis_def_list>

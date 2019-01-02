@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# DSW2724G
+		############################################################################################
+	-->
+
+	<chassis_def img="device1.png" width="876" height="86" name="DSW2724G">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="DSW2724G" />
+
+		<item x="30" y="18" moClass="INTERFACE" field="ifIndex" value="5001" tag="180" />
+		<item x="30" y="45" moClass="INTERFACE" field="ifIndex" value="5002" />
+		<item x="64" y="18" moClass="INTERFACE" field="ifIndex" value="5003" tag="180" />
+		<item x="64" y="45" moClass="INTERFACE" field="ifIndex" value="5004" />
+		<item x="98" y="18" moClass="INTERFACE" field="ifIndex" value="5005" tag="180" />
+		<item x="98" y="45" moClass="INTERFACE" field="ifIndex" value="5006" />
+		<item x="132" y="18" moClass="INTERFACE" field="ifIndex" value="5007" tag="180" />
+		<item x="132" y="45" moClass="INTERFACE" field="ifIndex" value="5008" />
+		
+		<item x="166" y="18" moClass="INTERFACE" field="ifIndex" value="5009" tag="180" />
+		<item x="166" y="45" moClass="INTERFACE" field="ifIndex" value="5010" />
+		<item x="200" y="18" moClass="INTERFACE" field="ifIndex" value="5011" tag="180" />
+		<item x="200" y="45" moClass="INTERFACE" field="ifIndex" value="5012" />
+		<item x="264" y="18" moClass="INTERFACE" field="ifIndex" value="5013" tag="180" />
+		<item x="264" y="45" moClass="INTERFACE" field="ifIndex" value="5014" />
+		<item x="298" y="18" moClass="INTERFACE" field="ifIndex" value="5015" tag="180" />
+		<item x="298" y="45" moClass="INTERFACE" field="ifIndex" value="5016" />
+		
+		<item x="332" y="18" moClass="INTERFACE" field="ifIndex" value="5017" tag="180" />
+		<item x="332" y="45" moClass="INTERFACE" field="ifIndex" value="5018" />
+		<item x="366" y="18" moClass="INTERFACE" field="ifIndex" value="5019" tag="180" />
+		<item x="366" y="45" moClass="INTERFACE" field="ifIndex" value="5020" />
+		<item x="400" y="18" moClass="INTERFACE" field="ifIndex" value="5021" tag="180" />
+		<item x="400" y="45" moClass="INTERFACE" field="ifIndex" value="5022" />
+		<item x="434" y="18" moClass="INTERFACE" field="ifIndex" value="5023" tag="180" />
+		<item x="434" y="45" moClass="INTERFACE" field="ifIndex" value="5024" />
+
+	<!--
+		############################################################################################
+		# sfp port
+		############################################################################################
+	-->		
+		<item x="500" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="5025" /> 
+		</item>
+		<item x="534" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="5026" /> 
+		</item>
+		<item x="568" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="5027" /> 
+		</item>
+		<item x="602" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="ifIndex" value="5028" /> 
+		</item>
+		
+		<item x="700" y="10" text="12,Arial,DSW2724G" />
+		
+	</chassis_def>
+
+</chassis_def_list>

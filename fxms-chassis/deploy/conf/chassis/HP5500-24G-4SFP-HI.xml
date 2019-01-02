@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# HP5500-24G-4SFP-HI
+		############################################################################################
+	-->
+
+	<chassis_def img="device.png" width="840" height="106" name="HP5500-24G-4SFP-HI">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="HP5500-24G-4SFP-HI" />
+		<item x="10" y="10" name="card_empty" moClass="CARD" field="chassisId" value="Slot0" />
+
+	</chassis_def>
+
+	<!--
+		############################################################################################
+		#	HP5500-24XG-4SFP-HI : module
+		############################################################################################
+	-->
+	<chassis_def img="device1.png" width="820" height="86" name="JG311A">
+
+		<attr moClass="CARD" field="cardModelName" value="JG311A" />
+	<!--
+		############################################################################################
+		#	HP5500-24XG-4SFP-HI : GigabitEthernet1/0/1 ~ 24
+		############################################################################################
+	-->	
+		<item x="30" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port1" /> 
+		</item>
+		
+		<item x="30" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port2" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="64" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port3" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="64" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port4" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="98" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port5" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="98" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port6" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="132" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port7" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="132" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port8" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="166" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port9" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="166" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port10" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="200" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port11" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="200" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port12" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="264" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port13" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="264" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port14" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="298" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port15" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="298" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port16" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="332" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port17" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="332" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port18" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="366" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port19" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="366" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port20" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="400" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port21" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="400" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port22" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="434" y="18" tag="180">
+			<attr moClass="INTERFACE" field="chassisId" value="Port23" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+		<item x="434" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port24" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+
+
+	<!--
+		############################################################################################
+		#	HP5500-24XG-4SFP-HI : GigabitEthernet1/0/25 ~ 28
+		############################################################################################
+	-->	
+		<item x="480" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port25" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		<item x="515" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port26" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		<item x="550" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port27" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		<item x="585" y="45" name="sfp_unlink" imgGroup="sfp" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port28" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+	<!--
+		############################################################################################
+		#	HP5500-24XG-4SFP-HI : Ten-GigabitEthernet1/0/29 ~ 30
+		############################################################################################
+	-->		
+		
+		<item x="630" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port29" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		<item x="665" y="45" >
+			<attr moClass="INTERFACE" field="chassisId" value="Port30" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		
+	<!--
+		############################################################################################
+		#	HP5500-24XG-4SFP-HI : M-GigabitEthernet0/0/0
+		############################################################################################
+	
+		<item x="720" y="45" tag="180" imgGroup="mge">
+			<attr moClass="INTERFACE" field="chassisId" value="Port0" /> 
+			<attr moClass="INTERFACE" field="cardId" value="%cardId%" /> 
+		</item>
+		-->		
+		
+	<!--
+		############################################################################################
+		#	HP5500-24XG-4SFP-HI : etc.
+		############################################################################################
+	-->		
+		
+		<item x="755" y="45" name="console" />
+		
+		<item x="700" y="12" text="12,Arial,HP5500-24G-4SFP-HI" />
+	</chassis_def>
+	
+	
+	
+	
+</chassis_def_list>

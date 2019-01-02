@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+	<!--
+		############################################################################################
+		# Dasan V2824
+		############################################################################################
+	-->
+
+	<chassis_def img="device.png" width="876" height="86" name="V6424">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="Dasan V6424" />
+
+		<item x="230" y="18" tag="180" name="rj45_2_unlink">
+			<attr moClass="INTERFACE" field="ifIndex" value="1" />
+			<attr moClass="INTERFACE" field="moNoUpper" value="%moNo%" />
+		</item>
+
+		<item x="262" y="18" moClass="INTERFACE" field="ifIndex" value="2" tag="180" />
+		<item x="294" y="18" moClass="INTERFACE" field="ifIndex" value="3" tag="180" />
+		<item x="326" y="18" moClass="INTERFACE" field="ifIndex" value="4" tag="180" />
+		<item x="230" y="45" moClass="INTERFACE" field="ifIndex" value="5" />
+		<item x="262" y="45" moClass="INTERFACE" field="ifIndex" value="6" />
+		<item x="294" y="45" moClass="INTERFACE" field="ifIndex" value="7" />
+		<item x="326" y="45" moClass="INTERFACE" field="ifIndex" value="8" />
+		<item x="368" y="18" moClass="INTERFACE" field="ifIndex" value="9" tag="180" />
+		<item x="400" y="18" moClass="INTERFACE" field="ifIndex" value="10" tag="180" />
+		<item x="432" y="18" moClass="INTERFACE" field="ifIndex" value="11" tag="180" />
+		<item x="464" y="18" moClass="INTERFACE" field="ifIndex" value="12" tag="180" />
+		<item x="368" y="45" moClass="INTERFACE" field="ifIndex" value="13" />
+		<item x="400" y="45" moClass="INTERFACE" field="ifIndex" value="14" />
+		<item x="432" y="45" moClass="INTERFACE" field="ifIndex" value="15" />
+		<item x="464" y="45" moClass="INTERFACE" field="ifIndex" value="16" />
+		<item x="506" y="18" moClass="INTERFACE" field="ifIndex" value="17" tag="180" />
+		<item x="538" y="18" moClass="INTERFACE" field="ifIndex" value="18" tag="180" />
+		<item x="570" y="18" moClass="INTERFACE" field="ifIndex" value="19" tag="180" />
+		<item x="602" y="18" moClass="INTERFACE" field="ifIndex" value="20" tag="180" />
+		<item x="506" y="45" moClass="INTERFACE" field="ifIndex" value="21" />
+		<item x="538" y="45" moClass="INTERFACE" field="ifIndex" value="22" />
+		<item x="570" y="45" moClass="INTERFACE" field="ifIndex" value="23" />
+		<item x="602" y="45" moClass="INTERFACE" field="ifIndex" value="24" />
+
+		<item x="100" y="58" text="36,Arial,V6424" />
+
+	</chassis_def>
+</chassis_def_list>

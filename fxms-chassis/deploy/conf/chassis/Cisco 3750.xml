@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# HP10508 : 14U
+		############################################################################################
+	-->
+
+	<chassis_def img="device.png" width="896" height="1290" name="HP10508">
+
+		<!--
+			<attr moClass="NODE" field="modelName" memthod="equals" value="HP10508" />
+		-->
+		<attr moClass="NODE" field="ipAddress" method="equals" value="39.119.203.30" />
+
+		<item x="10" y="10" name="card_empty" moClass="CARD" field="slotNo" value="1" />
+		<item x="10" y="100" name="card_empty" moClass="CARD" field="slotNo" value="2" />
+		<item x="10" y="190" name="card_empty" moClass="CARD" field="slotNo" value="3" />
+		<item x="10" y="280" name="card_empty" moClass="CARD" field="slotNo" value="4" />
+		<item x="10" y="370" name="card_empty" moClass="CARD" field="slotNo" value="5" />
+		<item x="10" y="460" name="card_empty" moClass="CARD" field="slotNo" value="6" />
+		<item x="10" y="550" name="card_empty" moClass="CARD" field="slotNo" value="7" />
+		<item x="10" y="640" name="card_empty" moClass="CARD" field="slotNo" value="8" />
+		<item x="10" y="730" name="card_empty" moClass="CARD" field="slotNo" value="1001" />
+		<item x="10" y="820" name="card_empty" moClass="CARD" field="slotNo" value="1031" />
+
+		<item x="10" y="930" width="876" height="50" name="separator" />
+
+		<item x="30" y="1000" name="power_empty">
+			<attr moClass="CARD" field="cardType" value="powerSupply" />
+			<attr moClass="CARD" field="slotNo" value="0" />
+		</item>
+		<item x="175" y="1000" name="power_empty">
+			<attr moClass="CARD" field="cardType" value="powerSupply" />
+			<attr moClass="CARD" field="slotNo" value="0" />
+		</item>
+		<item x="320" y="1000" name="power_empty">
+			<attr moClass="CARD" field="cardType" value="powerSupply" />
+			<attr moClass="CARD" field="slotNo" value="0" />
+		</item>
+		<item x="465" y="1000" name="power_empty">
+			<attr moClass="CARD" field="cardType" value="powerSupply" />
+			<attr moClass="CARD" field="slotNo" value="1003" />
+		</item>
+		<item x="610" y="1000" name="power_empty">
+			<attr moClass="CARD" field="cardType" value="powerSupply" />
+			<attr moClass="CARD" field="slotNo" value="0" />
+		</item>
+		<item x="755" y="1000" name="power_empty">
+			<attr moClass="CARD" field="cardType" value="powerSupply" />
+			<attr moClass="CARD" field="slotNo" value="1003" />
+		</item>
+
+
+	</chassis_def>
+
+
+	<chassis_def img="card_on.png" width="876" height="86" name="WS-C3750G-24TS-E1U">
+
+		<attr moClass="CARD" field="cardModelName" value="WS-C3750G-24TS-E1U" />
+
+		<item x="280" y="18" moClass="INTERFACE" field="ifIndex" value="10101" tag="180" />
+		<item x="310" y="18" moClass="INTERFACE" field="ifIndex" value="10102" tag="180" />
+		<item x="340" y="18" moClass="INTERFACE" field="ifIndex" value="10103" tag="180" />
+		<item x="370" y="18" moClass="INTERFACE" field="ifIndex" value="10104" tag="180" />
+		<item x="280" y="45" moClass="INTERFACE" field="ifIndex" value="10105" />
+		<item x="310" y="45" moClass="INTERFACE" field="ifIndex" value="10106" />
+		<item x="340" y="45" moClass="INTERFACE" field="ifIndex" value="10107" />
+		<item x="370" y="45" moClass="INTERFACE" field="ifIndex" value="10108" />
+		<item x="410" y="18" moClass="INTERFACE" field="ifIndex" value="10109" tag="180" />
+		<item x="440" y="18" moClass="INTERFACE" field="ifIndex" value="10110" tag="180" />
+		<item x="470" y="18" moClass="INTERFACE" field="ifIndex" value="10111" tag="180" />
+		<item x="500" y="18" moClass="INTERFACE" field="ifIndex" value="10112" tag="180" />
+		<item x="410" y="45" moClass="INTERFACE" field="ifIndex" value="10113" />
+		<item x="440" y="45" moClass="INTERFACE" field="ifIndex" value="10114" />
+		<item x="470" y="45" moClass="INTERFACE" field="ifIndex" value="10115" />
+		<item x="500" y="45" moClass="INTERFACE" field="ifIndex" value="10116" />
+		<item x="540" y="18" moClass="INTERFACE" field="ifIndex" value="10117" tag="180" />
+		<item x="570" y="18" moClass="INTERFACE" field="ifIndex" value="10118" tag="180" />
+		<item x="600" y="18" moClass="INTERFACE" field="ifIndex" value="10119" tag="180" />
+		<item x="630" y="18" moClass="INTERFACE" field="ifIndex" value="10120" tag="180" />
+		<item x="540" y="45" moClass="INTERFACE" field="ifIndex" value="10121" />
+		<item x="570" y="45" moClass="INTERFACE" field="ifIndex" value="10122" />
+		<item x="600" y="45" moClass="INTERFACE" field="ifIndex" value="10123" />
+		<item x="630" y="45" moClass="INTERFACE" field="ifIndex" value="10124" />
+
+
+	</chassis_def>
+
+	<chassis_def img="card_on.png" width="876" height="86" name="aaa">
+
+		<attr moClass="CARD" field="cardType" value="container" />
+
+		<item x="30" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="60" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="90" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="120" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="150" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="180" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="210" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="240" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="270" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="300" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="330" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="360" y="15" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="30" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="60" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="90" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="120" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="150" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="180" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="210" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="240" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="270" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="300" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="330" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+		<item x="360" y="45" name="sfp_unlink" moClass="INTERFACE" field="ifIndex" value="0" />
+
+	</chassis_def>
+
+
+</chassis_def_list>

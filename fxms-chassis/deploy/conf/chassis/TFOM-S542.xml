@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+
+	<!--
+		############################################################################################
+		# TFOM-S542
+		############################################################################################
+
+		/* AID:STATE,RACK,SHELF,UNIT-TYPE,REAL-TYPE */
+		"PSU.A,OUT:RACK1,SHELF1,PSUA09,"
+		"PSU.B,MISMATCH:RACK1,SHELF1,PSUA09,"
+		"MBU,NORMAL(ACT):RACK1,SHELF1,MBU,MBU"
+		"STM.A,NORMAL(ACT):RACK1,SHELF1,MBU(SFP),MBU(SFP)"
+		"STM.B,NORMAL(ACT):RACK1,SHELF1,MBU(SFP),MBU(SFP)"
+		"E1,NORMAL(ACT):RACK1,SHELF1,MBU(E1),MBU(E1)"
+		"CHA1,NORMAL(ACT):RACK1,SHELF1,SLCT,SLCT"
+		"CHA2,OUT:RACK1,SHELF1,EM2U,"
+		"ETH,NORMAL(ACT):RACK1,SHELF1,MBU(ETH),MBU(ETH)"
+		"FAN,NORMAL(ACT):RACK1,SHELF1,FAN,FAN"
+	-->
+
+    <chassis_def img="TFOM-S542/shelf_s542_unit_fan_nor.png" name="FAN">
+		<attr moClass="CARD" field="cardType" value="FAN" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_slct_nor.png" name="SLCT">
+		<attr moClass="CARD" field="cardType" value="SLCT" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_psu_nor.png" name="PSUA09">
+		<attr moClass="CARD" field="cardType" value="PSUA09" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_psu24_nor.png" name="PSUD10">
+		<attr moClass="CARD" field="cardType" value="PSUD10" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_psu48_nor.png" name="PSUD09">
+		<attr moClass="CARD" field="cardType" value="PSUD09" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_slct_nor.png" name="TD">
+		<attr moClass="CARD" field="cardType" value="TD" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_slct_nor.png" name="DPO">
+		<attr moClass="CARD" field="cardType" value="DPO" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_slct_nor.png" name="EM2U">
+		<attr moClass="CARD" field="cardType" value="EM2U" />
+	</chassis_def>
+	<chassis_def img="TFOM-S542/shelf_s542_unit_slct_nor.png" name="SLU-6">
+		<attr moClass="CARD" field="cardType" value="SLU-6" />
+	</chassis_def>
+	
+	<chassis_def img="TFOM-S542/shelf_s542_unit_shelf.png" width="752" height="247" name="TFOM-S542">
+
+		<attr moClass="NODE" field="modelName" method="equals" value="TFOM-S542" />
+
+		<item x="322" y="10" moClass="CARD" field="chassisId" value="CHA1" />
+		<item x="492" y="10" moClass="CARD" field="chassisId" value="CHA2" />
+		<item x="662" y="10" moClass="CARD" field="chassisId" value="FAN" />
+		<item x="148" y="132" moClass="CARD" field="chassisId" value="PSU.B" />
+		<item x="443" y="132" moClass="CARD" field="chassisId" value="PSU.A" />
+
+	</chassis_def>
+
+</chassis_def_list>

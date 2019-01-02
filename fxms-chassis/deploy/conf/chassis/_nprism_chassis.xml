@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE chassis_def_list SYSTEM "chassis.dtd" >
+
+<chassis_def_list>
+
+	<!--
+		############################################################################################
+		# 1U : 876 x 86
+		# RJ45 : 28 x 24
+		# SFP :
+		############################################################################################
+	-->
+
+
+	<!--
+		############################################################################################
+		# PORT NORMAL
+		############################################################################################
+	-->
+
+	<chassis_def img="sfp_link.png" name="sfp_link">
+		<attr moClass="INTERFACE" field="imgGroup" value="sfp" />
+		<attr moClass="INTERFACE" field="ifStatusOper" value="1" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+
+	<chassis_def img="sfp_unlink.png" name="sfp_unlink">
+		<attr moClass="INTERFACE" field="imgGroup" value="sfp" />
+		<attr moClass="INTERFACE" field="ifStatusOper" value="1" result="false" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+
+	<!-- m-gigabiteEthernet 포트. --> 
+	<chassis_def img="mge_link.png" name="mge_link">
+		<attr moClass="INTERFACE" field="imgGroup" value="mge" />
+		<attr moClass="INTERFACE" field="ifStatusOper" value="1" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+
+	<chassis_def img="mge_unlink.png" name="mge_unlink">
+		<attr moClass="INTERFACE" field="imgGroup" value="mge" />
+		<attr moClass="INTERFACE" field="ifStatusOper" value="1" result="false" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+    <!--  -->
+    
+	<chassis_def img="rj45_link.png" width="28" height="24" name="rj45_link">
+		<attr moClass="INTERFACE" field="ifType" value="6" />
+		<attr moClass="INTERFACE" field="ifStatusOper" value="1" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+
+	<chassis_def img="rj45_unlink.png" width="28" height="24" name="rj45_unlink">
+		<attr moClass="INTERFACE" field="ifType" value="6" />
+		<attr moClass="INTERFACE" field="ifStatusOper" value="1" result="false" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+	
+
+	<!--
+		############################################################################################
+		# PORT CRITICAL
+		############################################################################################
+	-->
+	<chassis_def img="sfp_cri.png" name="sfp_cri">
+		<attr moClass="INTERFACE" field="imgGroup" value="sfp" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="5" />
+	</chassis_def>
+
+	<chassis_def img="rj45_cri.png" width="28" height="24" name="rj45_cri">
+		<attr moClass="INTERFACE" field="alarmLevel" value="1" />
+	</chassis_def>
+	
+	<!-- m-gigabiteEthernet 포트. --> 
+	<chassis_def img="mge_cri.png" name="mge_cri">
+		<attr moClass="INTERFACE" field="imgGroup" value="mge" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="1" />
+	</chassis_def>
+
+	<!--
+		############################################################################################
+		# RJ45 MAJOR
+		############################################################################################
+	-->
+	<chassis_def img="sfp_maj.png" name="sfp_maj">
+		<attr moClass="INTERFACE" field="imgGroup" value="sfp" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="2" />
+	</chassis_def>
+	
+	<chassis_def img="rj45_maj.png" width="28" height="24" name="rj45_maj">
+		<attr moClass="INTERFACE" field="ifType" value="6" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="2" />
+	</chassis_def>
+	
+	<!-- m-gigabiteEthernet 포트. --> 
+	<chassis_def img="mge_maj.png" name="mge_maj">
+		<attr moClass="INTERFACE" field="imgGroup" value="mge" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="2" />
+	</chassis_def>
+
+	<!--
+		############################################################################################
+		# RJ45 MINOR
+		############################################################################################
+	-->
+	<chassis_def img="sfp_min.png" name="sfp_min">
+		<attr moClass="INTERFACE" field="imgGroup" value="sfp" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="3" />
+	</chassis_def>
+	
+	<chassis_def img="rj45_min.png" width="28" height="24" name="rj45_min">
+		<attr moClass="INTERFACE" field="ifType" value="6" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="3" />
+	</chassis_def>
+	
+	<!-- m-gigabiteEthernet 포트. --> 
+	<chassis_def img="mge_min.png" name="mge_min">
+		<attr moClass="INTERFACE" field="imgGroup" value="mge" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="3" />
+	</chassis_def>
+
+	<!--
+		############################################################################################
+		# RJ45 WARNING
+		############################################################################################
+	-->
+	<chassis_def img="sfp_war.png" name="sfp_war">
+		<attr moClass="INTERFACE" field="imgGroup" value="sfp" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="4" />
+	</chassis_def>
+	
+	<chassis_def img="rj45_war.png" width="28" height="24" name="rj45_war">
+		<attr moClass="INTERFACE" field="ifType" value="6" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="4" />
+	</chassis_def>
+	
+	<!-- m-gigabiteEthernet 포트. --> 
+	<chassis_def img="mge_war.png" name="mge_war">
+		<attr moClass="INTERFACE" field="imgGroup" value="mge" />
+		<attr moClass="INTERFACE" field="alarmLevel" value="4" />
+	</chassis_def>
+
+	<!--
+		############################################################################################
+		# RJ45 NOT MATCH MO
+		############################################################################################
+	-->
+	<chassis_def img="rj45_no_mo.png" name="rj45_no_mo" />
+
+	<chassis_def img="rj45_normal.png" width="28" height="24" name="rj45_normal">
+		<attr moClass="INTERFACE" field="ifType" value="6" />
+	</chassis_def>
+
+
+	<chassis_def img="rj45_2_unlink.png" name="rj45_2_unlink" />
+
+
+	<chassis_def img="card_empty.png" width="906" height="86" name="card_empty1" />
+	<chassis_def img="card_empty.png" width="876" height="86" name="card_empty" />
+	<chassis_def img="separator.png" width="876" height="40" name="separator" />
+
+	<!--
+		<chassis_def img="power_in.png" name="power_in">
+		<attr moClass="CARD" field="cardType" value="powerSupply" />
+		</chassis_def>
+
+
+		<chassis_def img="power_empty.png" name="power_empty" />
+	-->
+	<chassis_def img="nprism.png" name="nprism" width="50" height="10" />
+
+	<chassis_def img="console.png" name="console"  width="38" height="33"/>
+
+</chassis_def_list>
