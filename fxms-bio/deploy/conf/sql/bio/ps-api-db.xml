@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<!-- ############################################################################################ 
+		# R E S U L T ############################################################################################ -->
+
+	<resultMap id="RESULT_DEVICE_MO" javaClass="com.fxms.bio.mo.DeviceMo">
+		<result attr="setMoNo()" field="MO_NO" />
+		<result attr="setMoName()" field="MO_NAME" />
+		<result attr="setMoAname()" field="MO_ANAME" />
+		<result attr="setMoClass()" field="MO_CLASS" />
+		<result attr="setUpperMoNo()" field="UPPER_MO_NO" />
+		<result attr="setAlarmCfgNo()" field="ALARM_CFG_NO" />
+
+		<result attr="setDeviceIdInGw()" field="DEVICE_ID_IN_GW" />
+		<result attr="setDeviceIpaddr()" field="DEVICE_IPADDR" />
+		<result attr="setGwMoNo()" field="GW_MO_NO" />
+		<result attr="setDeviceType()" field="DEVICE_TYPE" />
+	</resultMap>
+
+
+
+	<!-- ############################################################################################ 
+		# S E L E C T ############################################################################################ -->
+
+	<select id="SELECT-CLASS-com.fxms.bio.mo.DeviceMo"
+		resultMap="RESULT_DEVICE_MO">
+		<![CDATA[
+		select	T1.MO_NO
+				, T1.MO_NAME
+				, T1.MO_ANAME
+				, T1.MO_CLASS
+				, T1.MNG_YN
+				, T1.UPPER_MO_NO
+				, T1.ALARM_CFG_NO			
+				
+				, T2.GW_MO_NO
+				, T2.DEVICE_IPADDR
+				, T2.DEVICE_ID_IN_GW
+				, T2.DEVICE_TYPE
+				, 300		as POLLING_CYCLE
+				
+		from	FX_MO			T1
+				, FX_MO_DEVICE 	T2
+				, FX_MO_GW T3
+		where	T1.MO_NO = T2.MO_NO
+		and	T1.MNG_YN = 'Y'
+		and	T3.MO_NO = T2.GW_MO_NO
+		and T3.GW_TYPE not in ( 'T-Agent' )
+		]]>
+
+		<test var="msIpaddr"> and ( T3.MS_IPADDR in ( $msIpaddr ) or T3.MS_IPADDR is null ) </test>
+		<test var="moNo"> and T1.MO_NO = $moNo </test>
+
+	</select>
+
+</queries>
+

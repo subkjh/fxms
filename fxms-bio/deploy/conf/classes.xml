@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE classes[
+
+<!ELEMENT classes (class*) >
+
+<!ELEMENT class EMPTY >
+<!ATTLIST class org CDATA #REQUIRED >
+<!ATTLIST class use CDATA #REQUIRED >
+<!ATTLIST class service CDATA #IMPLIED >
+
+]>
+
+<classes>
+
+	<class org="fxms.bas.api.PsApi" use="fxms.bas.api.PsApiDB" />
+	<class org="fxms.bas.api.MoApi" use="fxms.bas.api.MoApiDB" />
+	<class org="fxms.bas.api.EventApi" use="fxms.bas.api.EventApiDB" />
+	<class org="fxms.bas.api.AlarmApi" use="fxms.bas.api.AlarmApiDB" />	
+	<class org="fxms.bas.pso.VoApi" use="fxms.bas.api.VoApiDB" />
+	<class org="fxms.bas.api.ServiceApi" use="fxms.bas.api.ServiceApiDB" />
+	
+	
+	<!-- MO CLASS -->
+	<class org="fxms.bas.mo.Mo" use="fxms.bas.mo.Mo" />
+	<class org="com.fxms.bio.mo.DeviceMo" use="com.fxms.bio.mo.DeviceMo" />
+
+</classes>

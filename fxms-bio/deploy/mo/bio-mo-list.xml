@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mo-list[
+
+<!ELEMENT mo-list ( mo* ) >
+
+<!ELEMENT mo EMPTY >
+<!ATTLIST mo mo-class CDATA #REQUIRED >
+<!ATTLIST mo java-class CDATA #REQUIRED >
+
+]>
+
+<mo-list>
+
+	<mo mo-class="CONTAINER" java-class="com.fxms.bio.mo.ContainerMo" />
+	<mo mo-class="GW" java-class="com.fxms.bio.mo.GwMo" />
+	<mo mo-class="DEVICE" java-class="com.fxms.bio.mo.DeviceMo" />
+	<mo mo-class="PBR" java-class="com.fxms.bio.mo.PbrMo" />
+
+</mo-list>

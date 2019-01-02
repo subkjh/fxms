@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<java-class name="GwManager" class="com.fxms.agent.FxAgentActor" service="MoService">
+		<para name="local-port" value="63800" />
+		<para name="pdu-processor" value="com.fxms.bio.agent.processor.BioFxAgentProcessor" />
+	</java-class>
+
+	<java-class name="AgentAdapter" class="com.fxms.bio.adapter.AgentAdapter" service="MoService">
+		<compare field="gwType" value="T-Agent" method="equals" result="true" />
+	</java-class>
+
+	<java-class name="GwMySqlAdapter" class="com.fxms.bio.adapter.GwMySqlAdapter" service="MoService">
+		<para name="db-name" value="TEST" />
+		<para name="container-id" value="JB-CON-001" />
+		<compare field="gwType" value="소노넷" method="equals" result="true" />
+	</java-class>
+
+
+	<java-class name="GwPollerMgr" class="com.fxms.bio.poller.GwPollerMgr" service="MoService">
+	</java-class>
+
+	<java-class name="fxms-bio-restapi" class="fxms.module.restapi.vo.HandlerVo" service="ExtService">
+		<para name="context" value="/bio, com.fxms.bio.handler.BioHandler" />
+		<para name="port" value="10005" />
+	</java-class>
+
+	<java-class name="BioAlarmFilter" class="com.fxms.bio.filter.BioAlarmFilter" service="AppService">
+	</java-class>
+	
+</class-list>
