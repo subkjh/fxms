@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE attributes [
+
+<!ELEMENT attributes (attr-list*, attr*) >
+
+<!ELEMENT attr (para*)>
+<!ATTLIST attr id CDATA #REQUIRED >
+<!ATTLIST attr text CDATA #REQUIRED >
+<!ATTLIST attr type CDATA #REQUIRED >
+<!ATTLIST attr screen-tag CDATA  #IMPLIED >
+<!ATTLIST attr value CDATA  #IMPLIED >
+<!ATTLIST attr post-attr CDATA  #IMPLIED >
+
+<!ELEMENT para (#PCDATA) >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #REQUIRED >
+
+]>
+
+
+<attributes>
+
+
+	<attr id="equipId" text="장비ID" type="alpha-numeric">
+		<para name="moClass" value="NE" />
+	</attr>
+	
+	<attr id="equipId" text="장비아이디" type="alpha-numeric" />
+	<attr id="equipNm" text="장비명" type="string" />
+	<attr id="equipNm" text="장비" type="string" />
+	<attr id="equipTidVal" text="장비TID" type="string" />
+	<attr id="equipTidVal" text="장비티아디" type="string" />
+	<attr id="ifIdxNum" text="인터페이스번호" type="number" />
+	<attr id="ifIdxNum" text="인터페이스" type="number" />
+	<attr id="portNum" text="포트번호" type="number" />
+	<attr id="dablCd" text="장애,코드" type="string" screen-tag="경보,장애"/>
+	<attr id="equipUsgCd" text="CMTS" type="string" value="aaa" post-attr="equipNm" />
+	<attr id="equipUsgCd" text="교환기" type="string" value="bbb" post-attr="equipNm" />
+
+	<attr id="tpoCd" text="동작분배센터" type="string" value="M123123" />
+	<attr id="hasWarning" text="장애,있는" type="string" value="Y" />
+	<attr id="hasWarning" text="장애,가지고,있는" type="string" value="Y" />
+
+	<!-- 국사기본 데이터를 자동으로 가져오는 방법으로 변경
+		<attr-list id="tpoCd" qid="SELECT_TPO_LIST" type="String" />
+	-->
+
+	<attr id="tpoCd" value="N27177" text="충남당진HFC" type="string" />
+	<attr id="tpoCd" value="N04753" text="충남합덕HRO" type="string" />
+	<attr id="tpoCd" value="N02055" text="충남금산HFC" type="string" />
+	<attr id="tpoCd" value="N18816" text="충북청주HFC" type="string" />
+	<attr id="tpoCd" value="N07422" text="충북영동HRO" type="string" />
+	<attr id="tpoCd" value="N37283" text="충북오창HRO" type="string" />
+	<attr id="tpoCd" value="N64271" text="충남논산HFC" type="string" />
+	<attr id="tpoCd" value="N09066" text="서울성북HFC" type="string" />
+	<attr id="tpoCd" value="N04464" text="서울성동HFC" type="string" />
+	<attr id="tpoCd" value="N01340" text="서울동대문HFC" type="string" />
+	<attr id="tpoCd" value="N11417" text="서울송파HFC 예비국사" type="string" />
+	<attr id="tpoCd" value="N01428" text="서울송파HFC" type="string" />
+	<attr id="tpoCd" value="N05776" text="충북보은HRO" type="string" />
+	<attr id="tpoCd" value="N08480" text="경북영덕HRO" type="string" />
+	<attr id="tpoCd" value="N26841" text="전남광양HFC" type="string" />
+	<attr id="tpoCd" value="N09574" text="전남광양HISP" type="string" />
+	<attr id="tpoCd" value="N15592" text="전남목포HFC" type="string" />
+	<attr id="tpoCd" value="N09916" text="전남강진HSO" type="string" />
+	<attr id="tpoCd" value="N26865" text="전남강진HFC" type="string" />
+	<attr id="tpoCd" value="N09917" text="전남목포HSO" type="string" />
+	<attr id="tpoCd" value="N26842" text="전남여수HFC" type="string" />
+	<attr id="tpoCd" value="N17424" text="전남해남HSO" type="string" />
+	<attr id="tpoCd" value="N06764" text="전남장성HSO" type="string" />
+	<attr id="tpoCd" value="N01639" text="전북김제HSO" type="string" />
+	<attr id="tpoCd" value="N24285" text="(익산)CMB금강방송" type="string" />
+	<attr id="tpoCd" value="N01010" text="전북익산HFC" type="string" />
+	<attr id="tpoCd" value="N17352" text="전북부안HRO" type="string" />
+	<attr id="tpoCd" value="N14141" text="전북고창HRO" type="string" />
+	<attr id="tpoCd" value="N04880" text="전북정읍HFC" type="string" />
+	<attr id="tpoCd" value="N09895" text="전북정읍HSO" type="string" />
+	<attr id="tpoCd" value="N15721" text="서귀포HISP" type="string" />
+	<attr id="tpoCd" value="N11867" text="충남부여HFC" type="string" />
+	<attr id="tpoCd" value="N18191" text="충남공주HRO" type="string" />
+	<attr id="tpoCd" value="N22707" text="충남부여HSO" type="string" />
+	<attr id="tpoCd" value="N13681" text="충남공주HSO" type="string" />
+	<attr id="tpoCd" value="N01006" text="충남공주HFC" type="string" />
+	<attr id="tpoCd" value="N35147" text="충남웅천HRO" type="string" />
+	<attr id="tpoCd" value="N27562" text="충남보령HFC" type="string" />
+	<attr id="tpoCd" value="N05775" text="충남서천HRO" type="string" />
+	<attr id="tpoCd" value="N02056" text="충남보령HSO" type="string" />
+	<attr id="tpoCd" value="N24382" text="충남아산HFC" type="string" />
+	<attr id="tpoCd" value="N15633" text="충북내수TRO" type="string" />
+	<attr id="tpoCd" value="N15634" text="충북진천HRO" type="string" />
+	<attr id="tpoCd" value="N13370" text="충북주원HRO" type="string" />
+	<attr id="tpoCd" value="N13952" text="충북증평HSO" type="string" />
+	<attr id="tpoCd" value="N11418" text="서울강남HFC 예비국사" type="string" />
+	<attr id="tpoCd" value="A20718" text="서울강남HFC" type="string" />
+	<attr id="tpoCd" value="N02905" text="서울서초HFC" type="string" />
+	<attr id="tpoCd" value="N03005" text="서울강동HFC" type="string" />
+	<attr id="tpoCd" value="N10789" text="서울마포HSO" type="string" />
+	<attr id="tpoCd" value="N09064" text="서울중랑HFC" type="string" />
+	<attr id="tpoCd" value="N08451" text="서울용산HFC" type="string" />
+	<attr id="tpoCd" value="N15024" text="부산해운대HFC(연제)" type="string" />
+	<attr id="tpoCd" value="N15025" text="부산해운대HFC(좌동)" type="string" />
+	<attr id="tpoCd" value="N39480" text="부산반송RO" type="string" />
+	<attr id="tpoCd" value="N00983" text="부산서사하HFC" type="string" />
+	<attr id="tpoCd" value="M12931" text="HFC불용국사" type="string" />
+	<attr id="tpoCd" value="N32214" text="구월" type="string" />
+	<attr id="tpoCd" value="N17631" text="경남진해HFC" type="string" />
+	<attr id="tpoCd" value="N15023" text="경남통영HRO" type="string" />
+	<attr id="tpoCd" value="N12040" text="경북경주HSO" type="string" />
+	<attr id="tpoCd" value="N26352" text="경북김천HFC" type="string" />
+	<attr id="tpoCd" value="N04316" text="경북김천HISP" type="string" />
+	<attr id="tpoCd" value="N05146" text="경북성주HRO" type="string" />
+	<attr id="tpoCd" value="N04821" text="경기김포HFC" type="string" />
+	<attr id="tpoCd" value="N04988" text="인천영종SO" type="string" />
+	<attr id="tpoCd" value="N00974" text="울산남구HFC" type="string" />
+	<attr id="tpoCd" value="N05014" text="충북옥천HFC" type="string" />
+	<attr id="tpoCd" value="N14560" text="대전중구HRO(문화유선)" type="string" />
+	<attr id="tpoCd" value="N13586" text="CMB선화동국사(중/서/유성구)" type="string" />
+	<attr id="tpoCd" value="N20748" text="CMB유성국사" type="string" />
+	<attr id="tpoCd" value="N14851" text="경기용인THFC" type="string" />
+	<attr id="tpoCd" value="N14855" text="경기구리THFC" type="string" />
+	<attr id="tpoCd" value="N26082" text="경기남양주진건RO" type="string" />
+	<attr id="tpoCd" value="N11872" text="수원HFC예비" type="string" />
+	<attr id="tpoCd" value="N14281" text="경기안산HFC" type="string" />
+	<attr id="tpoCd" value="N03871" text="경기안산MISP" type="string" />
+	<attr id="tpoCd" value="N16396" text="경기안산TSO(청약불가)" type="string" />
+	<attr id="tpoCd" value="N12249" text="경기안양HFC" type="string" />
+	<attr id="tpoCd" value="N04870" text="경기이천HFC" type="string" />
+	<attr id="tpoCd" value="N04868" text="경기안성평택HFC" type="string" />
+	<attr id="tpoCd" value="N21754" text="수원HFC" type="string" />
+	<attr id="tpoCd" value="N02075" text="수원장안MISP" type="string" />
+	<attr id="tpoCd" value="N24424" text="경기광주HFC" type="string" />
+	<attr id="tpoCd" value="N11092" text="대구/중HFC국사" type="string" />
+	<attr id="tpoCd" value="N03782" text="대구달성HRO" type="string" />
+	<attr id="tpoCd" value="N00183" text="대구달서HSO" type="string" />
+	<attr id="tpoCd" value="N14378" text="대구수성TSO" type="string" />
+	<attr id="tpoCd" value="N03437" text="대구수성HRO" type="string" />
+	<attr id="tpoCd" value="N04209" text="대구수성HFC" type="string" />
+	<attr id="tpoCd" value="N15463" text="대구서THFC" type="string" />
+	<attr id="tpoCd" value="N12637" text="대구서구HSO" type="string" />
+	<attr id="tpoCd" value="N14649" text="나주SO(CMB)" type="string" />
+	<attr id="tpoCd" value="A20716" text="전남고흥HISP" type="string" />
+	<attr id="tpoCd" value="N08370" text="전남구례HSO" type="string" />
+	<attr id="tpoCd" value="N27140" text="전남고흥HFC" type="string" />
+	<attr id="tpoCd" value="N26840" text="전남순천HFC" type="string" />
+	<attr id="tpoCd" value="N15605" text="전남순천HSO" type="string" />
+	<attr id="tpoCd" value="N05871" text="전남영광HSO" type="string" />
+	<attr id="tpoCd" value="N13675" text="전남담양HSO" type="string" />
+	<attr id="tpoCd" value="N01008" text="전북군산HFC" type="string" />
+	<attr id="tpoCd" value="N05108" text="전북남원HFC" type="string" />
+	<attr id="tpoCd" value="N18894" text="전북순창HSO" type="string" />
+	<attr id="tpoCd" value="N10256" text="전북남원HSO" type="string" />
+	<attr id="tpoCd" value="N12557" text="전북HFC(예비국사)" type="string" />
+	<attr id="tpoCd" value="N14304" text="한국방송통신대" type="string" />
+	<attr id="tpoCd" value="N24228" text="전북전주HFC" type="string" />
+	<attr id="tpoCd" value="N15719" text="제주HISP" type="string" />
+	<attr id="tpoCd" value="N11301" text="충남논산HFC_폐국" type="string" />
+	<attr id="tpoCd" value="N18192" text="충남강경HRO" type="string" />
+	<attr id="tpoCd" value="N18194" text="충남연산HRO" type="string" />
+	<attr id="tpoCd" value="N21607" text="충남논산HSO" type="string" />
+	<attr id="tpoCd" value="N11302" text="충남서산HSO" type="string" />
+	<attr id="tpoCd" value="N14490" text="충남태안TSO" type="string" />
+	<attr id="tpoCd" value="N27179" text="충남서산HFC" type="string" />
+	<attr id="tpoCd" value="N24527" text="충남연기HFC" type="string" />
+	<attr id="tpoCd" value="N24381" text="충남천안HFC" type="string" />
+	<attr id="tpoCd" value="N02957" text="충남천안연기MISP" type="string" />
+	<attr id="tpoCd" value="N00690" text="충남/예산(HFC국사)" type="string" />
+	<attr id="tpoCd" value="N05774" text="충남/청양(HFC국사)" type="string" />
+	<attr id="tpoCd" value="N07675" text="충남/홍성(HFC국사)" type="string" />
+	<attr id="tpoCd" value="N18784" text="충북덕산HSO" type="string" />
+	<attr id="tpoCd" value="N05144" text="경북상주,문경HFC" type="string" />
+	<attr id="tpoCd" value="N39444" text="경북영주HFC_SKT" type="string" />
+	<attr id="tpoCd" value="N26867" text="경북영주HFC" type="string" />
+	<attr id="tpoCd" value="N04965" text="포항남구HFC" type="string" />
+	<attr id="tpoCd" value="N00453" text="경북포항HSO" type="string" />
+	<attr id="tpoCd" value="N47175" text="강원화천RO" type="string" />
+	<attr id="tpoCd" value="N00822" text="부산진구HRO" type="string" />
+	<attr id="tpoCd" value="N09067" text="부산북사상강서HFC" type="string" />
+	<attr id="tpoCd" value="N04819" text="인천남동HFC" type="string" />
+	<attr id="tpoCd" value="N26849" text="광주광산HFC" type="string" />
+	<attr id="tpoCd" value="A20715" text="서광주HSO" type="string" />
+	<attr id="tpoCd" value="N15711" text="강원강릉HFC" type="string" />
+	<attr id="tpoCd" value="N15020" text="강원영월TRO" type="string" />
+	<attr id="tpoCd" value="A20717" text="강원원주HISP" type="string" />
+	<attr id="tpoCd" value="N26981" text="강원원주HFC" type="string" />
+	<attr id="tpoCd" value="N15021" text="강원정선TRO" type="string" />
+	<attr id="tpoCd" value="N11873" text="강원HFC예비국사" type="string" />
+	<attr id="tpoCd" value="N24787" text="경남장유HFC" type="string" />
+	<attr id="tpoCd" value="N24784" text="경남김해HFC" type="string" />
+	<attr id="tpoCd" value="N22108" text="경남밀양HFC" type="string" />
+	<attr id="tpoCd" value="N15008" text="서울동작HFC" type="string" />
+	<attr id="tpoCd" value="N11399" text="HFC예비국사(동작운용)" type="string" />
+	<attr id="tpoCd" value="N11400" text="HFC예비품관리국사" type="string" />
+	<attr id="tpoCd" value="N04497" text="서울서대문HFC" type="string" />
+	<attr id="tpoCd" value="N01271" text="서울노원HFC" type="string" />
+	<attr id="tpoCd" value="N04463" text="서울도봉HFC" type="string" />
+	<attr id="tpoCd" value="N08799" text="서울영등포HSO" type="string" />
+	<attr id="tpoCd" value="N22117" text="서울종로중구HFC" type="string" />
+	<attr id="tpoCd" value="N15007" text="서울구로금천HFC" type="string" />
+	<attr id="tpoCd" value="N00534" text="서울양천HSO" type="string" />
+	<attr id="tpoCd" value="N14616" text="서울은평HFC" type="string" />
+	<attr id="tpoCd" value="N11459" text="서울강서HSO(지에스)" type="string" />
+	<attr id="tpoCd" value="A20703" text="서울강서HRO(삭제)" type="string" />
+	<attr id="tpoCd" value="N01182" text="서울관악HFC" type="string" />
+	<attr id="tpoCd" value="N17553" text="부산금사HRO" type="string" />
+	<attr id="tpoCd" value="N04387" text="부산남수영구HFC" type="string" />
+	<attr id="tpoCd" value="N14323" text="부산중영도HFC" type="string" />
+	<attr id="tpoCd" value="N14559" text="부산동래연제HFC" type="string" />
+	<attr id="tpoCd" value="N04825" text="인천부평HFC" type="string" />
+	<attr id="tpoCd" value="N04836" text="인천중동HFC" type="string" />
+	<attr id="tpoCd" value="N16986" text="울산동구HFC" type="string" />
+	<attr id="tpoCd" value="A20702" text="대전서중유성구HISP" type="string" />
+	<attr id="tpoCd" value="N20749" text="CMB관저국사" type="string" />
+	<attr id="tpoCd" value="N15639" text="대전중,서,유성TMISP" type="string" />
+	<attr id="tpoCd" value="N01005" text="대전동,대덕구HFC" type="string" />
+	<attr id="tpoCd" value="N13097" text="CMB법동국사(동구/대덕구)" type="string" />
+	<attr id="tpoCd" value="N14488" text="대전동,대덕TISP" type="string" />
+	<attr id="tpoCd" value="N01106" text="경기성남HFC" type="string" />
+	<attr id="tpoCd" value="N04586" text="경기파주HFC" type="string" />
+	<attr id="tpoCd" value="N01111" text="경기고양HFC" type="string" />
+	<attr id="tpoCd" value="N11403" text="HFC예비국사" type="string" />
+	<attr id="tpoCd" value="N14754" text="경기광명HFC" type="string" />
+	<attr id="tpoCd" value="N11421" text="안양HFC예비국사" type="string" />
+	<attr id="tpoCd" value="N22456" text="경기남양주HFC" type="string" />
+	<attr id="tpoCd" value="N16398" text="경기시흥,시화TSO(청약불가)" type="string" />
+	<attr id="tpoCd" value="N23254" text="경기오산화성HFC" type="string" />
+	<attr id="tpoCd" value="N17674" text="강원철원와수RO" type="string" />
+	<attr id="tpoCd" value="N22453" text="경기의정부HFC" type="string" />
+	<attr id="tpoCd" value="N17245" text="강원철원동송RO" type="string" />
+	<attr id="tpoCd" value="N22481" text="경기포천HFC" type="string" />
+	<attr id="tpoCd" value="N15563" text="경기금촌THFC" type="string" />
+	<attr id="tpoCd" value="N15564" text="경기문산TSO" type="string" />
+	<attr id="tpoCd" value="N11157" text="대구중남구HSO" type="string" />
+	<attr id="tpoCd" value="N11401" text="HFC예비국사" type="string" />
+	<attr id="tpoCd" value="N20854" text="대구북구HFC" type="string" />
+	<attr id="tpoCd" value="N20790" text="대구칠곡HFC" type="string" />
+	<attr id="tpoCd" value="N14407" text="대구동TSO" type="string" />
+	<attr id="tpoCd" value="N14637" text="광주_수기 CMB-중앙" type="string" />
+	<attr id="tpoCd" value="N14306" text="광주동,북THFC" type="string" />
+	<attr id="tpoCd" value="N11165" text="동광주HSO" type="string" />
+	<attr id="tpoCd" value="A20714" text="전남화순HFC" type="string" />
+	<attr id="tpoCd" value="N11411" text="호남HFC(예비국사)" type="string" />
+	<attr id="tpoCd" value="N05134" text="강원동해HFC" type="string" />
+	<attr id="tpoCd" value="N15126" text="강원속초HFC" type="string" />
+	<attr id="tpoCd" value="N24715" text="강원홍천HFC" type="string" />
+	<attr id="tpoCd" value="N13856" text="강원춘천HFC" type="string" />
+	<attr id="tpoCd" value="N04593" text="경남거제HRO" type="string" />
+	<attr id="tpoCd" value="N14660" text="경남마산HFC" type="string" />
+	<attr id="tpoCd" value="N14340" text="경남남해TRO" type="string" />
+	<attr id="tpoCd" value="N05152" text="경남사천HFC" type="string" />
+	<attr id="tpoCd" value="N24728" text="경남진주HFC" type="string" />
+	<attr id="tpoCd" value="N14339" text="경남진주,사천TSO" type="string" />
+	<attr id="tpoCd" value="N17630" text="경남창원HFC" type="string" />
+	<attr id="tpoCd" value="N13695" text="HFC예비국사[창원]" type="string" />
+	<attr id="tpoCd" value="N26351" text="경북왜관HFC" type="string" />
+	<attr id="tpoCd" value="N26350" text="경북구미HFC" type="string" />
+	<attr id="tpoCd" value="N26847" text="경북안동HFC" type="string" />
+	<attr id="tpoCd" value="N11775" text="경북영천HRO" type="string" />
+	<attr id="tpoCd" value="N14416" text="포항GNC국사" type="string" />
+	<attr id="tpoCd" value="N10658" text="경북후포HRO" type="string" />
+	<attr id="tpoCd" value="N10900" text="경북울진HRO" type="string" />
+	<attr id="tpoCd" value="N01175" text="인천서구HFC" type="string" />
+	<attr id="tpoCd" value="N12567" text="부평HFC예비국사" type="string" />
+	<attr id="tpoCd" value="N27644" text="인천연수HFC" type="string" />
+	<attr id="tpoCd" value="N29047" text="충북단양HRO" type="string" />
+	<attr id="tpoCd" value="N19649" text="충북동량HRO" type="string" />
+	<attr id="tpoCd" value="N13217" text="HFC 예비품국사(충주)" type="string" />
+	<attr id="tpoCd" value="N09820" text="충북설성HRO" type="string" />
+	<attr id="tpoCd" value="N22653" text="충북음성HRO" type="string" />
+	<attr id="tpoCd" value="N00688" text="충북충주HSO" type="string" />
+	<attr id="tpoCd" value="N15329" text="충북감곡HRO" type="string" />
+	<attr id="tpoCd" value="N15327" text="충북대소HRO" type="string" />
+	<attr id="tpoCd" value="N15632" text="충북충주THFC" type="string" />
+	<attr id="tpoCd" value="N04565" text="인천남구HFC" type="string" />
+	<attr id="tpoCd" value="N00188" text="경북구미HISP" type="string" />
+	<attr id="tpoCd" value="N11774" text="경북경산HRO" type="string" />
+	<attr id="tpoCd" value="N01176" text="경기부천HFC" type="string" />
+	<attr id="tpoCd" value="A20100" text="동작종합통신센터" type="string" />
+	<attr id="tpoCd" value="A30100" text="서대문정보센터" type="string" />
+	<attr id="tpoCd" value="A40100" text="성북정보센터" type="string" />
+	<attr id="tpoCd" value="B10100" text="동부산정보센터" type="string" />
+	<attr id="tpoCd" value="B20100" text="부산지사(연제)" type="string" />
+	<attr id="tpoCd" value="C10100" text="인천지사(남동)" type="string" />
+	<attr id="tpoCd" value="C20100" text="계양정보센터" type="string" />
+	<attr id="tpoCd" value="D10100" text="남울산정보센터" type="string" />
+	<attr id="tpoCd" value="E10100" text="대구/중" type="string" />
+	<attr id="tpoCd" value="E20100" text="대구/달서" type="string" />
+	<attr id="tpoCd" value="F10100" text="대전/서" type="string" />
+	<attr id="tpoCd" value="F20100" text="대전/중" type="string" />
+	<attr id="tpoCd" value="G10100" text="광주/광산" type="string" />
+	<attr id="tpoCd" value="H10100" text="분당정보센터(성남)" type="string" />
+	<attr id="tpoCd" value="J10100" text="경기/고양(일산)" type="string" />
+	<attr id="tpoCd" value="N00056" text="광주/북" type="string" />
+	<attr id="tpoCd" value="N00935" text="경기/팔달" type="string" />
+	<attr id="tpoCd" value="N00936" text="경기/의정부" type="string" />
+	<attr id="tpoCd" value="N00939" text="경기/구리" type="string" />
+	<attr id="tpoCd" value="N00940" text="경남/김해" type="string" />
+	<attr id="tpoCd" value="N01710" text="충북/청주" type="string" />
+	<attr id="tpoCd" value="N01711" text="충남/천안" type="string" />
+	<attr id="tpoCd" value="N02179" text="전남/순천" type="string" />
+	<attr id="tpoCd" value="N02808" text="제주/신제주" type="string" />
+	<attr id="tpoCd" value="N03029" text="경남/창원" type="string" />
+	<attr id="tpoCd" value="N03038" text="전북/전주" type="string" />
+	<attr id="tpoCd" value="N03979" text="전남/목포" type="string" />
+	<attr id="tpoCd" value="N04428" text="강원/원주" type="string" />
+	<attr id="tpoCd" value="N12231" text="경북/포항" type="string" />
+	<attr id="tpoCd" value="A10202" text="강남정보센터" type="string" />
+	<attr id="tpoCd" value="N00882" text="경기/안산" type="string" />
+	<attr id="tpoCd" value="N01204" text="경기/안양" type="string" />
+	<attr id="tpoCd" value="N02473" text="IDC Center" type="string" />
+	<attr id="tpoCd" value="A10100" text="송파정보센터" type="string" />
+
+
+
+	<attr id="ldongCd" value="2811000000" text="인천,중구" type="string" />
+	<attr id="ldongCd" value="2814000000" text="인천,동구" type="string" />
+	<attr id="ldongCd" value="2817000000" text="인천,남구" type="string" />
+	<attr id="ldongCd" value="2818500000" text="인천,연수구" type="string" />
+	<attr id="ldongCd" value="2820000000" text="인천,남동구" type="string" />
+	<attr id="ldongCd" value="2823700000" text="인천,부평구" type="string" />
+	<attr id="ldongCd" value="2824500000" text="인천,계양구" type="string" />
+	<attr id="ldongCd" value="2826000000" text="인천,서구" type="string" />
+	<attr id="ldongCd" value="2871000000" text="인천,강화군" type="string" />
+	<attr id="ldongCd" value="2872000000" text="인천,옹진군" type="string" />
+
+</attributes>

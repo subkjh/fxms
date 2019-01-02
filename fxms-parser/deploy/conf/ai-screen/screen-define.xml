@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE screens [
+
+<!ELEMENT screens (screen-list*,screen*,rename-para*) >
+
+<!ELEMENT screen (#PCDATA)>
+<!ATTLIST screen id CDATA #REQUIRED >
+<!ATTLIST screen text CDATA #REQUIRED >
+
+<!ELEMENT rename-para (rename*) >
+<!ATTLIST rename-para screen-id CDATA #REQUIRED >
+
+<!ELEMENT rename (#PCDATA) >
+<!ATTLIST rename src CDATA #REQUIRED >
+<!ATTLIST rename dst CDATA #REQUIRED >
+
+]>
+
+<screens>
+
+
+	<screen id="equip-chassis" text="장비,실장도" />
+	<screen id="equip-list" text="장비,목록" />
+	<screen id="show-equip-detail" text="장비,상세,정보" />
+	<screen id="show-sw-equip-detail" text="교환기,상세,정보" />
+
+	<screen id="cur-alarm-list" text="현재,장애" />
+	<screen id="cur-alarm-list" text="현재,장애,화면" />
+	<screen id="cur-alarm-list" text="현재,장애,정보" />
+	<screen id="alarm-list" text="경보,이력" />
+	<screen id="alarm-list" text="경보,목록" />
+	<screen id="alarm-list" text="장애,이력" />
+	<screen id="alert-detail" text="경보,내역" />
+
+	<screen id="/web/jsp/co/CO-NTM-BM-001.jsp" text="공지사항" />
+	<screen id="/web/jsp/co/CO-NTM-BM-004.jsp" text="자료실" />
+	<screen id="/web/jsp/co/CO-NTM-BM-004.jsp" text="자료실화면" />
+	<screen id="/web/jsp/co/CO-NTM-BM-004.jsp" text="자료실,화면" />
+	<!--
+		<screen-list qid="SELECT_SCREEN_LIST" />
+	-->
+
+	<!--
+
+		<screen id="/web/jsp/co/sym/CO-SYM-AQS-001.jsp" text="프로그램관리" />
+		<screen id="/web/jsp/co/sym/CO-SYM-AQS-001.jsp" text="프로그램 이력조회" />
+		<screen id="/web/jsp/cm/PG-CM-2102-S01.jsp" text="FTTx망 장비조회" />
+		<screen id="/web/jsp/fm/PG-FM-4102.jsp" text="STB장애_모델별 통계" />
+		<screen id="/web/jsp/fm/PG-FM-4103-S01.jsp" text="STB장애통계_장애코드별통계" />
+		<screen id="/web/jsp/pm/PG-PM-2004-S03.jsp" text="VOIP V5.2 자동분석" />
+		<screen id="/web/jsp/fm/widgetManager3.jsp?psnl_lst_ser_num=10" text="예보현황_멀티창" />
+		<screen id="/web/jsp/cm/PG-CM-7101.jsp" text="회선조회" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S06.jsp" text="IPTV CEI 품질열위장비-모델별" />
+		<screen id="/web/jsp/pm/PG-PM-2401-S04.jsp" text="분배센터별 품질통계" />
+		<screen id="/web/jsp/fm/PG-FM-6001-S01.jsp" text="중복VoC" />
+		<screen id="/web/jsp/pm/PG-PM-1007.jsp" text="교환기별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-1401.jsp" text="CMTS CPU 성능" />
+		<screen id="/web/jsp/pm/PG-PM-1402.jsp" text="CMTS 온도 성능" />
+		<screen id="/web/jsp/pm/PG-PM-1403.jsp" text="CMTS 상향포트 성능" />
+		<screen id="/web/jsp/pm/PG-PM-1404.jsp" text="CMTS 하향포트 성능" />
+		<screen id="/web/jsp/pm/PG-PM-1405.jsp" text="CMTS CRC" />
+		<screen id="/web/jsp/pm/PG-PM-2002-S02.jsp" text="번호별 트래픽 추이" />
+		<screen id="/web/jsp/pm/PG-PM-2004-S01.jsp" text="루트/V5.2별 트래픽 자동분석(주기)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S02.jsp" text="VoIP-트래픽통계-시간대별 발착신 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S07.jsp" text="VoIP-트래픽통계-입출중계 V5.2 인터페이스별 트래픽 현황(일/주)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S08.jsp" text="VoIP-트래픽통계-입출중계 V5.2 인터페이스별 최번시 트래픽 현황(일/주/월)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S09.jsp" text="VoIP-트래픽통계-시스템별 발착신 트래픽 현황(일/주)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S10.jsp" text="VoIP-트래픽통계-V5.2 인터페이스별 시간대별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S11.jsp" text="VoIP-트래픽통계-사업자별 발착신 트래픽 현황(일/주)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S12.jsp" text="VoIP-트래픽통계-주요 가입자별(기업고객) 트래픽 현황(일/주/월)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S14.jsp" text="VoIP-트래픽통계-매체별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S15.jsp" text="VoIP-트래픽통계-프리픽스 트랙픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S18.jsp" text="VoIP-트래픽통계-호소통율 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2008-S01.jsp" text="사업자별 트래픽 자동분석(주기)" />
+		<screen id="/web/jsp/pm/PG-PM-2008-S02.jsp" text="사업자별 트래픽 자동분석(당일)" />
+		<screen id="/web/jsp/pm/PG-PM-2009-S01.jsp" text="서비스별 트래픽 자동분석(주기)" />
+		<screen id="/web/jsp/pm/PG-PM-2009-S02.jsp" text="서비스별 트래픽 자동분석(당일)" />
+		<screen id="/web/jsp/pm/PG-PM-2010.jsp" text="VoIP-Mass/B2B통계" />
+		<screen id="/web/jsp/pm/PG-PM-2011.jsp" text="통합통계" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S01.jsp" text="발번 오류 보고서" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S02.jsp" text="MNP 보고서" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S03.jsp" text="TM호 보고서" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S04.jsp" text="호소통율 보고서" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S05.jsp" text="완료율 저하 보고서" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S06.jsp" text="실선 PRI 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2012-S07.jsp" text="소요회선" />
+		<screen id="/web/jsp/pm/PG-PM-2013-S01.jsp" text="PSTN Mass/B2B통계" />
+		<screen id="/web/jsp/pm/PG-PM-2013-S02.jsp" text="전체 Mass/B2B통계" />
+		<screen id="/web/jsp/pm/PG-PM-2201.jsp" text="IPTV 백본망 품질통계" />
+		<screen id="/web/jsp/pm/PG-PM-2202.jsp" text="IPTV IP망 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2401-S01.jsp" text="CMTS 분배센터별 운용현황 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2401-S02.jsp" text="CMTS 분배센터별 트래픽 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2401-S03.jsp" text="CMTS 분배센터별 운용현황 총괄" />
+		<screen id="/web/jsp/pm/PG-PM-2402-S01.jsp" text="CMTS 장비별 트래픽 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2012.jsp" text="모델 버전별 통계 NEW" />
+		<screen id="/web/jsp/qm/PG-QM-2002-S02.jsp" text="파워 비정상 모뎀 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2003-S01.jsp" text="WCM 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2003-S02.jsp" text="WCM 인증불량 가입자 모뎀" />
+		<screen id="/web/jsp/qm/PG-QM-2004.jsp" text="AP-CRC통계" />
+		<screen id="/web/jsp/qm/PG-QM-2005.jsp" text="AP-IGMP통계" />
+		<screen id="/web/jsp/qm/PG-QM-2006.jsp" text="AP-리소스통계" />
+		<screen id="/web/jsp/qm/PG-QM-2007.jsp" text="AP-DNS통계" />
+		<screen id="/web/jsp/qm/PG-QM-2008.jsp" text="AP-사설공유기" />
+		<screen id="/web/jsp/co/CO-STD-CC-001.jsp" text="그룹공통코드관리" />
+		<screen id="/web/jsp/co/CO-STD-CC-002.jsp" text="공통코드관리" />
+		<screen id="/web/jsp/co/CO-STD-FC-001.jsp" text="장애원인 코드 관리" />
+		<screen id="/web/jsp/qm/PG-QM-2009.jsp" text="STB 모뎀 버전별통계" />
+		<screen id="/web/jsp/qm/PG-QM-2010.jsp" text="STB 품질통계" />
+		<screen id="/web/jsp/co/CO-STD-BM-001.jsp" text="기준일 관리" />
+		<screen id="/web/jsp/co/CO-STD-BM-001-P01.jsp" text="기준일 관리 등록" />
+		<screen id="/web/jsp/co/std/CO-STD-VOC-001.jsp" text="VOC유형분류코드관리" />
+		<screen id="/web/jsp/co/CO-STM-FS-004.jsp" text="프로토콜 Syslog 장애 설정" />
+		<screen id="/web/jsp/qm/PG-QM-2011-S01.jsp" text="STB 서비스 ON/OFF 현황" />
+		<screen id="/web/jsp/qm/PG-QM-2011-S02.jsp" text="STB 서비스 상태 분포" />
+		<screen id="/web/jsp/qm/PG-QM-2101-S01.jsp" text="CELL 운용 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2101-S02.jsp" text="CELL 운용 순위" />
+		<screen id="/web/jsp/co/CO-STM-FS-004-P01.jsp" text="프로토콜 Syslog 장애 설정 등록" />
+		<screen id="/web/jsp/qm/PG-QM-2102-S01.jsp" text="CELL별 파워분포 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2102-S02.jsp" text="가입자별 파워레벨 통계" />
+		<screen id="/web/jsp/co/CO-STM-FS-005.jsp" text="TRAP 장애 설정" />
+		<screen id="/web/jsp/co/CO-STM-FS-005-P01.jsp" text="TRAP 장애 설정 등록" />
+		<screen id="/web/jsp/qm/PG-QM-2103-S01.jsp" text="CELL별 SNR분포 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2103-S02.jsp" text="가입자별 SNR 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2104-S02.jsp" text="종합 양호율 CELL 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2105-S01.jsp" text="월간전송망 SLA 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2105-S02.jsp" text="분배센터별 SLA 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2106-S01.jsp" text="IPTV CM 품질-CELL별 파워통계" />
+		<screen id="/web/jsp/qm/PG-QM-2106-S02.jsp" text="IPTV CM 품질-CELL별 SNR통계" />
+		<screen id="/web/jsp/qm/PG-QM-2106-S03.jsp" text="IPTV CM 품질-주파수별 파워통계" />
+		<screen id="/web/jsp/qm/PG-QM-2106-S04.jsp" text="IPTV CM 품질-주파수별 SNR통계" />
+		<screen id="/web/jsp/qm/PG-QM-2107.jsp" text="IPTV 지역별 품질 통계" />
+		<screen id="/web/jsp/co/CO-STM-FS-021.jsp" text="장비/국소,국소,고객센터 인입콜 설정" />
+		<screen id="/web/jsp/co/CO-STM-FS-023.jsp" text="환경설정" />
+		<screen id="/web/jsp/qm/PG-QM-2108-S01.jsp" text="IPTV 채널별 품질 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2108-S02.jsp" text="IPTV 채널별 시청 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2109.jsp" text="IPTV 장비별 품질 통계" />
+		<screen id="/web/jsp/co/CO-STM-FS-024.jsp" text="장비 감시경보설정" />
+		<screen id="/web/jsp/co/CO-STM-FS-024-P01.jsp" text="장비 감시경보설정 등록" />
+		<screen id="/web/jsp/qm/PG-QM-2110-S02.jsp" text="IPTV 일일품질요약-장비" />
+		<screen id="/web/jsp/qm/PG-QM-2110-S01.jsp" text="IPTV 일일품질요약-STB" />
+		<screen id="/web/jsp/co/CO-STD-CC-025.jsp" text="모델 감시경보설정" />
+		<screen id="/web/jsp/co/CO-STD-CC-025-P01.jsp" text="모델 감시경보설정 등록" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S01.jsp" text="IPTV CEI 통계 현황 조회" />
+		<screen id="/web/jsp/co/CO-STM-FS-026.jsp" text="감시장비종류 설정" />
+		<screen id="/web/jsp/co/CO-STM-FS-027.jsp" text="IOMC장애 필터관리" />
+		<screen id="/web/jsp/co/CO-STM-FS-027.jsp" text="IOMC장애 필터관리 등록" />
+		<screen id="/web/jsp/co/CO-STM-FS-028-T01.jsp" text="IFAlis 장애감시 제외설정-조회" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S02.jsp" text="IPTV CEI 실시간 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S03.jsp" text="IPTV CEI 현황 REPORT" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S04.jsp" text="IPTV CEI 지표별 REPORT" />
+		<screen id="/web/jsp/qm/PG-QM-2113-S01.jsp" text="VoIP-품질통계-전주대비 루트별 완료율 저하 및 과다 변동 현황" />
+		<screen id="/web/jsp/qm/PG-QM-2113-S02.jsp" text="VoIP-품질통계-전주 비교 TM업체 트래픽(일/주/월)" />
+		<screen id="/web/jsp/qm/PG-QM-2113-S03.jsp" text="VoIP-품질통계-교환기별 호소통 현황(일/주/월)" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S07.jsp" text="IPTV CEI 일일품질요약-장비" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S08.jsp" text="IPTV CEI 일일품질요약-STB" />
+		<screen id="/web/jsp/pm/PG-PM-2402-S02.jsp" text="CMTS 장비별 최번시 평균속도" />
+		<screen id="/web/jsp/pm/PG-PM-2402-S03.jsp" text="CMTS 장비별 폭주 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2402-S04.jsp" text="CMTS 장비별 월간 폭주율" />
+		<screen id="/web/jsp/pm/PG-PM-2403-S01.jsp" text="CMTS 포트별 상향포트별 운용통계" />
+		<screen id="/web/jsp/pm/PG-PM-2403-S02.jsp" text="CMTS 포트별 하향포트별 운용통계" />
+		<screen id="/web/jsp/pm/PG-PM-2404-S01.jsp" text="CMTS 가입자 트래픽 과도사용자 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2404-S02.jsp" text="CMTS 가입자 트래픽 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2405.jsp" text="EQAM 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2406.jsp" text="D2E 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2407.jsp" text="D2E 채널 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2408.jsp" text="SDV 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2409.jsp" text="UPS 성능 통계" />
+		<screen id="/web/jsp/pm/PG-PM-2411.jsp" text="UPS 사용량(일/월)" />
+		<screen id="/web/jsp/qm/PG-QM-1001-S01.jsp" text="모뎀 품질측정 등록(예약)" />
+		<screen id="/web/jsp/qm/PG-QM-1001-S02.jsp" text="모뎀 품질측정 통계(예약)" />
+		<screen id="/web/jsp/qm/PG-QM-1001-S03.jsp" text="모뎀 품질측정 결과조회" />
+		<screen id="/web/jsp/qm/PG-QM-1003.jsp" text="모뎀 CELL별 품질" />
+		<screen id="/web/jsp/qm/PG-QM-1004.jsp" text="AP CRC" />
+		<screen id="/web/jsp/cm/PG-CM-3501.jsp" text="단말연동 이력조회" />
+		<screen id="/web/jsp/qm/PG-QM-1006-S01.jsp" text="STB 품질 수집현황" />
+		<screen id="/web/jsp/qm/PG-QM-1006-S02.jsp" text="STB 품질 집중관리" />
+		<screen id="/web/jsp/qm/PG-QM-1007.jsp" text="STB SLA 품질" />
+		<screen id="/web/jsp/qm/PG-QM-1013.jsp" text="AP 리소스 조회" />
+		<screen id="/web/jsp/qm/PG-QM-1102-S01.jsp" text="IPTV CM 품질불량(SNR)" />
+		<screen id="/web/jsp/qm/PG-QM-1102-S02.jsp" text="IPTV CM 실시간" />
+		<screen id="/web/jsp/qm/PG-QM-1102-S03.jsp" text="IPTV CM 품질불량(파워)" />
+		<screen id="/web/jsp/qm/PG-QM-1103-S01.jsp" text="IPTV 지역별 품질-AR" />
+		<screen id="/web/jsp/qm/PG-QM-1103-S02.jsp" text="IPTV 지역별 품질-가입자망" />
+		<screen id="/web/jsp/qm/PG-QM-1103-S04.jsp" text="IPTV 지역별 품질-KPI" />
+		<screen id="/web/jsp/qm/PG-QM-1104-S01.jsp" text="IPTV 채널별 품질-상태조회" />
+		<screen id="/web/jsp/qm/PG-QM-1104-S02.jsp" text="IPTV 채널별 품질-팀별시청" />
+		<screen id="/web/jsp/qm/PG-QM-1104-S03.jsp" text="IPTV 채널별 품질-JoinFail" />
+		<screen id="/web/jsp/qm/PG-QM-1104-S04.jsp" text="IPTV 채널별 품질-품질관리" />
+		<screen id="/web/jsp/qm/PG-QM-1105-S01.jsp" text="TV-IP망 품질-백본망 품질관리" />
+		<screen id="/web/jsp/qm/PG-QM-1105-S02.jsp" text="TV-IP망 품질-H/E망 품질관리" />
+		<screen id="/web/jsp/qm/PG-QM-2001-S01.jsp" text="불량모뎀 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2001-S02.jsp" text="모뎀품질 추이" />
+		<screen id="/web/jsp/qm/PG-QM-2001-S03.jsp" text="SNR 불량모뎀 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2001-S04.jsp" text="모뎀품질 통계정보" />
+		<screen id="/web/jsp/qm/PG-QM-2002-S01.jsp" text="파워 불안정 모뎀 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2113-S04.jsp" text="VoIP-품질통계-주요가입자별(기업고객) 트래픽 현황(일/주/월)" />
+		<screen id="/web/jsp/qm/PG-QM-2112-S01.jsp" text="IPTV 품질열위장비-가입자망" />
+		<screen id="/web/jsp/qm/PG-QM-2112-S02.jsp" text="IPTV 품질열위장비-모델별" />
+		<screen id="/web/jsp/qm/PG-QM-2112-S03.jsp" text="IPTV 품질열위장비-AR" />
+		<screen id="/web/jsp/qm/PG-QM-2114.jsp" text="자동개통 GW 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2116.jsp" text="완료율 저조 고객관리(통계)" />
+		<screen id="/web/jsp/qm/PG-QM-2104-S01.jsp" text="종합 양호율 통계" />
+		<screen id="/web/jsp/cm/PG-CM-6201.jsp" text="가입자조회" />
+		<screen id="/web/jsp/pm/PG-PM-1002.jsp" text="서비스별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-1003.jsp" text="지역별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-1004.jsp" text="서비스별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-1005.jsp" text="nXer SBC 동시호 성능" />
+		<screen id="/web/jsp/pm/PG-PM-1006.jsp" text="자원 성능 이력" />
+		<screen id="/web/jsp/pm/PG-PM-1406.jsp" text="CMTS 상향패킷 손실" />
+		<screen id="/web/jsp/cm/PG-CM-7201.jsp" text="FTTx_CELL관리" />
+		<screen id="/web/jsp/cm/PG-CM-7301.jsp" text="HFC CELL 조회" />
+		<screen id="/web/jsp/cm/PG-CM-4201.jsp" text="관리 단말 통계" />
+		<screen id="/web/jsp/cm/PG-CM-4101.jsp" text="장비통계" />
+		<screen id="/web/jsp/pm/PG-PM-1416.jsp" text="CMTS 트렁크 그래프" />
+		<screen id="/web/jsp/pm/PG-PM-2402-S05.jsp" text="트래픽폭주순위통계" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S01.jsp" text="VoIP-트래픽통계-발착신 트래픽 현황(일/주/월)" />
+		<screen id="/web/jsp/pm/PG-PM-2005.jsp" text="호 트래픽 추이" />
+		<screen id="/web/jsp/pm/PG-PM-2006.jsp" text="IP 트래픽 추이" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S03.jsp" text="VoIP-트래픽통계-서비스 유형별 발신 트래픽 현황(일/주)" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S04.jsp" text="VoIP-트래픽통계-입출중계 루트별 트래픽 현황(일/주)" />
+		<screen id="/web/jsp/pm/PG-PM-1411.jsp" text="D2E 채널 상세 트래픽" />
+		<screen id="/web/jsp/pm/PG-PM-1414.jsp" text="UPS 성능 이력" />
+		<screen id="/web/jsp/pm/PG-PM-1415.jsp" text="UPS 성능 그래프" />
+		<screen id="/web/jsp/pm/PG-PM-2001.jsp" text="교환기별 트래픽 현황" />
+		<screen id="/web/jsp/cm/PG-CM-6301.jsp" text="SBC별 가입자현황" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S05.jsp" text="VoIP-트래픽통계-입출중계 루트별 최번시 트래픽 현황(일/주/월)" />
+		<screen id="/web/jsp/fm/PG-FM-1004.jsp" text="BS 패턴 시뮬레이션" />
+		<screen id="/web/jsp/fm/widgetManager.jsp?psnl_lst_ser_num=8" text="장비장애_멀티창" />
+		<screen id="/web/jsp/fm/PG-FM-2101.jsp" text="단말장애 - STB장애" />
+		<screen id="/web/jsp/fm/PG-FM-3001.jsp" text="장비장애이력조회_전체" />
+		<screen id="/web/jsp/fm/PG-FM-3006.jsp" text="회선장애이력조회" />
+		<screen id="/web/jsp/fm/PG-FM-3007.jsp" text="단말장애이력조회" />
+		<screen id="/web/jsp/fm/PG-FM-3101.jsp" text="예보이력조회" />
+		<screen id="/web/jsp/fm/PG-FM-3102.jsp" text="BS활동이력조회" />
+		<screen id="/web/jsp/fm/PG-FM-3201.jsp" text="장애 SMS발송 이력" />
+		<screen id="/web/jsp/fm/PG-FM-3202.jsp" text="장애 E-mail발송 이력" />
+		<screen id="/web/jsp/fm/PG-FM-3203.jsp" text="장애보고서 이력조회" />
+		<screen id="/web/jsp/fm/PG-FM-4001-S02.jsp" text="중복통계TopN" />
+		<screen id="/web/jsp/fm/PG-FM-4003-S01.jsp" text="장비별 장애통계_장애등급별" />
+		<screen id="/web/jsp/fm/PG-FM-4004-S01.jsp" text="장애이벤트별 통계_장애그룹별" />
+		<screen id="/web/jsp/fm/PG-FM-4101.jsp" text="STB장애_지역별통계" />
+		<screen id="/web/jsp/fm/PG-FM-4202.jsp" text="예보현황통계" />
+		<screen id="/web/jsp/fm/PG-FM-4203.jsp" text="예보 패턴별 통계" />
+		<screen id="/web/jsp/fm/PG-FM-4204.jsp" text="예보 조치유형별 통계" />
+		<screen id="/web/jsp/fm/PG-FM-4205.jsp" text="BS 패턴별 통계" />
+		<screen id="/web/jsp/fm/PG-FM-4206.jsp" text="BS 조치유형별 통계" />
+		<screen id="/web/jsp/fm/PG-FM-5002-S01.jsp" text="장애원인별 분석" />
+		<screen id="/web/jsp/fm/PG-FM-5003-S01.jsp" text="장비별 분석_카드별 분석" />
+		<screen id="/web/jsp/fm/PG-FM-5006-S01.jsp" text="장애영향도분석_장애피해가입자수 추이" />
+		<screen id="/web/jsp/fm/PG-FM-5101.jsp" text="예보/BS 패턴발굴" />
+		<screen id="/web/jsp/fm/PG-FM-6101.jsp" text="B2B VoC현황" />
+		<screen id="/web/jsp/fm/PG-FM-6201.jsp" text="VoC추이" />
+		<screen id="/web/jsp/fm/PG-FM-6204.jsp" text="콜센터 추이" />
+		<screen id="/web/jsp/fm/PG-FM-6301.jsp" text="VoC통계" />
+		<screen id="/web/jsp/fm/PG-FM-4002.jsp" text="지역별 장애통계" />
+		<screen id="/web/jsp/pm/PG-PM-1407-S01.jsp" text="CMTS 카드상태 조회-Cisco" />
+		<screen id="/web/jsp/pm/PG-PM-1407-S02.jsp" text="CMTS 카드상태 조회-Arris" />
+		<screen id="/web/jsp/pm/PG-PM-1408.jsp" text="OTX별 세부 통계" />
+		<screen id="/web/jsp/pm/PG-PM-1409.jsp" text="EQAM 상세 트래픽" />
+		<screen id="/web/jsp/pm/PG-PM-2007-S06.jsp" text="VoIP-트래픽통계-루트별 시간대별 트래픽 현황" />
+		<screen id="/web/jsp/cm/PG-CM-4301.jsp" text="UPS통계" />
+		<screen id="/web/jsp/cm/PG-CM-6101.jsp" text="조직별 현황" />
+		<screen id="/web/jsp/fm/PG-FM-4201-S01.jsp" text="예보/BS 기준별 통계" />
+		<screen id="/web/jsp/qm/PG-QM-2111-S05.jsp" text="IPTV CEI 품질열위장비-가입자망" />
+		<screen id="/web/jsp/fm/widgetManager2.jsp?psnl_lst_ser_num=9" text="회선장애_멀티창" />
+		<screen id="/web/jsp/qm/PG-QM-1006-S03.jsp" text="STB 품질현황조회" />
+		<screen id="/web/jsp/fm/PG-FM-1001.jsp" text="예보 패턴 관리" />
+		<screen id="/web/jsp/fm/PG-FM-1002.jsp" text="예보 패턴 시뮬레이션" />
+		<screen id="/web/jsp/fm/PG-FM-1003.jsp" text="BS대상추출패턴관리" />
+		<screen id="/web/jsp/cm/PG-CM-1101.jsp" text="장비모델조회" />
+		<screen id="/web/jsp/cm/PG-CM-1201.jsp" text="구성품모델조회" />
+		<screen id="/web/jsp/cm/PG-CM-1301.jsp" text="장비접속계정조회" />
+		<screen id="/web/jsp/cm/PG-CM-8107.jsp" text="품질지표실적" />
+		<screen id="/web/jsp/cm/PG-CM-1501.jsp" text="단말모델조회" />
+		<screen id="/web/jsp/cm/PG-CM-2101-S01.jsp" text="장비조회" />
+		<screen id="/web/jsp/cm/PG-CM-2201.jsp" text="장비실장카드조회" />
+		<screen id="/web/jsp/cm/PG-CM-2301.jsp" text="장비속성변경이력조회" />
+		<screen id="/web/jsp/cm/PG-CM-2401.jsp" text="장비속성현행화조회" />
+		<screen id="/web/jsp/cm/PG-CM-3101.jsp" text="단말조회" />
+		<screen id="/web/jsp/cm/PG-CM-3201.jsp" text="단말현행화조회" />
+		<screen id="/web/jsp/cm/PG-CM-3301-S01.jsp" text="CM 모델 펌웨어버전 실시간 조회" />
+		<screen id="/web/jsp/co/CO-STM-FS-028-P01.jsp" text="IFAlis 장애감시 제외설정-조회 등록" />
+		<screen id="/web/jsp/cm/PG-CM-5101.jsp" text="E2E토폴로지조회" />
+		<screen id="/web/jsp/cm/PG-CM-5201.jsp" text="조직별토폴로지조회" />
+		<screen id="/web/jsp/pm/PG-PM-0001.jsp" text="성능 종합 현황" />
+		<screen id="/web/jsp/pm/PG-PM-0201.jsp" text="교환장비 성능 감시" />
+		<screen id="/web/jsp/pm/PG-PM-0202.jsp" text="IPTV 성능 감시" />
+		<screen id="/web/jsp/pm/PG-PM-1001.jsp" text="사업자별 트래픽 현황" />
+		<screen id="/web/jsp/pm/PG-PM-2004-S02.jsp" text="루트/V5.2별 트래픽 자동분석(당일)" />
+		<screen id="/web/jsp/pm/PG-PM-1410.jsp" text="D2E 상세 트래픽" />
+		<screen id="/web/jsp/pm/PG-PM-2002-S01.jsp" text="서비스별/접속구간별 트래픽 추이" />
+		<screen id="/web/jsp/cm/PG-CM-2103-S01.jsp" text="교환망 장비조회" />
+		<screen id="/web/jsp/fm/widgetManager4.jsp" text="SWING장애_멀티창" />
+		<screen id="/web/jsp/fm/widgetManager5.jsp" text="트래픽장애_멀티창" />
+		<screen id="/web/jsp/fm/PG-FM-4001-S03.jsp" text="장애종합통계_장애종합통계_경보조치통계" />
+		<screen id="/web/jsp/co/CO-STM-FS-028-T01.jsp" text="분배센터 장애감시 제외설정-조회" />
+		<screen id="/web/jsp/co/CO-STM-FS-028-T02.jsp" text="장비 장애감시 제외설정-조회" />
+		<screen id="/web/jsp/co/CO-STM-FS-028-T03.jsp" text="인터페이스 장애감시 제외설정-조회" />
+		<screen id="/web/jsp/co/CO-STM-FS-028-P02.jsp" text="장애감시 제외설정-등록" />
+		<screen id="/web/jsp/co/CO-MS-SYS-001.jsp" text="장비 Syslog 장애 설정" />
+		<screen id="/web/jsp/co/CO-MS-SYS-001-P01.jsp" text="장비 Syslog 장애 설정 등록" />
+		<screen id="/web/jsp/co/CO-STM-FS-008.jsp" text="경보 조건 선택" />
+		<screen id="/web/jsp/co/CO-STM-FS-029.jsp" text="지정감시조건설정" />
+		<screen id="/web/jsp/co/CO-STM-TF-001.jsp" text="[시내]장애감시조건설정 (15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-002.jsp" text="[시내]지정감시루트설정(15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-003.jsp" text="[시내]감시 제외 설정 (15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-004.jsp" text="[시내]일시가청 제외설정(15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-011.jsp" text="[시내]서비스 및 사업자별 장애감시조건 (15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-012.jsp" text="[시내]서비스 및 사업자별 지정감시루트 설정(15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-013.jsp" text="[시내]서비스 및 사업자별 감시 제외 설정 (15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-014.jsp" text="[시내]서비스 및 사업자별 일시가청 제외설정(15/30/60)" />
+		<screen id="/web/jsp/co/CO-STM-TF-007.jsp" text="[VoIP]장애감시조건설정" />
+		<screen id="/web/jsp/co/CO-STM-TF-008.jsp" text="[VoIP]지정감시루트설정" />
+		<screen id="/web/jsp/co/CO-STM-TF-009.jsp" text="[VoIP]감시 제외 설정" />
+		<screen id="/web/jsp/co/CO-STM-TF-010.jsp" text="[VoIP]일시가청 제외설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-001.jsp" text="장애 가청 알람 설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-002.jsp" text="인입콜/대기코 알람설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-003.jsp" text="망별 경보음 설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-005.jsp" text="사운드설정- 루트별" />
+		<screen id="/web/jsp/co/CO-STM-TV-006.jsp" text="사운드설정- V52별" />
+		<screen id="/web/jsp/co/CO-STM-TV-007.jsp" text="사운드설정- 사업자별" />
+		<screen id="/web/jsp/co/CO-STM-TV-011.jsp" text="사운드설정- 서비스별" />
+		<screen id="/web/jsp/co/CO-STM-TV-012.jsp" text="장애 사운드설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-010.sp" text="정보센터별 알람 설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-013.jsp" text="IP 트래픽 경보음 설정" />
+		<screen id="/web/jsp/co/CO-STM-TV-014.jsp" text="호 트래픽 경보음 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-001.jsp" text="전국 품질 고장 알람 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-002.jsp" text="전국 품질 인입콜 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-003.jsp" text="장비별 고장 알람 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-004.jsp" text="장비별 인입콜 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-005.jsp" text="전국 인입콜/대기콜 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-006.jsp" text="콜센터 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-007.jsp" text="전국 인입콜 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-008.jsp" text="국소별 인입콜 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-009.jsp" text="성능 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-010.jsp" text="온도 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-011.jsp" text="IPTV WCM 시설 상세 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-012.jsp" text="분배센터별 Power, Snr 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-021.jsp" text="통계임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-023.jsp" text="UPS 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-013.jsp" text="서버 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-014.jsp" text="[VoIP]TMG별 통화품질 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-015.jsp" text="[VoIP]가입자 개별호별 통화품질 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-016.jsp" text="[VoIP]루트별 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-025.jsp" text="[VOIP]인터페이스별 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-017.jsp" text="[시내]루트별 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-018.jsp" text="[시내]사업자별 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-019.jsp" text="[시내]서비스별 임계값 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-020.jsp" text="장애 알람 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-022.jsp" text="D2E NIC ERROR 임계치 설정" />
+		<screen id="/web/jsp/co/CO-STM-TM-024.jsp" text="자동개통GW임계치설정" />
+		<screen id="/web/jsp/co/CO-STM-MM-001.jsp" text="지정 메시지" />
+		<screen id="/web/jsp/co/CO-STM-MM-002.jsp" text="현재 메시지" />
+		<screen id="/web/jsp/co/CO-STM-MM-003.jsp" text="제외 메시지" />
+		<screen id="/web/jsp/co/CO-STM-MM-004.jsp" text="AFS 메시지" />
+		<screen id="/web/jsp/co/CO-STM-MM-005.jsp" text="교환기장애" />
+		<screen id="/web/jsp/co/CO-STM-MM-006.jsp" text="장시간호" />
+		<screen id="/web/jsp/co/CO-STM-MM-007.jsp" text="장애자동해제" />
+		<screen id="/web/jsp/cm/PG-CM-9101.jsp" text="SNMP R/W Community관리" />
+		<screen id="/web/jsp/cm/PG-CM-9101-P01.jsp" text="SNMP R/W Community관리 등록" />
+		<screen id="/web/jsp/co/CO-STM-AS-002.jsp" text="AGW 관리" />
+		<screen id="/web/jsp/co/CO-STM-AS-002-P01.jsp" text="AGW 관리 등록" />
+		<screen id="/web/jsp/co/CO-STM-AS-003.jsp" text="장비접속ID관리" />
+		<screen id="/web/jsp/co/CO-STM-AS-003-P01.jsp" text="장비접속ID관리 등록" />
+		<screen id="/web/jsp/co/sym/CO-SYM-IPM-001.jsp" text="웹접근IP관리" />
+		<screen id="/web/jsp/fm/PG-FM-4001-S04.jsp" text="장애종합통계_일일보고서 - 관리자" />
+		<screen id="/web/jsp/cm/PG-CM-9101.jsp" text="ROUTER/LAN SNMP 필터" />
+		<screen id="/web/jsp/cm/PG-CM-9101.jsp" text="ROUTER/LAN SNMP 필터 등록" />
+		<screen id="/web/jsp/co/CO-ORM-IC-001.jsp" text="정보센터 관리" />
+		<screen id="/web/jsp/co/CO-ORM-IC-002.jsp" text="국사관리" />
+		<screen id="/web/jsp/co/CO-OTM-PM-007.jsp" text="운용자 정보 관리" />
+		<screen id="/web/jsp/co/operator/CO-OTM-MUS-001.jsp" text="사용이력" />
+		<screen id="/web/jsp/co/operator/CO-OTM-MUS-002.jsp" text="사용통계" />
+		<screen id="/web/jsp/co/CO-OTM-PM-009.jsp" text="승인관리" />
+		<screen id="/web/jsp/co/CO-OTM-PM-006.jsp" text="승인이력" />
+		<screen id="/web/jsp/co/CO-WM-WH-002.jsp" text="작업관리" />
+		<screen id="/web/jsp/co/CO-WM-WH-002.jsp?gubun=b" text="작업이력" />
+		<screen id="/web/jsp/co/CO-WM-WH-002-P01.jsp" text="작업관리 등록" />
+		<screen id="/web/jsp/co/CO-NTM-BM-001.jsp" text="공지리스트" />
+		<screen id="/web/jsp/co/CO-NTM-BM-001-P1.jsp" text="공지리스트 등록" />
+		<screen id="/web/jsp/co/CO-NTM-BM-002.jsp" text="QnA" />
+		<screen id="/web/jsp/co/CO-NTM-BM-002-P1.jsp" text="QnA 등록" />
+		<screen id="/web/jsp/co/CO-NTM-BM-003.jsp" text="FAQ" />
+		<screen id="/web/jsp/co/CO-NTM-BM-003-P1.jsp" text="FAQ 등록" />
+		<screen id="/web/jsp/co/CO-NTM-BM-004.jsp" text="자료실" />
+		<screen id="/web/jsp/co/CO-NTM-BM-004-P1.jsp" text="자료실 등록" />
+		<screen id="/web/jsp/co/CO-NTM-BM-005.jsp" text="공지이력" />
+		<screen id="/web/jsp/co/ntm/CO-NTM-SMS-001.jsp" text="SMS발송관리" />
+		<screen id="/web/jsp/co/ntm/CO-NTM-SMS-003.jsp" text="SMS통계조회" />
+		<screen id="/web/jsp/co/ntm//CO-NTM-SMS-001-P01.jsp" text="그룹명추가" />
+		<screen id="/web/jsp/co/ntm//CO-NTM-SMS-001-P02.jsp" text="즉시/예약발송" />
+		<screen id="/web/jsp/co/ntm/CO-NTM-SMS-002.jsp" text="SMS이력조회" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-PFM-001.jsp" text="국 번호관리" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-PFM-001-P01.jsp" text="국 번호관리 등록" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-SIM-001.jsp" text="서비스식별 번호관리" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-PFM-002-P01.jsp" text="서비스식별 번호관리 등록" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-TCM-001.jsp" text="테스트호 관리" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-PFM-003-P01.jsp" text="테스트호 관리 등록" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-TMM-001.jsp" text="트래픽감시번호관리" />
+		<screen id="/web/jsp/co/stationnum/CO-NM-PFM-004-P01.jsp" text="트래픽감시번호관리 등록" />
+		<screen id="/web/jsp/co/CO-SYM-MM-001.jsp" text="메뉴관리" />
+		<screen id="/web/jsp/co/CO-SYM-MM-002.jsp" text="화면관리" />
+		<screen id="null" text="수집관리" />
+		<screen id="/web/jsp/co/widgetManager.jsp" text="관리자화면관리" />
+		<screen id="/web/jsp/co/CO-OTM-IM-002.jsp?psnl_typ_cd=A" text="관리자화면리스트관리" />
+		<screen id="/web/jsp/co/CO-OTM-OM-004.jsp" text="권한관리" />
+		<screen id="/web/jsp/co/login.jsp" text="로그인" />
+		<screen id="/web/jsp/co/CO-LI-001-P04.jsp" text="아이디찾기" />
+		<screen id="/web/jsp/co/CO-LI-001-P04.jsp" text="비밀번호찾기" />
+		<screen id="/web/jsp/co/CO-LI-001-P04.jsp" text="회원가입" />
+		<screen id="/web/jsp/co/CO-POP-BOOKMARK.jsp" text="북마크" />
+		<screen id="/web/jsp/co/CO-OTM-PJ-003.jsp" text="회원내역" />
+		<screen id="/web/jsp/co/CO-OTM-PJ-003-P01.jsp" text="회원변경" />
+		<screen id="/web/jsp/co/CO-OTM-PJ-003-P02.jsp" text="비밀번호변경" />
+		<screen id="/web/jsp/co/CO-OTM-PJ-003-P03.jsp" text="권한변경" />
+		<screen id="/web/jsp/co/CO-OTM-PJ-003-P04.jsp" text="담당매니저변경" />
+		<screen id="/web/jsp/co/top_menu.jsp" text="사이트맵" />
+		<screen id="/web/jsp/co/top_menu.jsp" text="히스토리" />
+		<screen id="/web/jsp/co/bottom.jsp" text="알림바" />
+		<screen id="/web/jsp/co/CO-map-widget.jsp" text="전국 네트워크 품질" />
+		<screen id="/web/jsp/co/widget.jsp" text="개인화" />
+		<screen id="/web/jsp/co/widgetManager_p01.jsp" text="개인화화면등록" />
+		<screen id="/web/jsp/co/CO-OTM-IM-002.jsp?psnl_typ_cd=P" text="개인화관리" />
+		<screen id="/web/jsp/cm/PG-CM-2101-S04.jsp" text="UPS관리" />
+		<screen id="/web/jsp/cm/PG-CM-5203.jsp" text="즐겨찾기" />
+		<screen id="/web/jsp/cm/PG-CM-2103-S03.jsp" text="VoIP-집합형장비구성정보" />
+		<screen id="/web/jsp/fm/widgetManager6.jsp?" text="DAPS장애_멀티창" />
+		<screen id="/web/jsp/fm/PG-FM-3103.jsp" text="BS활동이력조회_BS 활동 대상 리스트" />
+		<screen id="/web/jsp/cm/PG-CM-7102.jsp" text="연결정보 조회" />
+		<screen id="/web/jsp/cm/PG-CM-1406.jsp" text="[시내] 사업자별 국번호조회" />
+		<screen id="/web/jsp/cm/PG-CM-2202.jsp" text="장비포트조회" />
+		<screen id="/web/jsp/cm/PG-CM-2204-S04.jsp" text="신호점 조회" />
+		<screen id="/web/jsp/cm/PG-CM-1404.jsp" text="사업자조회" />
+		<screen id="/web/jsp/cm/PG-CM-2101-S03.jsp" text="OTX조회" />
+		<screen id="/web/jsp/cm/PG-CM-2102-S02.jsp" text="RN장비 조회" />
+		<screen id="/web/jsp/cm/PG-CM-2203-S01.jsp" text="CMTS 포트 채널설정 조회" />
+		<screen id="/web/jsp/cm/PG-CM-2402.jsp" text="장비상태현행화조회" />
+		<screen id="/web/jsp/cm/PG-CM-6102.jsp" text="지역별 현황" />
+		<screen id="/web/jsp/cm/PG-CM-2101-S07-01.jsp" text="해지인입선조회" />
+		<screen id="/web/jsp/cm/PG-CM-1409.jsp" text="모듈구성조회" />
+		<screen id="/web/jsp/cm/PG-CM-2204-S02.jsp" text="루트 Sequence조회" />
+		<screen id="/web/jsp/cm/PG-CM-2303-S02.jsp" text="DIBA 절체이력" />
+		<screen id="/web/jsp/cm/PG-CM-1407.jsp" text="[시내] 단국교환기조회" />
+		<screen id="/web/jsp/cm/PG-CM-4203.jsp" text="사설공유기통계" />
+		<screen id="/web/jsp/fm/widgetManager8.jsp" text="(EWS)장비장애" />
+		<screen id="/web/jsp/fm/widgetManager9.jsp" text="(EWS)회선장애" />
+		<screen id="/web/jsp/cm/PG-CM-2203-S04.jsp" text="EQAM 포트채널 조회" />
+		<screen id="/web/jsp/cm/PG-CM-1401.jsp " text="국번호조회" />
+		<screen id="/web/jsp/cm/PG-CM-2204-S01.jsp" text="루트 조회" />
+		<screen id="/web/jsp/cm/PG-CM-2204-S03.jsp" text="STP링크셋 조회" />
+		<screen id="/web/jsp/cm/PG-CM-4303.jsp" text="CMTS 포트통계" />
+		<screen id="/web/jsp/co/CO-WM-WH-003.jsp" text="작업지시서" />
+		<screen id="/web/jsp/cm/PG-CM-1402.jsp" text="TM정보조회" />
+		<screen id="/web/jsp/cm/PG-CM-1405.jsp" text="[시내]단국조회" />
+		<screen id="/web/jsp/cm/PG-CM-2101-S02.jsp" text="DIBA조회" />
+		<screen id="/web/jsp/cm/PG-CM-2404-S02.jsp" text="W-CMTS &amp; EQAM" />
+		<screen id="/web/jsp/cm/PG-CM-4202.jsp" text="펌웨어 버전별 단말통계" />
+		<screen id="/web/jsp/cm/PG-CM-4302-S01.jsp" text="월별팀별철거현황" />
+		<screen id="/web/jsp/cm/PG-CM-2103-S02.jsp" text="VoIP-ASP 조회" />
+		<screen id="/web/jsp/cm/PG-CM-2303-S01.jsp" text="CMTS 절체 이력" />
+		<screen id="/web/jsp/cm/PG-CM-7302.jsp" text="HFC 전송망 설비 조회" />
+		<screen id="/web/jsp/fm/PG-FM-3104.jsp" text="BS활동이력조회_BS 활동 내역 리스트" />
+		<screen id="/web/jsp/cm/PG-CM-2403.jsp" text="SWING미등록장비조회" />
+		<screen id="/web/jsp/cm/PG-CM-3103.jsp" text="미확인단말조회" />
+		<screen id="/web/jsp/cm/PG-CM-3104.jsp" text="사설공유기조회" />
+		<screen id="/web/jsp/cm/PG-CM-4302-S02.jsp" text="월별 분배센터별 철거현황" />
+		<screen id="/web/jsp/cm/PG-CM-5204.jsp" text="장비별포톨로지조회" />
+		<screen id="/web/jsp/cm/PG-CM-2203-S02.jsp" text="D2E 채절조회" />
+		<screen id="/web/jsp/cm/PG-CM-2203-S03.jsp" text="D2E 채널상태조회" />
+		<screen id="/web/jsp/cm/PG-CM-2404-S01.jsp" text="CMTS &amp; DHCP" />
+		<screen id="/web/jsp/cm/PG-CM-2101-S06.jsp" text="한전AMI관리" />
+		<screen id="/web/jsp/fm/widgetManager10.jsp" text="백본망장애" />
+		<screen id="/web/jsp/fm/widgetManager7.jsp?" text="장시간호 감시" />
+		<screen id="/web/jsp/fm/PG-FM-2006.jsp" text="시스템현재메시지 - 현재메시지" />
+		<screen id="/web/jsp/fm/PG-FM-3009.jsp" text="시스템현재메시지이력" />
+		<screen id="/web/jsp/cm/PG-CM-1408.jsp" text="[시내] 모듈코드 조회" />
+		<screen id="/web/jsp/cm/PG-CM-3102.jsp" text="리모컨조회" />
+		<screen id="/web/jsp/fm/PG-FM-5102.jsp" text="장비경보이력(Big Data)" />
+		<screen id="/web/jsp/fm/PG-FM-3010.jsp" text="장시간호이력조회" />
+		<screen id="/web/jsp/co/CO-map.jsp" text="전국 네트워크 품질현황" />
+		<screen id="/web/jsp/cm/PG-CM-1411.jsp" text="포트구성조회" />
+		<screen id="/web/jsp/cm/PG-CM-2205-S01.jsp" text="EQAM 구성조회" />
+		<screen id="/web/jsp/cm/PG-CM-2302.jsp" text="장비카드변경이력조회" />
+		<screen id="/web/jsp/cm/PG-CM-5202.jsp" text="망별토폴로지조회" />
+	-->
+	
+	
+	<rename-para screen-id="alert-detail">
+		<rename src="startDate" dst="startOccrDtm" />
+		<rename src="endDate" dst="endOccrDtm" />
+	</rename-para>
+	<rename-para screen-id="alarm-list">
+		<rename src="startDate" dst="startOccrDtm" />
+		<rename src="endDate" dst="endOccrDtm" />
+	</rename-para>
+	<rename-para screen-id="cur-alarm-list">
+		<rename src="startDate" dst="startOccrDtm" />
+		<rename src="endDate" dst="endOccrDtm" />
+	</rename-para>
+	
+	
+</screens>

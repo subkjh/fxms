@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+	<select id="SELECT_SCREEN_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+		select
+    			a.scrn_nm      		as text     /* 화면명 */ 
+    			, a.scrn_web_url	as id 		/* 화면weburl */ 
+  		from 	OCO30200 a 						/* 화면목록 */ 
+		where 	a.use_yn = 'Y'
+		]]>
+	</select>
+
+	<select id="SELECT_TPO_LIST" resultMap="RESULT_MAP">
+	<![CDATA[
+		select
+				a.tpo_cd		as id		/* 국사코드 */ 
+				, a.tpo_nm		as text 	/* 국사명 */ 
+		from 	oiv10300 a 					/* 국사기본 */ 
+		where 	tpo_typ_cd in ( '7' )
+		and		a.tpo_use_yn = 'Y'
+		
+		union all
+		
+		select
+				a.tpo_cd		as id		/* 국사코드 */ 
+				, a.tpo_nm		as text 	/* 국사명 */ 
+		from 	oiv10301 a 				
+	]]>
+	</select>
+
+	<select id="SELECT_GUNGU_LIST" resultMap="RESULT_MAP">
+	<![CDATA[
+		select 	ldong_cd		as id
+				, ct_pvc_nm || ',' || ct_gun_gu_nm 
+								as text
+		from 	OES30300 
+		where 	ldong_cl_cd = '2' 
+		and 	ct_pvc_nm = '인천' 
+		and 	eff_end_dt > '20180517'
+	]]>
+	</select>
+
+
+</queries>
+

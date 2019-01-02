@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE databases [
+
+<!ELEMENT databases (database*) >
+
+<!ELEMENT database (driver,url,user?,password?,isReadOnly?
+					,countConnectionMax,isAutoCommit?,permitConnectionPoolOver?,reconnectTimeout?,sqlSelectKeepAlive?,const*)>
+<!ATTLIST database name CDATA #REQUIRED >
+<!ATTLIST database java-class CDATA #REQUIRED >
+
+<!ELEMENT const (#PCDATA) >
+<!ATTLIST const id CDATA #REQUIRED >
+
+]>
+
+<databases>
+
+	<database name="ADAMS_MICM" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.107.143:7208/ADAMS</url>
+		<user>MICM_USR</user>
+		<password>!qwer1234</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+
+</databases>
