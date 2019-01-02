@@ -1,0 +1,1 @@
+java -Dfile.encoding=UTF-8 -Dfxms.home=C:\Users\SUBKJH-DEV\fxms -jar C:\Users\SUBKJH-DEV\fxms/bin/fxms.jar
