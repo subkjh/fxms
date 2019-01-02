@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_ATTR" javaClass="fxms.bas.vo.Attr">
+		<result attr="setAttrId()" field="ATTR_ID" />
+		<result attr="setAttrText()" field="ATTR_TEXT" />
+	</resultMap>
+	
+	<select id="SELECT_OPCODE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	OP_NO 		as ATTR_ID
+				, OP_DESCR	as ATTR_TEXT
+		from 	FX_CD_OP
+		order by SEQ_BY
+				, OP_DESCR
+		]]>
+	</select>
+	
+	<select id="SELECT_OPNAME_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	OP_NAME 	as ATTR_ID
+				, OP_DESCR	as ATTR_TEXT
+		from 	FX_CD_OP
+		order by SEQ_BY
+				, OP_DESCR
+		]]>
+	</select>
+	
+	<select id="SELECT_ALARMCODE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	ALCD_NO 		as ATTR_ID
+				, ALCD_DESCR	as ATTR_TEXT
+		from 	FX_AL_CODE
+		order by ALCD_DESCR
+		]]>
+	</select>
+	
+	
+
+	<select id="SELECT_CODE_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	CD_CODE 		as ATTR_ID
+				, CD_NAME 		as ATTR_TEXT
+		from 	FX_CD_CODE
+		where	CD_TYPE = $cdType
+		and		USE_YN = 'Y'
+		order by SEQ_BY
+				, CD_NAME
+		]]>
+	</select>
+
+
+	<select id="SELECT_GW_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select	MO_NO			as ATTR_ID
+				, MO_NAME		as ATTR_TEXT
+		from	FX_MO
+		where	MO_CLASS = 'GW'
+		order by MO_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_COMPANY_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	INLO_NO 		as ATTR_ID
+				, INLO_NAME 	as ATTR_TEXT
+		from 	FX_CF_INLO 
+		where 	INLO_TYPE = 'COMPANY' 
+		order by INLO_NAME
+		]]>
+	</select>
+
+	<select id="SELECT_ALARM_CFG_LIST" resultMap="RESULT_ATTR">
+		<![CDATA[
+		select 	ALARM_CFG_NO 		as ATTR_ID
+				, ALARM_CFG_NAME 	as ATTR_TEXT
+		from 	FX_AL_CFG 
+		order by BASIC_CFG_YN desc
+				, ALARM_CFG_NAME
+		]]>
+	</select>
+
+</queries>
+

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="compile" name="fxms-all">
+
+	<property file="build.properties" />
+
+	<!-- set global properties for this build -->
+	<property location="." name="project.dir" />
+
+	<property location="${project.dir}/classes" name="classes.dir" />
+	<property location="${project.dir}/src" name="src.dir" />
+	<property location="${project.dir}/javadoc" name="javadoc.dir" />
+	<property location="${project.dir}/deploy" name="deploy.dir" />
+	<property location="${project.dir}/deploy/conf" name="conf.dir" />
+	<property location="${project.dir}/deploy/conf/sql" name="sql.dir" />
+	<property location="${project.dir}/deploy/javadoc" name="javadoc.dir" />
+	<property location="${deploy.dir}/libext" name="libext.dir" />
+	<property location="${deploy.dir}/lib" name="lib.dir" />
+	<property location="C:/Java/jdk1.8.0_31/bin" name="java.bin" />
+
+	<property location="../fxms-base" name="fxms-base.dir" />
+	<property location="${fxms-base.dir}/classes" name="fxms-base.classes.dir" />
+
+	<property location="../fxms-bio" name="fxms-bio.dir" />
+	<property location="${fxms-bio.dir}/classes" name="fxms-bio.classes.dir" />
+
+	<property location="../fxms-nms" name="fxms-nms.dir" />
+	<property location="${fxms-nms.dir}/classes" name="fxms-nms.classes.dir" />
+
+	<!-- sets the standard DSTAMP, make output directory -->
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<target name="print-version">
+		<echo>Java/JVM version: ${ant.java.version}</echo>
+		<echo>Java/JVM detail version: ${java.version}</echo>
+	</target>
+
+	<path id="project.class.path">
+		<pathelement path="${project.dir}" />
+		<pathelement path="${conf.dir}" />
+		<fileset dir="${libext.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target depends="init" name="compile">
+		<javac debug="true" destdir="${classes.dir}" encoding="UTF-8" fork="yes" memoryMaximumSize="256m">
+			<src path="${src.dir}/" />
+			<classpath refid="project.class.path" />
+			<classpath>
+				<pathelement path="${classes.dir}" />
+				<fileset dir="${libext.dir}/">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="clean">
+		<echo message="remove all from ${classes.dir}">
+		</echo>
+		<delete failonerror="false">
+			<fileset dir="${classes.dir}" />
+		</delete>
+		<echo message="remove all from ${lib.dir}">
+		</echo>
+		<delete failonerror="false">
+			<fileset dir="${lib.dir}" />
+		</delete>
+	</target>
+
+	<target name="rebuild">
+		<antcall target="clean" />
+		<antcall target="print-version" />
+		<antcall target="compile" />
+		<antcall target="makeRmi" />
+		<antcall target="copy_key" />
+		<antcall target="dfc3.2.jar" />
+		<antcall target="dutil.jar" />
+	</target>
+
+
+	<!-- alarm utility -->
+	<target name="dutil.jar">
+		<jar destfile="${lib.dir}/dutil.jar" update="true">
+			<zipgroupfileset dir="${libext.dir}" includes="subkjh_all.jar" />
+			<zipgroupfileset dir="${libext.dir}/gson" includes="gson-2.2.2.jar" />
+			<fileset dir="${classes.dir}">
+				<include name="com/daims/dfc/service/dagent/**/*" />
+				<include name="com/daims/dfc/service/aa/**/*" />
+				<include name="com/daims/dfc/service/AaService.class" />
+				<include name="com/daims/dfc/service/DfcService.class" />
+				<include name="com/daims/dfc/common/beans/**/*" />
+				<include name="com/daims/dfc/extsys/**/*" />
+			</fileset>
+		</jar>
+	</target>
+
+
+
+
+	<target name="copy_sql">
+		<copydir dest="${classes.dir}/subkjh/dao/sql" src="${sql.dir}">
+		</copydir>
+	</target>
+
+
+	<target name="fxms-all.jar">
+
+		<!--
+		<antcall target="copy_sql" />
+	-->
+		<jar destfile="${lib.dir}/fxms-all.jar" update="true">
+			<fileset dir="${fxms-base.classes.dir}">
+				<include name="fxms/**/*" />
+				<include name="subkjh/**/*" />
+				<include name="FX/**/*" />
+			</fileset>
+			<fileset dir="${fxms-bio.classes.dir}">
+				<include name="com/fxms/**/*" />
+			</fileset>
+			<fileset dir="${fxms-nms.classes.dir}">
+				<include name="com/fxms/**/*" />
+			</fileset>
+		</jar>
+
+
+	</target>
+
+
+
+
+
+	<target name="copy_key">
+		<copy tofile="${classes.dir}/com/daims/dfc/common/api/private.key" file="${src.dir}/com/daims/dfc/common/api/private.key" overwrite="true" />
+		<copy tofile="${classes.dir}/com/daims/dfc/common/api/public.key" file="${src.dir}/com/daims/dfc/common/api/public.key" overwrite="true" />
+	</target>
+
+
+	<target name="deploy-fxms-bio">
+		<copy tofile="${libext.dir}/subkjh_all.jar" file="${project.dir}/../subkjh_all.jar/deploy/lib/subkjh_all.jar" overwrite="true" />
+	</target>
+
+
+
+	<target name="deploy-dfc">
+
+		<echo message="deploy dfc3.2.jar" />
+		<copy tofile="${project.dir}/../dfc_ems3.2/deploy/libext/dfc3.2.jar" file="${lib.dir}/dfc3.2.jar" overwrite="true" />
+		<copy tofile="${project.dir}/../N.Prism/deploy/libext/dfc3.2.jar" file="${lib.dir}/dfc3.2.jar" overwrite="true" />
+
+		<echo message="deploy *.classes.xml" />
+		<copy todir="${project.dir}/../dfc_ems3.2/deploy/conf/def">
+			<fileset dir="${conf.dir}/def">
+				<include name="*.def.xml" />
+			</fileset>
+		</copy>
+
+		<copy todir="${project.dir}/../N.Prism/deploy/conf/def">
+			<fileset dir="${conf.dir}/def">
+				<include name="*.def.xml" />
+			</fileset>
+		</copy>
+
+
+	</target>
+
+
+	<target name="makeRmi">
+		<echo message="* rmic *" />
+		<exec dir="./classes" executable="${java.bin}/rmic.exe">
+			<arg line="-extdirs ${libext.dir}" />
+			<arg line="-g" />
+			<arg line="-v1.2" />
+			<arg line="fxms.bas.fxo.service.app.AppServiceImpl" />
+			<arg line="fxms.bas.fxo.service.mo.MoServiceImpl" />
+			<arg line="fxms.bas.fxo.service.noti.NotiServiceImpl" />
+			<arg line="fxms.bas.fxo.service.ext.ExtServiceImpl" />
+			<arg line="FX.MS" />
+		</exec>
+		<echo message="* rmic end *" />
+	</target>
+
+	<target name="dfc3.2_doc.jar">
+		<jar destfile="${deploy.dir}/dfc3.2_doc.jar" update="true">
+			<fileset dir="${javadoc.dir}">
+				<include name="**/*" />
+			</fileset>
+		</jar>
+	</target>
+
+
+
+	<target name="nPrismLicense.jar">
+		<jar destfile="${lib.dir}/nPrismLicense.jar" update="true">
+			<fileset dir="${classes.dir}">
+				<include name="com/daims/ems/beans/License.class" />
+				<include name="com/daims/dfc/common/api/DesApi.class" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="runEmulator.jar">
+		<jar destfile="${lib.dir}/runEmulator.jar" update="true">
+			<fileset dir="${classes.dir}">
+				<include name="com/daims/ems/utils/**/*" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="make key">
+		<exec executable="${java.bin}/keytool">
+			<arg value="-genkey" />
+			<arg value="-v" />
+			<arg value="-validity" />
+			<arg value="36500" />
+			<arg value="-alias" />
+			<arg value="dfckey" />
+			<arg value="-keyalg" />
+			<arg value="RSA" />
+			<arg value="-keystore" />
+			<arg value="${project.dir}/dfc.ks" />
+			<arg value="-storetype" />
+			<arg value="JCEKS" />
+			<arg value="-dname" />
+			<arg value='"cn=ems, ou=dfc, o=daims, c=KR"' />
+			<arg value="-keypass" />
+			<arg value="ekdlawm!@" />
+			<arg value="-storepass" />
+			<arg value="ekdlawm!@" />
+		</exec>
+
+		<!--
+		//KEY 삭제
+		keytool -delete  -alias mspkeyname -storetype JCEKS -keystore c:/MSP/signkeystore.ks -storepass ekdlawm!@
+
+		//KEY List확인
+		keytool -list -v -keystore c:/MSP/signkeystore.ks -storepass ekdlawm!@ -storetype JCEKS
+
+		//JAR sign
+		jarsigner -keystore C:/MSP/signkeystore.ks -storetype JCEKS -storepass ekdlawm!@ -keypass ekdlawm!@ C:/MSP/dfc_msp.jar mspkeyname
+		
+
+		<exec executable="${java.bin}/keytool">
+			<arg value="-list" />
+			<arg value="-v" />
+			<arg value="-keystore ${project.dir}/dfc.ks" />
+			<arg value="-storetype JCEKS" />
+			<arg value="-storepass ekdlawm!@" />
+		</exec>
+-->
+	</target>
+
+	<target name="runEmulatorJarSign" description="jarsign">
+		<signjar keypass="ekdlawm!@" alias="dfckey" storepass="ekdlawm!@" storetype="JCEKS" keystore="${project.dir}/dfc.ks" signedjar="${lib.dir}/SignedRunEmulator.jar" jar="${lib.dir}/runEmulator.jar">
+		</signjar>
+		<!--
+		<exec executable="${java.bin}/jarsigner.exe">
+			<arg line="-verify" />
+			<arg line="${lib.dir}/runEmulator.jar" />
+		</exec>
+		-->
+
+	</target>
+
+</project>
+
+
+

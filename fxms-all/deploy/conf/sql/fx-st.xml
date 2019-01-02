@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<delete id="FX_ST_AL_1_DELETE">
+		<![CDATA[
+		delete 
+		from	FX_ST_AL
+		where	ST_DATE = $stDate
+		]]>
+	</delete>
+
+	<insert id="FX_ST_AL_2_INSERT">
+		<![CDATA[
+		insert into FX_ST_AL (
+				ST_DATE
+				, MO_NO
+				, ALCD_NO
+				, INLO_NO
+				, MODEL_NO
+				, LEVEL1_COUNT
+				, LEVEL2_COUNT
+				, LEVEL3_COUNT
+				, LEVEL4_COUNT
+				, ETC_COUNT
+				, REG_DATE
+		)
+		select	$stDate	as ST_DATE
+				, MO_NO
+				, ALCD_NO
+				, INLO_NO
+				, 0 as MODEL_NO
+				, sum(if( ALARM_LEVEL = 1, 1, 0)) as LEVEL1_COUNT
+				, sum(if( ALARM_LEVEL = 2, 1, 0)) as LEVEL2_COUNT
+				, sum(if( ALARM_LEVEL = 3, 1, 0)) as LEVEL3_COUNT
+				, sum(if( ALARM_LEVEL = 4, 1, 0)) as LEVEL4_COUNT
+				, sum(if( ALARM_LEVEL > 4, 1, 0)) as ETC_COUNT
+				, $regDate
+		from 	FX_AL_HST
+		where	cast(OCU_DATE / 1000000 as UNSIGNED) = $stDate
+		group by MO_NO
+				, ALCD_NO
+				, INLO_NO
+		]]>
+	</insert>
+	
+	<delete id="FX_ST_AL_HH_1_DELETE">
+		<![CDATA[
+		delete 
+		from	FX_ST_AL_HH
+		where	ST_DATE = $stDate
+		]]>
+	</delete>
+
+	<insert id="FX_ST_AL_HH_2_INSERT">
+		<![CDATA[
+		insert into FX_ST_AL_HH (
+				ST_DATE
+				, HH
+				, ALCD_NO
+				, LEVEL1_COUNT
+				, LEVEL2_COUNT
+				, LEVEL3_COUNT
+				, LEVEL4_COUNT
+				, ETC_COUNT
+				, REG_DATE
+		)
+		select	$stDate	as ST_DATE
+				, TRUNCATE((OCU_DATE % 1000000) / 10000, 0) as HH
+				, ALCD_NO
+				, sum(if( ALARM_LEVEL = 1, 1, 0)) as LEVEL1_COUNT
+				, sum(if( ALARM_LEVEL = 2, 1, 0)) as LEVEL2_COUNT
+				, sum(if( ALARM_LEVEL = 3, 1, 0)) as LEVEL3_COUNT
+				, sum(if( ALARM_LEVEL = 4, 1, 0)) as LEVEL4_COUNT
+				, sum(if( ALARM_LEVEL > 4, 1, 0)) as ETC_COUNT
+				, $regDate
+		from 	FX_AL_HST
+		where	cast(OCU_DATE / 1000000 as UNSIGNED) = $stDate
+		group by TRUNCATE((OCU_DATE % 1000000) / 10000, 0)
+				, ALCD_NO
+		]]>
+	</insert>
+
+
+</queries>
+

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<!--
+		############################################################################################
+		# R E S U L T
+		############################################################################################
+	-->
+
+	<resultMap id="RESULT_TRMO" javaClass="test.db.dbTrmo">
+		<result attr="setMoNo()" field="MO_NO" />
+		<result attr="setMoName()" field="MO_NAME" />
+		<result attr="setMoAlias()" field="MO_ALIAS" />
+		<result attr="setMoClass()" field="MO_CLASS" />
+		<result attr="setManaged()" field="IS_MANAGED" />
+		<result attr="setMoNoNode()" field="MO_NO_NODE" />
+		<result attr="setPothNo()" field="POTH_NO" />
+		<result attr="setGusrNo()" field="GUSR_NO" />
+		<result attr="setHstmAdd()" field="HSTM_ADD" />
+		<result attr="setHstmSync()" field="HSTM_SYNC" />
+	</resultMap>
+
+
+
+	<!--
+		############################################################################################
+		# S E L E C T
+		############################################################################################
+	-->
+
+	<select id="SELECT_TRMO" resultMap="RESULT_TRMO">
+		<![CDATA[
+		select	MO_NO
+			, MO_NAME
+			, MO_ALIAS
+			, MO_CLASS
+			, IS_MANAGED
+			, MO_NO_NODE
+			, POTH_NO
+			, GUSR_NO
+			, HSTM_ADD
+			, HSTM_SYNC
+		from	TRMO
+		]]>
+		<sub id="SELECT_TRMO__BY_MO_CLASS">
+			<![CDATA[
+			where	MO_CLASS = $getMoClass()
+			]]>
+		</sub>
+		<sub id="SELECT_TRMO__BY_MO_NO_NODE_MO_CLASS_MO_NAME">
+			<![CDATA[
+			where	MO_NO_NODE = $getMoNoNode()
+			and	MO_CLASS = $getMoClass()
+			and	MO_NAME = $getMoName()
+			]]>
+		</sub>
+		<sub id="SELECT_TRMO__BY_MO_NO">
+			<![CDATA[
+			where	MO_NO = $getMoNo()
+			]]>
+		</sub>
+		<sub id="SELECT_TRMO__BY_MO_NO_NODE">
+			<![CDATA[
+			where	MO_NO_NODE = $getMoNoNode()
+			]]>
+		</sub>
+		<sub id="SELECT_TRMO__BY_IS_MANAGED">
+			<![CDATA[
+			where	IS_MANAGED = $isManaged()
+			]]>
+		</sub>
+	</select>
+
+
+
+	<!--
+		############################################################################################
+		# I N S E R T
+		############################################################################################
+	-->
+
+	<insert id="INSERT_TRMO">
+		<![CDATA[
+		insert into TRMO (
+			MO_NO
+			, MO_NAME
+			, MO_ALIAS
+			, MO_CLASS
+			, IS_MANAGED
+			, MO_NO_NODE
+			, POTH_NO
+			, GUSR_NO
+			, HSTM_ADD
+			, HSTM_SYNC
+		) values (
+			$getMoNo()
+			, $getMoName()
+			, $getMoAlias()
+			, $getMoClass()
+			, $isManaged()
+			, $getMoNoNode()
+			, $getPothNo()
+			, $getGusrNo()
+			, $getHstmAdd()
+			, $getHstmSync()
+		)
+		]]>
+	</insert>
+
+
+
+	<!--
+		############################################################################################
+		# U P D A T E
+		############################################################################################
+	-->
+
+	<update id="UPDATE_TRMO">
+		<![CDATA[
+		update TRMO set
+			MO_NO = $getMoNo()
+			, MO_NAME = $getMoName()
+			, MO_ALIAS = $getMoAlias()
+			, MO_CLASS = $getMoClass()
+			, IS_MANAGED = $isManaged()
+			, MO_NO_NODE = $getMoNoNode()
+			, POTH_NO = $getPothNo()
+			, GUSR_NO = $getGusrNo()
+			, HSTM_ADD = $getHstmAdd()
+			, HSTM_SYNC = $getHstmSync()
+		]]>
+		<sub id="UPDATE_TRMO__BY_MO_CLASS">
+			<![CDATA[
+			where	MO_CLASS = $getMoClass()
+			]]>
+		</sub>
+		<sub id="UPDATE_TRMO__BY_MO_NO_NODE_MO_CLASS_MO_NAME">
+			<![CDATA[
+			where	MO_NO_NODE = $getMoNoNode()
+			and	MO_CLASS = $getMoClass()
+			and	MO_NAME = $getMoName()
+			]]>
+		</sub>
+		<sub id="UPDATE_TRMO__BY_MO_NO">
+			<![CDATA[
+			where	MO_NO = $getMoNo()
+			]]>
+		</sub>
+		<sub id="UPDATE_TRMO__BY_MO_NO_NODE">
+			<![CDATA[
+			where	MO_NO_NODE = $getMoNoNode()
+			]]>
+		</sub>
+		<sub id="UPDATE_TRMO__BY_IS_MANAGED">
+			<![CDATA[
+			where	IS_MANAGED = $isManaged()
+			]]>
+		</sub>
+	</update>
+
+
+
+	<!--
+		############################################################################################
+		# D E L E T E
+		############################################################################################
+	-->
+
+	<delete id="DELETE_TRMO">
+		<![CDATA[
+		delete
+		from	TRMO
+		]]>
+		<sub id="DELETE_TRMO__BY_MO_CLASS">
+			<![CDATA[
+			where	MO_CLASS = $getMoClass()
+			]]>
+		</sub>
+		<sub id="DELETE_TRMO__BY_MO_NO_NODE_MO_CLASS_MO_NAME">
+			<![CDATA[
+			where	MO_NO_NODE = $getMoNoNode()
+			and	MO_CLASS = $getMoClass()
+			and	MO_NAME = $getMoName()
+			]]>
+		</sub>
+		<sub id="DELETE_TRMO__BY_MO_NO">
+			<![CDATA[
+			where	MO_NO = $getMoNo()
+			]]>
+		</sub>
+		<sub id="DELETE_TRMO__BY_MO_NO_NODE">
+			<![CDATA[
+			where	MO_NO_NODE = $getMoNoNode()
+			]]>
+		</sub>
+		<sub id="DELETE_TRMO__BY_IS_MANAGED">
+			<![CDATA[
+			where	IS_MANAGED = $isManaged()
+			]]>
+		</sub>
+	</delete>
+
+
+</queries>
+

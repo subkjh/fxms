@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_ID_VAL_VO" javaClass="com.fxms.bio.vo.IdValVO" >
+		<result attr="setId()" field="ID" />
+		<result attr="setVal()" field="VAL" />
+		<result attr="setTag()" field="TAG" />
+	</resultMap>
+	
+
+	<select id="SELECT_SENSOR_VALUE" resultMap="RESULT_ID_VAL_VO">
+		<![CDATA[
+		select	NODE_ID							as ID
+				, avg(CO2)					   	as VAL
+				, 'CO2'							as TAG
+		from 	JB_Sensor_CO2
+		where 	unix_timestamp(insert_date) >= $startUnixTime
+		and		unix_timestamp(insert_date) <= $endUnixTime
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, avg(PH)						as VAL
+				, 'PH'							as TAG
+		from 	JB_Sensor_PH
+		where 	unix_timestamp(insert_date) >= $startUnixTime
+		and		unix_timestamp(insert_date) <= $endUnixTime
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, avg(TEMPERATURE)				as VAL
+				, 'TEMP'						as TAG
+		from 	JB_Sensor_THL
+		where 	unix_timestamp(insert_date) >= $startUnixTime
+		and		unix_timestamp(insert_date) <= $endUnixTime
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, avg(HUMIDITY)					as VAL
+				, 'HUMI'						as TAG
+		from 	JB_Sensor_THL
+		where 	unix_timestamp(insert_date) >= $startUnixTime
+		and		unix_timestamp(insert_date) <= $endUnixTime
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, avg(ILLUMINATION)				as VAL
+				, 'ILLUMI'						as TAG
+		from 	JB_Sensor_THL
+		where 	unix_timestamp(insert_date) >= $startUnixTime
+		and		unix_timestamp(insert_date) <= $endUnixTime
+		group by NODE_ID
+		]]>
+	</select>
+	
+	<select id="SELECT_SENSOR_ID_LIST" resultMap="RESULT_ID_VAL_VO">
+		<![CDATA[
+		select	NODE_ID							as ID
+				, 'CO2'							as TAG
+		from 	JB_Sensor_CO2
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, 'PH'							as TAG
+		from 	JB_Sensor_PH
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, 'TEMP'						as TAG
+		from 	JB_Sensor_THL
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, 'HUMI'						as TAG
+		from 	JB_Sensor_THL
+		group by NODE_ID
+		
+		union all
+		
+		select	NODE_ID							as ID
+				, 'ILLUMI'						as TAG
+		from 	JB_Sensor_THL
+		group by NODE_ID
+		]]>
+	</select>
+
+	<delete id="DELETE_SENSOR_VALUE_1">
+		<![CDATA[
+		delete from JB_Sensor_CO2 where unix_timestamp(insert_date) < $unixTime                  
+		]]>
+	</delete>
+
+
+	<delete id="DELETE_SENSOR_VALUE_2">
+		<![CDATA[
+		delete from JB_Sensor_PH where unix_timestamp(insert_date) < $unixTime                  
+		]]>
+	</delete>
+
+	<delete id="DELETE_SENSOR_VALUE_3">
+		<![CDATA[
+		delete from JB_Sensor_THL where unix_timestamp(insert_date) < $unixTime                  
+		]]>
+	</delete>
+
+</queries>
+

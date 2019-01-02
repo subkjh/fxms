@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE service[
+
+
+<!ELEMENT service (project, para*) >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #REQUIRED>
+
+<!-- match condition -->
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para service CDATA #IMPLIED >
+<!ATTLIST para ip CDATA #IMPLIED >
+
+]>
+
+<service>
+
+	<!--
+		############################################################################################
+		# Set Site Name
+		############################################################################################
+	-->
+	<project>fxms</project>
+	
+	<!--
+		############################################################################################
+		# Set IP Address
+		############################################################################################
+	-->
+	<!-- 
+	<para name="IP-ADDRESS" value="localhost" />
+	 -->
+	<para name="IP-ADDRESS-AppService" value="125.7.128.42" />
+	
+	<!-- 
+		PORT-FXMS
+		PORT-FXMS-RMI
+		PORT-ALIVE
+		PORT-RMI
+		PORT-SERVICE
+	 -->
+	<para name="PORT-FXMS" value="63805" />
+	<para name="PORT-FXMS-RMI" value="63804" />
+	<para name="PORT-ALIVE" value="63803" />
+
+	<para name="PORT-RMI" value="63810" />
+	<!-- 
+	<para name="PORT-SERVICE" value="63811" service="MoService" />
+	 -->
+	<para name="PORT-SERVICE" value="0" service="MoService" />
+	<para name="PORT-SERVICE" value="63812" service="NotiService" />
+	<para name="PORT-SERVICE" value="63813" service="AppService" />
+	<para name="PORT-SERVICE" value="63814" service="ExtService" />
+	<para name="PORT-SERVICE" value="63817" service="WsBroadcaster" />
+
+	
+	<!-- 
+		PS-TYPE
+		PS-MS-IPADDR
+	 -->
+	<!-- 1m,5m,30m,1h,2h,1d -->
+	<para name="PS-TYPE" value="5m,1h,1d" />
+	<para name="PS-MS-IPADDR" value="*" />
+	<!-- 
+	<para name="PS-MS-IPADDR" value="10.0.0.1,10.0.0.2" />
+ 	-->
+ 
+
+
+	
+	<!--
+		############################################################################################
+		# Set DataBase Defined XML File
+		############################################################################################
+	-->
+	<para name="FILE_DATABASES_XML" value="databases.xml" />
+
+	<!--
+		############################################################################################
+		# Set Charset For SNMP
+		############################################################################################
+	-->
+	<para name="CHARSET_SNMP" value="euc-kr" />
+
+	<!--
+		############################################################################################
+		# Set Default Charset
+		############################################################################################
+	-->
+	<para name="CHARSET_DEFAULT" value="utf-8" />
+	
+	
+	<!--	
+		############################################################################################
+		LOG-LEVEL = info | debug | trace | raw : Default info
+		LOG-MAX-FILE-SIZE = 21
+		LOG-PRINT-CONSOLE = false
+		############################################################################################
+	-->
+	<para name="LOG-LEVEL" value="trace" />
+	<para name="LOG-MAX-FILE-SIZE" value="21" />
+	<para name="LOG-PRINT-CONSOLE" value="true" />
+	
+
+</service>

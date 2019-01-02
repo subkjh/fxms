@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_MAP" javaClass="fxms.module.usertree.vo.UserTreeItemVo" />
+
+	<select id="SELECT_USER_TREE_MO_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+		select	
+				MO.MO_NO
+				, MO.MO_NAME
+				, MO.MO_ANAME
+				, MO.MO_CLASS
+				, MO.MO_TYPE
+		]]>
+		
+		<test var="MO_CLASS" equals="NE">
+		<![CDATA[
+				, A.IP_ADDRESS
+				, A.NET_TYPE
+				, A.CATEGORY_CD
+				, A.MODEL_NO
+		]]>
+		</test>
+		
+		<![CDATA[
+		from 	FX_MO MO
+		]]>
+
+		<test var="MO_CLASS" equals="NE">
+		<![CDATA[
+				, FN_MO_NE A
+		where	MO.MO_ON = A.MO_NO
+		]]>
+		</test>
+
+		<test var="NET_TYPE"> and A.NET_TYPE in ( #NET_TYPE ) </test>
+		<test var="CATEGORY_CD"> and A.CATEGORY_CD in ( #CATEGORY_CD ) </test>
+		<test var="MODEL_NO"> and A.MODEL_NO in ( #MODEL_NO ) </test>
+		<test var="MO_TYPE"> and MO.MO_TYPE in ( #MO_TYPE ) </test>
+
+	</select>
+
+</queries>
+

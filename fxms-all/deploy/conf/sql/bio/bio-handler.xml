@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+	<select id="SELECT_CONTAINER_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+		select	C.CONTAINER_ID
+				, C.CONTAINER_TYPE
+				, C.INLO_NO
+				, C.INLO_MEMO
+				, ( select INLO_NAME from FX_CF_INLO A where A.INLO_NO = C.INLO_NO ) 
+								as INLO_NAME
+				, ( select 	M.INLO_NAME 
+					from 	FX_CF_INLO_MEM MEM
+							, FX_CF_INLO M
+					where 	MEM.mem_inlo_no = C.INLO_NO
+					and		MEM.INLO_TYPE = 'COMPANY'					
+					and 	MEM.INLO_NO = M.INLO_NO
+					) 			as COMPANY_NAME
+				, C.GW_MO_NO
+				, C.INSTALL_YMD
+				, GW.GW_IPADDR
+				, GW.GW_PORT				
+		from	FX_MO_CONTAINER C
+					left join FX_MO_GW GW on GW.MO_NO = C.GW_MO_NO
+				, FX_MO MO			
+		where	C.MO_NO = MO.MO_NO
+		]]>
+
+		<test var="containerId"> and C.CONTAINER_ID = $containerId </test>
+		<test var="containerType"> and C.CONTAINER_TYPE = $containerType </test>
+		<test var="userNo">
+		<![CDATA[
+				and		C.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) )  
+		 ]]>
+		</test>
+
+	</select>
+
+	<select id="SELECT_SENSOR_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+		select	
+				( select 	M.INLO_NAME 
+					from 	FX_CF_INLO_MEM MEM
+							, FX_CF_INLO M
+					where 	MEM.MEM_INLO_NO = C.INLO_NO
+					and		MEM.INLO_TYPE = 'COMPANY'					
+					and 	MEM.INLO_NO = M.INLO_NO
+					) 			as COMPANY_NAME		
+				, C.INLO_NO
+				, ( select INLO_NAME from FX_CF_INLO A where A.INLO_NO = C.INLO_NO ) 
+								as INLO_NAME
+				, C.INLO_MEMO
+				, C.CONTAINER_ID
+				, C.CONTAINER_TYPE
+				, GW.MO_NO				as GW_MO_NO
+				, GW.GW_IPADDR
+				, GW.GW_PORT
+				, S.MO_NO				as SENSOR_MO_NO
+				, S.DEVICE_TYPE			as SENSOR_TYPE
+				, MO.MO_NAME			as SENSOR_NAME
+				, S.DEVICE_ID_IN_GW		as SENDOR_ID
+		from	FX_MO_DEVICE S
+					left join FX_MO_GW GW on GW.MO_NO = S.GW_MO_NO
+				, FX_MO_CONTAINER C
+				, FX_MO MO			
+		where	S.MO_NO = MO.MO_NO
+		and		C.MO_NO = MO.UPPER_MO_NO
+		]]>
+
+		<test var="containerId"> and C.CONTAINER_ID = $containerId </test>
+		<test var="userNo">
+		<![CDATA[
+				and		C.INLO_NO in ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = ( select MNG_INLO_NO from FX_UR_USER where USER_NO = $userNo ) )  
+		 ]]>
+		</test>
+
+	</select>
+
+</queries>
+

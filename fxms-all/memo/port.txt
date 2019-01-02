@@ -1,0 +1,32 @@
+	
+fxms-agent-manager		63800/udp					# fxms
+fxms-agent-manager		63800/tcp					# fxms
+fxms-agent				63801/udp					# fxms
+fxms-agent				63801/tcp					# fxms
+
+fxms-alive				63803/tcp					# fxms
+fxms-ms-rmi				63804/tcp					# fxms
+fxms-ms					63805/tcp					# fxms
+
+fxms-rmi				63810/tcp					# fxms
+fxms-mo-service			63811/tcp					# fxms
+fxms-noti-service		63812/tcp					# fxms
+fxms-app-service		63813/tcp					# fxms
+fxms-ext-service		63814/tcp					# fxms
+fxms-rest-api			63815/tcp					# fxms
+fxms-rest-api			10005/tcp					# fxms
+fx-broadcaster			63816/tcp					# fxms ws-broadcaster
+WsBroadcaster			63817/tcp					# fxms
+fxalarm-broadcaster		63818/tcp					# fxms
+fxps-sender				63819/tcp					# fxms
+fxms-traffic-service	63820/tcp					# fxms
+fxms-reserverd5			63821/tcp					# fxms
+fxms-reserverd6			63822/tcp					# fxms
+fxms-reserverd7			63823/tcp					# fxms
+fxms-reserverd8			63824/tcp					# fxms
+fxms-reserverd9			63825/tcp					# fxms
+fxms-reserverd10		63826/tcp					# fxms
+fxms-reserverd11		63827/tcp					# fxms
+fxms-reserverd12		63828/tcp					# fxms
+fxms-reserverd13		63829/tcp					# fxms
+fxms-reserverd14		63830/tcp					# fxms

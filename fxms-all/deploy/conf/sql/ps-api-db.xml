@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<!-- ############################################################################################
+		# R E S U L T ############################################################################################ -->
+
+	<resultMap id="RESULT_DEVICE_MO" javaClass="fxms.bas.mo.Mo">
+		<result attr="setMoNo()" field="MO_NO" />
+		<result attr="setMoName()" field="MO_NAME" />
+		<result attr="setMoAname()" field="MO_ANAME" />
+		<result attr="setMoClass()" field="MO_CLASS" />
+		<result attr="setUpperMoNo()" field="UPPER_MO_NO" />
+		<result attr="setAlarmCfgNo()" field="ALARM_CFG_NO" />
+	</resultMap>
+
+
+
+	<!-- ############################################################################################
+		# S E L E C T ############################################################################################ -->
+
+	<select id="SELECT-CLASS-fxms.bas.mo.Mo" resultMap="RESULT_DEVICE_MO">
+		<![CDATA[
+		select	T1.MO_NO
+				, T1.MO_NAME
+				, T1.MO_ANAME
+				, T1.MO_CLASS
+				, T1.MNG_YN
+				, T1.UPPER_MO_NO
+				, T1.ALARM_CFG_NO	
+				
+		from	FX_MO			T1
+		where	T1.MNG_YN = 'Y'
+		]]>
+
+		<!--
+			<test var="msIpaddr"> and ( T3.MS_IPADDR in ( $msIpaddr ) or T3.MS_IPADDR is null ) </test>
+		-->
+		<test var="moNo"> and T1.MO_NO = $moNo </test>
+
+	</select>
+
+</queries>
+

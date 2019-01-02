@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE databases [
+
+<!ELEMENT databases (database*) >
+
+<!ELEMENT database (driver,url,user?,password?,isReadOnly?
+					,countConnectionMax,isAutoCommit?,permitConnectionPoolOver?,reconnectTimeout?,sqlSelectKeepAlive?,const*)>
+<!ATTLIST database name CDATA #REQUIRED >
+<!ATTLIST database java-class CDATA #REQUIRED >
+
+<!ELEMENT const (#PCDATA) >
+<!ATTLIST const id CDATA #REQUIRED >
+
+]>
+
+<databases>
+
+	
+	
+	<database name="FXMSDB" java-class="subkjh.bas.dao.database.MariaDb">
+		<!-- 
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<url>
+			jdbc:mysql://125.7.128.42:3306/FXDB?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+		 -->
+		<driver>org.mariadb.jdbc.Driver</driver>
+		<url>
+			jdbc:mariadb://125.7.128.42:3306/FXDB?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+	
+	<database name="TEST" java-class="subkjh.bas.dao.database.MariaDb">
+			<!-- 
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		 -->
+		<driver>org.mariadb.jdbc.Driver</driver>
+		<url>
+			jdbc:mariadb://125.7.128.42:3306/test?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+	
+</databases>
