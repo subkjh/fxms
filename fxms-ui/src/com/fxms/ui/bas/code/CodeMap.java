@@ -426,7 +426,7 @@ public class CodeMap {
 
 				Map<String, Object> map = DxAsyncSelector.getSelector().selectObject("cd", "get-system-time", null);
 				Number systemTime = (Number) map.get("system-time");
-				UiConfig.getConfig().setTime(systemTime.longValue());
+				UiConfig.getConfig().setSystemTime(systemTime.longValue());
 
 				List<UiTimeVo> list = DxAsyncSelector.getSelector().selectList("cd", "get-op-time-list", null,
 						UiTimeVo.class);

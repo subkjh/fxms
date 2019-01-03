@@ -33,8 +33,6 @@ public class UiData {
 
 	private static Map<String, String> confMap = null;
 
-	
-
 	public static String getConfig(String name, String defValue) {
 		if (confMap == null) {
 			confMap = new HashMap<String, String>();
@@ -238,7 +236,7 @@ public class UiData {
 			Collections.sort(keyList);
 
 			outStream.write("#\n".getBytes());
-			outStream.write("# Fxms UI Configuration \n".getBytes());
+			outStream.write("# fxms UI Configuration \n".getBytes());
 			outStream.write("#\n\n".getBytes());
 
 			outStream.write("#####################################################################\n".getBytes());

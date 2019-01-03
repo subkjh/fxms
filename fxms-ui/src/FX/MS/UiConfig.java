@@ -15,11 +15,6 @@ public class UiConfig {
 
 	private static final SimpleDateFormat YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
 	private static final SimpleDateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss");
-
-	public synchronized static String getTime(long milliseconds) {
-		return YYYYMMDDHHMMSS.format(new Date(milliseconds));
-	}
-
 	private static UiConfig config;
 
 	public static UiConfig getConfig() {
@@ -31,15 +26,19 @@ public class UiConfig {
 		return config;
 	}
 
-	public void updateUiSize(int opNo, double width, double height) {
+	public synchronized static String getTime(long milliseconds) {
+		return YYYYMMDDHHMMSS.format(new Date(milliseconds));
+	}
 
-		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("opNo", opNo);
-		para.put("uiWidth", width);
-		para.put("uiHeight", height);
+	/** 서버 시간 */
+	private long systemTime;
+	/** 서버 시간 받은 시점의 로컬 시간 */
+	private long clientTime;
 
-		DxAsyncSelector.getSelector().callMethod("cd", "update-op-size", para, null);
-
+	public String getCfgData() {
+		String file = getFolder("deploy", "conf");
+		String name = new File(file).getPath() + "/cfg.data";
+		return name;
 	}
 
 	public String getFolder(String... folders) {
@@ -56,27 +55,6 @@ public class UiConfig {
 		return folder;
 	}
 
-	private long systemTime;
-	private long clientTime;
-
-	public String getNowSystemTime() {
-		return HHMMSS.format(new Date(systemTime + (System.currentTimeMillis() - clientTime)));
-	}
-
-	public void setTime(long systemTime) {
-
-		clientTime = System.currentTimeMillis();
-		this.systemTime = systemTime;
-
-		//System.out.println(getTime(clientTime) + " : " + getTime(systemTime));
-
-	}
-
-	public void writeInitData(String name, Object obj) {
-
-		write(UiConfig.getConfig().getFolder("datas"), name + ".json", new Gson().toJson(obj));
-	}
-
 	public String getHome() {
 		return System.getProperty("user.home") + "/fxms";
 	}
@@ -85,13 +63,50 @@ public class UiConfig {
 		return getFolder("logs");
 	}
 
-	public String getCfgData() {
-		String file = getFolder("deploy", "conf");
-		String name = new File(file).getPath() + "/cfg.data";
-		return name;
+	/**
+	 * 
+	 * @return HHMMSS 형식의 시스템(서버) 시간
+	 */
+	public String getNowSystemTime() {
+		return HHMMSS.format(new Date(systemTime + (System.currentTimeMillis() - clientTime)));
 	}
 
-	public void write(String folder, String filename, String datas) {
+	/**
+	 * 
+	 * @param systemTime
+	 *            mstime의 시스템(서버) 시간
+	 */
+	public void setSystemTime(long systemTime) {
+		clientTime = System.currentTimeMillis();
+		this.systemTime = systemTime;
+	}
+
+	/**
+	 * 화면의 크기를 기록한다.
+	 * 
+	 * @param opNo
+	 *            화면번호
+	 * @param width
+	 *            넓이
+	 * @param height
+	 *            높이
+	 */
+	public void updateUiSize(int opNo, double width, double height) {
+
+		Map<String, Object> para = new HashMap<String, Object>();
+		para.put("opNo", opNo);
+		para.put("uiWidth", width);
+		para.put("uiHeight", height);
+
+		DxAsyncSelector.getSelector().callMethod("cd", "update-op-size", para, null);
+
+	}
+
+	public void writeInitData(String name, Object obj) {
+		write(UiConfig.getConfig().getFolder("datas"), name + ".json", new Gson().toJson(obj));
+	}
+
+	private void write(String folder, String filename, String datas) {
 
 		File file = new File(folder + "/" + filename);
 

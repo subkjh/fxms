@@ -10,6 +10,12 @@ import fxms.client.log.Logger;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * FXMS C/S MAIN START
+ * 
+ * @author SUBKJH-DEV
+ *
+ */
 public class UI extends Application implements FxCallback<String> {
 
 	public static DxPane dxPane;
