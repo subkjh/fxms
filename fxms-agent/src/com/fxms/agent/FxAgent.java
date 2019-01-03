@@ -127,6 +127,10 @@ public class FxAgent extends QueueFxThread<FxAgentPdu> {
 		return looper;
 	}
 
+	public final Map<String, AgentMethod> getMethodMap() {
+		return methodMap;
+	}
+
 	public String getRemoteHost() {
 		return remoteHost;
 	}
@@ -153,8 +157,49 @@ public class FxAgent extends QueueFxThread<FxAgentPdu> {
 		this.cycleMethod = agentMethod;
 	}
 
-	public final Map<String, AgentMethod> getMethodMap() {
-		return methodMap;
+	@Override
+	protected void doInit() {
+	}
+
+	@Override
+	protected void doWork(FxAgentPdu data) throws Exception {
+
+		try {
+			byte[] sendData = data.getSendData().getBytes(FxAgentCode.charset);
+
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(remoteHost),
+					remotePort);
+			socket.send(sendPacket);
+
+			Logger.logger.debug("send={}", data.getSendData());
+
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+
+	}
+
+	@Override
+	protected void onNoDatas(long index) {
+
+		// 보낼 데이터가 없으면 keep-alive용 내용을 보낸다.
+
+		NotifyPdu pdu = (NotifyPdu) notiPdu.clone();
+
+		pdu.setMethod(cycleMethod.getMethod());
+		try {
+			pdu.setParameters(cycleMethod.call(this, null));
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+
+		prevAgentSeqno = agentSeqno;
+		agentSeqno = System.currentTimeMillis();
+
+		pdu.setAgentSeqno(agentSeqno);
+
+		put(pdu);
+
 	}
 
 	private void onReceive(FxAgentPdu receivedPdu) {
@@ -239,51 +284,6 @@ public class FxAgent extends QueueFxThread<FxAgentPdu> {
 			}
 
 		}.start();
-
-	}
-
-	@Override
-	protected void doInit() {
-	}
-
-	@Override
-	protected void doWork(FxAgentPdu data) throws Exception {
-
-		try {
-			byte[] sendData = data.getSendData().getBytes(FxAgentCode.charset);
-
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(remoteHost),
-					remotePort);
-			socket.send(sendPacket);
-
-			Logger.logger.debug("send={}", data.getSendData());
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-		}
-
-	}
-
-	@Override
-	protected void onNoDatas(long index) {
-
-		// 보낼 데이터가 없으면 keep-alive용 내용을 보낸다.
-
-		NotifyPdu pdu = (NotifyPdu) notiPdu.clone();
-
-		pdu.setMethod(cycleMethod.getMethod());
-		try {
-			pdu.setParameters(cycleMethod.call(this, null));
-		} catch (Exception e) {
-			Logger.logger.error(e);
-		}
-
-		prevAgentSeqno = agentSeqno;
-		agentSeqno = System.currentTimeMillis();
-
-		pdu.setAgentSeqno(agentSeqno);
-
-		put(pdu);
 
 	}
 
