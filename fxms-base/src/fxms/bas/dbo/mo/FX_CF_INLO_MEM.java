@@ -1,7 +1,5 @@
 package fxms.bas.dbo.mo;
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -17,7 +15,7 @@ import subkjh.bas.fxdao.define.FxTable;
 @FxIndex(name = "FX_CF_INLO_CHLD__PK", type = INDEX_TYPE.PK, columns = { "INLO_NO", "MEM_INLO_NO" })
 @FxIndex(name = "FX_CF_INLO_CHLD__KEY1", type = INDEX_TYPE.KEY, columns = { "INLO_NO" })
 @FxIndex(name = "FX_CF_INLO_CHLD__KEY2", type = INDEX_TYPE.KEY, columns = { "MEM_INLO_NO" })
-public class FX_CF_INLO_MEM implements Serializable {
+public class FX_CF_INLO_MEM {
 
 	public FX_CF_INLO_MEM() {
 	}
@@ -33,7 +31,7 @@ public class FX_CF_INLO_MEM implements Serializable {
 
 	@FxColumn(name = "INLO_TYPE", size = 30, comment = "설치위치종류(코드집)")
 	private String inloType;
-	
+
 	public String getInloType() {
 		return inloType;
 	}

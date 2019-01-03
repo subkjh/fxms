@@ -21,6 +21,7 @@ public class AlarmListPane extends ScrollPane implements AlarmRefresher {
 
 	protected final TableView<UiAlarm> table = new TableView<>();
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public AlarmListPane() {
 
 		setContent(table);
@@ -55,6 +56,7 @@ public class AlarmListPane extends ScrollPane implements AlarmRefresher {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private FxContextMenu makeContextMenu() {
 		FxContextMenu menu = new FxContextMenu();
 		menu.getItems().add(new AlarmAckMenuItem(this));

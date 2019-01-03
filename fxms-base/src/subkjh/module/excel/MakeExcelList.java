@@ -1,6 +1,5 @@
 package subkjh.module.excel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +21,6 @@ public class MakeExcelList extends MakeExcel {
 		c.open("목록 자동 생성", columns, widths, alignments, datafmts, null);
 		// c.setCellToSum("key", "key2", "key", "key", "", "=sum", "=sum",
 		// "=G%rowNo%/F%rowNo%");
-
-		List<Object[]> list = new ArrayList<Object[]>();
 
 		String custNo;
 		String custName;

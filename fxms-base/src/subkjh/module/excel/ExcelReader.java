@@ -247,11 +247,11 @@ public class ExcelReader {
 		// "D:\\02.Projects(B)\\2013\\05. [한국스마트카드]단말원격관리시스템\\05. 설계\\26. 데이터베이스
 		// 설계서(쿼리생성용).xlsx"));
 		List<List<Object[]>> sheetList = ExcelReader.getDatas(new File("datas/biz.xls"));
-		int index = 0;
+//		int index = 0;
 		String s;
 		String sp = null;
 		for (List<Object[]> list : sheetList) {
-			index = 0;
+//			index = 0;
 
 			list.remove(0);
 			list.remove(0);

@@ -19,6 +19,11 @@ import subkjh.bas.fxdao.define.FxTable;
 @FxIndex(name = "FX_PS_STREQ_CUR__UK", type = INDEX_TYPE.UK, columns = { "PS_TABLE", "PS_TYPE", "PS_DATE" })
 public class FX_PS_STREQ_CUR implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7810537916722524665L;
+
 	public FX_PS_STREQ_CUR() {
 	}
 

@@ -1,7 +1,5 @@
 package fxms.bas.dbo;
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -15,7 +13,7 @@ import subkjh.bas.fxdao.define.FxTable;
 
 @FxTable(name = "FY_VBIO", comment = " 성능수집값테이블")
 @FxIndex(name = "FY_VBIO__PK", type = INDEX_TYPE.PK, columns = { "MO_NO", "CLLT_DATE", "MO_INSTANCE" })
-public class FY_VBIO implements Serializable {
+public class FY_VBIO  {
 
 	public FY_VBIO() {
 	}

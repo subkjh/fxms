@@ -26,7 +26,7 @@ public class MakeExcelByQid implements DaoListener {
 		DataBase database = DBManager.getMgr().getDataBase("ADAMS_2018_DEV_MIAPP");
 
 		DbTrans tran = database.createDbTrans("deploy/conf/sql/test-excel-list.xml");
-		MakeExcelByQid c = new MakeExcelByQid(-1);
+		MakeExcelByQid c = new MakeExcelByQid();
 		c.addAlias("시도호", "시도\n호");
 		c.makeExcel(tran, "QID_SELECT_EXCEL_LIST", null, "test", "tmp/excel-test-qid.xlsx");
 	}
@@ -37,21 +37,10 @@ public class MakeExcelByQid implements DaoListener {
 	/** DB외 컬럼 */
 	private List<ExcelColumn> columnsExtra;
 	private MakeExcelList excel;
-	private int fileIndex = 1;
 	private String filename;
-	private int sizePerFile = 0;
 	private String title;
 
 	public MakeExcelByQid() {
-	}
-
-	/**
-	 * 
-	 * @param sizePerFile
-	 *            화일당 페이지 수
-	 */
-	public MakeExcelByQid(int sizePerFile) {
-		this.sizePerFile = sizePerFile;
 	}
 
 	/**

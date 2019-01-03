@@ -1,7 +1,5 @@
 package fxms.bas.dbo.diag;
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -15,7 +13,7 @@ import subkjh.bas.fxdao.define.FxTable;
 
 @FxTable(name = "FX_DI_LINE", comment = "다이아그램라인테이블")
 @FxIndex(name = "FX_DI_LINE__PK", type = INDEX_TYPE.PK, columns = { "DIAG_NO", "DIAG_NODE_NO" })
-public class FX_DI_LINE implements Serializable {
+public class FX_DI_LINE {
 
 	public FX_DI_LINE() {
 	}

@@ -12,11 +12,9 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import com.fxms.ui.OP_NAME;
 import com.fxms.ui.UiCode.Action;
-import com.fxms.ui.bas.FxDialog;
 import com.fxms.ui.bas.code.CodeMap;
 import com.fxms.ui.bas.code.UiOpCodeVo;
 import com.fxms.ui.bas.vo.UiAlarm;
-import com.fxms.ui.biz.pane.ShowAlarmDetailPane;
 import com.fxms.ui.node.alarm.AlarmReceiverStatusDxNode;
 import com.fxms.ws.socket.WsClient;
 import com.google.gson.Gson;

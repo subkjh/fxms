@@ -4,7 +4,6 @@ import javafx.event.EventType;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Window;
 
 public class DiagNodeBounds {
 

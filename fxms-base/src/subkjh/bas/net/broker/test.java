@@ -4,11 +4,11 @@ public class test {
 	public static void main(String[] args) {
 
 		test t = new test();
-		t.test();
+		t.t1();
 
 	}
 
-	private void test() {
+	void t1() {
 		String str = "5448 494e 4753 5049 5245 2020 4441 5441 2054 4553 5420 2045 4e44 20";
 
 		String s = str.replaceAll(" ", "");

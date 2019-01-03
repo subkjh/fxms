@@ -67,7 +67,7 @@ public abstract class TextParser {
 
 	public TextParser(String sentence) {
 
-		inputWordList = new ArrayList(Arrays.asList(sentence.split(" |\t|\\+|\\*|/")));
+		inputWordList = new ArrayList<String>(Arrays.asList(sentence.split(" |\t|\\+|\\*|/")));
 		remainWordList = new ArrayList<>(inputWordList);
 
 		textPool = new TextPool() {

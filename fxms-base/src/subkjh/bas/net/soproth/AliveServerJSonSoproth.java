@@ -14,7 +14,8 @@ public class AliveServerJSonSoproth extends JSonSoproth {
 	protected void processJSon(String jsonMsg) throws Exception {
 
 		Gson gson = new Gson();
-		Map map = gson.fromJson(jsonMsg, HashMap.class);
+		@SuppressWarnings("unchecked")
+		Map<Object, Object> map = gson.fromJson(jsonMsg, HashMap.class);
 
 		Object ip = map.get("ip");
 		Object name = map.get("name");

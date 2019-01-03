@@ -86,7 +86,7 @@ public class DiagNodeRing extends BorderPane implements DiagNode {
 
 	}
 
-	private void makeArc(int size, int index) {
+	void makeArc(int size, int index) {
 
 		double angle = 360f / size;
 		double startAngle = angle * index;

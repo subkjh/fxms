@@ -11,10 +11,11 @@ public class test {
 
 	public static void main(String[] args) {
 		test t = new test();
-		t.test();
+		t.t1();
 	}
 
-	public void test() {
+	@SuppressWarnings("unused")
+	public void t1() {
 
 		OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
 

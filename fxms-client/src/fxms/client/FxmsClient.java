@@ -411,6 +411,7 @@ public class FxmsClient {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public final List<Map<String, Object>> ls(String folder) throws Exception {
 		try {
 
@@ -442,7 +443,7 @@ public class FxmsClient {
 
 			conn.disconnect();
 
-			return (List) new Gson().fromJson(sb.toString(), ArrayList.class);
+			return (List<Map<String, Object>>) new Gson().fromJson(sb.toString(), ArrayList.class);
 
 		} catch (Exception e) {
 

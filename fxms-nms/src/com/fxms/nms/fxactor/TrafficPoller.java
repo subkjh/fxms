@@ -1,6 +1,5 @@
 package com.fxms.nms.fxactor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fxms.nms.NmsCodes;

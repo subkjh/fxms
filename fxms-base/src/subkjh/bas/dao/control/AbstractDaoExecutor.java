@@ -29,15 +29,6 @@ import subkjh.bas.utils.ObjectUtil;
 
 public class AbstractDaoExecutor {
 
-	enum ExecuteType {
-		Null
-
-		, Collection
-
-		, Array;
-
-	}
-
 	public enum EntryType {
 
 		Result
@@ -51,14 +42,18 @@ public class AbstractDaoExecutor {
 		, ObjectArray;
 	}
 
-	/** 연결된 콘넥션 */
-	private Connection connection = null;
+	enum ExecuteType {
+		Null
 
-	private DataBase database;
-	private int fetchSize = 0;
+		, Collection
 
-	private boolean isConnected;
+		, Array;
 
+	}
+
+	static final String RET_LOG = DaoCode.RET_LOG;
+
+	static final String ERR_LOG = DaoCode.ERR_LOG;
 	public static Map<String, Object> makePara(Object... parameters) {
 		if (parameters == null || parameters.length < 2) {
 			return null;
@@ -71,95 +66,19 @@ public class AbstractDaoExecutor {
 		return para;
 	}
 
+	/** 연결된 콘넥션 */
+	private Connection connection = null;
+
+	private DataBase database;
+
+	private int fetchSize = 0;
+
+	private boolean isConnected;
+
 	public void commit() throws Exception {
 
 		if (connection != null && connection.getAutoCommit() == false) {
 			connection.commit();
-		}
-	}
-
-	public Connection getConnection() throws IOException, Exception {
-		if (connection == null) {
-			return database.getConnection();
-		} else
-			return connection;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @return 데이터베이스
-	 */
-	public DataBase getDatabase() {
-		return database;
-	}
-
-	public int getFetchSize() {
-		return fetchSize;
-	}
-
-	/**
-	 * 
-	 * @param sequence
-	 * @param classOfT
-	 * @return
-	 * @throws Exception
-	 */
-	public <T> T getNextVal(String sequence, Class<T> classOfT) throws Exception {
-		List<T> list = selectSql(database.getSqlSequenceNextVal(sequence), null, classOfT);
-		if (list != null && list.size() >= 1) {
-			if (list.get(0) == null) {
-				throw new Exception("Sequence(" + sequence + ") CHECK");
-			}
-			return list.get(0);
-		}
-		throw new Exception("No Datas");
-	}
-
-	public void rollback() {
-		
-		if (connection != null) {
-
-			try {
-				if (connection.getAutoCommit() == false) {
-					Logger.logger.trace("rollback");
-					connection.rollback();
-				}
-			} catch (SQLException e) {
-				Logger.logger.error(e);
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> List<T> selectSql(String sql, Object para[], Class<T> classOfT) throws Exception {
-		return selectSql(sql, para, EntryType.ClassOfT, classOfT, Integer.MAX_VALUE);
-	}
-
-	public void setDatabase(DataBase database) {
-		this.database = database;
-	}
-
-	public synchronized void start() throws IOException, Exception {
-		try {
-			connect();
-			isConnected = true;
-		} catch (Exception e) {
-			isConnected = false;
-			throw e;
-		}
-	}
-
-	public void stop() {
-		if (isConnected == false)
-			return;
-
-		isConnected = false;
-
-		try {
-			disconnect(false);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -174,12 +93,71 @@ public class AbstractDaoExecutor {
 		connection = null;
 	}
 
-	public int executeSql(String sql) throws Exception {
-		return executeSql(sql, ExecuteType.Null, null);
+	private int execute(String sql, Collection<Object[]> dataList) throws IOException, Exception {
+
+		PreparedStatement pstmt = null;
+
+		try {
+
+			pstmt = getPrepareStatement(sql);
+
+			// one by one
+			if (dataList.size() == 1 || database instanceof Altibase) {
+				int count = 0;
+				for (Object v[] : dataList) {
+					setPreSt(pstmt, v);
+					count += pstmt.executeUpdate();
+				}
+				return count;
+			}
+			// batch
+			else {
+				for (Object v[] : dataList) {
+					setPreSt(pstmt, v);
+					pstmt.addBatch();
+				}
+
+				int cnt[] = pstmt.executeBatch();
+				int total = 0;
+				for (int i = 0; i < cnt.length; i++) {
+					if (cnt[i] > 0)
+						total += cnt[i];
+					else if (cnt[i] == Statement.SUCCESS_NO_INFO) {
+						total++;
+					}
+				}
+				return total;
+
+			}
+
+		} catch (Exception e) {
+			throw database.makeException(e, sql);
+		} finally {
+			if (pstmt != null)
+				free(pstmt);
+		}
+
 	}
 
-	protected int executeSql(String sql, Object data[]) throws Exception {
-		return executeSql(sql, ExecuteType.Array, data);
+	private int execute(String sql, Object para[]) throws IOException, Exception {
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = getPrepareStatement(sql);
+			setPreSt(pstmt, para);
+			return pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw database.makeException(e, sql);
+		} finally {
+			if (pstmt != null)
+				free(pstmt);
+		}
+
+	}
+
+	public int executeSql(String sql) throws Exception {
+		return executeSql(sql, ExecuteType.Null, null);
 	}
 
 	protected int executeSql(String sql, Collection<Object[]> dataList) throws Exception {
@@ -245,6 +223,31 @@ public class AbstractDaoExecutor {
 				count, System.currentTimeMillis() - ptime);
 
 		return count;
+	}
+
+	protected int executeSql(String sql, Object data[]) throws Exception {
+		return executeSql(sql, ExecuteType.Array, data);
+	}
+
+	/**
+	 * 연결을 해지한다.
+	 * 
+	 * @param c
+	 */
+	private void free(Connection c) throws Exception {
+
+		if (c == null)
+			return;
+
+		// 멤버변수가 같다면 disconnect()에 의해서만 닫힌다.
+		if (connection != null && c.equals(connection))
+			return;
+
+		try {
+			database.close(c, false);
+		} catch (Exception ex) {
+			throw database.makeException(ex, null);
+		}
 	}
 
 	protected void free(PreparedStatement preStmt) throws Exception {
@@ -342,258 +345,6 @@ public class AbstractDaoExecutor {
 		return target;
 	}
 
-	/**
-	 * sql 문의 PreparedStatement를 넘긴다.
-	 * 
-	 * 만약 Connection이 되어 있다면 새롭게 Connect 하지 않는다.
-	 * 
-	 * @param sql
-	 * @return sql 문의 PreparedStatement
-	 * @throws Exception
-	 */
-	protected PreparedStatement getPrepareStatement(String sql) throws IOException, Exception {
-
-		PreparedStatement preStmt = null;
-
-		Connection c = getConnection();
-		try {
-			preStmt = c.prepareStatement(sql);
-		} catch (SQLException e) {
-			free(c);
-			throw database.makeException(e, sql);
-		}
-
-		if (fetchSize != 0) {
-			try {
-				preStmt.setFetchSize(fetchSize);
-			} catch (Exception e) {
-				throw database.makeException(e, sql);
-			}
-		}
-
-		return preStmt;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> List<T> select(QueryResult info) throws Exception {
-		return selectSql(info.getSql(), info.getParaArray(), EntryType.QueryInfo, info, Integer.MAX_VALUE);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object[]> selectSql(String sql, Object para[]) throws Exception {
-		return selectSql(sql, para, EntryType.ObjectArray, null, Integer.MAX_VALUE);
-	}
-
-	@SuppressWarnings("rawtypes")
-	protected List selectSql(String sql, Object para[], EntryType entryType, Object inPara, int size) throws Exception {
-
-		int tryIndex = 0;
-		List list;
-
-		while (true) {
-
-			try {
-
-				list = select(sql, para, entryType, inPara, size);
-				break;
-
-			} catch (IOException e) {
-				tryIndex++;
-				if (tryIndex >= database.getReconnectRetry()) {
-					throw e;
-				}
-
-				try {
-					database.close(connection, true);
-				} catch (Exception e1) {
-				}
-
-				try {
-					Thread.sleep(database.getReconnectWaitTimeSec() * 1000);
-				} catch (InterruptedException ex) {
-				}
-
-				try {
-					connection = database.getConnection();
-				} catch (Exception ex) {
-					continue;
-				}
-
-			} catch (Exception e) {
-				throw e;
-			}
-		}
-
-		return list;
-	}
-
-	protected void setField(Object target, Field f, Object value) throws Exception {
-		ObjectUtil.setField(target, f, value);
-	}
-
-	protected void setMethod(Object target, Method method, Object value) throws Exception {
-		ObjectUtil.setMethod(target, method, value);
-	}
-
-	protected void setPreSt(PreparedStatement pstmt, int index, Object val) throws Exception {
-		try {
-
-			if (val instanceof String) {
-				// 오라클의 경우 공백이면 null로 기록됨
-				// 다른 데이터베이스는 그렇치 않은 관계로 공백이면 null로 강제 설정합니다.
-				// 2015.09.18 by subkjh
-				if (val.toString().length() == 0) {
-					pstmt.setString(index, null);
-				} else {
-					pstmt.setString(index, val.toString());
-				}
-			} else if (val instanceof Boolean) {
-				pstmt.setString(index, (((Boolean) val).booleanValue() ? "Y" : "N"));
-			} else if (val instanceof Integer) {
-				pstmt.setInt(index, ((Integer) val).intValue());
-			} else if (val instanceof Short) {
-				pstmt.setShort(index, ((Short) val).shortValue());
-			} else if (val instanceof Byte) {
-				pstmt.setByte(index, ((Byte) val).byteValue());
-			} else if (val instanceof Long) {
-				pstmt.setLong(index, ((Long) val).longValue());
-			} else if (val instanceof Double) {
-				pstmt.setDouble(index, ((Double) val).doubleValue());
-			} else if (val instanceof Float) {
-				pstmt.setFloat(index, ((Float) val).floatValue());
-			} else if (val instanceof BigDecimal) {
-				pstmt.setBigDecimal(index, (BigDecimal) val);
-			} else if (val == null) {
-				try {
-					pstmt.setObject(index, null);
-				} catch (Exception e) {
-					try {
-						pstmt.setString(index, null);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-			} else {
-				pstmt.setObject(index, val);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	protected void setPreSt(PreparedStatement pstmt, Object para[]) throws Exception {
-
-		if (para == null)
-			return;
-
-		for (int i = 0; i < para.length; i++) {
-			setPreSt(pstmt, i + 1, para[i]);
-		}
-	}
-
-	protected void trace(Object para[]) {
-
-		if (para == null || para.length == 0)
-			return;
-
-		if (Logger.logger.isTrace()) {
-			StringBuffer sb = new StringBuffer();
-			if (para != null) {
-				for (Object o : para) {
-					sb.append(o + "|");
-				}
-				Logger.logger.trace(sb.toString());
-			}
-		}
-	}
-
-	private int execute(String sql, Collection<Object[]> dataList) throws IOException, Exception {
-
-		PreparedStatement pstmt = null;
-
-		try {
-
-			pstmt = getPrepareStatement(sql);
-
-			// one by one
-			if (dataList.size() == 1 || database instanceof Altibase) {
-				int count = 0;
-				for (Object v[] : dataList) {
-					setPreSt(pstmt, v);
-					count += pstmt.executeUpdate();
-				}
-				return count;
-			}
-			// batch
-			else {
-				for (Object v[] : dataList) {
-					setPreSt(pstmt, v);
-					pstmt.addBatch();
-				}
-
-				int cnt[] = pstmt.executeBatch();
-				int total = 0;
-				for (int i = 0; i < cnt.length; i++) {
-					if (cnt[i] > 0)
-						total += cnt[i];
-					else if (cnt[i] == Statement.SUCCESS_NO_INFO) {
-						total++;
-					}
-				}
-				return total;
-
-			}
-
-		} catch (Exception e) {
-			throw database.makeException(e, sql);
-		} finally {
-			if (pstmt != null)
-				free(pstmt);
-		}
-
-	}
-
-	private int execute(String sql, Object para[]) throws IOException, Exception {
-
-		PreparedStatement pstmt = null;
-		try {
-			pstmt = getPrepareStatement(sql);
-			setPreSt(pstmt, para);
-			return pstmt.executeUpdate();
-
-		} catch (Exception e) {
-			throw database.makeException(e, sql);
-		} finally {
-			if (pstmt != null)
-				free(pstmt);
-		}
-
-	}
-
-	/**
-	 * 연결을 해지한다.
-	 * 
-	 * @param c
-	 */
-	private void free(Connection c) throws Exception {
-
-		if (c == null)
-			return;
-
-		// 멤버변수가 같다면 disconnect()에 의해서만 닫힌다.
-		if (connection != null && c.equals(connection))
-			return;
-
-		try {
-			database.close(c, false);
-		} catch (Exception ex) {
-			throw database.makeException(ex, null);
-		}
-	}
-
 	private String[] getColumnNameArray(ResultSet r) throws Exception {
 		// 결과 필드 개수
 		int colCnt = r.getMetaData().getColumnCount();
@@ -607,6 +358,26 @@ public class AbstractDaoExecutor {
 		String[] colArr = colList.toArray(new String[colList.size()]);
 
 		return colArr;
+	}
+
+	public Connection getConnection() throws IOException, Exception {
+		if (connection == null) {
+			return database.getConnection();
+		} else
+			return connection;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @return 데이터베이스
+	 */
+	public DataBase getDatabase() {
+		return database;
+	}
+
+	public int getFetchSize() {
+		return fetchSize;
 	}
 
 	/**
@@ -658,6 +429,57 @@ public class AbstractDaoExecutor {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param sequence
+	 * @param classOfT
+	 * @return
+	 * @throws Exception
+	 */
+	public <T> T getNextVal(String sequence, Class<T> classOfT) throws Exception {
+		List<T> list = selectSql(database.getSqlSequenceNextVal(sequence), null, classOfT);
+		if (list != null && list.size() >= 1) {
+			if (list.get(0) == null) {
+				throw new Exception("Sequence(" + sequence + ") CHECK");
+			}
+			return list.get(0);
+		}
+		throw new Exception("No Datas");
+	}
+
+	/**
+	 * sql 문의 PreparedStatement를 넘긴다.
+	 * 
+	 * 만약 Connection이 되어 있다면 새롭게 Connect 하지 않는다.
+	 * 
+	 * @param sql
+	 * @return sql 문의 PreparedStatement
+	 * @throws Exception
+	 */
+	protected PreparedStatement getPrepareStatement(String sql) throws IOException, Exception {
+
+		PreparedStatement preStmt = null;
+
+		Connection c = getConnection();
+		try {
+			preStmt = c.prepareStatement(sql);
+		} catch (SQLException e) {
+			free(c);
+			throw database.makeException(e, sql);
+		}
+
+		if (fetchSize != 0) {
+			try {
+				preStmt.setFetchSize(fetchSize);
+			} catch (Exception e) {
+				throw database.makeException(e, sql);
+			}
+		}
+
+		return preStmt;
+
+	}
+
 	private Object[] getResult2Array(ResultSet r, int colCnt) throws Exception {
 		Object ret[] = new Object[colCnt];
 		for (int i = 1; i <= colCnt; i++)
@@ -695,6 +517,26 @@ public class AbstractDaoExecutor {
 		}
 
 		return target;
+	}
+
+	public void rollback() {
+		
+		if (connection != null) {
+
+			try {
+				if (connection.getAutoCommit() == false) {
+					Logger.logger.trace("rollback");
+					connection.rollback();
+				}
+			} catch (SQLException e) {
+				Logger.logger.error(e);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> select(QueryResult info) throws Exception {
+		return selectSql(info.getSql(), info.getParaArray(), EntryType.QueryInfo, info, Integer.MAX_VALUE);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -850,6 +692,164 @@ public class AbstractDaoExecutor {
 		}
 	}
 
-	private static final String RET_LOG = DaoCode.RET_LOG;
-	private static final String ERR_LOG = DaoCode.ERR_LOG;
+	@SuppressWarnings("unchecked")
+	public List<Object[]> selectSql(String sql, Object para[]) throws Exception {
+		return selectSql(sql, para, EntryType.ObjectArray, null, Integer.MAX_VALUE);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> selectSql(String sql, Object para[], Class<T> classOfT) throws Exception {
+		return selectSql(sql, para, EntryType.ClassOfT, classOfT, Integer.MAX_VALUE);
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected List selectSql(String sql, Object para[], EntryType entryType, Object inPara, int size) throws Exception {
+
+		int tryIndex = 0;
+		List list;
+
+		while (true) {
+
+			try {
+
+				list = select(sql, para, entryType, inPara, size);
+				break;
+
+			} catch (IOException e) {
+				tryIndex++;
+				if (tryIndex >= database.getReconnectRetry()) {
+					throw e;
+				}
+
+				try {
+					database.close(connection, true);
+				} catch (Exception e1) {
+				}
+
+				try {
+					Thread.sleep(database.getReconnectWaitTimeSec() * 1000);
+				} catch (InterruptedException ex) {
+				}
+
+				try {
+					connection = database.getConnection();
+				} catch (Exception ex) {
+					continue;
+				}
+
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+
+		return list;
+	}
+
+	public void setDatabase(DataBase database) {
+		this.database = database;
+	}
+
+	protected void setField(Object target, Field f, Object value) throws Exception {
+		ObjectUtil.setField(target, f, value);
+	}
+
+	protected void setMethod(Object target, Method method, Object value) throws Exception {
+		ObjectUtil.setMethod(target, method, value);
+	}
+
+	protected void setPreSt(PreparedStatement pstmt, int index, Object val) throws Exception {
+		try {
+
+			if (val instanceof String) {
+				// 오라클의 경우 공백이면 null로 기록됨
+				// 다른 데이터베이스는 그렇치 않은 관계로 공백이면 null로 강제 설정합니다.
+				// 2015.09.18 by subkjh
+				if (val.toString().length() == 0) {
+					pstmt.setString(index, null);
+				} else {
+					pstmt.setString(index, val.toString());
+				}
+			} else if (val instanceof Boolean) {
+				pstmt.setString(index, (((Boolean) val).booleanValue() ? "Y" : "N"));
+			} else if (val instanceof Integer) {
+				pstmt.setInt(index, ((Integer) val).intValue());
+			} else if (val instanceof Short) {
+				pstmt.setShort(index, ((Short) val).shortValue());
+			} else if (val instanceof Byte) {
+				pstmt.setByte(index, ((Byte) val).byteValue());
+			} else if (val instanceof Long) {
+				pstmt.setLong(index, ((Long) val).longValue());
+			} else if (val instanceof Double) {
+				pstmt.setDouble(index, ((Double) val).doubleValue());
+			} else if (val instanceof Float) {
+				pstmt.setFloat(index, ((Float) val).floatValue());
+			} else if (val instanceof BigDecimal) {
+				pstmt.setBigDecimal(index, (BigDecimal) val);
+			} else if (val == null) {
+				try {
+					pstmt.setObject(index, null);
+				} catch (Exception e) {
+					try {
+						pstmt.setString(index, null);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			} else {
+				pstmt.setObject(index, val);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	protected void setPreSt(PreparedStatement pstmt, Object para[]) throws Exception {
+
+		if (para == null)
+			return;
+
+		for (int i = 0; i < para.length; i++) {
+			setPreSt(pstmt, i + 1, para[i]);
+		}
+	}
+
+	public synchronized void start() throws IOException, Exception {
+		try {
+			connect();
+			isConnected = true;
+		} catch (Exception e) {
+			isConnected = false;
+			throw e;
+		}
+	}
+
+	public void stop() {
+		if (isConnected == false)
+			return;
+
+		isConnected = false;
+
+		try {
+			disconnect(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	protected void trace(Object para[]) {
+
+		if (para == null || para.length == 0)
+			return;
+
+		if (Logger.logger.isTrace()) {
+			StringBuffer sb = new StringBuffer();
+			if (para != null) {
+				for (Object o : para) {
+					sb.append(o + "|");
+				}
+				Logger.logger.trace(sb.toString());
+			}
+		}
+	}
 }

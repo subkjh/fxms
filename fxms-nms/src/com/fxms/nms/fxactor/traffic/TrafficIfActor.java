@@ -40,7 +40,8 @@ public class TrafficIfActor extends TrafficFxActor implements NeIfTrafficIndex {
 	private final IFMIB MIB = new IFMIB();
 
 	@Override
-	public List<PsVo> getValues(long pollMsdate, Mo mo, String... psCodes) throws PollingTimeoutException, PollingNoTargetException, Exception {
+	public List<PsVo> getValues(long pollMsdate, Mo mo, String... psCodes)
+			throws PollingTimeoutException, PollingNoTargetException, Exception {
 
 		if ((mo instanceof NeMo) == false) {
 			return null;
@@ -146,10 +147,10 @@ public class TrafficIfActor extends TrafficFxActor implements NeIfTrafficIndex {
 			retValue.add(port, NmsCodes.PsItem.IfInBytes, traffic.getInOctets());
 			retValue.add(port, NmsCodes.PsItem.IfInUsage, traffic.getInUsage());
 
-//			if (node.getIpAddress().equals(port.getIpAddress())) {
-//				retValue.add(node, NmsCodes.PsItem.NeIfInUsgae, traffic.getInUsage());
-//				ifUsage = traffic.getInUsage();
-//			}
+			if (node.getIpAddress().equals(port.getIpAddress())) {
+				retValue.add(node, NmsCodes.PsItem.NeIfInUsgae, traffic.getInUsage());
+				ifUsage = traffic.getInUsage();
+			}
 		}
 		retValue.add(port, NmsCodes.PsItem.IfInEps, traffic.getInErrors());
 		retValue.add(port, NmsCodes.PsItem.IfInErrors, traffic.getInErrors());
@@ -166,11 +167,10 @@ public class TrafficIfActor extends TrafficFxActor implements NeIfTrafficIndex {
 			retValue.add(port, NmsCodes.PsItem.IfOutBytes, traffic.getOutOctets());
 			retValue.add(port, NmsCodes.PsItem.IfOutUsage, traffic.getOutUsage());
 
-//			if (node.getIpAddress().equals(port.getIpAddress())) {
-//				retValue.add(node, NmsCodes.PsItem.NeIfInUsgae, traffic.getOutUsage());
-//
-//				ifUsage += traffic.getOutUsage();
-//			}
+			if (node.getIpAddress().equals(port.getIpAddress())) {
+				retValue.add(node, NmsCodes.PsItem.NeIfInUsgae, traffic.getOutUsage());
+				ifUsage += traffic.getOutUsage();
+			}
 
 		}
 		retValue.add(port, NmsCodes.PsItem.IfOutEps, traffic.getOutErrors());
@@ -185,11 +185,11 @@ public class TrafficIfActor extends TrafficFxActor implements NeIfTrafficIndex {
 			retValue.add(port, NmsCodes.PsItem.IfSpeedQos.name(), port.getIfSpeedReal());
 		}
 
-//		if (ifUsage >= 0) {
-//			if (ifUsage > 100)
-//				ifUsage = 100f;
-//			retValue.add(node, NmsCodes.PsItem.IfUsage, ifUsage);
-//		}
+		if (ifUsage >= 0) {
+			if (ifUsage > 100)
+				ifUsage = 100f;
+			retValue.add(node, NmsCodes.PsItem.IfUsage, ifUsage);
+		}
 
 		return retValue;
 	}

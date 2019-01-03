@@ -37,6 +37,7 @@ public class ViewWebButton extends FxMenuButton {
 		scrollPane.setFitToWidth(true);
 
 		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+			@SuppressWarnings("rawtypes")
 			@Override
 			public void changed(ObservableValue ov, State oldState, State newState) {
 

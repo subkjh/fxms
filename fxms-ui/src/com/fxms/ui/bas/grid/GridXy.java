@@ -3,7 +3,6 @@ package com.fxms.ui.bas.grid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public abstract class GridXy {
 
@@ -20,43 +19,6 @@ public abstract class GridXy {
 		} else {
 			return new GridXyLeft2Right(cfg.max);
 		}
-	}
-
-	public static void main(String[] args) {
-		GridXy grid = getNewGridXy(new GridCfg(4));
-		// grid.find(1, 1);
-		// grid.printData();
-		grid.fromToLast = true;
-		grid.test();
-	}
-
-	protected void test() {
-
-		Scanner sc = new Scanner(System.in);
-		String command;
-		int col, row;
-		while (true) {
-
-			System.out.print("$ ");
-			command = sc.nextLine();
-
-			if (command == null || command.length() == 0) {
-				continue;
-			}
-
-			String ss[] = command.split(",");
-			try {
-				col = Integer.parseInt(ss[0]);
-				row = Integer.parseInt(ss[1]);
-
-				find(col, row);
-				printData();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-
 	}
 
 	public abstract GridNode.XY find(int colSize, int rowSize);

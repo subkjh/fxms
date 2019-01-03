@@ -166,7 +166,7 @@ public class UserTreeMaker {
 
 	}
 
-	private void print(String tag, UserTreeVo tree) {
+	void print(String tag, UserTreeVo tree) {
 
 		System.out.println(tag + tree.getTreeName() + " (" + tree.getMoCountAll() + ")");
 		// if (tree.getChildren().size() > 0) {

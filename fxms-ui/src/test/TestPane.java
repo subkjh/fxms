@@ -131,7 +131,7 @@ public class TestPane extends Application {
 
 	}
 
-	private synchronized void initialize() {
+	synchronized void initialize() {
 		CodeMap.getMap().reload(null);
 
 		while (CodeMap.getMap().isLoaded() == false) {

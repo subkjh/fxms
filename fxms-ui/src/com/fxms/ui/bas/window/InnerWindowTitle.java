@@ -3,7 +3,6 @@ package com.fxms.ui.bas.window;
 import com.fxms.ui.css.CssPointer;
 import com.fxms.ui.css.image.ImagePointer;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

@@ -45,7 +45,7 @@ public class StMaker extends Crontab {
 		if (qidPara instanceof String) {
 			qidList.add((String) qidPara);
 		} else if (qidPara instanceof List) {
-			for (Object e : (List) qidPara) {
+			for (Object e : (List<?>) qidPara) {
 				qidList.add(e.toString());
 			}
 		}

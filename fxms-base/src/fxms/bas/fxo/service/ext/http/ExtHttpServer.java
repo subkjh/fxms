@@ -49,6 +49,7 @@ public class ExtHttpServer extends FxThread {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void parseQuery(String query, Map<String, Object> parameters) throws UnsupportedEncodingException {
 
 		if (query != null) {

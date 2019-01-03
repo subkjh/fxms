@@ -78,7 +78,7 @@ public class NetworkEvent {
 		miSetLink.setOnAction((ActionEvent e) -> {
 			NetworkLinkVo linkVo = (NetworkLinkVo) selectedNode.getUserData();
 			NetworkLinkSetPane pane = new NetworkLinkSetPane(linkVo.getWestNeMoNo(), linkVo.getEastNeMoNo());
-			FxDialog dialog = FxDialog.showDialog(canvas, pane, miSetLink.getText(), "Apply");
+			FxDialog<?> dialog = FxDialog.showDialog(canvas, pane, miSetLink.getText(), "Apply");
 			if (dialog.getResult() != null) {
 				linkVo.setEastIfMoNo(pane.getEastIfMoNo());
 				linkVo.setWestIfMoNo(pane.getWestIfMoNo());

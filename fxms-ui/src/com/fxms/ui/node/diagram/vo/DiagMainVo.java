@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.fxms.ui.bas.utils.ObjectUtil;
-import com.fxms.ui.node.diagram.node.DiagNode;
-
-import javafx.scene.Node;
 
 public class DiagMainVo {
 

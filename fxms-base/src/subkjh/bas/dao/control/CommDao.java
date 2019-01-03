@@ -602,6 +602,7 @@ public class CommDao {
 	 * @param r
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Map<String, Object> getMap(ResultSet r, Class<? extends Map> classOfData, ResultBean map, String colArr[]) throws Exception {
 
 		Map<String, Object> ret = classOfData.newInstance();

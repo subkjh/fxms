@@ -15,7 +15,6 @@ import subkjh.bas.log.Logger;
  */
 public class LoopFxThread extends FxThread {
 
-	private List<String> script;
 	private LinkedBlockingQueue<List<String>> queue;
 
 	public static void main(String[] args) {
@@ -109,9 +108,9 @@ public class LoopFxThread extends FxThread {
 
 	}
 
-	private final String CMD_LOOP = "loop";
-	private final String CMD_ONCE = "once";
-	private final String CMD_SLEEP = "sleep";
+	final String CMD_LOOP = "loop";
+	final String CMD_ONCE = "once";
+	final String CMD_SLEEP = "sleep";
 
 	private void runScript() {
 

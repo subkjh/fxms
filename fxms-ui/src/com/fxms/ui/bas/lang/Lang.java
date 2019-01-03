@@ -32,6 +32,7 @@ public class Lang {
 		return ret == null ? name : ret;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void load(ProgressIndicator indicator) {
 
 		if (indicator != null) {

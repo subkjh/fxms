@@ -1,8 +1,6 @@
 package fxms.bas.dbo.diag;
 
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -18,7 +16,7 @@ import subkjh.bas.fxdao.define.FxTable;
 
 @FxTable(name = "FX_DI_PROPERTY", comment = "다이아그램속성테이블")
 @FxIndex(name = "FY_DI_PROPERTY__PK", type = INDEX_TYPE.PK, columns = {"DIAG_NO", "DIAG_NODE_NO", "PROPERTY_NAME"})
-public class FX_DI_PROPERTY implements Serializable {
+public class FX_DI_PROPERTY  {
 
 public FX_DI_PROPERTY() {
  }

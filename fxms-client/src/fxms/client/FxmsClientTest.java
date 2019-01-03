@@ -100,6 +100,7 @@ public class FxmsClientTest {
 		System.out.println(line);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void print(String tag, Map<String, Object> treeMap) {
 
 		System.out.println(tag + treeMap);
@@ -413,6 +414,7 @@ public class FxmsClientTest {
 		print(list);
 	}
 
+	@SuppressWarnings("unchecked")
 	void getUserTree() throws Exception {
 		Map<String, Object> item = client.testRetObj("usr", "get-user-tree-item-list", null);
 
@@ -422,6 +424,7 @@ public class FxmsClientTest {
 		// System.out.println(item);
 	}
 
+	@SuppressWarnings("unchecked")
 	void printPsList(List<Map<String, Object>> list) {
 		if (list == null || list.size() == 0) {
 			System.out.println("size = 0");

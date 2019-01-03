@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.fxms.ui.bas.utils.ObjectUtil;
 
-import fxms.client.log.Logger;
-
 public class Mo {
 
 	public static final String MO_CLASS = "MO";

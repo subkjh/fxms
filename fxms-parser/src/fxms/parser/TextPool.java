@@ -211,6 +211,7 @@ public abstract class TextPool {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private AttrToken makeAttrToken(Element element) {
 
 		AttrToken token = new AttrToken(element.getAttributeValue("id") //
@@ -284,6 +285,7 @@ public abstract class TextPool {
 
 	private Map<String, Map<String, String>> renameMap = new HashMap<String, Map<String, String>>();
 
+	@SuppressWarnings("unchecked")
 	private void makeRenamePara(Element element) {
 
 		String screenId = element.getAttributeValue("screen-id");

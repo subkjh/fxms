@@ -18,6 +18,11 @@ import subkjh.bas.fxdao.define.FxTable;
 @FxIndex(name = "FX_PS_ITEM__UK_DB", type = INDEX_TYPE.UK, columns = { "PS_TABLE", "PS_COLUMN" })
 public class FX_PS_ITEM implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1428451903429475569L;
+
 	public FX_PS_ITEM() {
 	}
 
@@ -80,7 +85,7 @@ public class FX_PS_ITEM implements Serializable {
 
 	@FxColumn(name = "VAL_MAX", size = 100, nullable = true, comment = "최대값")
 	private String valMax;
-	
+
 	@FxColumn(name = "VAL_MIN", size = 100, nullable = true, comment = "최소값")
 	private String valMin;
 
@@ -92,13 +97,13 @@ public class FX_PS_ITEM implements Serializable {
 
 	@FxColumn(name = "PS_CODE_2ND", size = 20, nullable = true, comment = "2차상태값번호")
 	private String psCode2nd;
-	
+
 	@FxColumn(name = "MO_CLASS", size = 20, nullable = true, comment = "수집MO분류")
 	private String moClass;
 
 	@FxColumn(name = "MO_TYPE", size = 50, nullable = true, comment = "수집MO종류")
 	private String moType;
-	
+
 	/**
 	 * 상태값번호
 	 * 
@@ -548,8 +553,5 @@ public class FX_PS_ITEM implements Serializable {
 	public void setMoType(String moType) {
 		this.moType = moType;
 	}
-	
-	
 
-	
 }

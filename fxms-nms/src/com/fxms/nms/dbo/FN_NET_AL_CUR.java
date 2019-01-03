@@ -1,7 +1,5 @@
 package com.fxms.nms.dbo;
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -15,7 +13,7 @@ import subkjh.bas.fxdao.define.FxTable;
 
 @FxTable(name = "FN_NET_AL_CUR", comment = "네트워크경보현재")
 @FxIndex(name = "FN_NET_AL_CUR__PK", type = INDEX_TYPE.PK, columns = { "ALARM_NO", "NET_NO" })
-public class FN_NET_AL_CUR implements Serializable {
+public class FN_NET_AL_CUR  {
 
 	public FN_NET_AL_CUR() {
 	}

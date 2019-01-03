@@ -96,7 +96,6 @@ public class DxPane extends ScrollPane implements FxNode {
 	private DxNodeEvent nodeEvent;
 	private DxViewContextMenu contextMenu;
 	private UiGroupVo uiGroup;
-	private DxNodeContextMenu nodeMenu;
 	private Label selectedDiaplayNode;
 	private final FxBounds fxBound;
 	private final Label tag = new Label();
@@ -108,7 +107,6 @@ public class DxPane extends ScrollPane implements FxNode {
 
 		nodeEvent = new DxNodeEvent(pane);
 		contextMenu = new DxViewContextMenu(this);
-		nodeMenu = new DxNodeContextMenu();
 		fxBound = new FxBounds();
 		// new DxPaneEvent(this);
 

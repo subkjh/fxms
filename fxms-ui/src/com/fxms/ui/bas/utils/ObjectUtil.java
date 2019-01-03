@@ -13,7 +13,7 @@ public class ObjectUtil {
 
 	protected static Object lockObj = new Object();
 
-	private static Map<String, Class<?>> classMap = null;
+//	private static Map<String, Class<?>> classMap = null;
 
 	public static Object convert(Class<?> paraType, Object o) {
 

@@ -1,7 +1,5 @@
 package fxms.bas.dbo;
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -17,7 +15,7 @@ import subkjh.bas.fxdao.define.FxTable;
 @FxIndex(name = "FX_MO_DEVICE__PK", type = INDEX_TYPE.PK, columns = { "MO_NO" })
 @FxIndex(name = "FX_MO_DEVICE__FK_MO", type = INDEX_TYPE.FK, columns = {
 		"MO_NO" }, fkTable = "FX_MO", fkColumn = "MO_NO")
-public class FX_MO_DEVICE implements Serializable {
+public class FX_MO_DEVICE {
 
 	public FX_MO_DEVICE() {
 	}

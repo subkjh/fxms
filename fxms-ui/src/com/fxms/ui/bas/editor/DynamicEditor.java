@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.fxms.ui.bas.code.CodeMap;
 import com.fxms.ui.bas.code.UiCodeVo;
-import com.fxms.ui.bas.code.UiOpCodeAttrVo;
 import com.fxms.ui.bas.vo.Attr;
 
 import javafx.scene.control.ComboBox;

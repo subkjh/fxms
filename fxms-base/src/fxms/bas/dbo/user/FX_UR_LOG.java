@@ -17,7 +17,12 @@ import subkjh.bas.fxdao.define.FxTable;
 @FxIndex(name = "FX_UR_LOG__PK", type = INDEX_TYPE.PK, columns = { "OP_SEQNO" })
 @FxIndex(name = "FX_UR_LOG__KEY_SES", type = INDEX_TYPE.KEY, columns = { "SESSION_ID" })
 @FxIndex(name = "FX_UR_LOG__KEY_OP", type = INDEX_TYPE.KEY, columns = { "OP_NO" })
-public class FX_UR_LOG implements Serializable {
+public class FX_UR_LOG implements Serializable  {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8194118700624367615L;
 
 	public FX_UR_LOG() {
 	}
@@ -331,7 +336,7 @@ public class FX_UR_LOG implements Serializable {
 	 *            입력인수
 	 */
 	public void setInPara(String inPara) {
-		if ( inPara.length() > 500 ) {
+		if (inPara.length() > 500) {
 			this.inPara = inPara.substring(0, 500);
 		} else {
 			this.inPara = inPara;

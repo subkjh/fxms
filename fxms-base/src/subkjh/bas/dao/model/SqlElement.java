@@ -128,6 +128,7 @@ public class SqlElement {
 	 *            변수
 	 * @return 객체에서 변수에 해당되는 값
 	 */
+	@SuppressWarnings("rawtypes")
 	public static Object getValue(Object obj, SqlVar var) {
 
 		Object ret = null;

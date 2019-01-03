@@ -14,7 +14,7 @@ public class DiagEvent implements EventHandler<MouseEvent> {
 
 	public void handle(MouseEvent e) {
 
-		FxDiagramEdit node = (FxDiagramEdit) e.getSource();
+//		FxDiagramEdit node = (FxDiagramEdit) e.getSource();
 
 		if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
 //			node.setMode(FxDiagramEdit.Mode.normal);

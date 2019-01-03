@@ -1,7 +1,5 @@
 package fxms.bas.dbo;
 
-import java.io.Serializable;
-
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
@@ -16,7 +14,8 @@ import subkjh.bas.fxdao.define.FxTable;
 @FxTable(name = "FX_CF_VAR", comment = "코드(시간)테이블")
 @FxIndex(name = "FX_CD_VAR__PK", type = INDEX_TYPE.PK, columns = { "VAR_NAME" })
 @FxIndex(name = "FX_CD_VAR__UK", type = INDEX_TYPE.UK, columns = { "VAR_ANAME" })
-public class FX_CF_VAR implements Serializable {
+
+public class FX_CF_VAR {
 
 	@FxColumn(name = "CHG_DATE", size = 14, nullable = true, comment = "수정일시")
 	private long chgDate;
@@ -183,7 +182,6 @@ public class FX_CF_VAR implements Serializable {
 		this.useYn = useYn;
 	}
 
-	
 	/**
 	 * 변수별칭
 	 * 

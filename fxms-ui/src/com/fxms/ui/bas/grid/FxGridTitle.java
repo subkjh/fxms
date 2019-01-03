@@ -9,7 +9,6 @@ import javafx.scene.layout.BorderPane;
 public class FxGridTitle extends BorderPane {
 
 	private Label title;
-	private Button iconBtn;
 	private Button closeBtn;
 
 	public FxGridTitle(FxGridPane fxGridPane, String title) {

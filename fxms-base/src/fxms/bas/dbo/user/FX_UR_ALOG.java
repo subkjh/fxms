@@ -15,7 +15,12 @@ import subkjh.bas.fxdao.define.FxTable;
 
 @FxTable(name = "FX_UR_ALOG", comment = "운용자접속이력테이블")
 @FxIndex(name = "FX_UR_ALOG__PK", type = INDEX_TYPE.PK, columns = { "SESSION_ID" })
-public class FX_UR_ALOG implements Serializable {
+public class FX_UR_ALOG implements Serializable  {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9019911716012700918L;
 
 	public FX_UR_ALOG() {
 	}

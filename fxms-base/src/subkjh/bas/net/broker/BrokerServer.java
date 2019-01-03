@@ -8,6 +8,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
+import subkjh.bas.log.LOG_LEVEL;
 import subkjh.bas.log.Logger;
 
 /**
@@ -33,6 +34,7 @@ public class BrokerServer implements Runnable {
 
 		Logger.logger = new Logger(home, "broker");
 		Logger.logger.setMaxBackupFileCount(3);
+		Logger.logger.setLevel(LOG_LEVEL.getLevel(level));
 
 		BrokerServer broker = new BrokerServer(null);
 		try {
@@ -206,7 +208,7 @@ public class BrokerServer implements Runnable {
 		} else {
 			serverSocket.bind(new InetSocketAddress(host, port));
 		}
-		
+
 		Logger.logger.info(Logger.makeString(port, targetHost + ":" + targetPort));
 
 		thread = new Thread(this);

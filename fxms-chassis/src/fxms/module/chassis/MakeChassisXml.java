@@ -22,7 +22,7 @@ public class MakeChassisXml {
 	}
 
 	private final String PORT = "<item x=\"$x\" y=\"$y\" moClass=\"INTERFACE\" field=\"ifIndex\" value=\"$ifIndex\" $tag />";
-	private final String PORT2 = "<item x=\"$x\" y=\"$y\" moClass=\"INTERFACE\" field=\"ifIndex\" value=\"$ifIndex\" $tag />";
+//	private final String PORT2 = "<item x=\"$x\" y=\"$y\" moClass=\"INTERFACE\" field=\"ifIndex\" value=\"$ifIndex\" $tag />";
 	private final String SFP_PORT = "<item x=\"$x\" y=\"$y\" name=\"sfp_unlink\" moClass=\"INTERFACE\" field=\"ifIndex\" value=\"$ifIndex\" $tag />";
 
 	private final String POWER = "<item x=\"$x\" y=\"$y\" name=\"power_empty\"  $tag >\n" //

@@ -23,7 +23,6 @@ public class ServiceApiFile extends ServiceApi {
 		System.out.println(api.getVarValue("TEST", 1));
 	}
 
-	private Map<String, FxServiceMo> serviceMap;
 	private Map<String, VarDbo> varMap;
 
 	private FxmsFao fao;

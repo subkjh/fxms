@@ -141,29 +141,6 @@ class MakeQueryXml extends SoDo {
 
 		table.setName(Column.getField(c.getSimpleName()));
 
-		Object obj = null;
-		try {
-			obj = c.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		// Row row = null;
-		// if (obj instanceof Row) {
-		// row = (Row) obj;
-		// List<Index> indexes = new ArrayList<Index>();
-		// for (Index index : row.getKeys()) {
-		// indexes.add(index);
-		// }
-		// table.setIdxList(indexes);
-		//
-		// if (row.getTableName() != null && row.getTableName().length() > 0) {
-		// table.setTableName(row.getTableName());
-		// }
-		// }
-
 		List<Column> columns = new ArrayList<Column>();
 		String field;
 		Method methods[] = c.getMethods();
@@ -359,11 +336,11 @@ class MakeQueryXml extends SoDo {
 		String var;
 
 		for (int i = 0; i < index.getColumnNameList().size(); i++) {
-			
+
 			var = Column.getGetter(index.getColumnNameList().get(i)) + "()";
 
-			bean.getChildren()
-					.add(new TestSqlElement(var, "not null", "and " + index.getColumnNameList().get(i) + " = " + "$" + var));
+			bean.getChildren().add(
+					new TestSqlElement(var, "not null", "and " + index.getColumnNameList().get(i) + " = " + "$" + var));
 		}
 	}
 

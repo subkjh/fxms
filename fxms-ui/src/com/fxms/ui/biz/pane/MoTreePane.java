@@ -39,6 +39,7 @@ public class MoTreePane extends BorderPane {
 		private TextField textField;
 		private final ContextMenu locationContextMenu = new ContextMenu();
 
+		@SuppressWarnings("rawtypes")
 		public TextFieldTreeCellImpl() {
 
 			// System.out.println(getTreeItem());

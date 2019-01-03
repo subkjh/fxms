@@ -49,7 +49,7 @@ public class MxMainPane extends FxGridPane {
 		}
 	}
 
-	private Background makeBackground() {
+	Background makeBackground() {
 		BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
 		Background background2 = new Background(
 				new BackgroundImage(ImagePointer.getImage("background/dashboard-background.jpg"),

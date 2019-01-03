@@ -14,10 +14,6 @@ import fxms.module.restapi.vo.SessionVo;
 
 public class PsHandler extends CommHandler {
 
-	public static void main(String[] args) {
-		PsHandler h = new PsHandler();
-	}
-
 	private PS_TYPE getPsType(Map<String, Object> parameters, String name) throws Exception {
 		String psType = getString(parameters, "psType");
 		PS_TYPE ret = PS_TYPE.getPsType(psType);

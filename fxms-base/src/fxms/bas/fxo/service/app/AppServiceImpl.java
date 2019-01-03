@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.Gson;
-
 import fxms.bas.alarm.AlarmCleaner;
 import fxms.bas.alarm.AlarmEvent;
 import fxms.bas.alarm.dbo.Alarm;
@@ -156,7 +154,7 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "hiding" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public <T> T process(String sessionId, Class<? extends UserProc<T>> classOfP, Object... parameters)
 			throws RemoteException, Exception {

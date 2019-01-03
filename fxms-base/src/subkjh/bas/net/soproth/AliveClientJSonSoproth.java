@@ -19,7 +19,7 @@ public class AliveClientJSonSoproth extends JSonSoproth {
 	protected void processJSon(String jsonMsg) throws Exception {
 
 		Gson gson = new Gson();
-		Map map = gson.fromJson(jsonMsg, HashMap.class);
+		Map<?, ?> map = gson.fromJson(jsonMsg, HashMap.class);
 
 		Object value = map.get("stop");
 		if (value != null && value.toString().equalsIgnoreCase("yes")) {

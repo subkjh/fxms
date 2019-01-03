@@ -144,6 +144,7 @@ public class FxTableColumm {
 			setStyle("-fx-alignment: CENTER;");
 
 			setCellValueFactory(new Callback<CellDataFeatures<DATA, Number>, ObservableValue<Number>>() {
+				@SuppressWarnings({ "unchecked", "rawtypes" })
 				public ObservableValue<Number> call(CellDataFeatures<DATA, Number> p) {
 					Object value = getValue(p.getValue());
 
@@ -197,6 +198,7 @@ public class FxTableColumm {
 			setStyle("-fx-alignment: top-right;");
 
 			setCellValueFactory(new Callback<CellDataFeatures<DATA, Number>, ObservableValue<Number>>() {
+				@SuppressWarnings({ "unchecked", "rawtypes" })
 				public ObservableValue<Number> call(CellDataFeatures<DATA, Number> p) {
 					Object value = getValue(p.getValue());
 

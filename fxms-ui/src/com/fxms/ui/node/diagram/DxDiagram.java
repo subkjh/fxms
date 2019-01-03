@@ -116,7 +116,6 @@ public class DxDiagram extends FxDiagram implements DxListener<UiAlarm>, DxNode,
 	}
 
 	private DiagMenu4Dx contextMenu;
-	private NodeEvent nodeEvent;
 	private final Timeline timeline;
 
 	public DxDiagram() {
@@ -127,7 +126,6 @@ public class DxDiagram extends FxDiagram implements DxListener<UiAlarm>, DxNode,
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.setAutoReverse(true);
 
-		nodeEvent = new NodeEvent();
 		contextMenu = new DiagMenu4Dx(this);
 	}
 

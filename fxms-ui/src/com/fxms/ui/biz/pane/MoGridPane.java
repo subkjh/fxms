@@ -46,6 +46,7 @@ public class MoGridPane extends BorderPane implements FxUi, EditorCallback<Objec
 		return opcode;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void init(UiOpCodeVo opcode) {
 		this.opcode = opcode;

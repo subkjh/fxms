@@ -11,7 +11,6 @@ public class DiagNodeStatus extends DiagNodeBase implements DiagNode {
 
 	private long moNo;
 	private UiPsItemVo psItem;
-	private Number status;
 
 	@Override
 	public DiagNodeVo getDiagNodeVo() {

@@ -503,7 +503,7 @@ public class NioServer<SOPROTH extends Soproth> implements Runnable, SoprothList
 				return;
 			}
 
-			Object soprothId = soproth.getSoprothId();
+//			Object soprothId = soproth.getSoprothId();
 
 			// Clear out our read buffer so it's ready for new data
 			readBuffer.clear();
@@ -538,7 +538,8 @@ public class NioServer<SOPROTH extends Soproth> implements Runnable, SoprothList
 				readBuffer.rewind();
 				readBuffer.get(bytes);
 
-				long len = soproth.putReceivedBytes(bytes);
+				soproth.putReceivedBytes(bytes);
+				
 				// if (logger.isRaw()) {
 				// logger.raw("[" + soprothId + "] read length=" + numRead + "|"
 				// + len);

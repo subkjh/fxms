@@ -3,9 +3,8 @@ package com.fxms.ui.bas.editor;
 import java.util.List;
 import java.util.Map;
 
-import com.fxms.ui.bas.code.UiCodeVo;
-import com.fxms.ui.bas.code.UiOpCodeAttrVo;
 import com.fxms.ui.bas.code.CodeMap;
+import com.fxms.ui.bas.code.UiCodeVo;
 import com.fxms.ui.bas.vo.Attr;
 
 import javafx.beans.value.ChangeListener;

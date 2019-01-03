@@ -168,6 +168,7 @@ public class MoTreeTablePane extends ScrollPane implements FxUi {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private FxContextMenu<Mo> makeContextMenu(TreeTableView<Mo> treeTableView) {
 
 		moMenu = new MoShowDetailMenuItem<Mo>(treeTableView);
