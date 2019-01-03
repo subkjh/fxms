@@ -1,12 +1,13 @@
 package fxms.module.chassis.beans;
 
 /**
+ * 
  * 실장도 구성 항목 정의
  * 
- * @author subkjh
- * 
+ * @author subkjh@naver.com(김종훈)
+ *
  */
-public class ChassisItem extends _ChassisDef {
+public class ChassisItem extends ChassisBase {
 
 	private int x;
 	private int y;
@@ -43,8 +44,8 @@ public class ChassisItem extends _ChassisDef {
 	 *            이미지 그룹
 	 * @throws Exception
 	 */
-	public ChassisItem(String name, String x, String y, String rotate, String tag, String width, String height, String text,
-			String imgGroup) throws Exception {
+	public ChassisItem(String name, String x, String y, String rotate, String tag, String width, String height,
+			String text, String imgGroup) throws Exception {
 
 		this.name = name;
 		this.x = Integer.parseInt(x);

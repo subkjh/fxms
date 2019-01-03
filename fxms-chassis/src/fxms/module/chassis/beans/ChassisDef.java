@@ -9,7 +9,7 @@ import java.util.List;
  * @author subkjh
  * 
  */
-public class ChassisDef extends _ChassisDef {
+public class ChassisDef extends ChassisBase {
 
 	private String name;
 	private String img;

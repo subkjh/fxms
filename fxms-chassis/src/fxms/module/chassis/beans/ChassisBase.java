@@ -5,14 +5,13 @@ import java.util.List;
 
 import fxms.bas.mo.Mo;
 
-
 /**
- * 명칭 : 실장도 정의<br>
+ * 실장요소 기존 정보
  * 
  * @author subkjh
  * 
  */
-public class _ChassisDef {
+public class ChassisBase {
 
 	/** 어떤 경우에 이 실장도를 사용할지 확인용 조건 */
 	protected List<MoAttr> moAttrList;
@@ -67,10 +66,12 @@ public class _ChassisDef {
 	 * @return 해당 여부
 	 */
 	public boolean match(Mo parent, Mo mo) {
-		if (moAttrList == null) return false;
+		if (moAttrList == null)
+			return false;
 
 		for (MoAttr attr : moAttrList) {
-			if (attr.match(parent, mo) == false) return false;
+			if (attr.match(parent, mo) == false)
+				return false;
 		}
 
 		return true;

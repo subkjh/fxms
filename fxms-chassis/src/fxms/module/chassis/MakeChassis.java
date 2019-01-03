@@ -22,7 +22,7 @@ import fxms.module.chassis.beans.Chassis;
 import fxms.module.chassis.beans.ChassisDef;
 import fxms.module.chassis.beans.ChassisItem;
 import fxms.module.chassis.beans.MoAttr;
-import fxms.module.chassis.beans._ChassisDef;
+import fxms.module.chassis.beans.ChassisBase;
 import subkjh.bas.lang.Lang;
 import subkjh.bas.log.LOG_LEVEL;
 import subkjh.bas.log.Logger;
@@ -87,7 +87,7 @@ public class MakeChassis {
 		return new File(FxCfg.getHomeDeployConf() + File.separator + "chassis");
 	}
 
-	private final String FILE_CHASSIS_DEFAULT = "_nprism_chassis.xml";
+	private final String FILE_CHASSIS_DEFAULT = "fxms_chassis.xml";
 	//private final String FILE_CHASSIS_UNKNOWN = "_nprism_unknown.xml";
 
 	private List<ChassisDef> chassisList;
@@ -474,7 +474,7 @@ public class MakeChassis {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setAttr(Element element, _ChassisDef def) {
+	private void setAttr(Element element, ChassisBase def) {
 		List<Element> children = element.getChildren();
 
 		for (Element child : children) {
