@@ -41,213 +41,27 @@ import subkjh.bas.user.dbo.UserLogDbo;
 import subkjh.bas.utils.FileUtil;
 import subkjh.bas.utils.ObjectUtil;
 
+/**
+ * REST API를 위한 공용 핸들러
+ * 
+ * @author subkjh@naver.com(김종훈)
+ *
+ */
 public abstract class CommHandler extends FxHttpHandler {
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private HashMap<String, Object> convert(Map<String, Object> map) {
-
-		if (map == null) {
-			return new HashMap<String, Object>();
-		}
-
-		HashMap<String, Object> newMap = new HashMap(map);
-		Object value;
-		String keys[] = newMap.keySet().toArray(new String[newMap.size()]);
-
-		for (String key : keys) {
-
-			value = newMap.get(key);
-			if (value instanceof List) {
-				List list = (List) value;
-				for (int i = 0; i < list.size(); i++) {
-					if (list.get(i) instanceof Map) {
-						list.set(i, convert((Map) list.get(i)));
-					}
-				}
-			} else if (value instanceof Map) {
-				newMap.put(key, convert((Map) value));
-			}
-		}
-		return newMap;
-	}
-
-	private Method getJavaMethod(String javaMethodName) {
-
-		for (Method method : getClass().getMethods()) {
-
-			if (method.getName().equals(javaMethodName) == false)
-				continue;
-
-			if (method.getParameterTypes().length != 2)
-				continue;
-
-			if (method.getParameterTypes()[0].isAssignableFrom(SessionVo.class) //
-					&& method.getParameterTypes()[1].isAssignableFrom(Map.class)) {
-				return method;
-			}
-		}
-		return null;
-	}
-
-	private String getJavaMethodName(String name) {
-
-		String ss[] = name.toLowerCase().split("-|_");
-
-		if (ss.length == 1) {
-			return ss[0];
-		}
-
-		StringBuffer sb = new StringBuffer();
-		for (String s : ss) {
-			if (sb.length() > 0) {
-				sb.append(s.toUpperCase().substring(0, 1));
-				sb.append(s.substring(1));
-			} else {
-				sb.append(s);
-			}
-		}
-		return sb.toString();
-	}
-
-	private String help() {
-
-		List<String> list = new ArrayList<String>();
-
-		for (Method method : getClass().getMethods()) {
-
-			if (method.getParameterTypes().length != 2)
-				continue;
-
-			if (method.getParameterTypes()[0].isAssignableFrom(SessionVo.class) //
-					&& method.getParameterTypes()[1].isAssignableFrom(Map.class)) {
-
-				StringBuffer sb = new StringBuffer();
-				char chs[] = method.getName().toCharArray();
-				for (char ch : chs) {
-					if (ch >= 'A' && ch <= 'Z') {
-						sb.append("-");
-						sb.append(ch);
-					} else {
-						sb.append(ch);
-					}
-				}
-				list.add(sb.toString().toLowerCase());
-			}
-		}
-
-		Collections.sort(list);
-		FxTableMaker maker = new FxTableMaker();
-		Class<?> classOfT;
-
-		StringBuffer ret = new StringBuffer();
-		ret.append("<h1>method-list</h1>");
-		for (String methodName : list) {
-			ret.append("<h2>");
-			ret.append(methodName);
-			ret.append("</h2>");
-			ret.append("<p>");
-
-			classOfT = getMethodClass(methodName);
-			if (classOfT != null) {
-				try {
-					ret.append("<br>");
-					ret.append(maker.getAttrInfo(classOfT));
-				} catch (Exception e) {
-				}
-			}
-
-			File file = new File(FxCfg.getFile(FxCfg.getHomeDeploy(), "test", methodName + ".txt"));
-			Logger.logger.trace("[{}]{}", file.getName(), file.exists());
-			
-			if (file.exists()) {
-				ret.append("<br>");
-				ret.append("<h3>example</h3>\n");
-				ret.append("<h4>request</h4>\n");
-				ret.append("<h5>\n");
-				ret.append(FileUtil.getString(file).trim());
-				ret.append("\n</h5>\n");
-				file = new File(FxCfg.getFile(FxCfg.getHomeDeploy(), "test", methodName + "-result.txt"));
-				if (file.exists()) {
-					ret.append("<h4>response</h4>\n");
-					ret.append("<h5>\n");
-					ret.append(FileUtil.getString(file).trim());
-					ret.append("\n</h5>\n");
-				}
-			}
-
-			ret.append("</p>\n");
-
-		}
-
-		return ret.toString();
-	}
-
 	/**
+	 * 자료 추가 메소드
 	 * 
 	 * @param session
-	 *            세션
-	 * @param name
-	 *            운용명
 	 * @param parameters
-	 *            인자
-	 * @return 결과
+	 *            입력할 자료
+	 * @param item
+	 *            추가할 FxTable
+	 * @param callback
+	 *            추가전 작업 메소드
+	 * @return 추가된 자료
 	 * @throws Exception
 	 */
-	private Object onProcess(SessionVo session, String name, Map<String, Object> parameters) throws Exception {
-
-		OpCode opcode = OpCodePool.getPool().getOpCode(name);
-
-		String javaMethodName = getJavaMethodName(name);
-
-		Logger.logger.info("session={}, op-code={}, method={} -> {}", session.getSessionId(), opcode, name,
-				javaMethodName);
-
-		Method javaMethod = getJavaMethod(javaMethodName);
-
-		if (javaMethod == null) {
-			String msg = "method=" + name + " not defined";
-			Logger.logger.fail(msg);
-			throw new Exception(msg);
-		}
-
-		UserLogDbo log = new UserLogDbo(session.getUserNo(), session.getSessionId(), 0, name);
-		log.setSrtDate(FxApi.getDate(0));
-		log.setRetNo(0);
-		log.setUserName(session.getUserName());
-		log.setInPara(parameters == null ? "" : parameters.toString());
-
-		try {
-			return javaMethod.invoke(this, new Object[] { (SessionVo) session, (Map<String, Object>) parameters });
-		} catch (IllegalAccessException e) {
-			log.setRetNo(-1);
-			log.setRetMsg(e.getClass().getName());
-			Logger.logger.error(e);
-			throw e;
-		} catch (IllegalArgumentException e) {
-			log.setRetNo(-1);
-			log.setRetMsg(e.getClass().getName());
-			Logger.logger.error(e);
-			throw e;
-		} catch (InvocationTargetException e) {
-			Throwable t = e.getTargetException();
-			log.setRetNo(-1);
-			log.setRetMsg(t.getClass().getName());
-			Logger.logger.error(t);
-			throw new Exception(t.getClass().getSimpleName() + ":" + t.getMessage());
-
-		} finally {
-
-			log.setEndDate(FxApi.getDate(0));
-
-			try {
-				FxConfDao.getDao().insertUsrLog(log, opcode);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-			}
-
-		}
-	}
-
 	protected <T> T add(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback)
 			throws Exception {
 
@@ -317,6 +131,20 @@ public abstract class CommHandler extends FxHttpHandler {
 		}
 	}
 
+	/**
+	 * 
+	 * 자료를 삭제한다.
+	 * 
+	 * @param session
+	 * @param parameters
+	 *            삭제할 자료
+	 * @param item
+	 *            FxTable
+	 * @param callback
+	 *            삭제전 호출 메소드
+	 * @return
+	 * @throws Exception
+	 */
 	protected <T> T delete(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback)
 			throws Exception {
 
@@ -347,6 +175,11 @@ public abstract class CommHandler extends FxHttpHandler {
 
 	}
 
+	/**
+	 * 
+	 * @return AppService
+	 * @throws Exception
+	 */
 	protected AppService getAppService() throws Exception {
 
 		try {
@@ -658,6 +491,212 @@ public abstract class CommHandler extends FxHttpHandler {
 			throw e;
 		} finally {
 			tran.stop();
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private HashMap<String, Object> convert(Map<String, Object> map) {
+
+		if (map == null) {
+			return new HashMap<String, Object>();
+		}
+
+		HashMap<String, Object> newMap = new HashMap(map);
+		Object value;
+		String keys[] = newMap.keySet().toArray(new String[newMap.size()]);
+
+		for (String key : keys) {
+
+			value = newMap.get(key);
+			if (value instanceof List) {
+				List list = (List) value;
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i) instanceof Map) {
+						list.set(i, convert((Map) list.get(i)));
+					}
+				}
+			} else if (value instanceof Map) {
+				newMap.put(key, convert((Map) value));
+			}
+		}
+		return newMap;
+	}
+
+	private Method getJavaMethod(String javaMethodName) {
+
+		for (Method method : getClass().getMethods()) {
+
+			if (method.getName().equals(javaMethodName) == false)
+				continue;
+
+			if (method.getParameterTypes().length != 2)
+				continue;
+
+			if (method.getParameterTypes()[0].isAssignableFrom(SessionVo.class) //
+					&& method.getParameterTypes()[1].isAssignableFrom(Map.class)) {
+				return method;
+			}
+		}
+		return null;
+	}
+
+	private String getJavaMethodName(String name) {
+
+		String ss[] = name.toLowerCase().split("-|_");
+
+		if (ss.length == 1) {
+			return ss[0];
+		}
+
+		StringBuffer sb = new StringBuffer();
+		for (String s : ss) {
+			if (sb.length() > 0) {
+				sb.append(s.toUpperCase().substring(0, 1));
+				sb.append(s.substring(1));
+			} else {
+				sb.append(s);
+			}
+		}
+		return sb.toString();
+	}
+
+	private String help() {
+
+		List<String> list = new ArrayList<String>();
+
+		for (Method method : getClass().getMethods()) {
+
+			if (method.getParameterTypes().length != 2)
+				continue;
+
+			if (method.getParameterTypes()[0].isAssignableFrom(SessionVo.class) //
+					&& method.getParameterTypes()[1].isAssignableFrom(Map.class)) {
+
+				StringBuffer sb = new StringBuffer();
+				char chs[] = method.getName().toCharArray();
+				for (char ch : chs) {
+					if (ch >= 'A' && ch <= 'Z') {
+						sb.append("-");
+						sb.append(ch);
+					} else {
+						sb.append(ch);
+					}
+				}
+				list.add(sb.toString().toLowerCase());
+			}
+		}
+
+		Collections.sort(list);
+		FxTableMaker maker = new FxTableMaker();
+		Class<?> classOfT;
+
+		StringBuffer ret = new StringBuffer();
+		ret.append("<h1>method-list</h1>");
+		for (String methodName : list) {
+			ret.append("<h2>");
+			ret.append(methodName);
+			ret.append("</h2>");
+			ret.append("<p>");
+
+			classOfT = getMethodClass(methodName);
+			if (classOfT != null) {
+				try {
+					ret.append("<br>");
+					ret.append(maker.getAttrInfo(classOfT));
+				} catch (Exception e) {
+				}
+			}
+
+			File file = new File(FxCfg.getFile(FxCfg.getHomeDeploy(), "test", methodName + ".txt"));
+			Logger.logger.trace("[{}]{}", file.getName(), file.exists());
+
+			if (file.exists()) {
+				ret.append("<br>");
+				ret.append("<h3>example</h3>\n");
+				ret.append("<h4>request</h4>\n");
+				ret.append("<h5>\n");
+				ret.append(FileUtil.getString(file).trim());
+				ret.append("\n</h5>\n");
+				file = new File(FxCfg.getFile(FxCfg.getHomeDeploy(), "test", methodName + "-result.txt"));
+				if (file.exists()) {
+					ret.append("<h4>response</h4>\n");
+					ret.append("<h5>\n");
+					ret.append(FileUtil.getString(file).trim());
+					ret.append("\n</h5>\n");
+				}
+			}
+
+			ret.append("</p>\n");
+
+		}
+
+		return ret.toString();
+	}
+
+	/**
+	 * 메소드를 호출하여 결과를 제공한다.
+	 * 
+	 * @param session
+	 *            세션
+	 * @param name
+	 *            운용명
+	 * @param parameters
+	 *            인자
+	 * @return 결과
+	 * @throws Exception
+	 */
+	private Object onProcess(SessionVo session, String name, Map<String, Object> parameters) throws Exception {
+
+		OpCode opcode = OpCodePool.getPool().getOpCode(name);
+
+		String javaMethodName = getJavaMethodName(name);
+
+		Logger.logger.info("session={}, op-code={}, method={} -> {}", session.getSessionId(), opcode, name,
+				javaMethodName);
+
+		Method javaMethod = getJavaMethod(javaMethodName);
+
+		if (javaMethod == null) {
+			NotFoundException ex = new NotFoundException("method", name);
+			Logger.logger.fail(ex.getMessage());
+			throw ex;
+		}
+
+		UserLogDbo log = new UserLogDbo(session.getUserNo(), session.getSessionId(), 0, name);
+		log.setSrtDate(FxApi.getDate(0));
+		log.setRetNo(0);
+		log.setUserName(session.getUserName());
+		log.setInPara(parameters == null ? "" : parameters.toString());
+
+		try {
+			return javaMethod.invoke(this, new Object[] { (SessionVo) session, (Map<String, Object>) parameters });
+		} catch (IllegalAccessException e) {
+			log.setRetNo(-1);
+			log.setRetMsg(e.getClass().getName());
+			Logger.logger.error(e);
+			throw e;
+		} catch (IllegalArgumentException e) {
+			log.setRetNo(-1);
+			log.setRetMsg(e.getClass().getName());
+			Logger.logger.error(e);
+			throw e;
+		} catch (InvocationTargetException e) {
+			Throwable t = e.getTargetException();
+			log.setRetNo(-1);
+			log.setRetMsg(t.getClass().getName());
+			Logger.logger.error(t);
+			throw new Exception(t.getClass().getSimpleName() + ":" + t.getMessage());
+
+		} finally {
+
+			log.setEndDate(FxApi.getDate(0));
+
+			try {
+				FxConfDao.getDao().insertUsrLog(log, opcode);
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+
 		}
 	}
 

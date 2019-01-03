@@ -35,6 +35,12 @@ import subkjh.bas.fxdao.control.FxDaoExecutor;
 import subkjh.bas.log.Logger;
 import subkjh.bas.utils.ObjectUtil;
 
+/**
+ * 경보 관련 REST API용 핸들러
+ * 
+ * @author subkjh@naver.com(김종훈)
+ *
+ */
 public class AoHandler extends CommHandler {
 
 	public static void main(String[] args) throws Exception {

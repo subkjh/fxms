@@ -21,6 +21,12 @@ import com.sun.net.httpserver.HttpHandler;
 import fxms.bas.exception.NotFoundException;
 import subkjh.bas.log.Logger;
 
+/**
+ * REST API를 위한 fx 핸들러
+ * 
+ * @author subkjh@naver.com(김종훈)
+ *
+ */
 public abstract class FxHttpHandler implements HttpHandler {
 
 	private static long WORK_SEQNO = 10000000;

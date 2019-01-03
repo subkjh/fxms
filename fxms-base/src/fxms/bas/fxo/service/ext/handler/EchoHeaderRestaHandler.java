@@ -8,6 +8,12 @@ import fxms.module.restapi.FxHttpHandler;
 
 import java.util.Set;
 
+/**
+ * Echo 핸들러
+ * 
+ * @author subkjh@naver.com(김종훈)
+ *
+ */
 public class EchoHeaderRestaHandler extends FxHttpHandler {
 
 	@Override
