@@ -171,17 +171,6 @@ public class MakeExcelList extends MakeExcel {
 		}
 	}
 
-	/**
-	 * 두 객체가 동일한지 여부를 판단한다.
-	 * 
-	 * @param o1
-	 * @param o2
-	 * @return
-	 */
-	private boolean equalObject(Object o1, Object o2) {
-		return o1 != null && o2 != null && o1.equals(o2);
-	}
-
 	@Override
 	protected void initCellStyle() {
 		super.initCellStyle();
@@ -229,6 +218,17 @@ public class MakeExcelList extends MakeExcel {
 			}
 		}
 		entryPrev = entryCur;
+	}
+
+	/**
+	 * 두 객체가 동일한지 여부를 판단한다.
+	 * 
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
+	private boolean equalObject(Object o1, Object o2) {
+		return o1 != null && o2 != null && o1.equals(o2);
 	}
 
 }

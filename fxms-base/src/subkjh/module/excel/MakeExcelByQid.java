@@ -122,14 +122,13 @@ public class MakeExcelByQid implements DaoListener {
 	}
 
 	/**
-	 * Excel 화일을 만듭니다.
 	 * 
-	 * @param title
-	 *            타이틀
-	 * @param filename
-	 *            화일명<br>
-	 *            확장자는 제외합니다.
-	 * @return 처리결과
+	 * @param tran 트랜잭션
+	 * @param qid QID
+	 * @param para QID 조건
+	 * @param title 엑셀 타이틀
+	 * @param filename 엑셀 파일명
+	 * @throws Exception
 	 */
 	public void makeExcel(DbTrans tran, String qid, Object para, String title, String filename) throws Exception {
 

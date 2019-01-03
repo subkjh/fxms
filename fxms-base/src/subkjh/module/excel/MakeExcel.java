@@ -40,30 +40,21 @@ public class MakeExcel {
 	public static final String FONT_COLUMN = "column";
 	public static final String FONT_TITLE = "title";
 
+	private final short HEIGHT_UNIT = 15;
+	private final short WIDTH_UNIT = 32;
+
 	/** 컬럼 길이 */
 	protected int cellWidth2[];
-
-	// private List<Sheet> sheets = new ArrayList<Sheet>();
-
 	protected SXSSFWorkbook wb;
 	// protected XSSFWorkbook wb;
 	// protected HSSFWorkbook wb;
 
 	private CreationHelper createHelper;
-
 	private String fontNameDefault = "맑은 고딕";
-	private final short HEIGHT_UNIT = 15;
-
 	private Sheet sheet;
-
 	private Map<String, CellStyle> styleMap = new HashMap<String, CellStyle>();
-
 	private Map<String, Font> fontMap = new HashMap<String, Font>();
-
-	private final short WIDTH_UNIT = 32;
-
 	private XSSFDrawing xSSFDrawing = null;
-
 	private int maxColNo = 0;
 
 	public MakeExcel() {
@@ -171,26 +162,6 @@ public class MakeExcel {
 		}
 
 		return addCell(excelSheet, rowNo, colNo, value, cellStyle);
-	}
-
-	public CellRangeAddress mergeCell(Sheet excelSheet, int rowNo, int colNo, int rowCount, int colCount) {
-
-		if (rowCount <= 0 && colCount <= 0) {
-			return null;
-		}
-
-		Sheet s = excelSheet != null ? excelSheet : sheet;
-
-		CellRangeAddress range = new CellRangeAddress(rowNo, // first row
-																// (0-based)
-				rowNo + rowCount, // last row (0-based)
-				colNo, // first column (0-based)
-				colNo + colCount // last column (0-based)
-		);
-
-		s.addMergedRegion(range);
-
-		return range;
 	}
 
 	public void addCellImage(int rowNo, int colNo, File file, int rowCount, int colCount) throws Exception {
@@ -437,6 +408,26 @@ public class MakeExcel {
 		return makeSheet(sheetName);
 	}
 
+	public CellRangeAddress mergeCell(Sheet excelSheet, int rowNo, int colNo, int rowCount, int colCount) {
+
+		if (rowCount <= 0 && colCount <= 0) {
+			return null;
+		}
+
+		Sheet s = excelSheet != null ? excelSheet : sheet;
+
+		CellRangeAddress range = new CellRangeAddress(rowNo, // first row
+																// (0-based)
+				rowNo + rowCount, // last row (0-based)
+				colNo, // first column (0-based)
+				colNo + colCount // last column (0-based)
+		);
+
+		s.addMergedRegion(range);
+
+		return range;
+	}
+
 	public void setAlignment(HorizontalAlignment... align) {
 		CellStyle cellStyle;
 		for (int i = 0; i < align.length; i++) {
@@ -476,20 +467,15 @@ public class MakeExcel {
 		}
 	}
 
-	public void setTitle(int rowNo, int colNo, String title, int colLength) {
-		addCell(rowNo, colNo, title, MakeExcel.CELL_STYLE_TITLE, 0, colLength - 1);
-
+	public void setColTexts(int rowNo, String... columns) {
+		for (int i = 0; i < columns.length; i++) {
+			setColumns(new ExcelColumn(rowNo, i, columns[i], 1, 1));
+		}
 	}
 
 	public void setColumns(ExcelColumn... columns) {
 		for (ExcelColumn col : columns) {
 			addCell(col.rowNo, col.colNo, col.text, MakeExcel.CELL_STYLE_COLUMN, col.sizeRow - 1, col.sizeCol - 1);
-		}
-	}
-
-	public void setColTexts(int rowNo, String... columns) {
-		for (int i = 0; i < columns.length; i++) {
-			setColumns(new ExcelColumn(rowNo, i, columns[i], 1, 1));
 		}
 	}
 
@@ -521,29 +507,9 @@ public class MakeExcel {
 		row.setHeight((short) (height * HEIGHT_UNIT));
 	}
 
-	private CellStyle getCellStyleByColumn(int colNo) {
-		CellStyle cellStyle = styleMap.get("col" + colNo);
-		if (cellStyle == null) {
-			return makeCellStyle("col" + colNo, FONT_DEFAULT, null, BorderStyle.THIN, HorizontalAlignment.LEFT, null);
-		}
-		return cellStyle;
-	}
+	public void setTitle(int rowNo, int colNo, String title, int colLength) {
+		addCell(rowNo, colNo, title, MakeExcel.CELL_STYLE_TITLE, 0, colLength - 1);
 
-	private void setCellValue(Cell cell, Object value) {
-		if (value instanceof Double || value instanceof Float) {
-			cell.setCellValue((double) ((Number) value).doubleValue());
-		} else if (value instanceof Number) {
-			cell.setCellValue((long) ((Number) value).longValue());
-		} else if (value == null) {
-
-		} else if (value.toString().startsWith("=")) {
-			int rowNo = cell.getRow().getRowNum() + 1;
-			String s = value.toString().substring(1);
-			s = s.replaceAll("%rowNo%", rowNo + "");
-			cell.setCellFormula(s);
-		} else {
-			cell.setCellValue(createHelper.createRichTextString(value.toString()));
-		}
 	}
 
 	protected CellStyle getCellStyleForValue(Object value) {
@@ -580,6 +546,31 @@ public class MakeExcel {
 		makeFont(FONT_DEFAULT, "맑은 고딕", (short) 9, false, IndexedColors.BLACK);
 		makeFont(FONT_COLUMN, "맑은 고딕", (short) 10, true, IndexedColors.BLACK);
 		makeFont(FONT_TITLE, "맑은 고딕", (short) 12, true, IndexedColors.BLACK);
+	}
+
+	private CellStyle getCellStyleByColumn(int colNo) {
+		CellStyle cellStyle = styleMap.get("col" + colNo);
+		if (cellStyle == null) {
+			return makeCellStyle("col" + colNo, FONT_DEFAULT, null, BorderStyle.THIN, HorizontalAlignment.LEFT, null);
+		}
+		return cellStyle;
+	}
+
+	private void setCellValue(Cell cell, Object value) {
+		if (value instanceof Double || value instanceof Float) {
+			cell.setCellValue((double) ((Number) value).doubleValue());
+		} else if (value instanceof Number) {
+			cell.setCellValue((long) ((Number) value).longValue());
+		} else if (value == null) {
+
+		} else if (value.toString().startsWith("=")) {
+			int rowNo = cell.getRow().getRowNum() + 1;
+			String s = value.toString().substring(1);
+			s = s.replaceAll("%rowNo%", rowNo + "");
+			cell.setCellFormula(s);
+		} else {
+			cell.setCellValue(createHelper.createRichTextString(value.toString()));
+		}
 	}
 
 }
