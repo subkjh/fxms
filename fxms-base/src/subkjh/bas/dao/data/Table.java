@@ -8,10 +8,10 @@ import subkjh.bas.dao.exception.ColumnNotFoundException;
 import subkjh.bas.dao.exception.DBObjectNameInvalidExeption;
 
 /**
- * 테이블 정보를 나타냅니다.
+ * DB 테이블 정보
  * 
- * @author subkjh
- * @since 2007-01-01
+ * @author subkjh@naver.com(김종훈)
+ *
  */
 public class Table extends SoDo {
 
@@ -457,7 +457,7 @@ public class Table extends SoDo {
 			} else {
 				sb = man;
 			}
-			
+
 			sb.append("\t");
 			sb.append(col.getFieldName());
 			sb.append(" : ");
