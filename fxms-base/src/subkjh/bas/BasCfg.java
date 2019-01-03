@@ -253,7 +253,7 @@ public class BasCfg {
 
 	/**
 	 * 
-	 * @return deploy/filter-list.xml
+	 * @return deploy/filter
 	 */
 	public static String getPathFilter() {
 		return getFolder(getHomeDeploy(), "filter");

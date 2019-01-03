@@ -14,10 +14,20 @@ import subkjh.bas.BasCfg;
 import subkjh.bas.log.Logger;
 import subkjh.bas.utils.ObjectUtil;
 
+/**
+ * 
+ * @author subkjh@naver.com(김종훈)
+ *
+ */
 public class FxActorParser {
 
 	private static FxActorParser parser;
 
+	/**
+	 * deploy/filter 폴더의 있는 파일을 분석하여 FxActor를 읽는다.
+	 * 
+	 * @return
+	 */
 	public synchronized static FxActorParser getParser() {
 
 		if (parser != null) {

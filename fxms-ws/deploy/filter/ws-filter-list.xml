@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<java-class name="FxActor.fx-broadcaster" class="com.fxms.ws.fxactor.FxBroadcaster" service="NotiService">
+		<para name="port" value="63816" />
+		<para name="notify-class" value="fxms.bas.noti.FxEvent" />
+		<para name="var-name" value="fx-broadcaster" />
+	</java-class>
+
+	<java-class name="FxActor.fx-alarm-broadcaster" class="com.fxms.ws.fxactor.AlarmWsBroadcaster" service="NotiService">
+		<para name="port" value="63818" />
+		<para name="var-name" value="fx-alarm-broadcaster" />
+	</java-class>
+
+
+	<java-class name="FxActor.fxps-sender" class="com.fxms.ws.fxactor.WsPsSender" service="MoService">
+		<!--
+			<para name="host" value="localhost" />
+		-->
+		<para name="port" value="63819" />
+		<para name="var-name" value="ps-server" />
+	</java-class>
+
+</class-list>

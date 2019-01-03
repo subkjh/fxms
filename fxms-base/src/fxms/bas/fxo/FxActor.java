@@ -1,7 +1,7 @@
 package fxms.bas.fxo;
 
 /**
- * FxMS Model
+ * fxms 행위자
  * 
  * @author subkjh
  *

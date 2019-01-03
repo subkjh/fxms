@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<java-class name="FXMS" class="fxms.module.restapi.vo.HandlerVo" service="ExtService">
+		<para name="context" value="/login, fxms.module.restapi.handler.LoginHandler" />
+		<para name="context" value="/mo, fxms.module.restapi.handler.MoHandler" />
+		<para name="context" value="/ps, fxms.module.restapi.handler.PsHandler" />
+		<para name="context" value="/ao, fxms.module.restapi.handler.AoHandler" />
+		<para name="context" value="/cd, fxms.module.restapi.handler.CdHandler" />
+		<para name="context" value="/test, fxms.module.restapi.handler.TestHandler" />
+		<para name="context" value="/usr, fxms.module.restapi.handler.UserHandler" />
+		<para name="context" value="/download, fxms.module.restapi.handler.DownloadHandler" />
+		<para name="port" value="10005" />
+	</java-class>
+
+</class-list>

@@ -169,6 +169,9 @@ public class ObjectUtil {
 				|| classOfT.equals(Byte.TYPE);
 	}
 
+	/**
+	 * deploy/conf/classes.xml에 정의된 클래스를 로딩한다.
+	 */
 	@SuppressWarnings("unchecked")
 	public static synchronized void loadClassDef() {
 

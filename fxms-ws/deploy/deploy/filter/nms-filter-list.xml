@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+
+	<!-- <java-class name="CronSample" class="example.CrontabTest"> <para name="schedule"
+		value="period 10" /> </java-class> -->
+
+	<!-- node resource sync -->
+	<java-class name="CronSyncNode" class="com.fxms.nms.cron.SyncCrontab" service="MoService">
+		<para name="schedule" value="0 4 * * *" />
+	</java-class>
+
+	<!-- ping filter -->
+	<java-class name="UrlPingF" class="com.fxms.nms.ping.url.UrlPingAdapter" service="MoService">
+	</java-class>
+	<java-class name="DnsPingF" class="com.fxms.nms.ping.dns.DnsPingAdapter" service="MoService">
+	</java-class>
+	<java-class name="FPingF" class="com.fxms.nms.ping.fping.FPingAdapter" service="MoService">
+		<para name="cmdFPing" value="./fping.exe" os="windows" />
+		<para name="cmdFPing" value="./fping -c 2" os="unix" />
+		<para name="cmdFPing" value="./fping -c 2" os="linux" />
+		<para name="retry" value="3" descr="off인 경우 재 시도 횟수" />
+	</java-class>
+	<java-class name="MtrPingF" class="com.fxms.nms.ping.mtr.MtrPingAdapter" service="MoService">
+	</java-class>
+	<java-class name="TcpPingF" class="com.fxms.nms.ping.tcp.TcpPingAdapter" service="MoService">
+	</java-class>
+
+	<java-class name="NetworkElementAdapter" class="com.fxms.nms.adapter.NeAdapter" service="MoService">
+		<compare field="moClass" value="NODE" method="equals" result="true" />
+	</java-class>
+
+</class-list>
