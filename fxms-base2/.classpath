@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="deploy/libext/apache/commons-logging.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/apache/commons-net-1.4.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/apache/ws-commons-util-1.0.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/apache/xmlrpc-client-3.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/apache/xmlrpc-common-3.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/apache/xmlrpc-server-3.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/commons-codec-1.11.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/commons-collections4-4.2.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/commons-compress-1.18.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/commons-math3-3.6.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/jaxb-api-2.3.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/jaxb-core-2.3.0.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/jaxb-impl-2.3.0.1.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/mail/mail-1.5.0-b01.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/poi-4.0.0/poi-4.0.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/poi-4.0.0/poi-excelant-4.0.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/poi-4.0.0/poi-ooxml-4.0.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/poi-4.0.0/poi-ooxml-schemas-4.0.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/excel/poi-4.0.0/poi-scratchpad-4.0.0.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/xml/jdom.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/jcraft/jsch-0.1.52.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/gson/gson-2.8.2.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/jdrivers/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="deploy/libext/jdrivers/ojdbc14.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
