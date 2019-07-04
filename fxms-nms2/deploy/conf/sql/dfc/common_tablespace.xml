@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<queries>
+	<!--
+		############################################################################################
+		#
+		# 데이터베이스에 들어있던 VAR_NAME, VAE_VALUE를 가지고 있는 쿼리를 XML로 전환함
+		# 2014.03.27 by subkjh
+		#
+		############################################################################################
+	-->
+	<resultMap id="_RESULT_MO_DBSPACE" javaClass="com.daims.dfc.common.mo.MoDbSpace">
+		<result attr="setMoName()" field="MO_NAME" />
+		<result attr="setSizeMb()" field="SIZE_MB" />
+		<result attr="setSizeUsedMb()" field="SIZE_USED_MB" />
+		<result attr="setSizeFreeMb()" field="SIZE_FREE_MB" />
+	</resultMap>
+
+	<select id="SELECT_TABLE_SPACE" resultMap="_RESULT_MO_DBSPACE" database="informix">
+		<![CDATA[
+		select 	name 					MO_NAME
+				, sum(chksize * 1000) 	SIZE_MB
+				, sum(nfree * 1000) 	SIZE_FREE_MB
+				, -1					SIZE_USED_MB
+		from sysmaster:sysdbspaces d
+				, sysmaster:syschunks c
+		where d.dbsnum = c.dbsnum
+		group by name
+		order by name
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_SPACE" resultMap="_RESULT_MO_DBSPACE" database="oracle">
+		<![CDATA[
+		select 	tablespace_name		MO_NAME
+				, sum(sizeTotal) /  ( 1024 * 1024 )	SIZE_MB
+				, sum(sizeFree) / ( 1024 * 1024 ) 	SIZE_FREE_MB
+				, -1				SIZE_USED_MB
+		from  (
+				select tablespace_name
+						, sum(bytes) sizeTotal
+						, 0 sizeFree 
+				from DBA_DATA_FILES 
+				where bytes > 0 
+				group by tablespace_name 
+		
+				union all
+		
+				select tablespace_name
+						, 0 sizeTotal
+						, sum(bytes) sizeFree 
+				from DBA_FREE_SPACE 
+				where bytes > 0 
+				group by tablespace_name
+		)
+		group by tablespace_name
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_SPACE" resultMap="_RESULT_MO_DBSPACE" database="altibase">
+		<![CDATA[
+		SELECT 	RTRIM(NAME) 		MO_NAME
+				, MAXSIZE			SIZE_MB
+				, -1				SIZE_FREE_MB
+				, USEDSIZE			SIZE_USED_MB
+				, CURRSIZE			sizeCur
+       FROM (
+            SELECT B.SPACEID,
+                   B.MAXSIZE,
+                   A.USEDSIZE,
+                   CURRSIZE
+              FROM (
+                   SELECT A.SPACE_ID,
+                          NVL(sum(B.ALLOC), 0) ALLOCSIZE,
+                          NVL(sum(B.USED), 0) USEDSIZE
+                     FROM V$MEM_TABLESPACES A
+                     LEFT JOIN
+                          (
+                          SELECT A.TABLESPACE_ID,
+                                 B.TABLE_NAME,
+                                 SUM(A.FIXED_ALLOC_MEM+A.VAR_ALLOC_MEM) ALLOC,
+                                 SUM(A.FIXED_USED_MEM+A.VAR_USED_MEM) USED
+                            FROM V$MEMTBL_INFO A,
+                                 SYSTEM_.SYS_TABLES_ B
+                           WHERE A.TABLE_OID=B.TABLE_OID
+                           GROUP BY A.TABLESPACE_ID, B.TABLE_NAME
+                          ) B
+                       ON A.SPACE_ID=B.TABLESPACE_ID
+                    WHERE A.SPACE_ID != 0
+                    group by a.space_id
+                   ) A,
+                   (
+                   SELECT 1 SPACEID,
+                               MEM_MAX_DB_SIZE MAXSIZE,
+                               MEM_ALLOC_PAGE_COUNT * 32 * 1024 ALLOCSIZE,
+                               MEM_ALLOC_PAGE_COUNT * 32 * 1024 CURRSIZE
+                          FROM V$DATABASE
+                  ) B
+                    UNION ALL
+                    SELECT DF.SPACEID SPACEID,
+                               df.MAXSIZE,
+                               NVL(UF.USEDSIZE,'N/A') USEDSIZE,
+                               df.CURRSIZE
+                          FROM (
+                                SELECT SPACEID, 
+                                       SUM((case2(MAXSIZE=0, CURRSIZE, MAXSIZE))) * 8 * 1024 MAXSIZE,
+                                       SUM(CURRSIZE) * 8 * 1024 CURRSIZE
+                                  FROM X$DATAFILES
+                                 GROUP BY SPACEID
+                               ) DF,
+                               (
+                                SELECT ID SPACEID,
+                                       to_char(ALLOCATED_PAGE_COUNT * 8 * 1024) as USEDSIZE
+                                  FROM v$TABLESPACES 
+                                 WHERE ID NOT IN
+                                       (
+                                       SELECT SPACE_ID
+                                         FROM V$MEM_TABLESPACES
+                                       )
+                                ) UF
+                   WHERE DF.SPACEID = UF.SPACEID
+                 ) TBS_SZ
+        LEFT OUTER JOIN
+             V$TABLESPACES TBS_INFO
+          ON TBS_SZ.SPACEID = TBS_INFO.ID
+       ORDER BY TBS_SZ.SPACEID
+		]]>
+	</select>
+
+
+</queries>

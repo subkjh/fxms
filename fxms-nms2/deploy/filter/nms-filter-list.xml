@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+
+	<!-- <java-class name="CronSample" class="example.CrontabTest"> <para name="schedule"
+		value="period 10" /> </java-class> -->
+
+	<!-- node resource sync -->
+	<java-class name="CronSyncNode" class="fxms.nms.cron.SyncCrontab" service="MoService">
+		<para name="schedule" value="0 4 * * *" />
+	</java-class>
+
+
+	<!--
+		NeAdapter
+	-->
+	<java-class name="NeAdapter" class="fxms.nms.fxactor.NeAdapter" service="MoService">
+		<compare field="moClass" value="NE" method="equals" result="true" />
+	</java-class>
+
+	<!--
+		PingFxActor
+	-->
+	<java-class name="PingDnsActor" class="fxms.nms.fxactor.ping.PingDnsActor" service="PingService">
+	</java-class>
+	<java-class name="PingMtrActor" class="fxms.nms.fxactor.ping.PingMtrActor" service="PingService">
+	</java-class>
+	<java-class name="PingIpActor" class="fxms.nms.fxactor.ping.PingIpActor" service="PingService">
+		<para name="cmdFPing" value="./fping.exe" os="windows" />
+		<para name="cmdFPing" value="./fping -c 2" os="unix" />
+		<para name="cmdFPing" value="./fping -c 2" os="linux" />
+		<para name="retry" value="3" descr="off인 경우 재 시도 횟수" />
+	</java-class>
+	<java-class name="PingTcpActor" class="fxms.nms.fxactor.ping.PingTcpActor" service="PingService">
+	</java-class>
+	<java-class name="PingUrlActor" class="fxms.nms.fxactor.ping.PingUrlActor" service="PingService">
+	</java-class>
+
+
+	<!--
+		ConfFxActor
+	-->
+	<java-class name="ConfIfActor" class="fxms.nms.fxactor.conf.snmp.ConfIfActor" service="MoService">
+		<para name="if-type-ignore" value="131" descr="해당 if-type은 MO로 생성하지 않음" />
+		<para name="only-has-ip" value="true" descr="true이면 IP가 존재하는 인터페이스만 등록함" />
+	</java-class>
+
+	<java-class name="ConfSystemActor" class="fxms.nms.fxactor.conf.snmp.ConfSystemActor" service="MoService" />
+	<java-class name="ConfEntPhysicalActor" class="fxms.nms.fxactor.conf.snmp.ConfEntPhysicalActor" service="MoService">
+		<para name="no-serial-ignore" value="false" descr="카드를 수집할 때 시리얼번호가 없으면 무시할지 여부" />
+	</java-class>
+
+	<!--
+		SnmpPingFxActor
+	-->
+	<java-class name="SnmpPingIfActor" class="fxms.nms.fxactor.snmpping.SnmpPingIfActor" service="SnmpPingService" />
+	<java-class name="SnmpPingProcessActor" class="fxms.nms.fxactor.snmpping.SnmpPingProcessActor" service="SnmpPingService" />
+	<java-class name="SnmpPingTunnelActor" class="fxms.nms.fxactor.snmpping.SnmpPingTunnelActor" service="SnmpPingService" />
+	<java-class name="SnmpPingUptimeActor" class="fxms.nms.fxactor.snmpping.SnmpPingUptimeActor" service="SnmpPingService" />
+	<java-class name="SnmpPingVpnActor" class="fxms.nms.fxactor.snmpping.SnmpPingVpnActor" service="SnmpPingService" />
+
+	<!--
+		TrafficFxActor
+	-->
+	<java-class name="TrafficIfActor" class="fxms.nms.fxactor.traffic.TrafficIfActor" service="TrafficService" />
+
+	<!--
+		Poller
+		<java-class name="PingPollerMgr" class="fxms.nms.fxactor.PingPollerMgr" service="MoService" />
+		<java-class name="TrafficPollerMgr" class="fxms.nms.fxactor.TrafficPollerMgr" service="MoService" />
+		<java-class name="SnmpPollerMgr" class="fxms.nms.fxactor.SnmpPollerMgr" service="MoService" />
+	-->
+	<java-class name="SnmpPollerMgr" class="fxms.nms.fxactor.SnmpPollerMgr" service="SnmpPingService" />
+	<java-class name="PingPollerMgr" class="fxms.nms.fxactor.PingPollerMgr" service="PingService" />
+	<java-class name="TrafficPollerMgr" class="fxms.nms.fxactor.TrafficPollerMgr" service="TrafficService" />
+
+
+	<!--
+		rest-api
+	-->
+	<java-class name="fxms-nms-restapi" class="fxms.module.restapi.vo.HandlerVo" service="ExtService">
+		<para name="context" value="/nms, fxms.nms.handler.NmsHandler" />
+		<para name="port" value="10005" />
+	</java-class>
+
+	<!--
+		네트워크 영향 경보를 생성하는 스레드
+	-->
+	<java-class name="NetAlarmMaker" class="fxms.nms.fxactor.NetAlarmMaker" service="AppService" />
+
+</class-list>

@@ -1,0 +1,512 @@
+package fxms.nms.api;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import subkjh.bas.BasCfg;
+import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
+import fxms.bas.ao.AoCode;
+import fxms.bas.ao.vo.Alarm;
+import fxms.bas.api.EventApi;
+import fxms.bas.api.FxApi;
+import fxms.bas.api.MoApi;
+import fxms.bas.co.noti.FxEvent;
+import fxms.bas.co.noti.NotiSender;
+import fxms.bas.co.signal.ReloadSignal;
+import fxms.bas.co.thread.BatchSaver;
+import fxms.bas.co.vo.FileVo;
+import fxms.bas.fxo.FxActorParser;
+import fxms.bas.fxo.service.FxServiceImpl;
+import fxms.bas.mo.Mo;
+import fxms.bas.mo.property.HasIp;
+import fxms.nms.co.cd.NmsCode;
+import fxms.nms.co.snmp.mo.TrapNode;
+import fxms.nms.co.snmp.trap.actor.TrapActor;
+import fxms.nms.co.snmp.trap.vo.TrapEventLog;
+import fxms.nms.co.snmp.trap.vo.TrapEventLogList;
+import fxms.nms.co.snmp.trap.vo.TrapThr;
+import fxms.nms.co.snmp.trap.vo.TrapVo;
+import fxms.nms.mo.NeIfMo;
+import fxms.nms.mo.property.MoSnmppable;
+import fxms.nms.mo.property.SnmpPass;
+
+/**
+ * TrapService API
+ * 
+ * @author subkjh
+ * 
+ */
+public abstract class TrapApi extends FxApi {
+
+	/**
+	 * TrapApi
+	 */
+	public static TrapApi api;
+
+	private static final SimpleDateFormat HHMMSS = new SimpleDateFormat("HH:mm:ss");
+
+	/**
+	 * 사용할 DBM를 제공합니다.
+	 * 
+	 * @return DBM
+	 */
+	public synchronized static TrapApi getApi() {
+		if (api != null)
+			return api;
+
+		api = makeApi(TrapApi.class);
+
+		api.reload();
+
+		return api;
+	}
+
+	public static void main(String[] args) {
+
+		String s = ".1.3.6.1.2.1.2.2.1.1";
+		System.out.println(s.replaceFirst(".1.3.6.1.2.1.2.2.1.1", ""));
+
+		String oid = ".1.4.6.12.3.4.3.0";
+		int endIndex = oid.lastIndexOf(".");
+		if (endIndex > 0) {
+			System.out.println(oid.substring(0, endIndex));
+			System.out.println(oid.substring(endIndex));
+		}
+	}
+
+	public static <T extends MoSnmppable> T makeNodeSnmp(String ipAddress, Class<T> classOfT) {
+		T nodeT;
+		try {
+			nodeT = classOfT.newInstance();
+		} catch (InstantiationException e) {
+			return null;
+		} catch (IllegalAccessException e) {
+			return null;
+		}
+
+		nodeT.setIpAddress(ipAddress);
+		nodeT.setSnmpPass(SnmpPass.defSnmp);
+
+		// nodeT.setTelnetPass(true, TelnetPass.defTelnet);
+
+		return nodeT;
+	}
+
+	private boolean broadcastTrap;
+	/** 미등록 장비의 TRAP을 기록할지 여부 */
+	private boolean acceptNotRegIp = true;
+	private boolean allowSameEvent; /* 동일한 경보에 대해서 한 번만 발생할 것인지 계속발생시킬것인지 */
+	private boolean writeToFile; /* 화일로 기록 여부 */
+	private boolean writeToDatabase; /* trap을 DB에 기록할지 여부 */
+	private long trapSeqno;
+
+	private List<TrapThr> thrList = null;
+
+	private Map<Long, Alarm> trapAlarmMap; /* 트랩 일련번호에 대한 경보를 가지고 있습니다. */
+	private List<TrapActor> actorList; /* 필터 목록 */
+	private NotiSender trapSender;
+	private BatchSaver<TrapEventLog> saver;
+
+	private List<TrapNode> nodeList;
+	private Map<String, TrapNode> ipNodeMap;/* key : IP주소 */
+	private Map<Long, TrapNode> noNodeMap; /* key : MO_NO */
+
+	private String trapLogFile;
+
+	/**
+	 * 
+	 */
+	public TrapApi() {
+		actorList = new ArrayList<TrapActor>();
+		trapAlarmMap = new HashMap<Long, Alarm>();
+		trapSeqno = 0;
+
+		noNodeMap = new HashMap<Long, TrapNode>();
+		ipNodeMap = new HashMap<String, TrapNode>();
+	}
+
+	/**
+	 * 
+	 * @param syslogList
+	 */
+	public void broadcastLog(List<TrapEventLog> logList) {
+
+		if (broadcastTrap == false)
+			return;
+
+		TrapEventLogList eventLogList = new TrapEventLogList();
+		eventLogList.setStatus(FxEvent.STATUS.added);
+		eventLogList.addAll(logList);
+
+		if (trapSender != null) {
+			trapSender.put(eventLogList);
+		} else {
+			FxServiceImpl.fxService.send(eventLogList);
+		}
+
+	}
+
+	/**
+	 * 보관 기관이 지난 자료를 삭제합니다.
+	 * 
+	 * @throws Exception
+	 */
+	public void deleteLogExpired() {
+		try {
+			doDeleteLogExpired();
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+	}
+
+	/**
+	 * 
+	 * @return 필터목록
+	 */
+	public List<TrapActor> getActorList() {
+		return actorList;
+	}
+
+	public Alarm getAlarmTrapSeqno(long seqno) {
+		return trapAlarmMap.get(seqno);
+	}
+
+	/**
+	 * 
+	 * @param moNo
+	 * @return
+	 * @since 2013.03.12 by subkjh
+	 */
+	public TrapNode getMo(long moNo) {
+		return noNodeMap.get(moNo);
+	}
+
+	public Mo getMoByMac(String macAddr) {
+		Map<String, Object> para = new HashMap<String, Object>();
+		para.put("macAddress", macAddr);
+		return MoApi.getApi().getMo(para);
+	}
+
+	@Override
+	public String getName() {
+		return "API-TRAP";
+	}
+
+	public Mo getNeIf(long neMoNo, int ifIndex) {
+		Map<String, Object> para = new HashMap<String, Object>();
+		para.put("upperMoNo", neMoNo);
+		para.put("ifIndex", ifIndex);
+		para.put("moClass", NeIfMo.MO_CLASS);
+		return MoApi.getApi().getMo(para);
+	}
+
+	@Override
+	public String getState(LOG_LEVEL level) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(getClass().getName());
+		sb.append("TRAP-THR-SIZE(" + thrList.size() + ")");
+		sb.append("ACTOR-SIZE(" + actorList.size() + ")");
+		sb.append("TRAP-NODE-SIZE(" + nodeList.size() + ")");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 노드에 해당되는 트랩경보조건목록을 제공합니다.
+	 * 
+	 * @param node
+	 * @return 트랩경보조건목록
+	 */
+	public List<TrapThr> getThrByNode(TrapNode node) {
+
+		List<TrapThr> retList = new ArrayList<TrapThr>();
+		for (TrapThr th : thrList) {
+			if (th.match(node)) {
+				retList.add(th);
+			}
+		}
+
+		return retList;
+	}
+
+	/**
+	 * TRAP 화일을 제공합니다.
+	 * 
+	 * @param yyyymmdd
+	 *            받은일자
+	 * @param ipaddress
+	 *            IP주소
+	 * @return 화일내용
+	 * @throws FileNotFoundException
+	 * @throws Exception
+	 * @since 2013.02.19 by subkjh
+	 */
+	public FileVo getTrapFile(String yyyymmdd, String ipaddress) throws FileNotFoundException, Exception {
+
+		String filename = BasCfg.getFile(BasCfg.getHomeDatas(), "trap", yyyymmdd + "", ipaddress + ".log");
+		File file = new File(filename);
+		if (file.exists() == false) {
+			filename = BasCfg.getFile(BasCfg.getHomeDatas(), "trap", yyyymmdd + "", ipaddress + ".zip");
+			file = new File(filename);
+		}
+
+		if (file.exists() == false)
+			throw new FileNotFoundException(filename);
+
+		return new FileVo(file);
+	}
+
+	public String getTrapLogFile() {
+		return trapLogFile;
+	}
+
+	/**
+	 * 트랩에 해당되는 노드를 찾습니다.
+	 * 
+	 * @param trapEvent
+	 * @return
+	 */
+	public TrapNode getTrapNode(TrapVo vo) {
+		return ipNodeMap.get(vo.getIpAddress());
+	}
+
+	/**
+	 * 
+	 * @param ipAddress
+	 * @return IP주소에 해당되는 장비
+	 */
+	public TrapNode getTrapNodeByIpaddress(String ipAddress) {
+		return ipNodeMap.get(ipAddress);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public synchronized long getTrapSeqnoNext() {
+		trapSeqno++;
+		return trapSeqno;
+	}
+
+	/**
+	 * 트랩로그를 기록합니다.<br>
+	 * 저장소에 기록이 안 될 경우 미전송 백업 폴더에 기록합니다.
+	 * 
+	 * @param trapLog
+	 */
+	public void insertLog(TrapEventLog trapLog) {
+
+		Logger.logger.debug("{}", trapLog);
+
+		if (saver != null) {
+			saver.put(trapLog);
+		}
+
+	}
+
+	/**
+	 * 같은 경보에 대해서 한 번만 이벤트 발생여부<br>
+	 * 
+	 * @return true이면 한번만.
+	 */
+	public boolean isOnceSameTrap() {
+		return allowSameEvent;
+	}
+
+	@Override
+	public void onNotify(FxEvent noti) throws Exception {
+		if (noti instanceof ReloadSignal) {
+			ReloadSignal r = (ReloadSignal) noti;
+			if (r.contains(ReloadSignal.RELOAD_TYPE_ALL)) {
+				reload();
+			} else if (r.contains(ReloadSignal.RELOAD_TYPE_MO)) {
+				loadTrapNode();
+			} else if (r.contains("TRAP-ALARM-CFG")) {
+				loadTrapThr();
+			}
+		} else if (noti instanceof Mo) {
+
+			loadTrapNode();
+
+			// 등록되지 않은 장비로 부터의 SNMP TRAP 발생 경보가 존재하면 해제합니다.
+			if (noti instanceof HasIp) {
+				TrapNode node = TrapApi.api.getTrapNodeByIpaddress(((HasIp) noti).getIpAddress());
+				if (node != null)
+					EventApi.getApi().checkClear(node, "unknown-ne-trap", AoCode.ClearReason.Auto);
+			}
+
+		}
+
+	}
+
+	public Alarm removeAlarmTrapSeqno(long seqno) {
+		return trapAlarmMap.remove(seqno);
+	}
+
+	public void sendEventInvalidNode(TrapNode node) {
+		EventApi.getApi().check(node, null, NmsCode.AlarmCode.NOT_SET_TRAP, null, null);
+	}
+
+	/**
+	 * 
+	 * @param ipAddress
+	 */
+	public void sendEventUnknownNode(String ipAddress) {
+		EventApi.getApi().check(null, ipAddress, NmsCode.AlarmCode.UNKNOWN_TRAP, "ip:" + ipAddress, null);
+	}
+
+	/**
+	 * 받은 TRAP을 화일에 기록합니다.
+	 * 
+	 * @param trapLog
+	 */
+	public synchronized void write2File(TrapVo vo) {
+
+		if (writeToFile == false) {
+			return;
+		}
+
+		FileWriter fileWriter = null;
+		BufferedWriter bufferedWriter = null;
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(vo.getMstimeRecv());
+		String dateString = String.format("%04d%02d%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
+				cal.get(Calendar.DAY_OF_MONTH));
+		String filename = BasCfg.getFile(trapLogFile, dateString, vo.getIpAddress() + ".log");
+
+		String msTimeString;
+		msTimeString = HHMMSS.format(new Date(vo.getMstimeRecv()));
+		msTimeString = msTimeString + "." + String.format("%03d", (int) (vo.getMstimeRecv() % 1000));
+
+		try {
+			fileWriter = new FileWriter(new File(filename), true);
+			bufferedWriter = new BufferedWriter(fileWriter);
+			bufferedWriter.write(msTimeString + " " + vo.getFileLine());
+			bufferedWriter.newLine();
+			bufferedWriter.flush();
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		} finally {
+			try {
+				if (bufferedWriter != null)
+					bufferedWriter.close();
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+		}
+
+	}
+
+	protected abstract void doDeleteLogExpired() throws Exception;
+
+	/**
+	 * 트랩 로그 기록
+	 * 
+	 * @param logList
+	 * @return 처리결과
+	 */
+	protected abstract void doInsertLog(List<TrapEventLog> logList) throws Exception;
+
+	/**
+	 * 
+	 * @return 관리대상 노드 목록
+	 */
+	protected abstract List<TrapNode> doSelectTrapNode() throws Exception;
+
+	/**
+	 * 트랩 임계를 저장소로 부터 가져옵니다.
+	 * 
+	 * @return 임계목록
+	 */
+	protected abstract List<TrapThr> doSelectTrapThr() throws Exception;
+
+	@Override
+	protected void initApi() throws Exception {
+
+		broadcastTrap = getFxPara().getBoolean("broadcastTrap", false);
+		writeToFile = getFxPara().getBoolean("writeToFile", false);
+		writeToDatabase = getFxPara().getBoolean("writeToDatabase", false);
+		allowSameEvent = getFxPara().getBoolean("allowSameEvent", false);
+
+		trapLogFile = getFxPara().getString("trap-file-folder");
+		if (trapLogFile.charAt(0) != '/')
+			trapLogFile = BasCfg.getHome() + File.separator + trapLogFile;
+
+		if (writeToDatabase) {
+			saver = new BatchSaver<TrapEventLog>("TrapSaver" //
+					, getFxPara().getInt("insert-batch-size", 30) //
+					, trapLogFile + File.separator + "NotSend") {
+
+				@Override
+				public void doInsert(List<TrapEventLog> logList) throws Exception {
+					try {
+						doInsertLog(logList);
+					} catch (Exception e) {
+						throw e;
+					}
+				}
+
+			};
+			saver.start();
+		}
+
+		actorList = FxActorParser.getParser().getActorList(TrapActor.class);
+	}
+
+	@Override
+	protected void reload() {
+		loadTrapThr();
+		loadTrapNode();
+	}
+
+	private void loadTrapNode() {
+
+		try {
+			List<TrapNode> list = doSelectTrapNode();
+
+			Map<String, TrapNode> map = new HashMap<String, TrapNode>();
+			Map<Long, TrapNode> map2 = new HashMap<Long, TrapNode>();
+
+			for (TrapNode node : list) {
+				map.put(node.getIpAddress(), node);
+				map2.put(node.getMoNo(), node);
+			}
+
+			nodeList = list;
+			ipNodeMap = map;
+			noNodeMap = map2;
+
+			Logger.logger.debug("count-mo={}", nodeList.size());
+
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+
+	}
+
+	private void loadTrapThr() {
+
+		try {
+			List<TrapThr> list = doSelectTrapThr();
+
+			thrList = list;
+
+			Logger.logger.debug("count-threshold={}", thrList.size());
+
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+
+	}
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mo-list[
+
+<!ELEMENT mo-list ( mo* ) >
+
+<!ELEMENT mo EMPTY >
+<!ATTLIST mo mo-class CDATA #REQUIRED >
+<!ATTLIST mo java-class CDATA #REQUIRED >
+<!ATTLIST mo dbo-java-class CDATA #IMPLIED >
+
+]>
+
+<mo-list>
+
+	<mo mo-class="NE" java-class="fxms.nms.mo.NeMo" dbo-java-class="fxms.nms.dbo.FN_MO_NE" />
+	<mo mo-class="IF" java-class="fxms.nms.mo.NeIfMo" dbo-java-class="fxms.nms.dbo.FN_MO_IF" />
+	<mo mo-class="CARD" java-class="fxms.nms.mo.NeCardMo"
+		dbo-java-class="fxms.nms.dbo.FN_MO_CARD" />
+
+</mo-list>
