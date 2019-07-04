@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE databases [
+
+<!ELEMENT databases (database*) >
+
+<!ELEMENT database (driver,url,user?,password?,isReadOnly?
+					,countConnectionMax,isAutoCommit?,permitConnectionPoolOver?,reconnectTimeout?,sqlSelectKeepAlive?,const*)>
+<!ATTLIST database name CDATA #REQUIRED >
+<!ATTLIST database java-class CDATA #REQUIRED >
+
+<!ELEMENT const (#PCDATA) >
+<!ATTLIST const id CDATA #REQUIRED >
+
+]>
+
+<databases>
+
+	<database name="XXX_MYSQL2" java-class="subkjh.bas.dao.database.MySql">
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<!-- <url> jdbc:mysql://localhost/FXDB?useUnicode=true&amp;user=fxadmin&amp;password=fxoo0880&amp;characterEncoding=utf8
+			</url> -->
+		<url>
+			jdbc:mysql://125.7.128.42:3306/FXDB?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+	<database name="MYSQL_ROOT2" java-class="subkjh.bas.dao.database.MySql">
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<url>
+			jdbc:mysql://localhost/FXDB?useUnicode=true&amp;user=root&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+
+
+	<database name="XXX_MYSQL2" java-class="subkjh.bas.dao.database.MySql">
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<url>
+			jdbc:mysql://192.168.35.70:3306/FXDB?useUnicode=true&amp;user=fxadmin&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+	<database name="MYSQL_ROOT" java-class="subkjh.bas.dao.database.MySql">
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<url>
+			jdbc:mysql://125.7.128.42:3306/FXDB?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+	<database name="XXX_MYSQL" java-class="subkjh.bas.dao.database.MySql">
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<url>
+			jdbc:mysql://125.7.128.42:3306/FXDB?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+	<database name="ADAMS_MIAPP" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.107.143:7208/ADAMS</url>
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<database name="ADAMS" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.107.143:7208/ADAMS</url>
+		<user>MICM_USR</user>
+		<password>!qwer1234</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<database name="ADAMS_DEV" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<!-- 동작 -->
+		<url>jdbc:oracle:thin:@12.4.96.97:7208:MIDBDEV</url>
+		<!-- 여의도 -->
+		<!-- <url>jdbc:oracle:thin:@192.168.0.98:7208:NEXCORE</url> -->
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<database name="ADAMS_DJ" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.96.97:7208:NEXCORE</url>
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<!--
+		<database name="MGMTQ" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.12.139:7208:MGMTQ</url>
+		<user>ASISMI_USR</user>
+		<password>asisusr!6</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+		</database>
+	-->
+	<database name="ADAMS2" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@192.168.0.98:7208:NEXCORE</url>
+		<user>MIIV_OWN</user>
+		<password>MIIV12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+
+	<database name="ADAMS" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.107.143:7208/ADAMS</url>
+		<user>MICM_USR</user>
+		<password>!qwer1234</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<database name="ADAMS_MIAPP" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.107.143:7208/ADAMS</url>
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<!--
+		<database name="ADAMS" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.96.97:7208:MIDBDEV</url>
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+		</database>
+	-->
+
+	<!-- 개발 -->
+	<database name="NEIFDB" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.9.189:7208:NEIFDEV</url>
+		<user>NEADAMS</user>
+		<password>!qwer1234</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<!-- 운용 -->
+	<database name="NEIFDB" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.8.180:8308:NEIF</url>
+		<user>NEADAMS</user>
+		<password>!qwer1234</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<database name="MGMTQ" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.12.139:7208:MGMTQ</url>
+		<user>ASISMI_USR</user>
+		<password>asisusr!6</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+
+
+	<database name="FXMSDB" java-class="subkjh.bas.dao.database.MySql">
+		<driver>org.gjt.mm.mysql.Driver</driver>
+		<url>
+			jdbc:mysql://125.7.128.42:3306/FXDB?useUnicode=true&amp;user=root&amp;password=fxoo0880&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+
+	<database name="ADAMS_2018_DEV_MIAPP" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.111.31:7208:ADAMSDEV</url>
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+
+	<database name="ADAMS_2017_DEV_MIAPP" java-class="subkjh.bas.dao.database.Oracle">
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<url>jdbc:oracle:thin:@12.4.96.97:7208:MIDBDEV</url>
+		<user>MI_APP</user>
+		<password>miapp12#$</password>
+		<isReadOnly>false</isReadOnly>
+
+		<countConnectionMax>2</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>true</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+		<sqlSelectKeepAlive>select sysdate from dual</sqlSelectKeepAlive>
+
+		<const id="NVL">nvl</const>
+		<const id="TRUNC">trunc</const>
+
+	</database>
+	
+</databases>

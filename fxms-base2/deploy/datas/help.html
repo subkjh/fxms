@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<body>
+<h1>method-list</h1><h2>add-batch</h2><p><br><h3>mandatory : </h3>
+	batchId : 배치ID<br>
+	prdcCode : 대표생산품코드<br>
+	seedCode : 종균코드<br>
+	companyInloNo : 회사설치위치번호<br>
+	batchSrtDate : 배치시작일시<br>
+	batchEndDate : 배치종료일시<br>
+	endYn : 종료여부<br>
+	delYn : 삭제여부<br>
+
+<h3>optional : </h3>
+	curNDays : 현재차수<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+</p>
+<h2>add-batch-data</h2><p><br><h3>mandatory : </h3>
+	batchId : 배치ID<br>
+	yyyymmdd : 일자<br>
+	pbrMoNo : PBR 관리번호<br>
+	nDays : 차수<br>
+
+<h3>optional : </h3>
+	biomass : 바이오매스<br>
+	n : n<br>
+	p : p<br>
+	cell : cell<br>
+	aeration : aeration<br>
+	co2 : co2<br>
+	axc : axc<br>
+	memo : MEMO<br>
+	process : process<br>
+	endYn : isEnd<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+</p>
+<h2>add-batch-flow</h2><p><br><h3>mandatory : </h3>
+	batchId : 배치ID<br>
+	nDays : 차수<br>
+	pbrMoNo : PBR 관리번호<br>
+	alarmCfgNo : 래시피관리번호<br>
+
+<h3>optional : </h3>
+	daysMemo : 차수메모<br>
+	daysStartDate : 차수시작일시<br>
+	daysEndDate : 차수종료일시<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+</p>
+<h2>add-batch-in</h2><p></p>
+<h2>add-batch-out</h2><p></p>
+<h2>add-mo-container</h2><p><br><h3>mandatory : </h3>
+	moNo : MO번호<br>
+	moName : MO명<br>
+	moClass : MO분류 <br>
+	moType : MO종류 <br>
+	moMemo : MO메모<br>
+	mngYn : 관리여부<br>
+	upperMoNo : 상위MO번호<br>
+	alarmCfgNo : 경보조건번호<br>
+	containerId : 컨테이너 ID<br>
+	moNo : MO번호<br>
+
+<h3>optional : </h3>
+	moAname : MO표시명<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+	syncUserNo : 수정운영자번호<br>
+	syncDate : 동기화일시<br>
+	containerType : 컨테이너 종류<br>
+	inloNo : 컨테이너 설치위치번호<br>
+	inloMemo : 설치위치메모<br>
+	gwMoNo : GW관리번호<br>
+	installYmd : 설치일자<br>
+<br>	  example : {"seqno":"1531287559512","method":"add-mo-container","parameters":{"moAname":"김종훈테스트#002","inloNo":"200410","moClass":"CONTAINER","containerType":"12ft-A","inloMemo":"테스트용","gwMoNo":"1002556","mngYn":"Y","containerId":"김종훈테스트#002","moName":"김종훈테스트#002","installYmd":"20180711","alarmCfgNo":"1000"},"session-id":"FXMS-1531287556070"}</p>
+<h2>add-mo-gw</h2><p><br><h3>mandatory : </h3>
+	moNo : MO번호<br>
+	moName : MO명<br>
+	moClass : MO분류 <br>
+	moType : MO종류 <br>
+	moMemo : MO메모<br>
+	mngYn : 관리여부<br>
+	upperMoNo : 상위MO번호<br>
+	alarmCfgNo : 경보조건번호<br>
+	gwType : GW 종류<br>
+	inloNo : 설치위치번호<br>
+	moNo : MO번호<br>
+
+<h3>optional : </h3>
+	moAname : MO표시명<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+	syncUserNo : 수정운영자번호<br>
+	syncDate : 동기화일시<br>
+	gwIpaddr : GW IP주소<br>
+	gwPort : GW 포트<br>
+	gwVer : GW 버전<br>
+	managerIpaddr : 매니저 IP주소<br>
+	managerPort : 매니저 포트<br>
+	inloMemo : 설치위치메모<br>
+<br>	  example : {"seqno":"1531288094744","method":"add-mo-gw","parameters":{"gwIpaddr":"10.0.0.2","gwType":"T-Agent","moAname":"김종훈테스트#002-GW","inloNo":"200410","moClass":"GW","inloMemo":"aaa","gwPort":"1111","mngYn":"Y","moType":"T-Agent","moName":"김종훈테스트#002-GW","alarmCfgNo":"10250"},"session-id":"FXMS-1531287556070"}</p>
+<h2>add-mo-pbr</h2><p><br><h3>mandatory : </h3>
+	moNo : MO번호<br>
+	moName : MO명<br>
+	moClass : MO분류 <br>
+	moType : MO종류 <br>
+	moMemo : MO메모<br>
+	mngYn : 관리여부<br>
+	upperMoNo : 상위MO번호<br>
+	alarmCfgNo : 경보조건번호<br>
+	pbrType : PBR 유형<br>
+	containerId : 컨테이너 ID<br>
+	moNo : MO번호<br>
+
+<h3>optional : </h3>
+	moAname : MO표시명<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+	syncUserNo : 수정운영자번호<br>
+	syncDate : 동기화일시<br>
+<br>	  example : {"seqno":"1531288018231","method":"add-mo-pbr","parameters":{"moAname":"PBR-001-002","moClass":"PBR","mngYn":"Y","moType":"Green","pbrType":"Green","containerId":"김종훈테스트#002","moName":"PBR-001-002","alarmCfgNo":"10210"},"session-id":"FXMS-1531287556070"}</p>
+<h2>add-mtrl</h2><p><br><h3>mandatory : </h3>
+	companyInloNo : 회사설치위치번호<br>
+	mtrlCode : 원자재코드<br>
+	mtrlName : 원자재명<br>
+	mtrlUnit : 원자재단위<br>
+
+<h3>optional : </h3>
+	mtrlDescr : 원자재설명<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+<br>	  example : {"seqno":"1531723748028","method":"add-mtrl","parameters":{"mtrlUnit":"TEST-001-UNIT","companyInloNo":111,"mtrlCode":"TEST-001","mtrlDescr":"TEST-001-DESC","mtrlName":"TEST-001-NAME"},"session-id":"FXMS-1531723747992"}</p>
+<h2>add-prdc</h2><p><br><h3>mandatory : </h3>
+	companyInloNo : 회사설치위치번호<br>
+	prdcCode : 생산품코드<br>
+	prdcNm : 생산품명<br>
+
+<h3>optional : </h3>
+	prdcDescr : 생산품설명<br>
+	regUserNo : 등록운영자번호<br>
+	regDate : 등록일시<br>
+	chgUserNo : 수정운영자번호<br>
+	chgDate : 수정일시<br>
+</p>
+<h2>delete-batch</h2><p></p>
+<h2>get-batch</h2><p></p>
+<h2>get-container-list</h2><p><br>	  example : {"seqno":1531140282361,"method":"get-container-list","session-id":"FXMS-1531140282350","parameters":{}}</p>
+<h2>get-sensor-all</h2><p><br>	  example : {"seqno":1531140282451,"method":"get-sensor-all","session-id":"FXMS-1531140282350","parameters":{}}</p>
+<h2>set-batch-flow</h2><p></p>
+<h2>set-batch-in</h2><p></p>
+<h2>set-batch-out</h2><p></p>
+<h2>update-batch</h2><p></p>
+<h2>update-batch-data</h2><p></p>
+<h2>update-mtrl</h2><p></p>
+</body>
+</html>

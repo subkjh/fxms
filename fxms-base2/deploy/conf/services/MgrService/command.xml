@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<command-list>
+
+	<init cmd="./bin/init.bat">
+		<args>args1</args>
+		<args>args2</args>
+	</init>
+
+	<command service="NbService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="ApService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="AaService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="UiService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="PingService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="SnmpService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="TrafficService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="ConfService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="CrpService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="PerfService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="SyslogService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+	<command service="TrapService" cmd="./bin/nprism.bat" run="true" autoRestart="true" />
+
+</command-list>
+

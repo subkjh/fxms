@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<queries>
+
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+
+	<!--
+		############################################################################################
+		#
+		# O R A C L E
+		#
+		############################################################################################
+	-->
+
+	<select id="QID_TEST" resultMap="RESULT_MAP">
+		<![CDATA[
+			sql1
+		]]>
+		<test var="v1"> and B.v1 = $v1 </test>
+		
+		<![CDATA[
+			sql2
+		]]>
+		<test var="v2">
+			and B.v2 = $v2
+			<test var="v2_1"> and B.CONTAINER_ID like $v2_1  </test>
+		</test>
+		<![CDATA[
+			sql3
+		]]>
+		<test var="v3"> and B.v3 = $v3 </test>
+		<![CDATA[
+			sql4
+		]]>
+	</select>
+
+
+
+</queries>

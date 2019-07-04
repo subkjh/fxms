@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- root element -->
+<!ELEMENT queries (include* | resultMap*  | insert* | update* | delete* | select* )+>
+<!ATTLIST queries
+xmlns:fo CDATA #IMPLIED
+namespace CDATA #IMPLIED
+>
+
+<!-- �몃� xml瑜�癒쇱� 遺꾩꽍�����ъ슜�⑸땲�� -->
+<!ELEMENT include EMPTY>
+
+<!-- 異붽����붿씪濡��먯떊���붿씪怨�媛숈� �대뜑���붿씪���섑��낅땲�� -->
+<!ATTLIST include
+filename CDATA #REQUIRED
+>
+
+<!-- select 臾몄쓽 寃곌낵瑜��대뒗 媛앹껜瑜�吏�젙�⑸땲�� -->
+<!ELEMENT resultMap (result+)>
+<!-- id��紐낆묶, javaClass 寃곌낵瑜��댁쓣 媛앹껜 -->
+<!ATTLIST resultMap
+id CDATA #REQUIRED
+javaClass CDATA #REQUIRED
+>
+
+<!-- 寃곌낵��媛���ぉ怨�留ㅽ븨�쒗궎���댁슜�낅땲�� -->
+<!ELEMENT result EMPTY>
+
+<!-- attr 媛앹껜��蹂�닔 �먮뒗 硫붿냼�� 硫붿냼�쒖씤 寃쎌슦 ()濡�遺숈뿬���⑸땲�� field ���곗씠�곕쿋�댁뒪 �뚯씠釉붿쓽 而щ읆 -->
+<!ATTLIST result
+attr CDATA #REQUIRED
+field CDATA #IMPLIED
+>
+
+<!-- �곗씠��SELECT �뺤쓽 -->
+<!ELEMENT select (#PCDATA | sub )*>
+
+<!-- id: 援щ텇 ID, resultMap: resultMap��ID -->
+<!ATTLIST select
+id CDATA #REQUIRED
+resultMap CDATA #IMPLIED
+>
+
+<!-- SELECT�깆쓽 �댁슜���ш린���뺤쓽���댁슜��異붽��섏뿬 荑쇰━濡��ъ슜�⑸땲�� -->
+<!ELEMENT sub (#PCDATA)*>
+
+<!-- id: �ъ슜 ID -->
+<!ATTLIST sub
+id CDATA #REQUIRED
+>
+
+<!-- INSERT 臾��ъ슜 -->
+<!ELEMENT insert (#PCDATA | sub )*>
+<!ATTLIST insert
+id CDATA #REQUIRED
+>
+
+<!-- UPDATE 臾��ъ슜 -->
+<!ELEMENT update (#PCDATA | sub )*>
+<!ATTLIST update
+id CDATA #REQUIRED
+>
+
+<!-- DELETE 臾��ъ슜 -->
+<!ELEMENT delete (#PCDATA | sub )*>
+<!ATTLIST delete
+id CDATA #REQUIRED
+>

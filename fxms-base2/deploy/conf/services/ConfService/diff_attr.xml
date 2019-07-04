@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	############################################################################################
+	#
+	# CheckDiff FIELD LIST
+	#
+	############################################################################################
+-->
+
+<!DOCTYPE windows[
+
+<!ELEMENT diff_attr_list (diff_attr*) >
+
+
+<!ELEMENT diff_attr EMPTY >
+<!ATTLIST diff_attr moClass (INTERFACE|NODE) #REQUIRED >
+<!ATTLIST diff_attr field CDATA #REQUIRED >
+
+]>
+
+<diff_attr_list>
+
+	<diff_attr moClass="INTERFACE" field="ifAlias" />
+	<diff_attr moClass="INTERFACE" field="ifDescr" />
+	<diff_attr moClass="INTERFACE" field="ifName" />
+	<diff_attr moClass="INTERFACE" field="ifSpeed" />
+	<diff_attr moClass="INTERFACE" field="ifIndex" />
+	<diff_attr moClass="INTERFACE" field="ifNetmask" />
+	<diff_attr moClass="INTERFACE" field="ipAddress" />
+
+	<diff_attr moClass="NODE" field="ipAddress" />
+
+</diff_attr_list>
