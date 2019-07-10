@@ -22,6 +22,21 @@ public class EmulatorTelnet extends Emulator {
 	private Socket socket;
 	/** 로그인 문구를 기다렸다가 계정을 보낼지 여부 */
 	private boolean waitLoginString = false;
+	
+	public static void main(String[] args) throws Exception {
+		EmulatorTelnet e = new EmulatorTelnet();
+		e.setPromptArr("$", "#", ">");
+		e.connect("167.1.21.95", 23, "admin", "daims!@");
+		System.out.println("--------------------------------------------------");
+		System.out.println(e.cmdln("en"));
+		System.out.println("--------------------------------------------------");
+		System.out.println(e.cmdln("terminal length 0"));
+		System.out.println("--------------------------------------------------");
+		System.out.println(e.cmdln("show running-config"));
+		System.out.println("--------------------------------------------------");
+		e.disconnect();
+	}
+
 
 	public EmulatorTelnet() {
 
@@ -30,15 +45,14 @@ public class EmulatorTelnet extends Emulator {
 	/**
 	 * 로그인 문구를 기다렸다가 계정을 보낼지 여부를 설정합니다.
 	 * 
-	 * @param waitLoginString
-	 *            true이면 기다림.
+	 * @param waitLoginString true이면 기다림.
 	 */
 	public void setWaitLoginString(boolean waitLoginString) {
 		this.waitLoginString = waitLoginString;
 	}
 
 	@Override
-	protected void _connect(String host, int port, String userId, String password) throws Exception {
+	protected void doConnect(String host, int port, String userId, String password) throws Exception {
 
 		InetSocketAddress isa = new InetSocketAddress(host, port);
 		socket = new Socket();
@@ -51,11 +65,14 @@ public class EmulatorTelnet extends Emulator {
 
 		logger.debug("negotiation ok - " + new String(bytes));
 
-		if (reader == null) {
-			reader = new Reader();
-			reader.start();
-		}
+		startReader();
 
+		doLogin(userId, password);
+
+	}
+
+	protected void doLogin(String userId, String password) throws Exception {
+		
 		// negotiation 과정에서 login 문자를 먼저 읽어 버림.
 		if (waitLoginString) {
 			if (waitfor(getStrLoginIndi()) == null) {
@@ -76,7 +93,6 @@ public class EmulatorTelnet extends Emulator {
 		}
 
 		logger.debug("login ok", ret);
-
 	}
 
 	@Override
@@ -84,8 +100,7 @@ public class EmulatorTelnet extends Emulator {
 		if (socket != null) {
 			try {
 				socket.close();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				logger.error(e);
 			}
 			socket = null;
@@ -97,8 +112,7 @@ public class EmulatorTelnet extends Emulator {
 	protected InputStream getInputStream() {
 		try {
 			return socket.getInputStream();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -107,8 +121,7 @@ public class EmulatorTelnet extends Emulator {
 	protected OutputStream getOutputStream() {
 		try {
 			return socket.getOutputStream();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -155,8 +168,7 @@ public class EmulatorTelnet extends Emulator {
 					// System.out.println(String.format("%x %x %x", recvCh[0],
 					// recvCh[1], recvCh[2]));
 					outputStream.write(buff);
-				}
-				else if (recvCh[1] == WILL) {
+				} else if (recvCh[1] == WILL) {
 					recvCh[2] = (byte) inputStream.read();
 					buff[0] = IAC;
 					buff[1] = DONT;
@@ -169,7 +181,8 @@ public class EmulatorTelnet extends Emulator {
 
 			// 2013.08.08 by subkjh : added
 			else {
-				if (System.currentTimeMillis() > ptime + 5000) return new byte[0];
+				if (System.currentTimeMillis() > ptime + 5000)
+					return new byte[0];
 				Thread.yield();
 			}
 		}

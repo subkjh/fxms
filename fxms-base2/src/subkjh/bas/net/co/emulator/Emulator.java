@@ -6,6 +6,12 @@ import java.io.OutputStream;
 
 import subkjh.bas.co.log.Logger;
 
+/**
+ * Telnet/Ssh 접속 에뮬레이터 공통 부분
+ * 
+ * @author subkjh(Kim,JongHoon)
+ *
+ */
 public abstract class Emulator {
 
 	enum OP {
@@ -128,6 +134,8 @@ public abstract class Emulator {
 	/** 메시지 수신 대기 시간 */
 	private int timeoutMsRead = DEFAULT_READ_TIMEOUT;
 
+	protected abstract void _disconnect();
+
 	public String cmd(String cmd, String... waitStrArr) throws Exception {
 
 		reader.buffer(OP.reset);
@@ -151,21 +159,26 @@ public abstract class Emulator {
 		return cmd(cmd + "\n", waitStrArr);
 	}
 
+	/**
+	 * 접속 및 로그인
+	 * 
+	 * @param host
+	 * @param port
+	 * @param userId
+	 * @param password
+	 * @throws Exception
+	 */
 	public void connect(String host, int port, String userId, String password) throws Exception {
 
 		try {
-			_connect(host, port, userId, password);
+			doConnect(host, port, userId, password);
 		} catch (Exception e) {
 			logger.error(e);
 			disconnect();
 			throw e;
 		}
 
-		if (reader == null) {
-			reader = new Reader();
-			reader.start();
-		}
-
+		startReader();
 	}
 
 	public void disconnect() {
@@ -179,8 +192,47 @@ public abstract class Emulator {
 		logger.debug("ok");
 	}
 
+	protected abstract void doConnect(String host, int port, String userId, String password) throws Exception;
+
+	/**
+	 * 입력 스트림
+	 * 
+	 * @return 입력 스트림
+	 * @throws IOException
+	 */
+	protected abstract InputStream getInputStream();
+
 	public Logger getLogger() {
 		return logger;
+	}
+
+	/**
+	 * 
+	 * @return 출력 스트림
+	 * @throws IOException
+	 */
+	protected abstract OutputStream getOutputStream();
+
+	/**
+	 * 
+	 * @param strArr
+	 * @return
+	 */
+	protected String getString(String[] strArr) {
+
+		if (strArr == null)
+			return "null";
+		if (strArr.length == 0)
+			return "<empty>";
+		StringBuffer sb = new StringBuffer();
+
+		for (String s : strArr) {
+			sb.append(",");
+			sb.append(s);
+		}
+
+		return sb.toString().substring(1);
+
 	}
 
 	public String[] getStrLoginIndi() {
@@ -219,43 +271,19 @@ public abstract class Emulator {
 		this.timeoutMsRead = timeoutMsRead;
 	}
 
-	protected abstract void _connect(String host, int port, String userId, String password) throws Exception;
-
-	protected abstract void _disconnect();
-
-	/**
-	 * 입력 스트림
-	 * 
-	 * @return 입력 스트림
-	 * @throws IOException
-	 */
-	protected abstract InputStream getInputStream();
-
-	/**
-	 * 
-	 * @return 출력 스트림
-	 * @throws IOException
-	 */
-	protected abstract OutputStream getOutputStream();
-
-	protected String getString(String[] strArr) {
-
-		if (strArr == null)
-			return "null";
-		if (strArr.length == 0)
-			return "<empty>";
-		StringBuffer sb = new StringBuffer();
-
-		for (String s : strArr) {
-			sb.append(",");
-			sb.append(s);
+	protected synchronized void startReader() {
+		if (reader == null) {
+			reader = new Reader();
+			reader.start();
 		}
-
-		return sb.toString().substring(1);
-
 	}
 
-	protected String waitfor(String waitStrArr[]) {
+	/**
+	 * 
+	 * @param waitStrArr
+	 * @return
+	 */
+	public String waitfor(String waitStrArr[]) {
 
 		String s;
 		StringBuffer sb = new StringBuffer();
@@ -269,7 +297,9 @@ public abstract class Emulator {
 					return null;
 				continue;
 			}
+			
 			sb.append(s);
+			
 			result = sb.toString().toLowerCase();
 			for (String f : waitStrArr) {
 				if (result.indexOf(f.toLowerCase()) >= 0) {
@@ -280,6 +310,10 @@ public abstract class Emulator {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	protected String waitforPrompt() {
 
 		String s;

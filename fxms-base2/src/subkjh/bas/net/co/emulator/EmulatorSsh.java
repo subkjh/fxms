@@ -17,12 +17,23 @@ public class EmulatorSsh extends Emulator {
 	private Session session;
 	private Channel channel;
 
+	public static void main(String[] args) throws Exception {
+		EmulatorSsh e = new EmulatorSsh();
+		e.connect("125.7.128.42", 63822, "subkjh", "rlawhdgns");
+		System.out.println("--------------------------------------------------");
+		System.out.println(e.cmdln("ps -ef"));
+//		System.out.println("--------------------------------------------------");
+//		System.out.println(e.cmdln("nprismstatus"));
+//		System.out.println("--------------------------------------------------");
+		e.disconnect();
+	}
+
 	public EmulatorSsh() {
 
 	}
 
 	@Override
-	protected void _connect(String host, int port, String userId, String password) throws Exception {
+	protected void doConnect(String host, int port, String userId, String password) throws Exception {
 		jsch = new JSch();
 
 		session = jsch.getSession(userId, host, port);
