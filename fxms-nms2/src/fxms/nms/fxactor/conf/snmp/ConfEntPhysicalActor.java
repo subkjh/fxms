@@ -119,7 +119,7 @@ public class ConfEntPhysicalActor extends ConfSnmpFxActor {
 			// if (sensorList != null && sensorList.size() > 0)
 			// configMo.addMoListDetected(sensorList);
 
-			configMo.addMoListDetected(cardList);
+			configMo.addDetectedMoList(cardList);
 
 		}
 	}

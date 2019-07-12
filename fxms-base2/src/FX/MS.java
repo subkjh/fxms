@@ -9,12 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fxms.bas.api.MoApi;
 import fxms.bas.api.ServiceApi;
 import fxms.bas.co.exp.NotFoundException;
+import fxms.bas.co.vo.FxServiceVo;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.FxServiceImpl;
-import fxms.bas.mo.ServiceMo;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.net.NioServer;
 import subkjh.bas.net.soproth.AliveServerJSonSoproth;
@@ -115,11 +114,11 @@ public class MS extends UnicastRemoteObject implements FxMS {
 		para.put("msIpaddr", FxCfg.getCfg().getIpAddress());
 		para.put("serviceName", serviceName);
 		try {
-			List<ServiceMo> serviceList = MoApi.getApi().getMoList(para, ServiceMo.class);
+			List<FxServiceVo> serviceList = ServiceApi.getApi().getServiceList();
 			if (serviceList.size() == 0) {
 				throw new NotFoundException("SERVICE", serviceName);
 			}
-			ServiceMo service = serviceList.get(0);
+			FxServiceVo service = serviceList.get(0);
 			return executeService(service.getServiceName(), service.getServiceJavaClass());
 		} catch (Exception e1) {
 			Logger.logger.error(e1);
@@ -175,7 +174,7 @@ public class MS extends UnicastRemoteObject implements FxMS {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("msIpaddr", FxCfg.getCfg().getIpAddress());
 
-		List<ServiceMo> serviceList = null;
+		List<FxServiceVo> serviceList = null;
 
 		AliveServerJSonSoproth soproth;
 
@@ -188,14 +187,14 @@ public class MS extends UnicastRemoteObject implements FxMS {
 			}
 
 			try {
-				serviceList = MoApi.getApi().getMoList(para, ServiceMo.class);
+				serviceList = ServiceApi.getApi().getServiceList();
 			} catch (Exception e1) {
 				Logger.logger.error(e1);
 			}
 
 			if (serviceList != null) {
 
-				for (ServiceMo service : serviceList) {
+				for (FxServiceVo service : serviceList) {
 					soproth = aliveServer.getSoproth(service.getMsIpaddr() + "/" + service.getServiceName());
 
 					if (soproth == null) {

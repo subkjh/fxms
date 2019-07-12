@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fxms.bas.api.CoApi;
+import fxms.bas.api.FxApi;
+import fxms.bas.api.PsApi;
+import fxms.bas.api.VoApi;
+import fxms.bas.co.def.PS_TYPE;
+import fxms.bas.fxo.FxCfg;
+import fxms.bas.po.item.PsItem;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.dao.data.Column;
 import subkjh.bas.dao.data.Index;
@@ -12,13 +19,6 @@ import subkjh.bas.dao.database.DBManager;
 import subkjh.bas.dao.define.INDEX_TYPE;
 import subkjh.bas.fxdao.control.FxDaoExecutor;
 import subkjh.bas.fxdao.exception.NotFxTableException;
-import fxms.bas.api.FxApi;
-import fxms.bas.api.PsApi;
-import fxms.bas.api.ServiceApi;
-import fxms.bas.api.VoApi;
-import fxms.bas.co.def.PS_TYPE;
-import fxms.bas.fxo.FxCfg;
-import fxms.bas.po.item.PsItem;
 
 public class VoApiDB extends VoApi {
 
@@ -206,19 +206,19 @@ public class VoApiDB extends VoApi {
 		StringBuffer sb = new StringBuffer();
 		String ret;
 
-		int n = ServiceApi.getApi().getVarValue("ps-value-term-raw", 21);
+		int n = CoApi.getApi().getVarValue("ps-value-term-raw", 21);
 		ret = dropPsTables(PS_TYPE.RAW, FxApi.getDate(System.currentTimeMillis() - (86400000L * n)));
 		sb.append(ret);
 
-		n = ServiceApi.getApi().getVarValue("ps-value-term-5min", 21);
+		n = CoApi.getApi().getVarValue("ps-value-term-5min", 21);
 		ret = dropPsTables(PS_TYPE.MIN5, PS_TYPE.MIN5.getHstimeNextGroup(FxApi.getDate(0), -1 * n));
 		sb.append(ret);
 
-		n = ServiceApi.getApi().getVarValue("ps-value-term-hour", 3);
+		n = CoApi.getApi().getVarValue("ps-value-term-hour", 3);
 		ret = dropPsTables(PS_TYPE.HOUR1, PS_TYPE.HOUR1.getHstimeNextGroup(FxApi.getDate(0), -1 * n));
 		sb.append(ret);
 
-		n = ServiceApi.getApi().getVarValue("ps-value-term-day", 3);
+		n = CoApi.getApi().getVarValue("ps-value-term-day", 3);
 		ret = dropPsTables(PS_TYPE.DAY1, PS_TYPE.DAY1.getHstimeNextGroup(FxApi.getDate(0), -1 * n));
 		sb.append(ret);
 

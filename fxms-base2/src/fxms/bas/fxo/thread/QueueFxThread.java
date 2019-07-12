@@ -3,13 +3,14 @@ package fxms.bas.fxo.thread;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import fxms.bas.api.EventApi;
+import fxms.bas.api.MoApi;
+import fxms.bas.api.ServiceApi;
+import fxms.bas.co.def.ALARM_CODE;
+import fxms.bas.fxo.service.FxServiceImpl;
 import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
-import fxms.bas.api.EventApi;
-import fxms.bas.api.MoApi;
-import fxms.bas.co.def.ALARM_CODE;
-import fxms.bas.fxo.service.FxServiceImpl;
 
 public abstract class QueueFxThread<E> extends FxThread {
 
@@ -55,7 +56,7 @@ public abstract class QueueFxThread<E> extends FxThread {
 
 		FxServiceImpl.logger.fail(Lang.get("너무 많은 자료가 큐에 있어 모두 제거합니다."));
 
-		EventApi.getApi().check(MoApi.getApi().getFxServiceMo(), getName(), ALARM_CODE.SERVICE_QUEUE_TOO_MANY,
+		EventApi.getApi().check(ServiceApi.getApi().getMyMo(), getName(), ALARM_CODE.SERVICE_QUEUE_TOO_MANY,
 				"TOO MANY DATAS IN QUEUE", null);
 
 		FxServiceImpl.setError(getName(), "Too Many Datas : " + MoApi.getDate(0));

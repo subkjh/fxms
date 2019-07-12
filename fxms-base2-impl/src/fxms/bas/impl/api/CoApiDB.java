@@ -5,11 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.co.log.LOG_LEVEL;
-import subkjh.bas.co.log.Logger;
-import subkjh.bas.co.user.UserAlog;
-import subkjh.bas.dao.database.DBManager;
-import subkjh.bas.fxdao.control.FxDaoExecutor;
 import fxms.bas.api.CoApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.co.AmGroupVo;
@@ -17,10 +12,12 @@ import fxms.bas.co.AmHstVo;
 import fxms.bas.co.AmUserVo;
 import fxms.bas.co.FxConfDao;
 import fxms.bas.co.OpCode;
+import fxms.bas.co.vo.FxVar;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.co.LogoutDbo;
 import fxms.bas.impl.co.UserDao;
 import fxms.bas.impl.co.UserLogDbo;
+import fxms.bas.impl.co.VarDbo;
 import fxms.bas.impl.dbo.FX_AM_GROUP;
 import fxms.bas.impl.dbo.FX_AM_GROUP_MO;
 import fxms.bas.impl.dbo.FX_AM_GROUP_USER;
@@ -28,6 +25,12 @@ import fxms.bas.impl.dbo.FX_AM_HST;
 import fxms.bas.impl.dbo.FX_CD_OP;
 import fxms.bas.impl.dbo.FX_UR_TIME;
 import fxms.module.restapi.vo.SessionVo;
+import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
+import subkjh.bas.co.user.User;
+import subkjh.bas.co.user.UserAlog;
+import subkjh.bas.dao.database.DBManager;
+import subkjh.bas.fxdao.control.FxDaoExecutor;
 
 public class CoApiDB extends CoApi {
 
@@ -51,6 +54,76 @@ public class CoApiDB extends CoApi {
 		}
 
 		return user;
+	}
+
+	@Override
+	protected FxVar doSelectVar(String varName) throws Exception {
+
+		FxDaoExecutor tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createFxDao();
+
+		try {
+			tran.start();
+
+			Map<String, Object> para = new HashMap<String, Object>();
+			para.put("varName", varName);
+
+			VarDbo var = tran.selectOne(VarDbo.class, para);
+			return new FxVar(var.getVarName(), var.getVarValue());
+		} catch (Exception e) {
+			Logger.logger.error(e);
+			throw e;
+		} finally {
+			tran.stop();
+		}
+	}
+
+	@Override
+	protected void doUpdateVarValue(String varName, Object varValue) throws Exception {
+
+		FxDaoExecutor tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createFxDao();
+
+		try {
+			tran.start();
+
+			VarDbo dbo = new VarDbo();
+			dbo.setVarName(varName);
+			dbo.setVarValue(String.valueOf(varValue));
+			dbo.setChgDate(FxApi.getDate(0));
+			dbo.setChgUserNo(User.USER_NO_SYSTEM);
+
+			tran.updateOfClass(VarDbo.class, dbo, null);
+
+			tran.commit();
+
+		} catch (Exception e) {
+			Logger.logger.error(e);
+			throw e;
+		} finally {
+			tran.stop();
+		}
+
+	}
+
+	@Override
+	protected List<FxVar> doSelectVarAll() throws Exception {
+		FxDaoExecutor tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createFxDao();
+
+		try {
+			tran.start();
+
+			List<VarDbo> list = tran.select(VarDbo.class, null);
+			List<FxVar> ret = new ArrayList<FxVar>();
+			for (VarDbo e : list) {
+				ret.add(new FxVar(e.getVarName(), e.getVarValue()));
+			}
+			return ret;
+
+		} catch (Exception e) {
+			Logger.logger.error(e);
+			throw e;
+		} finally {
+			tran.stop();
+		}
 	}
 
 	@Override
@@ -101,8 +174,8 @@ public class CoApiDB extends CoApi {
 					for (FX_AM_GROUP_USER user : userList) {
 						for (AmGroupVo group : groupList) {
 							if (user.getAmGroupNo() == group.getAmGroupNo()) {
-								group.getAmList().add(
-										new AmUserVo(user.getUserNo(), user.getAmName(), user.getAmMail(), user.getAmTelno()));
+								group.getAmList().add(new AmUserVo(user.getUserNo(), user.getAmName(), user.getAmMail(),
+										user.getAmTelno()));
 								break;
 							}
 						}
@@ -146,8 +219,8 @@ public class CoApiDB extends CoApi {
 	}
 
 	@Override
-	public void logUserOp(int userNo, String sessionId, OpCode opcode, String inPara, String outRet, int retNo, String retMsg,
-			long mstimeStart) {
+	public void logUserOp(int userNo, String sessionId, OpCode opcode, String inPara, String outRet, int retNo,
+			String retMsg, long mstimeStart) {
 
 		UserLogDbo log = new UserLogDbo();
 

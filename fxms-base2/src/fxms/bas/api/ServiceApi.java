@@ -4,25 +4,15 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import fxms.bas.co.exp.FxServiceNotFoundException;
+import fxms.bas.co.vo.FxServiceVo;
+import fxms.bas.fxo.FxCfg;
+import fxms.bas.mo.Mo;
+import fxms.bas.mo.property.MoManageable;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
-import subkjh.bas.co.user.User;
-import fxms.bas.co.def.ALARM_CODE;
-import fxms.bas.co.exp.FxServiceNotFoundException;
-import fxms.bas.co.signal.ReloadSignal;
-import fxms.bas.co.vo.FxVar;
-import fxms.bas.fxo.FxCfg;
-import fxms.bas.fxo.service.FxServiceImpl;
-import fxms.bas.mo.Mo;
-import fxms.bas.mo.ServerMo;
-import fxms.bas.mo.ServiceMo;
-import fxms.bas.mo.attr.MoLoader;
-import fxms.bas.mo.property.MoManageable;
 
 public abstract class ServiceApi extends FxApi {
 
@@ -43,70 +33,57 @@ public abstract class ServiceApi extends FxApi {
 		return api;
 	}
 
-	private MoLoader<ServerMo> serverLoader;
-	private MoLoader<ServiceMo> serviceLoader;
-	/** 환경변수 목록 */
-	private Map<String, Object> varMap;
+	/** 서비스 목록 */
+	private List<FxServiceVo> serviceList = new ArrayList<FxServiceVo>();
+	/** 서비스를 나타내는 MO */
+	private Mo myMo;
 
 	public ServiceApi() {
-		varMap = new HashMap<String, Object>();
-
-		serverLoader = new MoLoader<ServerMo>(ServerMo.MO_CLASS, null) {
-			@Override
-			public String getKey(ServerMo mo) {
-				return mo.getMsIpaddr();
-			}
-		};
-		serverLoader.putPara("mngYn", true);
-
-		serviceLoader = new MoLoader<ServiceMo>(ServiceMo.MO_CLASS, null) {
-			@Override
-			public String getKey(ServiceMo mo) {
-				return mo.getMoName();
-			}
-		};
-		serviceLoader.putPara("mngYn", true);
 	}
 
+	/**
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @param javaClass
+	 * @throws Exception
+	 */
 	public void addService(String msIpaddr, String serviceName, String javaClass) throws Exception {
-
-		try {
-			ServerMo fxServer = getFxServer(msIpaddr);
-			if (fxServer == null) {
-				fxServer = (ServerMo) MoApi.getApi().makeNewMo(ServerMo.MO_CLASS);
-				ServerMo.set(fxServer, msIpaddr, msIpaddr, "auto-insert");
-				ServerMo newFxServer = (ServerMo) MoApi.getApi().addMo(fxServer, "service-added", User.USER_NO_SYSTEM);
-				if (newFxServer != null) {
-					serverLoader.addMo(newFxServer);
-				}
-			}
-		} catch (Exception e) {
-			Logger.logger.error(e);
-		}
-
 		try {
 
-			ServiceMo fxService = getService(serviceName, msIpaddr);
+			doAddService(msIpaddr, serviceName, javaClass);
 
-			if (fxService == null) {
+			FxServiceVo vo = new FxServiceVo();
+			vo.setMsIpaddr(msIpaddr);
+			vo.setServiceJavaClass(javaClass);
+			vo.setServiceName(serviceName);
 
-				fxService = (ServiceMo) MoApi.getApi().makeNewMo(ServiceMo.MO_CLASS);
-				ServiceMo.set(fxService, msIpaddr, serviceName);
-				fxService.setServiceJavaClass(javaClass);
-				fxService.setServiceStatus("ADDED");
-				fxService.setStatusChgDate(FxApi.getDate(0));
-
-				MoApi.getApi().addMo(fxService, "service-added", User.USER_NO_SYSTEM);
-
-			}
+			serviceList.add(vo);
 
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
-
 	}
 
-	public abstract void doSetServiceStatus(String serviceStatus) throws Exception;
+	/**
+	 * 
+	 * @return 서비스관리대상
+	 */
+	public synchronized Mo getMyMo() {
+		if (myMo == null) {
+			try {
+				myMo = doSelectMyMo(getMsIpAddr(), FxCfg.getFxServiceName());
+			} catch (Exception e) {
+
+				Logger.logger.error(e);
+
+				myMo = new Mo();
+				myMo.setMoNo(0);
+				myMo.setMoName(getMsIpAddr() + "/" + FxCfg.getFxServiceName());
+			}
+		}
+		return myMo;
+	}
 
 	/**
 	 * 
@@ -129,6 +106,15 @@ public abstract class ServiceApi extends FxApi {
 		return getService(classOfT, null);
 	}
 
+	/**
+	 * 
+	 * @param <T>
+	 * @param classOfT
+	 * @param mo
+	 * @return
+	 * @throws FxServiceNotFoundException
+	 * @throws Exception
+	 */
 	public <T> T getService(Class<T> classOfT, Mo mo) throws FxServiceNotFoundException, Exception {
 
 		String msIp = null;
@@ -144,7 +130,7 @@ public abstract class ServiceApi extends FxApi {
 			}
 		}
 
-		ServiceMo service = getService(classOfT.getSimpleName(), msIp);
+		FxServiceVo service = getService(classOfT.getSimpleName(), msIp);
 		if (service != null) {
 			return getFxService(classOfT, service.getUrl());
 
@@ -154,12 +140,24 @@ public abstract class ServiceApi extends FxApi {
 	}
 
 	/**
+	 * 현 서버에서 사용하는 서비스 목록을 조회한다.
+	 * 
+	 * @return
+	 */
+	public List<FxServiceVo> getServiceList() {
+
+		if (serviceList.size() == 0) {
+			loadServiceList();
+		}
+
+		return serviceList;
+	}
+
+	/**
 	 * 서비스 목록을 조회한다.
 	 * 
-	 * @param classOfT
-	 *            조회할 서비스 클래스
-	 * @param msIp
-	 *            담당주소
+	 * @param classOfT 조회할 서비스 클래스
+	 * @param msIp     담당주소
 	 * @return 서비스목록
 	 */
 	@SuppressWarnings("unchecked")
@@ -174,10 +172,10 @@ public abstract class ServiceApi extends FxApi {
 			}
 		}
 
-		List<ServiceMo> serviceMoList = getFxServiceMoList(ip);
+		List<FxServiceVo> list = getServiceList(ip);
 		List<T> serviceList = new ArrayList<T>();
 
-		for (ServiceMo mo : serviceMoList) {
+		for (FxServiceVo mo : list) {
 			try {
 				Remote remote = Naming.lookup(mo.getUrl());
 				if (classOfT.isInstance(remote)) {
@@ -195,147 +193,155 @@ public abstract class ServiceApi extends FxApi {
 		return null;
 	}
 
-	public int getVarValue(String varName, int valueDefault) {
-
-		String value = null;
-
+	/**
+	 * 서비스를 제거한다.
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @throws Exception
+	 */
+	public void removeService(String msIpaddr, String serviceName) {
 		try {
-			value = getVarValue(varName);
-			if (value == null) {
-				return valueDefault;
-			}
-			return Integer.parseInt(value);
 
-		} catch (Exception e) {
-			Logger.logger.fail("var={}, value={}", varName, value);
-			return valueDefault;
-		}
-	}
+			doRemoveService(msIpaddr, serviceName);
 
-	public long getVarValue(String varName, long valueDefault) {
+			FxServiceVo vo;
 
-		try {
-			String value;
-
-			value = getVarValue(varName);
-			if (value == null)
-				return valueDefault;
-
-			return Long.parseLong(value);
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			return valueDefault;
-		}
-	}
-
-	public String getVarValue(String varName, String valueDefault) {
-		try {
-			String value = getVarValue(varName);
-			if (value == null)
-				return valueDefault;
-			return value;
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			return valueDefault;
-		}
-	}
-
-	public void removeService(String msIpaddr, String serviceName) throws Exception {
-
-		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("msIpaddr", FxCfg.getCfg().getIpAddress());
-		para.put("moClass", ServiceMo.MO_CLASS);
-
-		List<ServiceMo> serviceList = MoApi.getApi().getMoList(para, ServiceMo.class);
-
-		if (serviceList.size() > 0) {
-			for (ServiceMo mo : serviceList) {
-				if (mo.getServiceName().equals(serviceName)) {
-					MoApi.getApi().deleteMo(mo, User.USER_NO_SYSTEM, "ms-delete");
+			for (int i = serviceList.size(); i >= 0; i--) {
+				vo = serviceList.get(i);
+				if (vo.getMsIpaddr().equals(msIpaddr) && vo.getServiceName().equals(serviceName)) {
+					serviceList.remove(i);
 					break;
 				}
 			}
-		}
 
-		serviceList = MoApi.getApi().getMoList(para, ServiceMo.class);
-		if (serviceList.size() == 0) {
-			para.put("moClass", ServerMo.MO_CLASS);
-			List<ServerMo> serverList = (List<ServerMo>) MoApi.getApi().getMoList(para, ServerMo.class);
-			if (serviceList.size() > 0) {
-				for (ServerMo mo : serverList) {
-					MoApi.getApi().deleteMo(mo, User.USER_NO_SYSTEM, "service-not-found");
-				}
-			}
+		} catch (Exception e) {
+			Logger.logger.error(e);
 		}
 	}
 
-	public void setVarValue(String varName, Object varValue, boolean broadcast) throws Exception {
-
-		Logger.logger.debug("var={}, val={}, broadcast={}", varName, varValue, broadcast);
-
+	public void setAllServiceStatus(String status) {
 		try {
-
-			doUpdateVarValue(varName, varValue);
-
-			varMap.remove(varName);
-
-			// 다시 적재 합니다.
-			getVarValue(varName);
-
-			if (broadcast && FxServiceImpl.fxService != null) {
-				FxServiceImpl.fxService.send(new ReloadSignal(ReloadSignal.RELOAD_TYPE_VAR));
-			}
-
+			doSetAllServiceStatus(status);
 		} catch (Exception e) {
 			Logger.logger.error(e);
-			throw e;
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @param startDate
+	 * @param serviceStatus
+	 */
+	public void updateServiceStatus(String msIpaddr, String serviceName, long startDate, String serviceStatus) {
+
+		try {
+			doUpdateServiceStatus(msIpaddr, serviceName, startDate, serviceStatus);
+		} catch (Exception e) {
+			Logger.logger.error(e);
 		}
 	}
 
-	public void updateServiceStatus(String msIpaddr, String serviceName, long startDate, String serviceStatus) throws Exception {
+	protected void addNewService(FxServiceVo service) {
+		if (service != null) {
+			serviceList.add(service);
+		}
+	}
 
-		try {
-			ServerMo fxServer = getFxServer(msIpaddr);
-			if (fxServer == null) {
-				fxServer = (ServerMo) MoApi.getApi().makeNewMo(ServerMo.MO_CLASS);
-				ServerMo.set(fxServer, msIpaddr, msIpaddr, "auto-insert");
-				ServerMo newFxServer = (ServerMo) MoApi.getApi().addMo(fxServer, "service-added", User.USER_NO_SYSTEM);
-				if (newFxServer != null) {
-					serverLoader.addMo(newFxServer);
+	/**
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @param javaClass
+	 * @throws Exception
+	 */
+	protected abstract void doAddService(String msIpaddr, String serviceName, String javaClass) throws Exception;
+
+	/**
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @throws Exception
+	 */
+	protected abstract void doRemoveService(String msIpaddr, String serviceName) throws Exception;
+
+	/**
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @return
+	 * @throws Exception
+	 */
+	protected abstract Mo doSelectMyMo(String msIpaddr, String serviceName) throws Exception;
+
+	/**
+	 * 서비스를 조회한다.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	protected abstract List<FxServiceVo> doServiceList() throws Exception;
+
+	/**
+	 * 
+	 * @param status
+	 * @throws Exception
+	 */
+	protected abstract void doSetAllServiceStatus(String status) throws Exception;
+
+	/**
+	 * 
+	 * @param msIpaddr
+	 * @param serviceName
+	 * @param startDate
+	 * @param serviceStatus
+	 * @throws Exception
+	 */
+	protected abstract void doUpdateServiceStatus(String msIpaddr, String serviceName, long startDate,
+			String serviceStatus) throws Exception;
+
+	/**
+	 * 
+	 * @return
+	 */
+	protected String getMsIpAddr() {
+		return FxCfg.getCfg().getIpAddress();
+	}
+
+	/**
+	 * 
+	 * @param serviceName
+	 * @param msIpaddr
+	 * @return
+	 */
+	protected FxServiceVo getService(String serviceName, String msIpaddr) {
+
+		for (FxServiceVo service : getServiceList()) {
+
+			if (service.getServiceName().equals(serviceName)) {
+				if (msIpaddr == null || msIpaddr.length() == 0) {
+					return service;
+				} else if (msIpaddr.equals(service.getMsIpaddr())) {
+					return service;
 				}
 			}
-		} catch (Exception e) {
-			Logger.logger.error(e);
 		}
 
-		try {
+		return null;
+	}
 
-			ServiceMo fxService = getService(serviceName, msIpaddr);
+	@Override
+	protected void initApi() throws Exception {
 
-			if (fxService == null) {
+	}
 
-				fxService = (ServiceMo) MoApi.getApi().makeNewMo(ServiceMo.MO_CLASS);
-				ServiceMo.set(fxService, msIpaddr, serviceName);
-				fxService.setServiceStatus(serviceStatus);
-				fxService.setStatusChgDate(FxApi.getDate(0));
+	@Override
+	protected void reload() throws Exception {
 
-				MoApi.getApi().addMo(fxService, "service-added", User.USER_NO_SYSTEM);
-
-			} else {
-
-				if (startDate != fxService.getStartDate() || serviceStatus.equals(fxService.getServiceStatus()) == false) {
-					doSetServiceStatus(fxService, startDate, serviceStatus);
-					fxService.setServiceStatus(serviceStatus);
-					fxService.setStartDate(startDate);
-
-					EventApi.getApi().check(fxService, String.valueOf(FxApi.getDate(0)), ALARM_CODE.SERVICE_ON_NOTI, serviceStatus,
-							null);
-				}
-			}
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-		}
+		loadServiceList();
 
 	}
 
@@ -362,28 +368,15 @@ public abstract class ServiceApi extends FxApi {
 
 	}
 
-	private Collection<ServiceMo> getFxServiceMoList() {
-		if (serviceLoader.size() == 0) {
-			try {
-				MoApi.getApi().loadFxMo(null, serviceLoader);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-				return serviceLoader.getMoList();
-			}
-		}
-
-		return serviceLoader.getMoList();
-	}
-
-	private List<ServiceMo> getFxServiceMoList(String msIpaddr) {
+	private List<FxServiceVo> getServiceList(String msIpaddr) {
 
 		if (msIpaddr == null) {
-			return new ArrayList<>(getFxServiceMoList());
+			return getServiceList();
 		}
 
-		List<ServiceMo> moList = new ArrayList<>();
+		List<FxServiceVo> moList = new ArrayList<>();
 
-		for (ServiceMo service : getFxServiceMoList()) {
+		for (FxServiceVo service : getServiceList()) {
 			if (msIpaddr.equals(service.getMsIpaddr())) {
 				moList.add(service);
 			}
@@ -392,158 +385,16 @@ public abstract class ServiceApi extends FxApi {
 		return moList;
 	}
 
-	/**
-	 * 
-	 * @param varName
-	 * @return
-	 * @throws Exception
-	 */
-	private synchronized String getVarValue(String varName) throws Exception {
-
-		if (varMap.size() == 0) {
-			List<FxVar> varList = doSelectVarAll();
-			for (FxVar var : varList) {
-				varMap.put(var.getName(), var.getValue());
-			}
-		}
-
-		Object value = varMap.get(varName);
-
-		if (value == null) {
-			try {
-				FxVar var = doSelectVar(varName);
-				String valueStr = var == null ? null : var.getValue();
-				if (valueStr != null) {
-					varMap.put(varName, valueStr);
-				} else {
-					Logger.logger.fail("VAR-NAME(" + varName + ") NOT DEFINED");
-				}
-				return valueStr;
-			} catch (Exception e) {
-				Logger.logger.error(e);
-				throw e;
-			}
-		}
-		return value.toString();
-	}
-
-	/**
-	 * 환경변수 내역을 제공합니다.
-	 * 
-	 * @param varName
-	 *            환경변수명
-	 * @return 환경변수
-	 * @throws Exception
-	 */
-	protected abstract FxVar doSelectVar(String varName) throws Exception;
-
-	/**
-	 * 환경변수를 저장소에서 조회합니다.
-	 * 
-	 * @return 환경변수 목록
-	 * @throws Exception
-	 */
-	protected abstract List<FxVar> doSelectVarAll() throws Exception;
-
-	/**
-	 * 
-	 * @param fxService
-	 * @param startDate
-	 * @param serviceStatus
-	 * @throws Exception
-	 */
-	protected abstract void doSetServiceStatus(ServiceMo fxService, long startDate, String serviceStatus) throws Exception;
-
-	/**
-	 * 환경변수의 값을 설정합니다.<br>
-	 * 
-	 * @param varName
-	 *            변수명
-	 * @param varValue
-	 *            변수값
-	 * 
-	 * @throws Exception
-	 */
-	protected abstract void doUpdateVarValue(String varName, Object varValue) throws Exception;
-
-	/**
-	 * 
-	 * @param msIpaddr
-	 * @return
-	 */
-	protected ServerMo getFxServer(String msIpaddr) {
-
-		if (serverLoader.size() == 0) {
-			try {
-				MoApi.getApi().loadFxMo(null, serverLoader);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-				return null;
-			}
-		}
-
-		if (serverLoader.size() == 0) {
-			return null;
-		}
-
-		return serverLoader.getMo(msIpaddr);
-
-	}
-
-	/**
-	 * 
-	 * @param serviceName
-	 * @param msIpaddr
-	 * @return
-	 */
-	protected ServiceMo getService(String serviceName, String msIpaddr) {
-
-		if (serviceLoader.size() == 0) {
-			try {
-				MoApi.getApi().loadFxMo(null, serviceLoader);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-				return null;
-			}
-		}
-
-		if (serviceLoader.size() == 0) {
-			return null;
-		}
-
-		for (ServiceMo service : serviceLoader.getMoList()) {
-
-			if (service.getServiceName().equals(serviceName)) {
-				if (msIpaddr == null || msIpaddr.length() == 0) {
-					return service;
-				} else if (msIpaddr.equals(service.getMsIpaddr())) {
-					return service;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	@Override
-	protected void initApi() throws Exception {
-
+	private void loadServiceList() {
+		List<FxServiceVo> list;
 		try {
-			StringBuffer sb = new StringBuffer();
-			List<FxVar> varList = doSelectVarAll();
-			for (FxVar var : varList) {
-				sb.append(Logger.makeSubString(var.getName(), var.getValue()));
-				varMap.put(var.getName(), var.getValue());
+			list = doServiceList();
+			if (list != null) {
+				serviceList = list;
 			}
-			Logger.logger.info(Logger.makeString("variables", null, sb.toString()));
-
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
-	}
-
-	@Override
-	protected void reload() throws Exception {
 	}
 
 }

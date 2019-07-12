@@ -14,13 +14,10 @@ public class AlarmEvent implements Cloneable, Serializable {
 
 	/**
 	 * 
-	 * @param moNo
-	 *            관리대상번호
-	 * @param instance
-	 *            인스턴서<br>
-	 *            null이거나 공백이면 무시됩니다.
-	 * @param alarmCode
-	 *            경보코드
+	 * @param moNo      관리대상번호
+	 * @param instance  인스턴서<br>
+	 *                  null이거나 공백이면 무시됩니다.
+	 * @param alarmCode 경보코드
 	 * @return 관리대상번호 + _ + [ 인스턴스 + _ ] + 경보코드
 	 */
 	public static String getAlarmKey(long moNo, String moInstance, int alcdNo) {
@@ -48,6 +45,15 @@ public class AlarmEvent implements Cloneable, Serializable {
 	private String treatName;
 	private String alarmKey;
 	private ClearReason clearReason;
+	private boolean isBroadcast = true; /* 방송여부 */
+
+	public boolean isBroadcast() {
+		return isBroadcast;
+	}
+
+	public void setBroadcast(boolean isBroadcast) {
+		this.isBroadcast = isBroadcast;
+	}
 
 	public ClearReason getClearReason() {
 		return clearReason;

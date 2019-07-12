@@ -129,7 +129,7 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 		super.onStarted();
 
 		try {
-			ServiceApi.getApi().doSetServiceStatus("INIT");
+			ServiceApi.getApi().setAllServiceStatus("INIT");
 
 			ServiceApi.getApi().updateServiceStatus(FxCfg.getCfg().getIpAddress(), FxCfg.getFxServiceName(),
 					FxCfg.getCfg().getLong(FxCfg.START_TIME, 0), "ON");

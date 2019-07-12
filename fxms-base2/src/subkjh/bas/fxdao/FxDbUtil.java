@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fxms.bas.mo.ServiceMo;
-import fxms.bas.mo.Mo;
 import subkjh.bas.dao.data.Column;
 import subkjh.bas.dao.data.Index;
 import subkjh.bas.dao.data.SoDo;
@@ -15,7 +13,6 @@ import subkjh.bas.dao.data.Table;
 import subkjh.bas.dao.database.DataBase;
 import subkjh.bas.dao.database.Oracle;
 import subkjh.bas.dao.define.COLUMN_TYPE;
-import subkjh.bas.fxdao.control.QueryMaker;
 import subkjh.bas.fxdao.define.FxColumn;
 import subkjh.bas.fxdao.define.FxIndex;
 import subkjh.bas.fxdao.define.FxIndexes;
@@ -30,64 +27,64 @@ public class FxDbUtil {
 
 		FxDbUtil util = new FxDbUtil();
 
-		util.insert();
+//		util.insert();
 		// util.delete();
 		// util.createTable();
 	}
-
-	void insert() throws Exception {
-		ServiceMo mo = new ServiceMo();
-
-		List<Table> tableList = getTableAll(mo);
-		QueryMaker maker = new QueryMaker();
-
-		for (Table table : tableList) {
-			System.out.println(maker.getInsertQueryResult(table, mo).getDebug());
-		}
-	}
-
-	void delete() throws Exception {
-		ServiceMo mo = new ServiceMo();
-		QueryMaker maker = new QueryMaker();
-		List<Table> tableList = getTableAll(mo);
-
-		for (int i = tableList.size() - 1; i >= 0; i--) {
-			System.out.println(tableList.get(i).getDebug());
-			System.out.println(maker.getDeleteSql(tableList.get(i)));
-//			System.out.println(maker.getUpdateSql(tableList.get(i)));
-		}
-	}
-
-	void createTable() throws Exception {
-		List<String> sqlList;
-
-		ServiceMo t = new ServiceMo();
-		FxDbUtil util = new FxDbUtil();
-
-		Table table = util.getTable(t);
-		System.out.println(database.getSqlCreate(table));
-		sqlList = database.getSqlCreateIndex(table);
-		for (String sql : sqlList) {
-			System.out.println(sql);
-		}
-		sqlList = database.getSqlComment(table);
-		for (String sql : sqlList) {
-			System.out.println(sql);
-		}
-		System.out.println("-----------------------------------------------------------");
-
-		Mo t2 = new ServiceMo();
-		table = util.getTable(t2);
-		System.out.println(database.getSqlCreate(table));
-		sqlList = database.getSqlCreateIndex(table);
-		for (String sql : sqlList) {
-			System.out.println(sql);
-		}
-		sqlList = database.getSqlComment(table);
-		for (String sql : sqlList) {
-			System.out.println(sql);
-		}
-	}
+//
+//	void insert() throws Exception {
+//		ServiceMo mo = new ServiceMo();
+//
+//		List<Table> tableList = getTableAll(mo);
+//		QueryMaker maker = new QueryMaker();
+//
+//		for (Table table : tableList) {
+//			System.out.println(maker.getInsertQueryResult(table, mo).getDebug());
+//		}
+//	}
+//
+//	void delete() throws Exception {
+//		ServiceMo mo = new ServiceMo();
+//		QueryMaker maker = new QueryMaker();
+//		List<Table> tableList = getTableAll(mo);
+//
+//		for (int i = tableList.size() - 1; i >= 0; i--) {
+//			System.out.println(tableList.get(i).getDebug());
+//			System.out.println(maker.getDeleteSql(tableList.get(i)));
+////			System.out.println(maker.getUpdateSql(tableList.get(i)));
+//		}
+//	}
+//
+//	void createTable() throws Exception {
+//		List<String> sqlList;
+//
+//		ServiceMo t = new ServiceMo();
+//		FxDbUtil util = new FxDbUtil();
+//
+//		Table table = util.getTable(t);
+//		System.out.println(database.getSqlCreate(table));
+//		sqlList = database.getSqlCreateIndex(table);
+//		for (String sql : sqlList) {
+//			System.out.println(sql);
+//		}
+//		sqlList = database.getSqlComment(table);
+//		for (String sql : sqlList) {
+//			System.out.println(sql);
+//		}
+//		System.out.println("-----------------------------------------------------------");
+//
+//		Mo t2 = new ServiceMo();
+//		table = util.getTable(t2);
+//		System.out.println(database.getSqlCreate(table));
+//		sqlList = database.getSqlCreateIndex(table);
+//		for (String sql : sqlList) {
+//			System.out.println(sql);
+//		}
+//		sqlList = database.getSqlComment(table);
+//		for (String sql : sqlList) {
+//			System.out.println(sql);
+//		}
+//	}
 
 	private Column getColumn(Object o, Field field) throws Exception {
 

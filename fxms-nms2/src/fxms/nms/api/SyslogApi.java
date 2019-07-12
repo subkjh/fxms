@@ -14,13 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.BasCfg;
-import subkjh.bas.co.log.LOG_LEVEL;
-import subkjh.bas.co.log.Logger;
 import fxms.bas.ao.AoCode;
+import fxms.bas.api.CoApi;
 import fxms.bas.api.EventApi;
 import fxms.bas.api.FxApi;
-import fxms.bas.api.ServiceApi;
 import fxms.bas.co.noti.FxEvent;
 import fxms.bas.co.noti.NotiSender;
 import fxms.bas.co.signal.ReloadSignal;
@@ -37,6 +34,9 @@ import fxms.nms.co.syslog.vo.SyslogEventLog;
 import fxms.nms.co.syslog.vo.SyslogEventLogList;
 import fxms.nms.co.syslog.vo.SyslogThr;
 import fxms.nms.co.syslog.vo.SyslogVo;
+import subkjh.bas.BasCfg;
+import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
 
 /**
  * SyslogService에서 사용하는 API
@@ -151,11 +151,11 @@ public abstract class SyslogApi extends FxApi {
 	 * @return SyslogVo 보관 일
 	 */
 	public int getDays2KeepFile() {
-		int days = ServiceApi.getApi().getVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, -1);
+		int days = CoApi.getApi().getVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, -1);
 		if (days <= 0) {
 			days = 30;
 			try {
-				ServiceApi.getApi().setVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, days, false);
+				CoApi.getApi().setVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, days, false);
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}
@@ -168,11 +168,11 @@ public abstract class SyslogApi extends FxApi {
 	 * @return ZIP으로 압축할 경과 일자
 	 */
 	public int getDays2Zip() {
-		int days = ServiceApi.getApi().getVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, -1);
+		int days = CoApi.getApi().getVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, -1);
 		if (days <= 0) {
 			days = 7;
 			try {
-				ServiceApi.getApi().setVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, days, false);
+				CoApi.getApi().setVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, days, false);
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}
@@ -273,8 +273,7 @@ public abstract class SyslogApi extends FxApi {
 	/**
 	 * 노드에 적용할 임계 조건을 검색합니다.
 	 * 
-	 * @param node
-	 *            노드
+	 * @param node 노드
 	 * @return 적용할 임계 조건<br>
 	 *         해당 사항이 없을 경우 size=0인 리스트 제공
 	 */
@@ -319,16 +318,15 @@ public abstract class SyslogApi extends FxApi {
 	 * 
 	 * @param mo
 	 * @param node
-	 * @param raw
-	 *            실제 SYSLOG데이터
+	 * @param raw        실제 SYSLOG데이터
 	 * @param alarmLevel
 	 * @param alarmCode
 	 * @param alarmName
 	 * @param alarmNo
 	 * @return
 	 */
-	public SyslogEventLog makeSyslogEvent(Mo mo, SyslogNode node, SyslogVo raw, int alarmLevel, int alarmCode, String alarmName,
-			long alarmNo) {
+	public SyslogEventLog makeSyslogEvent(Mo mo, SyslogNode node, SyslogVo raw, int alarmLevel, int alarmCode,
+			String alarmName, long alarmNo) {
 		SyslogEventLog item = new SyslogEventLog();
 
 		item.setAlarmCode(alarmCode);
@@ -411,15 +409,15 @@ public abstract class SyslogApi extends FxApi {
 			insertLog(syslogEvent);
 		}
 
-		EventApi.getApi().check(null, vo.getIpAddress(), NmsCode.AlarmCode.UNKNOWN_SYSLOG, "ip:" + vo.getIpAddress(), null);
+		EventApi.getApi().check(null, vo.getIpAddress(), NmsCode.AlarmCode.UNKNOWN_SYSLOG, "ip:" + vo.getIpAddress(),
+				null);
 
 	}
 
 	/**
 	 * SYSLOG패턴에서 검출된 인스턴스를 재 정의하는 메소드
 	 * 
-	 * @param instance
-	 *            패턴으로 검출된 인스턴스
+	 * @param instance 패턴으로 검출된 인스턴스
 	 * @return 재정의된 인스턴스
 	 */
 	public String remakeInstance(String instance) {
@@ -433,10 +431,8 @@ public abstract class SyslogApi extends FxApi {
 	/**
 	 * SYSLOG 내용을 파일로 기록한다.
 	 * 
-	 * @param node
-	 *            노드
-	 * @param vo
-	 *            메시지
+	 * @param node 노드
+	 * @param vo   메시지
 	 */
 	public void writeSyslog2File(SyslogNode node, SyslogVo vo) {
 

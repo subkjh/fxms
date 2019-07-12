@@ -107,6 +107,7 @@ public class Mo extends FxEventImpl implements FxObject, Cloneable, Serializable
 		return moName;
 	}
 
+	@Override
 	public long getMoNo() {
 		return moNo;
 	}
@@ -119,6 +120,7 @@ public class Mo extends FxEventImpl implements FxObject, Cloneable, Serializable
 		return etcPros;
 	}
 
+	@Override
 	public long getUpperMoNo() {
 		return upperMoNo;
 	}

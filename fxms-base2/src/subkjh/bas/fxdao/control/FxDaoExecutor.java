@@ -18,7 +18,6 @@ import subkjh.bas.fxdao.beans.QueryColumn;
 import subkjh.bas.fxdao.beans.QueryResult;
 import subkjh.bas.fxdao.define.FxOrder;
 import subkjh.bas.fxdao.exception.NotFxTableException;
-import fxms.bas.mo.ServiceMo;
 
 public class FxDaoExecutor extends DaoExecutor {
 
@@ -32,25 +31,25 @@ public class FxDaoExecutor extends DaoExecutor {
 		}
 	}
 
-	public static void main(String[] args) {
-		FxDaoExecutor dao = new FxDaoExecutor();
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("alarmCfgNo", 100);
-		map.put("moNo", 200);
-		map.put("msIpaddr", "10.0.0.1");
-		map.put("chgDate", "20180312");
-		map.put("chgUserNo", "111");
-
-		try {
-			dao.updateOfClass(ServiceMo.class, map);
-		} catch (QidNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		FxDaoExecutor dao = new FxDaoExecutor();
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("alarmCfgNo", 100);
+//		map.put("moNo", 200);
+//		map.put("msIpaddr", "10.0.0.1");
+//		map.put("chgDate", "20180312");
+//		map.put("chgUserNo", "111");
+//
+//		try {
+//			dao.updateOfClass(ServiceMo.class, map);
+//		} catch (QidNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	public static Map<String, Object> makaParameters(Object... objects) {
 		Map<String, Object> parameters = new HashMap<String, Object>();

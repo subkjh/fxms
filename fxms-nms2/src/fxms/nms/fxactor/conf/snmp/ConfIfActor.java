@@ -70,7 +70,7 @@ public class ConfIfActor extends ConfSnmpFxActor {
 				}
 			}
 
-			children.addMoListDetected(toAddList);
+			children.addDetectedMoList(toAddList);
 
 		} catch (Exception e) {
 			throw e;

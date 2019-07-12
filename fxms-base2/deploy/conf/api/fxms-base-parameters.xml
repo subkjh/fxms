@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE api-parameters[
+
+<!ELEMENT api-parameters ( api* ) >
+
+<!ELEMENT api (para*) >
+<!ATTLIST api class CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED >
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED >
+
+]>
+
+<api-parameters>
+</api-parameters>

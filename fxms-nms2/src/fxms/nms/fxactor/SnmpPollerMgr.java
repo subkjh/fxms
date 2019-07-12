@@ -49,7 +49,7 @@ public class SnmpPollerMgr extends PollerMgr<NeMo> {
 			for (NeIfMo ifMo : ifList) {
 				for (NeMo mo : neList) {
 					if (ifMo.getUpperMoNo() == mo.getMoNo()) {
-						mo.getMoConfig().addMo(ifMo, false);
+						mo.getMoConfig().addMo(ifMo);
 						break;
 					}
 				}

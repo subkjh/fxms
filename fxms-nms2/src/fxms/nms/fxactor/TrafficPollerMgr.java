@@ -48,7 +48,7 @@ public class TrafficPollerMgr extends PollerMgr<NeMo> {
 			for (NeIfMo ifMo : ifList) {
 				for (NeMo mo : neList) {
 					if (ifMo.getUpperMoNo() == mo.getMoNo()) {
-						mo.getMoConfig().addMo(ifMo, false);
+						mo.getMoConfig().addMo(ifMo);
 						if (ifMo.getAlarmCfgNo() < 0) {
 							ifMo.setAlarmCfgNo(mo.getAlarmCfgNo());
 						}

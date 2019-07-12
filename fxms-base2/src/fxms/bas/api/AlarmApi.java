@@ -68,7 +68,6 @@ public abstract class AlarmApi extends FxApi {
 
 		countWork++;
 
-		boolean isBroadcast = true;
 		Mo upperMo = null;
 		Mo mo;
 		Alarm curAlarm;
@@ -115,6 +114,7 @@ public abstract class AlarmApi extends FxApi {
 
 			// 경보가 발생인 경우
 			else if (curAlarm == null && event.getAlarmLevel() != AoCode.AlarmLevel.Clear.getNo()) {
+
 				OccurAlarm occurAlarm = makeOccurAlarm(event, mo, upperMo);
 
 				// if (alarm.getTreatNo() > 0) {
@@ -159,7 +159,7 @@ public abstract class AlarmApi extends FxApi {
 			EventApi.getApi().setAlarm(curAlarm);
 
 			// 방송 요청
-			if (isBroadcast) {
+			if (event.isBroadcast()) {
 				broadcast(curAlarm);
 			}
 
@@ -175,18 +175,12 @@ public abstract class AlarmApi extends FxApi {
 	/**
 	 * 현재 경보를 해제합니다.
 	 * 
-	 * @param alarm
-	 *            현재 경보
-	 * @param userNo
-	 *            해제 운용자번호
-	 * @param clearType
-	 *            해제유형
-	 * @param clearNo
-	 *            해제사유번호
-	 * @param clearName
-	 *            해제사유명
-	 * @param clearMemo
-	 *            해제사유메모
+	 * @param alarm     현재 경보
+	 * @param userNo    해제 운용자번호
+	 * @param clearType 해제유형
+	 * @param clearNo   해제사유번호
+	 * @param clearName 해제사유명
+	 * @param clearMemo 해제사유메모
 	 * @return 해제된 경보
 	 * @throws Exception
 	 */
@@ -227,10 +221,8 @@ public abstract class AlarmApi extends FxApi {
 	/**
 	 * 관리대상이 가지고 있는 현재 경보를 해제합니다.
 	 * 
-	 * @param moNo
-	 *            관리대상 번호
-	 * @param clearType
-	 *            해제사유
+	 * @param moNo      관리대상 번호
+	 * @param clearType 해제사유
 	 */
 	public void clearAlarm(long moNo, AoCode.ClearReason clearRsnNo) {
 
@@ -318,7 +310,7 @@ public abstract class AlarmApi extends FxApi {
 		return alarmNew;
 	}
 
-	private	 void initOccurAlarm(OccurAlarm alarm, AlarmEvent event, AlarmCode alarmCode, Mo mo, Mo upper) {
+	private void initOccurAlarm(OccurAlarm alarm, AlarmEvent event, AlarmCode alarmCode, Mo mo, Mo upper) {
 
 		alarm.setMoNo(mo.getMoNo());
 		if (upper != null) {

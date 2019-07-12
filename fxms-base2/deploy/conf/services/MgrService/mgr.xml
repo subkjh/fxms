@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mgr-info>
-  <manager host="167.1.21.25" port="60100" enable="false" />
-  <version>nPrism EMS 1.2 20130519-1114</version>
-  <url>http://167.1.21.25:260001/nPrismNew/jar_upgrade.zip</url>
-  <cycleKeepAliveToFetchMgr>120</cycleKeepAliveToFetchMgr>
-</mgr-info>

@@ -35,7 +35,28 @@ public class MoConfig implements Serializable {
 		this.parent = parent;
 	}
 
-	public void addMo(Mo mo, boolean isDetected) {
+	public void addDetectedMo(Mo mo) {
+
+		addMo(mo);
+
+		mo.setUpperMoNo(parent.getMoNo());
+
+		Mo moOld = find(mo);
+
+		if (moOld != null && moOld.getMoNo() > 0) {
+			mo.setStatus(FxEvent.STATUS.changed);
+			removeChild(moOld);
+			if (moListChg == null) {
+				moListChg = new ArrayList<Mo>();
+			}
+			moListChg.add(moOld);
+		} else {
+			mo.setStatus(FxEvent.STATUS.added);
+		}
+
+	}
+
+	public void addMo(Mo mo) {
 
 		if (children == null) {
 			children = new HashMap<String, List<Mo>>();
@@ -48,55 +69,25 @@ public class MoConfig implements Serializable {
 			children.put(mo.getMoClass(), list);
 		}
 
-		if (isDetected) {
-
-			mo.setUpperMoNo(parent.getMoNo());
-
-			Mo moOld = find(mo);
-
-			if (moOld != null && moOld.getMoNo() > 0) {
-				mo.setStatus(FxEvent.STATUS.changed);
-				removeChild(moOld);
-				if (moListChg == null) {
-					moListChg = new ArrayList<Mo>();
-				}
-				moListChg.add(moOld);
-			} else {
-				mo.setStatus(FxEvent.STATUS.added);
-			}
-
-		}
-
 		list.add(mo);
 
-	}
-
-	public void addMo(MoConfig children, boolean detected) {
-
-		if (children == null) {
-			return;
-		}
-
-		for (Mo mo : children.getMoListAll()) {
-			addMo(mo, detected);
-		}
 	}
 
 	/**
 	 * 탐색된 MO 목록을 추가 또는 수정합니다.
 	 * 
-	 * @param moList
-	 *            탐색된 MO 목록
+	 * @param moList 탐색된 MO 목록
 	 * @return 처리된 수량
 	 */
-	public int addMoListDetected(List<? extends Mo> moList) {
+	public int addDetectedMoList(List<? extends Mo> moList) {
 		if (moList == null || moList.size() == 0)
 			return 0;
 
 		renameMoNameIfDup(moList);
 
-		for (Mo mo : moList)
-			addMo(mo, true);
+		for (Mo mo : moList) {
+			addDetectedMo(mo);
+		}
 
 		return moList.size();
 	}
@@ -104,8 +95,7 @@ public class MoConfig implements Serializable {
 	/**
 	 * 기존 하위 목록에 존재하는지 찾아서 제공합니다.
 	 * 
-	 * @param mo
-	 *            찾을 새로운 MO
+	 * @param mo 찾을 새로운 MO
 	 * @return 찾은 기존 MO
 	 */
 	public Mo find(Mo mo) {
@@ -123,44 +113,16 @@ public class MoConfig implements Serializable {
 		return null;
 	}
 
-	public int sizeAll() {
-		int count = 0;
-
-		if (children != null) {
-			for (List<Mo> list : children.values()) {
-				count += (list == null ? 0 : list.size());
-			}
-		}
-		return count;
-	}
-
-	public String getChildrenString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("parent = " + parent);
-		if (children != null) {
-			for (String moClass : children.keySet()) {
-				sb.append("\n" + moClass + "\n");
-				for (Mo mo : children.get(moClass)) {
-					sb.append("  " + mo + "\n");
+	public Mo getChild(long moNo) {
+		for (List<Mo> list : children.values()) {
+			for (Mo mo : list) {
+				if (mo.getMoNo() == moNo) {
+					return mo;
 				}
 			}
 		}
 
-		return sb.toString();
-	}
-
-	/**
-	 * 
-	 * @param moClass
-	 *            MO_CLASS
-	 * @return MO_CLASS에 해당되는 MO 수
-	 */
-	public int size(String moClass) {
-		if (children == null || children.size() == 0)
-			return 0;
-
-		List<Mo> list = children.get(moClass);
-		return list == null ? 0 : list.size();
+		return null;
 	}
 
 	public Mo getChild(String moClass, String moName) {
@@ -172,18 +134,6 @@ public class MoConfig implements Serializable {
 			}
 		}
 		return null;
-	}
-
-	public List<String> getMoClassList() {
-		List<String> moClassList = new ArrayList<String>();
-
-		if (children != null) {
-			for (String moClass : children.keySet()) {
-				moClassList.add(moClass);
-			}
-		}
-
-		return moClassList;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -204,16 +154,19 @@ public class MoConfig implements Serializable {
 		return children == null ? null : children.get(moClass);
 	}
 
-	public List<Mo> getMoListAll() {
-		List<Mo> allList = new ArrayList<Mo>();
-
+	public String getChildrenString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("parent = " + parent);
 		if (children != null) {
-			for (List<Mo> list : children.values()) {
-				allList.addAll(list);
+			for (String moClass : children.keySet()) {
+				sb.append("\n" + moClass + "\n");
+				for (Mo mo : children.get(moClass)) {
+					sb.append("  " + mo + "\n");
+				}
 			}
 		}
 
-		return allList;
+		return sb.toString();
 	}
 
 	public String getDebug() {
@@ -235,20 +188,48 @@ public class MoConfig implements Serializable {
 		return sb.toString();
 	}
 
-	public Mo getParent() {
-		return parent;
-	}
+	public List<String> getMoClassList() {
+		List<String> moClassList = new ArrayList<String>();
 
-	public Mo getChild(long moNo) {
-		for (List<Mo> list : children.values()) {
-			for (Mo mo : list) {
-				if (mo.getMoNo() == moNo) {
-					return mo;
-				}
+		if (children != null) {
+			for (String moClass : children.keySet()) {
+				moClassList.add(moClass);
 			}
 		}
 
-		return null;
+		return moClassList;
+	}
+
+	public List<Mo> getMoListAll() {
+		List<Mo> allList = new ArrayList<Mo>();
+
+		if (children != null) {
+			for (List<Mo> list : children.values()) {
+				allList.addAll(list);
+			}
+		}
+
+		return allList;
+	}
+
+	/**
+	 * 명칭이 중복된 경우 index를 붙여서 제공합니다.
+	 * 
+	 * @param map
+	 * @param name
+	 * @param index
+	 * @return
+	 */
+	private String getName(Map<String, ?> map, String nameOrg, int index) {
+		String name = nameOrg + " (" + index + ")";
+		Object value = map.get(name);
+		if (value == null)
+			return name;
+		return getName(map, nameOrg, index + 1);
+	}
+
+	public Mo getParent() {
+		return parent;
 	}
 
 	public Mo removeChild(Mo child) {
@@ -260,6 +241,23 @@ public class MoConfig implements Serializable {
 		}
 
 		return null;
+	}
+
+	/**
+	 * 중복된 MO_NAME에 대해서 MO_NAME (2) 형식으로 rename합니다.
+	 * 
+	 * @param moList
+	 */
+	private void renameMoNameIfDup(List<? extends Mo> moList) {
+		Map<String, String> moNameMap = new HashMap<String, String>();
+		for (Mo mo : moList) {
+			if (moNameMap.get(mo.getMoName()) == null) {
+				moNameMap.put(mo.getMoName(), mo.getMoName());
+			} else {
+				mo.setMoName(getName(moNameMap, mo.getMoName(), 2));
+				moNameMap.put(mo.getMoName(), mo.getMoName());
+			}
+		}
 	}
 
 	public void setStatusAllChildren(FxEvent.STATUS _beanStatusOld, FxEvent.STATUS _beanStatusNew, String _moClass) {
@@ -293,41 +291,28 @@ public class MoConfig implements Serializable {
 		}
 	}
 
-	public String toString() {
-		return "SIZE(" + sizeAll() + ")";
+	/**
+	 * 
+	 * @param moClass MO_CLASS
+	 * @return MO_CLASS에 해당되는 MO 수
+	 */
+	public int size(String moClass) {
+		if (children == null || children.size() == 0)
+			return 0;
+
+		List<Mo> list = children.get(moClass);
+		return list == null ? 0 : list.size();
 	}
 
-	/**
-	 * 명칭이 중복된 경우 index를 붙여서 제공합니다.
-	 * 
-	 * @param map
-	 * @param name
-	 * @param index
-	 * @return
-	 */
-	private String getName(Map<String, ?> map, String nameOrg, int index) {
-		String name = nameOrg + " (" + index + ")";
-		Object value = map.get(name);
-		if (value == null)
-			return name;
-		return getName(map, nameOrg, index + 1);
-	}
+	public int sizeAll() {
+		int count = 0;
 
-	/**
-	 * 중복된 MO_NAME에 대해서 MO_NAME (2) 형식으로 rename합니다.
-	 * 
-	 * @param moList
-	 */
-	private void renameMoNameIfDup(List<? extends Mo> moList) {
-		Map<String, String> moNameMap = new HashMap<String, String>();
-		for (Mo mo : moList) {
-			if (moNameMap.get(mo.getMoName()) == null) {
-				moNameMap.put(mo.getMoName(), mo.getMoName());
-			} else {
-				mo.setMoName(getName(moNameMap, mo.getMoName(), 2));
-				moNameMap.put(mo.getMoName(), mo.getMoName());
+		if (children != null) {
+			for (List<Mo> list : children.values()) {
+				count += (list == null ? 0 : list.size());
 			}
 		}
+		return count;
 	}
 
 	public Map<String, Object> toMap() {
@@ -339,7 +324,10 @@ public class MoConfig implements Serializable {
 			map.put(moClass + "-list", this.getChildren(moClass));
 		}
 		return map;
-	}	
-	
+	}
+
+	public String toString() {
+		return "SIZE(" + sizeAll() + ")";
+	}
 
 }

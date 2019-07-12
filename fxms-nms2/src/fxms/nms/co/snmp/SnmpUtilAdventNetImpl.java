@@ -5,9 +5,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
-import subkjh.bas.co.lang.Lang;
-import subkjh.bas.co.log.Logger;
-
 import com.adventnet.snmp.beans.ErrorMessages;
 import com.adventnet.snmp.snmp2.SnmpAPI;
 import com.adventnet.snmp.snmp2.SnmpException;
@@ -20,7 +17,7 @@ import com.adventnet.snmp.snmp2.SnmpVarBind;
 import com.adventnet.snmp.snmp2.UDPProtocolOptions;
 import com.adventnet.snmp.snmp2.usm.USMUtils;
 
-import fxms.bas.api.ServiceApi;
+import fxms.bas.api.CoApi;
 import fxms.nms.co.snmp.exception.SnmpErrorException;
 import fxms.nms.co.snmp.exception.SnmpNotFoundOidException;
 import fxms.nms.co.snmp.exception.SnmpTimeoutException;
@@ -28,6 +25,8 @@ import fxms.nms.co.snmp.vo.OidValue;
 import fxms.nms.co.snmp.vo.SNMP;
 import fxms.nms.mo.property.MoSnmppable;
 import fxms.nms.mo.property.SnmpPass;
+import subkjh.bas.co.lang.Lang;
+import subkjh.bas.co.log.Logger;
 
 public class SnmpUtilAdventNetImpl extends SnmpUtil {
 
@@ -184,8 +183,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 	}
 
 	@Override
-	public int snmpbulk(MoSnmppable snmpNode, SnmpListener snmpListener, int nonRepeaters, int maxRepetitions, String... oidArray)
-			throws SnmpErrorException {
+	public int snmpbulk(MoSnmppable snmpNode, SnmpListener snmpListener, int nonRepeaters, int maxRepetitions,
+			String... oidArray) throws SnmpErrorException {
 
 		SnmpPDU pdu = makeSnmpPdu(snmpNode);
 		pdu.setCommand(SnmpAPI.GETBULK_REQ_MSG);
@@ -252,8 +251,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 	}
 
 	@Override
-	public List<OidValue> snmpgetnext(MoSnmppable snmpNode, String... oidArray) throws SnmpTimeoutException,
-			SnmpNotFoundOidException, SnmpErrorException {
+	public List<OidValue> snmpgetnext(MoSnmppable snmpNode, String... oidArray)
+			throws SnmpTimeoutException, SnmpNotFoundOidException, SnmpErrorException {
 
 		if (oidArray.length > 50) {
 			return snmpget(SnmpAPI.GETNEXT_REQ_MSG, snmpNode, oidArray);
@@ -294,8 +293,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 	}
 
 	@Override
-	public List<OidValue> snmpset(MoSnmppable snmpNode, OidValue... oidValueArray) throws SnmpTimeoutException,
-			SnmpNotFoundOidException, SnmpErrorException {
+	public List<OidValue> snmpset(MoSnmppable snmpNode, OidValue... oidValueArray)
+			throws SnmpTimeoutException, SnmpNotFoundOidException, SnmpErrorException {
 
 		SnmpPDU pdu = makeSnmpPdu(snmpNode);
 		pdu.setCommand(SnmpAPI.SET_REQ_MSG);
@@ -329,15 +328,16 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 			} catch (Exception e) {
 			}
 
-			throw new SnmpErrorException(res_pdu.getErrstat(), res_pdu.getErrindex(), snmpVarBindErr + "|" + res_pdu.getError());
+			throw new SnmpErrorException(res_pdu.getErrstat(), res_pdu.getErrindex(),
+					snmpVarBindErr + "|" + res_pdu.getError());
 		}
 
 		return convert(res_pdu, snmpOidList);
 	}
 
 	@Override
-	public List<OidValue> snmpwalk(MoSnmppable snmpNode, String oid) throws SnmpTimeoutException, SnmpNotFoundOidException,
-			SnmpErrorException {
+	public List<OidValue> snmpwalk(MoSnmppable snmpNode, String oid)
+			throws SnmpTimeoutException, SnmpNotFoundOidException, SnmpErrorException {
 
 		List<OidValue> valueList = new ArrayList<OidValue>();
 		SnmpPDU pduSend = makeSnmpPdu(snmpNode);
@@ -374,8 +374,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 
 			if (version == SnmpAPI.SNMP_VERSION_1) {
 
-				oidValue = makeOidValue(pduRecv.getVariableBinding(0).getObjectID().toString(), pduRecv.getVariableBinding(0)
-						.getVariable());
+				oidValue = makeOidValue(pduRecv.getVariableBinding(0).getObjectID().toString(),
+						pduRecv.getVariableBinding(0).getVariable());
 				valueList.add(oidValue);
 
 				if (Logger.debug)
@@ -394,7 +394,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 						if ((byte) error == SnmpAPI.ENDOFMIBVIEWEXP)
 							break;
 
-						throw new SnmpErrorException("Error Indication in response: " + SnmpException.exceptionString((byte) error));
+						throw new SnmpErrorException(
+								"Error Indication in response: " + SnmpException.exceptionString((byte) error));
 					}
 
 					// 2013.01.17 by subkjh. OID가 같으면 브레이크 함.
@@ -434,8 +435,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<OidValue>[] snmpwalk(MoSnmppable snmpNode, String... oidArray) throws SnmpTimeoutException,
-			SnmpNotFoundOidException, SnmpErrorException {
+	public List<OidValue>[] snmpwalk(MoSnmppable snmpNode, String... oidArray)
+			throws SnmpTimeoutException, SnmpNotFoundOidException, SnmpErrorException {
 		List<OidValue>[] listArray = new ArrayList[oidArray.length];
 
 		for (int i = 0; i < oidArray.length; i++) {
@@ -446,8 +447,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 	}
 
 	@Override
-	protected List<OidValue> doSnmpget(MoSnmppable snmpNode, String... oidArray) throws SnmpTimeoutException,
-			SnmpNotFoundOidException, SnmpErrorException {
+	protected List<OidValue> doSnmpget(MoSnmppable snmpNode, String... oidArray)
+			throws SnmpTimeoutException, SnmpNotFoundOidException, SnmpErrorException {
 
 		SnmpPDU pdu = makeSnmpPdu(snmpNode);
 		pdu.setCommand(SnmpAPI.GET_REQ_MSG);
@@ -538,7 +539,7 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 		if (snmpPass == null) {
 			snmpPass = new SnmpPass();
 			try {
-				ServiceApi api = ServiceApi.getApi();
+				CoApi api = CoApi.getApi();
 
 				snmpPass.setSnmpAuthPwd(api.getVarValue("SNMP_AUTH_PASSWORD", ""));
 				snmpPass.setSnmpAuthProtocol(api.getVarValue("Snmp_Auth_Protocol", SnmpPass.AUTH_PROTOCOL_NO_AUTH));
@@ -590,8 +591,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 		}
 
 		if (Logger.debug) {
-			System.out.println(snmpNode.getIpAddress() + ":" + snmpPass.getSnmpPort() + "|" + snmpPass.getSnmpVer() + "|"
-					+ snmpPass.getSnmpRead());
+			System.out.println(snmpNode.getIpAddress() + ":" + snmpPass.getSnmpPort() + "|" + snmpPass.getSnmpVer()
+					+ "|" + snmpPass.getSnmpRead());
 		}
 
 		SnmpPDU pdu = new SnmpPDU();
@@ -606,48 +607,39 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 
 			try {
 				/*
-				 * public static void init_v3_parameters(java.lang.String
-				 * userName, byte[] engineID, int authProtocol, java.lang.String
-				 * authPassword, java.lang.String privPassword, ProtocolOptions
-				 * po, SnmpSession session, boolean validateUser, int
-				 * privProtocol) throws SnmpException A comprehensive
-				 * initialisation routine that creates new SNMPv3 user entries
-				 * and performs time synchronization. Since the engineID is
-				 * accepted as an argument, the SNMPv3 discovery will not be
-				 * done. Hence an SnmpEngineEntry will not be created and added
-				 * to the SnmpEngineTable. If the engineID specified is null or
-				 * of zero length, then the method will automatically do a
-				 * discovery and add an SnmpEngineEntry to the SnmpEngineTable.
-				 * This method will do a time synchronization and hence will
-				 * create a new USMUserEntry and will add it to the
-				 * USMUserTable. After this method is called successfully (
-				 * without any exception ) with a proper engineID as the
-				 * argument, then a valid USMUserEntry will be present in the
-				 * USMUserTable and no entry will be added to the
-				 * SnmpEngineTable. Thus whenever an SNMPv3 request is sent for
-				 * this particular agent, this engineID should be specified in
-				 * the request using the setEngineID method.
+				 * public static void init_v3_parameters(java.lang.String userName, byte[]
+				 * engineID, int authProtocol, java.lang.String authPassword, java.lang.String
+				 * privPassword, ProtocolOptions po, SnmpSession session, boolean validateUser,
+				 * int privProtocol) throws SnmpException A comprehensive initialisation routine
+				 * that creates new SNMPv3 user entries and performs time synchronization. Since
+				 * the engineID is accepted as an argument, the SNMPv3 discovery will not be
+				 * done. Hence an SnmpEngineEntry will not be created and added to the
+				 * SnmpEngineTable. If the engineID specified is null or of zero length, then
+				 * the method will automatically do a discovery and add an SnmpEngineEntry to
+				 * the SnmpEngineTable. This method will do a time synchronization and hence
+				 * will create a new USMUserEntry and will add it to the USMUserTable. After
+				 * this method is called successfully ( without any exception ) with a proper
+				 * engineID as the argument, then a valid USMUserEntry will be present in the
+				 * USMUserTable and no entry will be added to the SnmpEngineTable. Thus whenever
+				 * an SNMPv3 request is sent for this particular agent, this engineID should be
+				 * specified in the request using the setEngineID method.
 				 * 
-				 * Parameters: userName - The string representing the SnmpV3
-				 * principal. engineID - The engineID of the remote SNMPv3
-				 * entity ( the agent ). authProtocol - The authentication
-				 * protocol. Should be one of the constants, MD5_AUTH, SHA_AUTH
-				 * or NO_AUTH. These constants are defined in USMUserEntry.
-				 * authPassword - The authentication password which is converted
-				 * to a localized key. privPassword - The privacy password which
-				 * is converted into a localized private key. po - The
-				 * ProtocolOptions instance session - The SnmpSession instance.
-				 * This should be in open state. The discovery and timeSync
-				 * messages are sent over this session. validateUser - The
-				 * boolean value. If this value is set to true, and if this
-				 * method is called for an NO_AUTH_NO_PRIV user, then a get
-				 * request will be sent to know if the user exits. AUTH_PRIV
-				 * user, then a get request will be sent to know if the priv
-				 * password is correct. privProtocol - The PrivProtocol value.
-				 * Should be one of the constants, CBC_DES, CFB_AES_128,
-				 * CFB_AES_192, CFB_AES_256, CBC_3DES or NO_PRIV, defined in
-				 * USMUserEntry. Throws: SnmpException - is thrown on error.
-				 * Since: AdventNet SNMP API 4 SP4 ( Release 4.0.4 )
+				 * Parameters: userName - The string representing the SnmpV3 principal. engineID
+				 * - The engineID of the remote SNMPv3 entity ( the agent ). authProtocol - The
+				 * authentication protocol. Should be one of the constants, MD5_AUTH, SHA_AUTH
+				 * or NO_AUTH. These constants are defined in USMUserEntry. authPassword - The
+				 * authentication password which is converted to a localized key. privPassword -
+				 * The privacy password which is converted into a localized private key. po -
+				 * The ProtocolOptions instance session - The SnmpSession instance. This should
+				 * be in open state. The discovery and timeSync messages are sent over this
+				 * session. validateUser - The boolean value. If this value is set to true, and
+				 * if this method is called for an NO_AUTH_NO_PRIV user, then a get request will
+				 * be sent to know if the user exits. AUTH_PRIV user, then a get request will be
+				 * sent to know if the priv password is correct. privProtocol - The PrivProtocol
+				 * value. Should be one of the constants, CBC_DES, CFB_AES_128, CFB_AES_192,
+				 * CFB_AES_256, CBC_3DES or NO_PRIV, defined in USMUserEntry. Throws:
+				 * SnmpException - is thrown on error. Since: AdventNet SNMP API 4 SP4 ( Release
+				 * 4.0.4 )
 				 */
 
 				if (snmpPass.getSnmpUserName() == null || snmpPass.getSnmpUserName().trim().length() == 0) {
@@ -690,8 +682,8 @@ public class SnmpUtilAdventNetImpl extends SnmpUtil {
 		return new SnmpVarBind(oid, var);
 	}
 
-	private List<OidValue> snmpget(byte req, MoSnmppable snmpNode, String... oidArray) throws SnmpTimeoutException,
-			SnmpNotFoundOidException, SnmpErrorException {
+	private List<OidValue> snmpget(byte req, MoSnmppable snmpNode, String... oidArray)
+			throws SnmpTimeoutException, SnmpNotFoundOidException, SnmpErrorException {
 
 		SnmpPDU pdu = makeSnmpPdu(snmpNode);
 		pdu.setCommand(req);

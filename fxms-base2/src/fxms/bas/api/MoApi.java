@@ -12,9 +12,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-import subkjh.bas.co.log.LOG_LEVEL;
-import subkjh.bas.co.log.Logger;
-import subkjh.bas.co.user.User;
 import fxms.bas.co.def.ALARM_CODE;
 import fxms.bas.co.exp.NotFoundException;
 import fxms.bas.co.noti.FxEvent;
@@ -25,12 +22,14 @@ import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.fxo.service.mo.MoService;
 import fxms.bas.mo.Mo;
-import fxms.bas.mo.ServiceMo;
 import fxms.bas.mo.attr.MoLoader;
 import fxms.bas.mo.attr.MoLocation;
 import fxms.bas.mo.attr.Model;
 import fxms.bas.mo.child.AutoAddChild;
 import fxms.bas.mo.child.MoConfig;
+import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
+import subkjh.bas.co.user.User;
 
 public abstract class MoApi extends FxApi {
 
@@ -75,8 +74,6 @@ public abstract class MoApi extends FxApi {
 	private Map<Integer, MoLocation> locMap = new HashMap<Integer, MoLocation>();
 	private Map<String, MoLoader<?>> fxMoMap;
 
-	private ServiceMo fxServiceMo;
-
 	public MoApi() {
 		moMap = Collections.synchronizedMap(new HashMap<Long, Mo>());
 		moMapKey = Collections.synchronizedMap(new HashMap<String, Mo>());
@@ -86,10 +83,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상을 추가한다.
 	 * 
-	 * @param mo
-	 *            추가할 관리대상
-	 * @param reason
-	 *            추가하는 이유
+	 * @param mo     추가할 관리대상
+	 * @param reason 추가하는 이유
 	 * @return 추가된 관리대상
 	 * @throws Exception
 	 */
@@ -107,12 +102,9 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상을 삭제한다.
 	 * 
-	 * @param mo
-	 *            삭제할 관리대상
-	 * @param userNo
-	 *            삭제하는 운용자
-	 * @param reason
-	 *            삭제 이유
+	 * @param mo     삭제할 관리대상
+	 * @param userNo 삭제하는 운용자
+	 * @param reason 삭제 이유
 	 * @return 삭제된 관리대상
 	 * @throws Exception
 	 */
@@ -130,8 +122,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상으로부터 구성 정보를 가져온다.
 	 * 
-	 * @param mo
-	 *            관리대상
+	 * @param mo 관리대상
 	 * @return 구성 정보
 	 * @throws Exception
 	 */
@@ -147,10 +138,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 메모리에 적재된 관리대상을 조회한다.
 	 * 
-	 * @param tag
-	 *            구분자
-	 * @param key
-	 *            관리대상 키
+	 * @param tag 구분자
+	 * @param key 관리대상 키
 	 * @return 관리대상
 	 */
 	public Mo getFxMo(String tag, String key) {
@@ -159,22 +148,9 @@ public abstract class MoApi extends FxApi {
 	}
 
 	/**
-	 * 
-	 * @return 서비스관리대상
-	 */
-	public synchronized Mo getFxServiceMo() {
-		if (fxServiceMo == null) {
-			String serviceName = ServiceMo.getMoName(FxCfg.getCfg().getIpAddress(), FxCfg.getFxServiceName());
-			fxServiceMo = (ServiceMo) getMo(0, ServiceMo.MO_CLASS, serviceName, false);
-		}
-		return fxServiceMo;
-	}
-
-	/**
 	 * 메모리에 적재된 관리대상을 조회한다.
 	 * 
-	 * @param moNo
-	 *            관리번호
+	 * @param moNo 관리번호
 	 * @return 관리대상
 	 */
 	public Mo getMo(long moNo) {
@@ -184,10 +160,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상을 조회한다.
 	 * 
-	 * @param moNo
-	 *            관리번호
-	 * @param reload
-	 *            저장소 직접 조회여부
+	 * @param moNo   관리번호
+	 * @param reload 저장소 직접 조회여부
 	 * @return 관리대상
 	 */
 	public Mo getMo(long moNo, boolean reload) {
@@ -222,14 +196,10 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 상위관리대상에 포함된 관리대상을 조회한다.
 	 * 
-	 * @param upperMoNo
-	 *            상위관리대상번호
-	 * @param moClass
-	 *            관리대상종류
-	 * @param moName
-	 *            관리대상명
-	 * @param reload
-	 *            저장소 직접 조회여부
+	 * @param upperMoNo 상위관리대상번호
+	 * @param moClass   관리대상종류
+	 * @param moName    관리대상명
+	 * @param reload    저장소 직접 조회여부
 	 * @return 관리대상
 	 */
 	public Mo getMo(long upperMoNo, String moClass, String moName, boolean reload) {
@@ -279,8 +249,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상분류의 클래스를 조회한다.
 	 * 
-	 * @param moClass
-	 *            관리대상분류
+	 * @param moClass 관리대상분류
 	 * @return 해당 클래스
 	 */
 	public Class<? extends Mo> getMoClass(String moClass) {
@@ -291,8 +260,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상의 구성을 조회한다.
 	 * 
-	 * @param mo
-	 *            관리대상
+	 * @param mo 관리대상
 	 * @return 구성
 	 * @throws Exception
 	 */
@@ -308,7 +276,7 @@ public abstract class MoApi extends FxApi {
 		para.put("upperMoNo", mo.getMoNo());
 		List<Mo> list = doSelectMo(para, true);
 		for (Mo a : list) {
-			children.addMo(a, false);
+			children.addMo(a);
 		}
 
 		return children;
@@ -317,8 +285,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 모델을 조회한다.
 	 * 
-	 * @param modelNo
-	 *            모델번호
+	 * @param modelNo 모델번호
 	 * @return 조회된 모델
 	 */
 	public Model getModel(int modelNo) {
@@ -345,8 +312,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상 목록을 조회한다.
 	 * 
-	 * @param para
-	 *            조건
+	 * @param para 조건
 	 * @return 조회된 목록
 	 * @throws Exception
 	 */
@@ -362,8 +328,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 번호에 해당되는 설치위치를 조회한다.
 	 * 
-	 * @param inloNo
-	 *            설치위치관리번호
+	 * @param inloNo 설치위치관리번호
 	 * @return 설치위치
 	 */
 	public MoLocation getMoLocation(int inloNo) {
@@ -401,10 +366,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 입력된 설치위치번호와 관련된 설치위치종류에 해당되는 설치위치를 조회한다.
 	 * 
-	 * @param inloNo
-	 *            설치위치번호
-	 * @param inloType
-	 *            설치위치종류
+	 * @param inloNo   설치위치번호
+	 * @param inloType 설치위치종류
 	 * @return 해당 설치위치
 	 */
 	public MoLocation getMoLocation(int inloNo, String inloType) {
@@ -452,10 +415,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리설치위치에 포함되는지 판단한다.
 	 * 
-	 * @param inloNo
-	 *            판단한 설치위치번호
-	 * @param mngInloNo
-	 *            관리설치위치번호
+	 * @param inloNo    판단한 설치위치번호
+	 * @param mngInloNo 관리설치위치번호
 	 * @return 포함여부
 	 */
 	public boolean isMemberLocation(int inloNo, int mngInloNo) {
@@ -476,10 +437,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상을 조회하여 메모리에 적재한다.
 	 * 
-	 * @param loaderTag
-	 *            적재자 키. null이거나 공백이면 메모리에 적재하지 않고 loader에만 넣음
-	 * @param loader
-	 *            관리대상 적재자
+	 * @param loaderTag 적재자 키. null이거나 공백이면 메모리에 적재하지 않고 loader에만 넣음
+	 * @param loader    관리대상 적재자
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -506,8 +465,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 새로운 관리대상 클래스를 만든다.
 	 * 
-	 * @param moClass
-	 *            관리대상 종류
+	 * @param moClass 관리대상 종류
 	 * @return 빈 틀래스
 	 * @throws Exception
 	 */
@@ -527,7 +485,8 @@ public abstract class MoApi extends FxApi {
 
 		if (noti instanceof ReloadSignal) {
 			ReloadSignal reload = (ReloadSignal) noti;
-			if (reload.contains(ReloadSignal.RELOAD_TYPE_ALL, ReloadSignal.RELOAD_TYPE_MO, ReloadSignal.RELOAD_TYPE_CFG)) {
+			if (reload.contains(ReloadSignal.RELOAD_TYPE_ALL, ReloadSignal.RELOAD_TYPE_MO,
+					ReloadSignal.RELOAD_TYPE_CFG)) {
 				reload();
 			}
 		}
@@ -549,8 +508,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상의 구성을 저장소에 적용한다.
 	 * 
-	 * @param children
-	 *            적용할 내용
+	 * @param children 적용할 내용
 	 * @throws Exception
 	 */
 	public void setMoChildren(MoConfig children) throws Exception {
@@ -580,8 +538,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상을 업데이트한다.
 	 * 
-	 * @param mo
-	 *            관리대상
+	 * @param mo 관리대상
 	 * @return 업데이트된 관리대상
 	 * @throws Exception
 	 */
@@ -604,10 +561,8 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 관리대상을 업데이트한다.
 	 * 
-	 * @param mo
-	 *            관리대상
-	 * @param newParameters
-	 *            업데이트할 내용
+	 * @param mo            관리대상
+	 * @param newParameters 업데이트할 내용
 	 * @return 업데이트된 관리대상
 	 * @throws Exception
 	 */
@@ -636,8 +591,7 @@ public abstract class MoApi extends FxApi {
 	/**
 	 * 
 	 * @param parameters
-	 * @param isDeep
-	 *            상세 정보 조회
+	 * @param isDeep     상세 정보 조회
 	 * @return
 	 * @throws Exception
 	 */
@@ -706,7 +660,7 @@ public abstract class MoApi extends FxApi {
 							if (children == null) {
 								children = new MoConfig(parent);
 							}
-							children.addMo(child, true);
+							children.addDetectedMo(child);
 							Logger.logger.trace("auto-add-child={}", child);
 						}
 					} catch (Exception e) {
@@ -792,7 +746,8 @@ public abstract class MoApi extends FxApi {
 				}
 			}
 			moClassList.add(data);
-			msg.append(Logger.makeSubString(1, data.moClass, javaClass + (dboJavaClass == null ? "" : " (" + dboJavaClass + ")")));
+			msg.append(Logger.makeSubString(1, data.moClass,
+					javaClass + (dboJavaClass == null ? "" : " (" + dboJavaClass + ")")));
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
