@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mo-list[
+
+<!ELEMENT mo-list ( mo* ) >
+
+<!ELEMENT mo EMPTY >
+<!ATTLIST mo mo-class CDATA #REQUIRED >
+<!ATTLIST mo java-class CDATA #REQUIRED >
+<!ATTLIST mo dbo-java-class CDATA #IMPLIED >
+
+
+
+]>
+
+<mo-list>
+
+	<mo mo-class="FXSERVER" java-class="fxms.bas.impl.mo.FxServerMo"
+		dbo-java-class="fxms.bas.impl.dbo.FX_MO_FXSERVER" />
+	<mo mo-class="FXSERVICE" java-class="fxms.bas.impl.mo.FxServiceMo"
+		dbo-java-class="fxms.bas.impl.dbo.FX_MO_FXSERVICE" />
+	<mo mo-class="MO" java-class="fxms.bas.impl.mo.FxMo" dbo-java-class="fxms.bas.impl.dbo.FX_MO" />
+
+</mo-list>
