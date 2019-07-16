@@ -41,7 +41,7 @@ public class CoApiDB extends CoApi {
 	}
 
 	@Override
-	public SessionVo login(String userId, String password, String ipaddr) throws Exception {
+	protected SessionVo doLogin(String userId, String password, String ipaddr) throws Exception {
 		SessionVo user = null;
 
 		try {
@@ -127,7 +127,7 @@ public class CoApiDB extends CoApi {
 	}
 
 	@Override
-	public void logout(String sessionId) throws Exception {
+	protected void doLogout(String sessionId) throws Exception {
 		LogoutDbo dbo = new LogoutDbo();
 		dbo.setLogoutDate(FxApi.getDate());
 		dbo.setLogStatusCode(UserAlog.TYPE_LOGOUT);
@@ -144,7 +144,6 @@ public class CoApiDB extends CoApi {
 	@Override
 	protected void reload() throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

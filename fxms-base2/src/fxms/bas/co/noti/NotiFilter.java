@@ -9,8 +9,9 @@ import fxms.bas.co.signal.Signal;
 import fxms.bas.mo.Mo;
 
 /**
+ * 서비스별 어떤 노티를 받을지 정하는 필터
  * 
- * @author subkjh
+ * @author subkjh(Kim,JongHoon)
  *
  */
 public class NotiFilter implements Serializable {
@@ -68,6 +69,7 @@ public class NotiFilter implements Serializable {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 

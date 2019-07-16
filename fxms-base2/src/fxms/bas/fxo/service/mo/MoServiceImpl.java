@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.api.MoApi;
+import fxms.bas.co.noti.NotiFilter;
 import fxms.bas.fxo.adapter.Adapter;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.mo.Mo;
@@ -36,6 +37,8 @@ public class MoServiceImpl extends FxServiceImpl implements MoService {
 	}
 
 	private MoConfigThread moConfiger;
+
+	private long updateServicePsTime = System.currentTimeMillis() - 480000L;
 
 	public MoServiceImpl(String name, int port) throws RemoteException, Exception {
 		super(name, port);
@@ -114,6 +117,22 @@ public class MoServiceImpl extends FxServiceImpl implements MoService {
 	}
 
 	@Override
+	public void onCycle(long mstime) {
+
+		if (System.currentTimeMillis() - 600000L > updateServicePsTime) {
+			try {
+				ValueApi.getApi().doUpdateServicePsCode();
+			} catch (Exception e) {
+				logger.error(e);
+			}
+
+			updateServicePsTime = System.currentTimeMillis();
+		}
+
+		super.onCycle(mstime);
+	}
+
+	@Override
 	public void requestSync(Mo mo) throws RemoteException, Exception {
 
 		logger.info(String.valueOf(mo));
@@ -172,22 +191,8 @@ public class MoServiceImpl extends FxServiceImpl implements MoService {
 		return moConfiger;
 	}
 
-	private long updateServicePsTime = System.currentTimeMillis() - 480000L;
-
 	@Override
-	public void onCycle(long mstime) {
-
-		if (System.currentTimeMillis() - 600000L > updateServicePsTime) {
-			try {
-				ValueApi.getApi().doUpdateServicePsCode();
-			} catch (Exception e) {
-				logger.error(e);
-			}
-
-			updateServicePsTime = System.currentTimeMillis();
-		}
-
-		super.onCycle(mstime);
+	public NotiFilter getNotiFilter() throws RemoteException, Exception {
+		return new MoServiceNotiFilter();
 	}
-
 }

@@ -1,17 +1,12 @@
 package fxms.bas.fxo.service.app;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.Map;
 
-import subkjh.bas.co.log.Logger;
 import fxms.bas.ao.AlarmEvent;
 import fxms.bas.ao.vo.Alarm;
 import fxms.bas.api.AlarmApi;
 import fxms.bas.api.CoApi;
-import fxms.bas.api.PsApi;
 import fxms.bas.api.ServiceApi;
-import fxms.bas.co.def.reflect.FxMethod;
 import fxms.bas.co.noti.FxEvent;
 import fxms.bas.co.noti.NotiFilter;
 import fxms.bas.co.signal.AliveSignal;
@@ -20,6 +15,7 @@ import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.po.ValueApi;
 import fxms.bas.po.VoList;
 import fxms.module.restapi.vo.SessionVo;
+import subkjh.bas.co.log.Logger;
 
 public class AppServiceImpl extends FxServiceImpl implements AppService {
 
@@ -35,8 +31,6 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 	public static void main(String[] args) {
 		FxServiceImpl.start(AppService.class.getSimpleName(), AppServiceImpl.class, args);
 	}
-
-	private Map<String, SessionVo> sessionMap = new HashMap<String, SessionVo>();
 
 	public AppServiceImpl(String name, int port) throws RemoteException, Exception {
 		super(name, port);
@@ -57,14 +51,8 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 	}
 
 	@Override
-	public SessionVo getUser(String sessionId) throws RemoteException, Exception {
-		return sessionMap.get(sessionId);
-	}
-
-	@Override
-	public Object invokeFx(FxMethod fxMethod) throws RemoteException, Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public SessionVo getUser(String hostname, String sessionId, long seqno) throws RemoteException, Exception {
+		return CoApi.getApi().getSessionMgr().get(hostname, sessionId, seqno);
 	}
 
 	@Override
@@ -74,18 +62,12 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 
 		SessionVo user = CoApi.getApi().login(userId, password, ipaddr);
 
-		sessionMap.put(user.getSessionId(), user);
-
 		return user;
 	}
 
 	@Override
 	public void logout(String sessionId) throws RemoteException, Exception {
-
 		CoApi.getApi().logout(sessionId);
-
-		sessionMap.remove(sessionId);
-
 	}
 
 	@Override
@@ -112,15 +94,10 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 
 		if (noti instanceof AliveSignal) {
 			AliveSignal signal = (AliveSignal) noti;
-			ServiceApi.getApi().updateServiceStatus(signal.getMsIpaddr(), signal.getServiceName(), signal.getStartTime(), "ON");
+			ServiceApi.getApi().updateServiceStatus(signal.getMsIpaddr(), signal.getServiceName(),
+					signal.getStartTime(), "ON");
 		}
 
-	}
-
-	@Override
-	public void reqMakeStat(String psTable, String psType, long psDate) throws RemoteException, Exception {
-		logger.trace("{} {} {}", psTable, psType, psDate);
-		PsApi.getApi().makeStatReq(psTable, psType, psDate);
 	}
 
 	@Override

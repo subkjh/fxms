@@ -161,8 +161,8 @@ public abstract class FxApi implements Loggable, NotiReceiver {
 				Logger.logger.error(e);
 				if (FxServiceImpl.fxService != null) {
 					try {
-						FxServiceImpl.fxService.onNotify(new ShutdownSignal(Lang.get("** API({}) INIT FAIL - " + e.getMessage(),
-								classOfT.getName())));
+						FxServiceImpl.fxService.onNotify(new ShutdownSignal(
+								Lang.get("** API({}) INIT FAIL - " + e.getMessage(), classOfT.getName())));
 					} catch (Exception e1) {
 						Logger.logger.error(e);
 					}

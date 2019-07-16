@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.co.log.LOG_LEVEL;
-import subkjh.bas.co.log.Logger;
-import fxms.bas.api.ServiceApi;
 import fxms.bas.api.VoApi;
 import fxms.bas.co.def.PS_TYPE;
-import fxms.bas.fxo.service.app.AppService;
+import fxms.bas.fxo.service.FxServiceImpl;
+import fxms.bas.po.noti.NotiReqMakeStat;
+import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
 
 /**
  * 수집된 성능을 기록하는 스레드
@@ -19,33 +19,11 @@ import fxms.bas.fxo.service.app.AppService;
  */
 public class VoSubInsert extends VoSub {
 
-	class Data {
-		String psTable;
-		String psType;
-		long psDate;
-		long mstime;
-
-		Data() {
-
-		}
-
-		Data(String psTable, String psType, long psDate) {
-			this.psTable = psTable;
-			this.psType = psType;
-			this.psDate = psDate;
-		}
-
-		String getKey() {
-			return psTable + "." + psType + "." + psDate;
-		}
-	}
-
-	private Map<String, Data> statReqMap = new HashMap<String, Data>();
+	private Map<String, NotiReqMakeStat> statReqMap = new HashMap<String, NotiReqMakeStat>();
 
 	/**
 	 * 
-	 * @param name
-	 *            스레드명
+	 * @param name 스레드명
 	 */
 	public VoSubInsert() {
 		super(VoSubInsert.class.getSimpleName());
@@ -77,15 +55,15 @@ public class VoSubInsert extends VoSub {
 				List<PS_TYPE> pstypeList = VoApi.getApi().getPstypeList();
 				long psDate;
 
-				Data newData;
-				Data data;
+				NotiReqMakeStat newData;
+				NotiReqMakeStat data;
 
 				for (String psTable : retMap.keySet()) {
 					if (retMap.get(psTable) > 0) {
 						for (PS_TYPE pstype : pstypeList) {
 
 							psDate = pstype.getHstimeStart(PS_TYPE.getHstimeByMstime(voList.getMstime()));
-							newData = new Data(psTable, pstype.name(), psDate);
+							newData = new NotiReqMakeStat(psTable, pstype.name(), psDate);
 							data = statReqMap.get(newData.getKey());
 							if (data == null) {
 								newData.mstime = System.currentTimeMillis();
@@ -134,8 +112,7 @@ public class VoSubInsert extends VoSub {
 	}
 
 	private void sendReq() {
-		Data data;
-		AppService appService = null;
+		NotiReqMakeStat data;
 
 		String keys[] = statReqMap.keySet().toArray(new String[statReqMap.size()]);
 
@@ -146,14 +123,13 @@ public class VoSubInsert extends VoSub {
 			if (System.currentTimeMillis() - data.mstime > 10000) {
 
 				try {
-					if (appService == null) {
-						appService = ServiceApi.getApi().getService(AppService.class);
-					}
-					appService.reqMakeStat(data.psTable, data.psType, data.psDate);
+
+					FxServiceImpl.fxService.send(data);
 
 					Logger.logger.trace("send req {}", key);
 
 					statReqMap.remove(key);
+					
 				} catch (Exception e) {
 					Logger.logger.error(e);
 				}

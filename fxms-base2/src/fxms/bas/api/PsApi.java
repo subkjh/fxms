@@ -111,8 +111,7 @@ public abstract class PsApi extends FxApi {
 	/**
 	 * 수집주기 정보를 설정합니다.
 	 * 
-	 * @param pollerVar
-	 *            수집주기 정보
+	 * @param pollerVar 수집주기 정보
 	 */
 	public void setPollerCfg(PollerCfg pollerCfg) {
 		this.pollerCfg = pollerCfg;
@@ -153,13 +152,4 @@ public abstract class PsApi extends FxApi {
 
 	}
 
-	/**
-	 * 통계 생성 요청
-	 * 
-	 * @param psTable
-	 * @param psType
-	 * @param psDate
-	 * @throws Exception
-	 */
-	public abstract void makeStatReq(String psTable, String psType, long psDate) throws Exception;
 }

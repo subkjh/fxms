@@ -9,10 +9,9 @@ import java.util.Set;
 
 import com.google.gson.Gson;
 
-import fxms.bas.fxo.service.app.AppService;
+import fxms.bas.api.CoApi;
 import fxms.bas.impl.co.LoginHandlerDao;
 import fxms.module.restapi.CommHandler;
-import fxms.module.restapi.vo.SessionMap;
 import fxms.module.restapi.vo.SessionVo;
 
 public class LoginHandler extends CommHandler {
@@ -40,22 +39,20 @@ public class LoginHandler extends CommHandler {
 		String userId = getString(map, "user-id");
 		String password = getString(map, "password");
 		String ipAddr = client.getHostName();
-		
+
 		return login(userId, password, ipAddr);
 
 	}
 
 	private byte[] login(String userId, String password, String ipAddr) throws Exception {
 
-		AppService service = getAppService();
 		try {
-			SessionVo vo = service.login(userId, password, ipAddr);
-			SessionMap.getSessionMap().setNewSession(vo, ipAddr);
-			
+			SessionVo vo = CoApi.getApi().login(userId, password, ipAddr);
+
 			new LoginHandlerDao().makeUserMo(vo.getUserNo());
-			
+
 			return getResult(vo.getSessionId(), null, null, true, vo);
-		
+
 		} catch (Exception e) {
 			return getResult("nothing", 0, "login", false, e.getClass().getSimpleName());
 		}

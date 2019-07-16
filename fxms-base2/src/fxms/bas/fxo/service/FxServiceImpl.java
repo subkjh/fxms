@@ -185,18 +185,17 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 	}
 
 	private List<FxActor> actorList;
-
 	private CronFxThread cronFxThread = null;
 	private NotiSender notiSender;
 	private boolean registryMine = false;
 	private ShutdownFxThread shutdownThread;
+	/** 이벤트의 마지막 시간을 보관한다. */
+	private Map<String, Long> eventRecvMap = new HashMap<String, Long>();
 
 	/**
 	 * 
-	 * @param name
-	 *            서비스명
-	 * @param port
-	 *            사용할 포트
+	 * @param name 서비스명
+	 * @param port 사용할 포트
 	 * @throws RemoteException
 	 */
 	public FxServiceImpl(String name, int port) throws RemoteException, Exception {
@@ -234,14 +233,23 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 		return true;
 	}
 
-	public <T> T getFxActor(Class<T> classOfActor) {
-		for (FxActor e : getFxActorArray()) {
-			if (classOfActor.isInstance(e)) {
-				return (T) e;
-			}
-		}
-		return null;
+	/**
+	 * 이벤트별 마지막 수신 시간을 갖는다.
+	 * 
+	 * @return
+	 */
+	public Map<String, Long> getEventRecvMap() {
+		return eventRecvMap;
 	}
+
+//	public <T> T getFxActor(Class<T> classOfActor) {
+//		for (FxActor e : getFxActorArray()) {
+//			if (classOfActor.isInstance(e)) {
+//				return (T) e;
+//			}
+//		}
+//		return null;
+//	}
 
 	public FxActor getFxActor(String name) {
 		for (FxActor e : getFxActorArray()) {
@@ -287,6 +295,7 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 		}
 
 		map.put("system-time", FxApi.getDate());
+		map.put("event-time", eventRecvMap.toString());
 
 		return FxCfg.makeLog(map);
 	}
@@ -314,8 +323,8 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 			if (key.getName().startsWith(threadName) || threadName.equals("all")) {
 				ret += "\n\n" + key + "\n";
 				for (StackTraceElement e : list) {
-					ret += "\t" + e.getClassName() + "." + e.getMethodName() + "(" + e.getFileName() + ":" + e.getLineNumber()
-							+ ")\n";
+					ret += "\t" + e.getClassName() + "." + e.getMethodName() + "(" + e.getFileName() + ":"
+							+ e.getLineNumber() + ")\n";
 				}
 			}
 		}
@@ -329,6 +338,11 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 
 	@Override
 	public void onNotify(FxEvent noti) throws Exception {
+
+		// 이벤트 종류별 마지막 수신한 시간을 보관한다.
+		if (noti != null && noti.getEventType() != null) {
+			eventRecvMap.put(noti.getEventType(), System.currentTimeMillis());
+		}
 
 		if (noti instanceof AliveSignal) {
 			logger.trace("receive {}", noti);
@@ -585,6 +599,74 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 
 	}
 
+	protected FxActor[] getFxActorArray() {
+		return actorList.toArray(new FxActor[actorList.size()]);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> getFxActorList(Class<T> classOf) {
+
+		List<T> tmpList = new ArrayList<T>();
+		FxActor[] actors = getFxActorArray();
+
+		for (FxActor f : actors) {
+			if (classOf.isInstance(f)) {
+				tmpList.add((T) f);
+			}
+		}
+
+		return tmpList;
+	}
+
+	protected void onInit(StringBuffer sb) throws Exception {
+		ObjectUtil.loadClassDef();
+		sb.append(Logger.makeSubString("class-list", "loaded"));
+
+		FxActorParser.getParser();
+		sb.append(Logger.makeSubString("actor-list", "loaded"));
+	}
+
+	/**
+	 * 모든 시작을 마친 후 호출됨
+	 * 
+	 * @throws Exception
+	 */
+	protected void onStarted() throws Exception {
+
+		List<FxServiceMember> memList = FxActorParser.getParser().getActorList(FxServiceMember.class);
+		StringBuffer sb = new StringBuffer();
+
+		for (FxServiceMember mem : memList) {
+			try {
+				mem.startMember();
+				sb.append(Logger.makeSubString(mem.getName(), "starting"));
+				addFxActor(mem);
+			} catch (Exception e) {
+				logger.error(e);
+				sb.append(Logger.makeSubString(mem.getName(), "error"));
+			}
+
+		}
+
+		logger.info(Logger.makeString("FxServiceMember", memList.size(), sb.toString()));
+
+	}
+
+	protected void start09SignSedner(StringBuffer sb) throws Exception {
+
+		logger.trace("called");
+
+		if (FxCfg.isAlone()) {
+			sb.append(Logger.makeSubString(NotiSender.NAME, "inactive"));
+			return;
+		}
+
+		notiSender = new NotiSender(FxCfg.getCfg().getFxServiceId());
+		notiSender.start();
+
+		sb.append(Logger.makeSubString(notiSender.getName(), "running"));
+	}
+
 	private String makeUrl() {
 		int portRmi = FxCfg.getCfg().getRmiPort();
 		if (portRmi > 0) {
@@ -720,7 +802,8 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 
 			NioClient client = new NioClient();
 			try {
-				AliveClientJSonSoproth soproth = new AliveClientJSonSoproth(FxCfg.getCfg().getIpAddress(), FxCfg.getFxServiceName()) {
+				AliveClientJSonSoproth soproth = new AliveClientJSonSoproth(FxCfg.getCfg().getIpAddress(),
+						FxCfg.getFxServiceName()) {
 					public void stopSoproth(String msg) {
 						super.stopSoproth(msg);
 						logger.info(Logger.makeString("Aliver disconnected", null));
@@ -834,74 +917,6 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 				logger.fail(e.getMessage());
 			}
 		}
-	}
-
-	protected FxActor[] getFxActorArray() {
-		return actorList.toArray(new FxActor[actorList.size()]);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> List<T> getFxActorList(Class<T> classOf) {
-
-		List<T> tmpList = new ArrayList<T>();
-		FxActor[] actors = getFxActorArray();
-
-		for (FxActor f : actors) {
-			if (classOf.isInstance(f)) {
-				tmpList.add((T) f);
-			}
-		}
-
-		return tmpList;
-	}
-
-	protected void onInit(StringBuffer sb) throws Exception {
-		ObjectUtil.loadClassDef();
-		sb.append(Logger.makeSubString("class-list", "loaded"));
-
-		FxActorParser.getParser();
-		sb.append(Logger.makeSubString("actor-list", "loaded"));
-	}
-
-	/**
-	 * 모든 시작을 마친 후 호출됨
-	 * 
-	 * @throws Exception
-	 */
-	protected void onStarted() throws Exception {
-
-		List<FxServiceMember> memList = FxActorParser.getParser().getActorList(FxServiceMember.class);
-		StringBuffer sb = new StringBuffer();
-
-		for (FxServiceMember mem : memList) {
-			try {
-				mem.startMember();
-				sb.append(Logger.makeSubString(mem.getName(), "starting"));
-				addFxActor(mem);
-			} catch (Exception e) {
-				logger.error(e);
-				sb.append(Logger.makeSubString(mem.getName(), "error"));
-			}
-
-		}
-
-		logger.info(Logger.makeString("FxServiceMember", memList.size(), sb.toString()));
-
-	}
-
-	protected void start09SignSedner(StringBuffer sb) throws Exception {
-
-		logger.trace("called");
-
-		if (FxCfg.isAlone()) {
-			sb.append(Logger.makeSubString(NotiSender.NAME, "inactive"));
-			return;
-		}
-
-		notiSender = new NotiSender(FxCfg.getCfg().getFxServiceId());
-		notiSender.start();
-
-		sb.append(Logger.makeSubString(notiSender.getName(), "running"));
 	}
 
 }

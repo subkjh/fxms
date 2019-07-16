@@ -12,17 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import subkjh.bas.co.log.Logger;
-import subkjh.bas.co.user.User.USER_TYPE;
-import subkjh.bas.co.utils.FileUtil;
-import subkjh.bas.co.utils.ObjectUtil;
-import subkjh.bas.dao.data.Column;
-import subkjh.bas.dao.data.Table;
-import subkjh.bas.dao.database.DBManager;
-import subkjh.bas.fxdao.FxDaoCallback;
-import subkjh.bas.fxdao.control.FxDaoExecutor;
-import subkjh.bas.fxdao.control.FxTableMaker;
-
 import com.google.gson.Gson;
 
 import fxms.bas.api.CoApi;
@@ -37,8 +26,17 @@ import fxms.bas.co.vo.IsRegChg;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.fxo.service.app.AppService;
-import fxms.module.restapi.vo.SessionMap;
 import fxms.module.restapi.vo.SessionVo;
+import subkjh.bas.co.log.Logger;
+import subkjh.bas.co.user.User.USER_TYPE;
+import subkjh.bas.co.utils.FileUtil;
+import subkjh.bas.co.utils.ObjectUtil;
+import subkjh.bas.dao.data.Column;
+import subkjh.bas.dao.data.Table;
+import subkjh.bas.dao.database.DBManager;
+import subkjh.bas.fxdao.FxDaoCallback;
+import subkjh.bas.fxdao.control.FxDaoExecutor;
+import subkjh.bas.fxdao.control.FxTableMaker;
 
 public abstract class CommHandler extends FxHttpHandler {
 
@@ -183,12 +181,9 @@ public abstract class CommHandler extends FxHttpHandler {
 
 	/**
 	 * 
-	 * @param session
-	 *            세션
-	 * @param name
-	 *            운용명
-	 * @param parameters
-	 *            인자
+	 * @param session    세션
+	 * @param name       운용명
+	 * @param parameters 인자
 	 * @return 결과
 	 * @throws Exception
 	 */
@@ -198,7 +193,8 @@ public abstract class CommHandler extends FxHttpHandler {
 
 		String javaMethodName = getJavaMethodName(name);
 
-		Logger.logger.info("session={}, op-code={}, method={} -> {}", session.getSessionId(), opcode, name, javaMethodName);
+		Logger.logger.info("session={}, op-code={}, method={} -> {}", session.getSessionId(), opcode, name,
+				javaMethodName);
 
 		Method javaMethod = getJavaMethod(javaMethodName);
 
@@ -243,7 +239,8 @@ public abstract class CommHandler extends FxHttpHandler {
 		}
 	}
 
-	protected <T> T add(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback) throws Exception {
+	protected <T> T add(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback)
+			throws Exception {
 
 		ObjectUtil.toObject(parameters, item);
 
@@ -311,7 +308,8 @@ public abstract class CommHandler extends FxHttpHandler {
 		}
 	}
 
-	protected <T> T delete(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback) throws Exception {
+	protected <T> T delete(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback)
+			throws Exception {
 
 		ObjectUtil.toObject(parameters, item);
 
@@ -435,7 +433,7 @@ public abstract class CommHandler extends FxHttpHandler {
 
 		Map<String, Object> ret = new HashMap<String, Object>();
 
-		long nextSeqno = SessionMap.getSessionMap().getSeqno(sessionId);
+		long nextSeqno = CoApi.getApi().getSessionMgr().getNextSeqno(sessionId);
 
 		if (seqno != null) {
 			ret.put("seqno", seqno.longValue());
@@ -515,12 +513,14 @@ public abstract class CommHandler extends FxHttpHandler {
 		return para;
 	}
 
-	protected Map<String, Object> makePara4Ownership(SessionVo session, Map<String, Object> parameters, Object... paras) {
+	protected Map<String, Object> makePara4Ownership(SessionVo session, Map<String, Object> parameters,
+			Object... paras) {
 
 		Map<String, Object> para = new HashMap<String, Object>(parameters);
 
 		if (session.getUserType() != USER_TYPE.admin) {
-			para.put("inloNo in", " ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = " + session.getMngInloNo() + " )");
+			para.put("inloNo in",
+					" ( select MEM_INLO_NO from FX_CF_INLO_MEM where INLO_NO = " + session.getMngInloNo() + " )");
 		}
 
 		for (int i = 0; i < paras.length; i += 2) {
@@ -534,7 +534,8 @@ public abstract class CommHandler extends FxHttpHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected byte[] onProcess(InetSocketAddress client, Set<Entry<String, List<String>>> header, String body) throws Exception {
+	protected byte[] onProcess(InetSocketAddress client, Set<Entry<String, List<String>>> header, String body)
+			throws Exception {
 
 		String sessionId = null;
 		Number seqno = null;
@@ -569,9 +570,11 @@ public abstract class CommHandler extends FxHttpHandler {
 			method = getString(map, "method");
 			Map<String, Object> parameters = (Map<String, Object>) map.get("parameters");
 
-			Logger.logger.info("session-id={}, seqno={}, method={}, parameters={}", sessionId, seqno, method, parameters);
+			Logger.logger.info("session-id={}, seqno={}, method={}, parameters={}", sessionId, seqno, method,
+					parameters);
 
-			SessionVo session = SessionMap.getSessionMap().getSession(hostname, sessionId, seqno == null ? -1 : seqno.longValue());
+			SessionVo session = CoApi.getApi().getSessionMgr().get(hostname, sessionId,
+					seqno == null ? -1 : seqno.longValue());
 
 			if (session == null) {
 				Logger.logger.fail("NotLoginException");
@@ -617,7 +620,8 @@ public abstract class CommHandler extends FxHttpHandler {
 		return parameters;
 	}
 
-	protected <T> T update(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback) throws Exception {
+	protected <T> T update(SessionVo session, Map<String, Object> parameters, T item, FxDaoCallback<T> callback)
+			throws Exception {
 
 		ObjectUtil.toObject(parameters, item);
 		if (item instanceof IsRegChg) {

@@ -10,6 +10,7 @@ import fxms.bas.co.OpCode;
 import fxms.bas.co.signal.ReloadSignal;
 import fxms.bas.co.vo.FxVar;
 import fxms.bas.fxo.service.FxServiceImpl;
+import fxms.module.restapi.vo.SessionMgr;
 import fxms.module.restapi.vo.SessionVo;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.user.User;
@@ -38,6 +39,9 @@ public abstract class CoApi extends FxApi {
 	private Map<String, OpCode> nameMap;
 	private Map<Long, List<AmGroupVo>> moAmMap = new HashMap<Long, List<AmGroupVo>>();
 
+	/** 로그인 정보 */
+	private SessionMgr sessionMgr = new SessionMgr();
+
 	public Map<Long, List<AmGroupVo>> getMoAmMap() {
 		return moAmMap;
 	}
@@ -57,6 +61,10 @@ public abstract class CoApi extends FxApi {
 		}
 
 		return nameMap == null ? null : nameMap.get(name);
+	}
+
+	public SessionMgr getSessionMgr() {
+		return sessionMgr;
 	}
 
 	/**
@@ -143,9 +151,33 @@ public abstract class CoApi extends FxApi {
 
 	public abstract void logAmHst(List<AmHstVo> list) throws Exception;
 
-	public abstract SessionVo login(String userId, String password, String ipaddr) throws Exception;
+	/**
+	 * 
+	 * @param userId
+	 * @param password
+	 * @param ipaddr
+	 * @return
+	 * @throws Exception
+	 */
+	public SessionVo login(String userId, String password, String ipaddr) throws Exception {
 
-	public abstract void logout(String sessionId) throws Exception;
+		SessionVo vo = doLogin(userId, password, ipaddr);
+
+		sessionMgr.putNew(vo, ipaddr);
+
+		return vo;
+
+	}
+
+	/**
+	 * 
+	 * @param sessionId
+	 * @throws Exception
+	 */
+	public void logout(String sessionId) throws Exception {
+		doLogout(sessionId);
+		sessionMgr.remove(sessionId);
+	}
 
 	public abstract void logUserAccess();
 
@@ -174,6 +206,10 @@ public abstract class CoApi extends FxApi {
 			throw e;
 		}
 	}
+
+	protected abstract SessionVo doLogin(String userId, String password, String ipaddr) throws Exception;
+
+	protected abstract void doLogout(String sessionId) throws Exception;
 
 	protected abstract List<OpCode> doSelectOpCode() throws Exception;
 

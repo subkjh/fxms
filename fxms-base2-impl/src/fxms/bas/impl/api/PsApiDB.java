@@ -6,15 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fxms.bas.api.PsApi;
+import fxms.bas.co.def.PS_TYPE;
+import fxms.bas.co.noti.FxEvent;
+import fxms.bas.fxo.FxCfg;
+import fxms.bas.impl.po.StatMakeReqDbo;
+import fxms.bas.po.item.PsItem;
+import fxms.bas.po.noti.NotiReqMakeStat;
 import subkjh.bas.BasCfg;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.dao.database.DBManager;
 import subkjh.bas.fxdao.control.FxDaoExecutor;
-import fxms.bas.api.PsApi;
-import fxms.bas.co.def.PS_TYPE;
-import fxms.bas.fxo.FxCfg;
-import fxms.bas.impl.po.StatMakeReqDbo;
-import fxms.bas.po.item.PsItem;
 
 public class PsApiDB extends PsApi {
 
@@ -81,22 +83,37 @@ public class PsApiDB extends PsApi {
 	}
 
 	@Override
-	public void makeStatReq(String psTable, String psType, long psDate) throws Exception {
-		
+	public void onNotify(FxEvent noti) throws Exception {
+		super.onNotify(noti);
+		if (noti instanceof NotiReqMakeStat) {
+			try {
+				makeStatReq((NotiReqMakeStat) noti);
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param vo
+	 * @throws Exception
+	 */
+	private void makeStatReq(NotiReqMakeStat vo) throws Exception {
+
 		FxDaoExecutor tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createFxDao();
 
 		try {
 			tran.start();
 
 			Map<String, Object> para = new HashMap<String, Object>();
-			para.put("psTable", psTable);
-			para.put("psDate", psDate);
-			para.put("psType", psType);
+			para.put("psTable", vo.getPsTable());
+			para.put("psDate", vo.getPsDate());
+			para.put("psType", vo.getPsType());
 
 			if (tran.selectOne(StatMakeReqDbo.class, para) == null) {
-				StatMakeReqDbo dbo = new StatMakeReqDbo(psTable, psType, psDate);
+				StatMakeReqDbo dbo = new StatMakeReqDbo(vo.getPsTable(), vo.getPsType(), vo.getPsDate());
 				dbo.setMakeReqNo(tran.getNextVal(StatMakeReqDbo.FX_SEQ_MAKEREQNO, Long.class));
-				dbo.setMakePossibleDate(PS_TYPE.getPsType(psType).getHstimeNext(dbo.getPsDate(), 1));
+				dbo.setMakePossibleDate(PS_TYPE.getPsType(vo.getPsType()).getHstimeNext(dbo.getPsDate(), 1));
 				tran.insertOfClass(StatMakeReqDbo.class, dbo);
 				tran.commit();
 			}
