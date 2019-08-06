@@ -1,7 +1,7 @@
 package subkjh.bas.dao.data;
 
 import java.lang.reflect.Field;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 import subkjh.bas.dao.define.COLUMN_OP;
 import subkjh.bas.dao.define.COLUMN_TYPE;
@@ -132,8 +132,7 @@ public class Column extends SoDo {
 
 	/**
 	 * 
-	 * @param s
-	 *            name:datatype:length:scale:default
+	 * @param s name:datatype:length:scale:default
 	 */
 	public Column(String s) {
 
@@ -249,8 +248,7 @@ public class Column extends SoDo {
 			return type;
 		}
 		if (type.indexOf("number") >= 0) {
-			return type + "(" + getDataLength() + (getDataScale() > 0 ? "," + getDataScale() : "")
-					+ ")";
+			return type + "(" + getDataLength() + (getDataScale() > 0 ? "," + getDataScale() : "") + ")";
 		}
 
 		return type + "(" + getDataLength() + ")";
@@ -346,8 +344,7 @@ public class Column extends SoDo {
 	/**
 	 * 입력된 이름이 컬럼명과 일치하는 여부를 확인한다.
 	 * 
-	 * @param name
-	 *            비교할 이름
+	 * @param name 비교할 이름
 	 * @return 일치여부
 	 */
 	public boolean isMatch(String name) {
@@ -376,7 +373,7 @@ public class Column extends SoDo {
 	 */
 	public Class<?> makeFieldType() {
 		String type = getDataType().toLowerCase();
-		
+
 		if (JAVA_FIELD_STYLE_OBJECT) {
 			if (type.indexOf("char") >= 0)
 				return String.class;
@@ -433,24 +430,21 @@ public class Column extends SoDo {
 	}
 
 	/**
-	 * @param comments
-	 *            the comments to set
+	 * @param comments the comments to set
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
 
 	/**
-	 * @param dataDefault
-	 *            the dataDefault to set
+	 * @param dataDefault the dataDefault to set
 	 */
 	public void setDataDefault(String dataDefault) {
 		this.dataDefault = (dataDefault == null ? null : dataDefault.trim());
 	}
 
 	/**
-	 * @param dataLength
-	 *            the dataLength to set
+	 * @param dataLength the dataLength to set
 	 */
 	public void setDataLength(int dataLength) {
 		if (dataLength < 0)
@@ -460,8 +454,7 @@ public class Column extends SoDo {
 	}
 
 	/**
-	 * @param dataScale
-	 *            the dataScale to set
+	 * @param dataScale the dataScale to set
 	 */
 	public void setDataScale(int dataScale) {
 		if (dataScale < 0) {
@@ -472,8 +465,7 @@ public class Column extends SoDo {
 	}
 
 	/**
-	 * @param dataType
-	 *            the dataType to set
+	 * @param dataType the dataType to set
 	 */
 	public void setDataType(String dataType) {
 		this.dataType = (dataType == null ? null : dataType.toLowerCase());
@@ -524,8 +516,7 @@ public class Column extends SoDo {
 	 * 컬럼명을 설정합니다.<br>
 	 * 컬럼명에 (PK)가 존재하면 이를 분석하여 isPK() = true가 되도록 설정합니다.
 	 * 
-	 * @param columnName
-	 *            the columnName to set
+	 * @param columnName the columnName to set
 	 */
 	public void setName(String columnName) {
 		if (columnName == null) {
@@ -545,8 +536,7 @@ public class Column extends SoDo {
 	}
 
 	/**
-	 * @param nullable
-	 *            the nullable to set
+	 * @param nullable the nullable to set
 	 */
 	public void setNullable(boolean nullable) {
 		this.nullable = nullable;
@@ -557,8 +547,7 @@ public class Column extends SoDo {
 	}
 
 	/**
-	 * @param pk
-	 *            the pk to set
+	 * @param pk the pk to set
 	 */
 	public void setPk(boolean pk) {
 		this.pk = pk;
