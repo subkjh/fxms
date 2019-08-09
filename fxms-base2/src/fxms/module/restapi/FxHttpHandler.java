@@ -38,9 +38,69 @@ public abstract class FxHttpHandler implements HttpHandler {
 
 		long seqno = getNextSeqno();
 
-		String curName = Thread.currentThread().getName();
+		Thread th = new Thread() {
+			public void run() {
+				try {
+					handle2(he);
+				} catch (IOException e) {
+					Logger.logger.error(e);
+				}
+			}
+		};
+		th.setName("HTTP-" + seqno);
+		th.start();
 
-		Thread.currentThread().setName("HTTP-" + seqno);
+	}
+
+	/**
+	 * 요청 내용을 처리하는 메소드
+	 * 
+	 * @param client 요청 클라이언트
+	 * @param header 헤더
+	 * @param body   바디
+	 * @return 결과
+	 * @throws Exception
+	 */
+	protected abstract byte[] onProcess(InetSocketAddress client, Set<Entry<String, List<String>>> header, String body)
+			throws Exception;
+
+	@SuppressWarnings("unchecked")
+	protected void parseBody(String query, Map<String, Object> parameters) throws UnsupportedEncodingException {
+
+		if (query != null) {
+			String pairs[] = query.split("[&]");
+			for (String pair : pairs) {
+				String param[] = pair.split("[=]");
+				String key = null;
+				String value = null;
+				if (param.length > 0) {
+					key = URLDecoder.decode(param[0], System.getProperty("file.encoding"));
+				}
+
+				if (param.length > 1) {
+					value = URLDecoder.decode(param[1], System.getProperty("file.encoding"));
+				}
+
+				if (parameters.containsKey(key)) {
+					Object obj = parameters.get(key);
+					if (obj instanceof List<?>) {
+						List<String> values = (List<String>) obj;
+						values.add(value);
+
+					} else if (obj instanceof String) {
+						List<String> values = new ArrayList<String>();
+						values.add((String) obj);
+						values.add(value);
+						parameters.put(key, values);
+					}
+				} else {
+					parameters.put(key, value);
+				}
+			}
+		}
+	}
+
+	private void handle2(HttpExchange he) throws IOException {
 
 		Logger.logger
 				.debug(he.getRemoteAddress().getHostString() + ", " + he.getRequestURI().getPath() + ", handle...");
@@ -109,61 +169,8 @@ public abstract class FxHttpHandler implements HttpHandler {
 		} catch (Exception e) {
 			Logger.logger.error(e);
 			throw e;
-		} finally {
-			Thread.currentThread().setName(curName);
 		}
 
-	}
-
-	/**
-	 * 요청 내용을 처리하는 메소드
-	 * 
-	 * @param client
-	 *            요청 클라이언트
-	 * @param header
-	 *            헤더
-	 * @param body
-	 *            바디
-	 * @return 결과
-	 * @throws Exception
-	 */
-	protected abstract byte[] onProcess(InetSocketAddress client, Set<Entry<String, List<String>>> header, String body)
-			throws Exception;
-
-	@SuppressWarnings("unchecked")
-	protected void parseBody(String query, Map<String, Object> parameters) throws UnsupportedEncodingException {
-
-		if (query != null) {
-			String pairs[] = query.split("[&]");
-			for (String pair : pairs) {
-				String param[] = pair.split("[=]");
-				String key = null;
-				String value = null;
-				if (param.length > 0) {
-					key = URLDecoder.decode(param[0], System.getProperty("file.encoding"));
-				}
-
-				if (param.length > 1) {
-					value = URLDecoder.decode(param[1], System.getProperty("file.encoding"));
-				}
-
-				if (parameters.containsKey(key)) {
-					Object obj = parameters.get(key);
-					if (obj instanceof List<?>) {
-						List<String> values = (List<String>) obj;
-						values.add(value);
-
-					} else if (obj instanceof String) {
-						List<String> values = new ArrayList<String>();
-						values.add((String) obj);
-						values.add(value);
-						parameters.put(key, values);
-					}
-				} else {
-					parameters.put(key, value);
-				}
-			}
-		}
 	}
 
 }

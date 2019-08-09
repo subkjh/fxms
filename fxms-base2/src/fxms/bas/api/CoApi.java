@@ -163,7 +163,9 @@ public abstract class CoApi extends FxApi {
 
 		SessionVo vo = doLogin(userId, password, ipaddr);
 
-		sessionMgr.putNew(vo, ipaddr);
+		vo.setHostname(ipaddr);
+
+		sessionMgr.putNew(vo);
 
 		return vo;
 
@@ -207,10 +209,28 @@ public abstract class CoApi extends FxApi {
 		}
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param password
+	 * @param ipaddr
+	 * @return
+	 * @throws Exception
+	 */
 	protected abstract SessionVo doLogin(String userId, String password, String ipaddr) throws Exception;
 
+	/**
+	 * 
+	 * @param sessionId
+	 * @throws Exception
+	 */
 	protected abstract void doLogout(String sessionId) throws Exception;
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	protected abstract List<OpCode> doSelectOpCode() throws Exception;
 
 	/**

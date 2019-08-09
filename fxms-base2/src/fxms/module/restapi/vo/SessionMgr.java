@@ -70,14 +70,12 @@ public class SessionMgr {
 	 * 세션 정보와 접속한 호스트 정보를 보관한다.
 	 * 
 	 * @param data
-	 * @param hostname
 	 * @return
 	 */
-	public synchronized long putNew(SessionVo data, String hostname) {
+	public synchronized long putNew(SessionVo data) {
 
 		long seqno = (long) (Math.random() * System.currentTimeMillis());
 
-		data.setHostname(hostname);
 		data.setSeqno(seqno);
 
 		map.put(data.getSessionId(), data);

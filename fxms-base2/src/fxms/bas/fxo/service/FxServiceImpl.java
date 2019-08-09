@@ -8,6 +8,7 @@ import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.net.httpserver.HttpServer;
+
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Loggable;
 import subkjh.bas.co.log.Logger;
@@ -27,6 +30,7 @@ import subkjh.bas.co.utils.FileUtil;
 import subkjh.bas.co.utils.ObjectUtil;
 import subkjh.bas.net.NioClient;
 import subkjh.bas.net.soproth.AliveClientJSonSoproth;
+import sun.net.httpserver.HttpServerImpl;
 import fxms.bas.api.FxApi;
 import fxms.bas.co.cron.CronFxThread;
 import fxms.bas.co.noti.ExAliveNotiFilter;
@@ -42,6 +46,8 @@ import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.noti.thread.NotiPeerFxThread;
 import fxms.bas.fxo.service.property.FxServiceMember;
 import fxms.bas.fxo.thread.ShutdownFxThread;
+import fxms.module.restapi.FxHttpHandler;
+import fxms.module.restapi.vo.HandlerVo;
 
 public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 
@@ -650,7 +656,67 @@ public class FxServiceImpl extends UnicastRemoteObject implements FxService {
 
 		logger.info(Logger.makeString("FxServiceMember", memList.size(), sb.toString()));
 
+		initHttp();
 	}
+	
+	/**
+	 * RestAPI를 초기화 한다.
+	 * @throws Exception
+	 */
+	private void initHttp() throws Exception {
+		
+		List<HandlerVo> restaList = FxActorParser.getParser().getActorList(HandlerVo.class);
+		if (restaList != null) {
+
+			HttpServer server;
+			StringBuffer sb;
+			FxHttpHandler handler;
+			Map<Integer, HandlerVo> restaMap = new HashMap<Integer, HandlerVo>();
+			HandlerVo dupResta;
+			for (HandlerVo resta : restaList) {
+				if (resta.getPort() > 0) {
+					dupResta = restaMap.get(resta.getPort());
+					if (dupResta != null) {
+						dupResta.getHandler().putAll(resta.getHandler());
+					} else {
+						restaMap.put(resta.getPort(), resta);
+					}
+				} else {
+					logger.fail(Logger.makeString("RESTA " + resta.getName(), "PORT IS NOT DEFINED"));
+				}
+			}
+
+			for (HandlerVo resta : restaMap.values()) {
+
+				sb = new StringBuffer();
+
+				try {
+					server = HttpServerImpl.create(new InetSocketAddress(resta.getPort()), 0);
+					for (String context : resta.getHandler().keySet()) {
+						handler = resta.getHandler().get(context);
+						server.createContext(context, handler);
+						sb.append("\n  ");
+						sb.append(Logger.fill(context, 40, '-'));
+						sb.append(handler.getClass().getName());
+					}
+					server.setExecutor(null);
+					server.start();
+
+					logger.info(Logger.makeString("RESTA [" + resta.getName() + "] PORT=" + resta.getPort(),
+							"started", sb.toString()));
+
+					addFxActor(resta);
+
+				} catch (Exception e) {
+					logger.fail(Logger.makeString("RESTA [" + resta.getName() + "] PORT=" + resta.getPort(),
+							e.getClass().getSimpleName()));
+					Logger.logger.error(e);
+					throw e;
+				}
+			}
+		}
+	}
+	
 
 	protected void start09SignSedner(StringBuffer sb) throws Exception {
 
