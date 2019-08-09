@@ -21,10 +21,22 @@ public class UserDao extends FxDaoExecutor {
 	public UserDao() {
 		setDatabase(DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG));
 	}
+	
+	private static long sessionId = 0;
+	private static synchronized String getNextSessionId()
+	{
+		if ( sessionId == 0 ) {
+			sessionId = ( System.currentTimeMillis() / 1234 ) * 1000;
+		}
+		
+		++sessionId;
+		
+		return "fxms-" + sessionId;
+	}
 
 	public SessionVo login(String userId, String password, String ipaddr) throws UserNotFoundException, Exception {
 
-		String sessionId = "FXMS-" + System.currentTimeMillis();
+		String sessionId = getNextSessionId();
 
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("userId", userId);
