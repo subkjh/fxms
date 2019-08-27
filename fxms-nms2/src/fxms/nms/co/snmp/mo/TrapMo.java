@@ -1,6 +1,7 @@
 package fxms.nms.co.snmp.mo;
 
 import fxms.bas.mo.Mo;
+import fxms.nms.co.snmp.trap.TrapNode;
 
 /**
  * 트랩을 보내는 노드
@@ -8,7 +9,7 @@ import fxms.bas.mo.Mo;
  * @author subkjh
  * 
  */
-public class TrapNode extends Mo {
+public class TrapMo extends Mo implements TrapNode {
 
 	/**
 	 * 
@@ -28,7 +29,7 @@ public class TrapNode extends Mo {
 	/** 트랩 수신 여부 */
 	private boolean trapRecv;
 
-	public TrapNode() {
+	public TrapMo() {
 		trapRecv = true;
 	}
 

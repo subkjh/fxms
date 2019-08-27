@@ -1,7 +1,8 @@
 package fxms.nms.co.snmp.trap.vo;
 
 import fxms.bas.co.noti.FxEventImpl;
-import fxms.nms.co.snmp.mo.TrapNode;
+import fxms.nms.co.snmp.mo.TrapMo;
+import fxms.nms.co.snmp.trap.TrapNode;
 
 /**
  * 비교 조건
@@ -85,8 +86,7 @@ public class TrapThr extends FxEventImpl {
 	/**
 	 * PK
 	 * 
-	 * @param alarmCode
-	 *            경보코드
+	 * @param alarmCode 경보코드
 	 */
 	public TrapThr(int alarmCode) {
 		this.alarmCode = alarmCode;
@@ -115,8 +115,7 @@ public class TrapThr extends FxEventImpl {
 	/**
 	 * UK
 	 * 
-	 * @param alarmName
-	 *            경보명
+	 * @param alarmName 경보명
 	 */
 	public TrapThr(String alarmName) {
 		this.alarmName = alarmName;
@@ -253,14 +252,18 @@ public class TrapThr extends FxEventImpl {
 	/**
 	 * MO에 해당되는 트랩정보조건인지 확인합니다.
 	 * 
-	 * @param mo
-	 *            MO
+	 * @param mo MO
 	 * @return 부합여부
 	 */
 	public boolean match(TrapNode node) {
 		if (modelNo <= 0)
 			return true;
-		return node.getModelNo() == modelNo;
+
+		if (node instanceof TrapMo) {
+			return ((TrapMo) node).getModelNo() == modelNo;
+		}
+
+		return false;
 	}
 
 	/**

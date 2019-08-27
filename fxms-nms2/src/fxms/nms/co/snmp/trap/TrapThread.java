@@ -2,8 +2,6 @@ package fxms.nms.co.snmp.trap;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import subkjh.bas.co.log.Logger;
-
 import com.adventnet.snmp.snmp2.SnmpPDU;
 import com.adventnet.snmp.snmp2.SnmpVarBind;
 import com.adventnet.snmp.snmp2.UDPProtocolOptions;
@@ -14,7 +12,6 @@ import fxms.nms.api.TrapApi;
 import fxms.nms.co.snmp.mib.IFMIB;
 import fxms.nms.co.snmp.mib.SNMPV2_MIB;
 import fxms.nms.co.snmp.mib.TrapMib;
-import fxms.nms.co.snmp.mo.TrapNode;
 import fxms.nms.co.snmp.trap.actor.TrapActor;
 import fxms.nms.co.snmp.trap.vo.RecvTrapVo;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
@@ -23,6 +20,7 @@ import fxms.nms.co.snmp.vo.SNMP;
 import fxms.nms.co.snmp.vo.SNMP.TrapType;
 import fxms.nms.co.snmp.vo.SNMP.Type;
 import fxms.nms.co.snmp.vo.SNMP.Version;
+import subkjh.bas.co.log.Logger;
 
 /**
  * 받은 트랩을 처리하는 스레드
@@ -39,12 +37,9 @@ public class TrapThread extends FxThread {
 
 	/**
 	 * 
-	 * @param queue
-	 *            받은 트랩이 입력되는 큐
-	 * @param name
-	 *            스레드명
-	 * @param receiveAll
-	 *            모두 받을지 알고 있는 장비에서 올라오는 트랩만 받을지 여부
+	 * @param queue      받은 트랩이 입력되는 큐
+	 * @param name       스레드명
+	 * @param receiveAll 모두 받을지 알고 있는 장비에서 올라오는 트랩만 받을지 여부
 	 */
 	public TrapThread(LinkedBlockingQueue<RecvTrapVo> queue) {
 
@@ -183,8 +178,8 @@ public class TrapThread extends FxThread {
 				if (bind == null)
 					break;
 
-				data = new OidValue(bind.getObjectID().toString(), Type.getOidType(bind.getVariable().getType()), bind
-						.getVariable().toString(), bind.getVariable().toBytes());
+				data = new OidValue(bind.getObjectID().toString(), Type.getOidType(bind.getVariable().getType()),
+						bind.getVariable().toString(), bind.getVariable().toBytes());
 
 				vo.add(data);
 

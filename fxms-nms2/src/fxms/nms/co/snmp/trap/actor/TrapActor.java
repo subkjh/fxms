@@ -1,7 +1,7 @@
 package fxms.nms.co.snmp.trap.actor;
 
 import fxms.bas.fxo.FxActor;
-import fxms.nms.co.snmp.mo.TrapNode;
+import fxms.nms.co.snmp.trap.TrapNode;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
 
 /**

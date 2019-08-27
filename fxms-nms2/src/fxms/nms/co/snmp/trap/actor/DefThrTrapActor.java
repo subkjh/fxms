@@ -5,17 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.co.log.Logger;
 import fxms.bas.ao.AoCode.ClearReason;
 import fxms.bas.ao.vo.Alarm;
 import fxms.bas.api.EventApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.fxo.FxActorImpl;
 import fxms.nms.api.TrapApi;
-import fxms.nms.co.snmp.mo.TrapNode;
+import fxms.nms.co.snmp.mo.TrapMo;
+import fxms.nms.co.snmp.trap.TrapNode;
 import fxms.nms.co.snmp.trap.vo.TrapThr;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
 import fxms.nms.co.snmp.vo.OidValue;
+import subkjh.bas.co.log.Logger;
 
 /**
  * 정의된 트랩 임계 조건으로 경보를 판단한다.
@@ -30,8 +31,11 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 
 		Logger.logger.trace("{} {}", node, vo);
 
-		if (node == null)
+		if ((node instanceof TrapMo) == false) {
 			return vo;
+		}
+
+		TrapMo trapMo = (TrapMo) node;
 
 		List<TrapThr> thrList = TrapApi.getApi().getThrByNode(node);
 		if (thrList == null || thrList.size() == 0) {
@@ -67,8 +71,8 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 							para.put(EventApi.PARA_VALUE, ov.getValue());
 							para.put(EventApi.PARA_TREAT_NAME, th.getTreatName());
 
-							alarm = EventApi.getApi().check(node, instance, th.getAlarmCode(),
-									makeMsg(node, oidValueList, th.getAlarmMsg()), para);
+							alarm = EventApi.getApi().check(trapMo, instance, th.getAlarmCode(),
+									makeMsg(oidValueList, th.getAlarmMsg()), para);
 
 							if (alarm != null) {
 								return vo;
@@ -79,8 +83,9 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 					// 위에서 매칭이 안되면 Clear 매칭여부를 판단합니다.
 					if (th.matchTrapOidClear(vo.getTrapOid())) {
 						if (th.getVarOidClear() != null && th.getVarValClear() != null) {
-							if (th.getVarOidClear().startsWith(ov.getOid()) && ov.getValue().equals(th.getVarValClear())) {
-								EventApi.getApi().checkClear(node, th.getAlarmCode(), ClearReason.Auto);
+							if (th.getVarOidClear().startsWith(ov.getOid())
+									&& ov.getValue().equals(th.getVarValClear())) {
+								EventApi.getApi().checkClear(trapMo, th.getAlarmCode(), ClearReason.Auto);
 							}
 						}
 					}
@@ -94,7 +99,7 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 		return null;
 	}
 
-	private String makeMsg(TrapNode node, List<OidValue> oidValueList, String msgOrg) {
+	private String makeMsg(List<OidValue> oidValueList, String msgOrg) {
 
 		String ret = msgOrg;
 		for (OidValue ov : oidValueList) {

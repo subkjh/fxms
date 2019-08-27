@@ -2,19 +2,17 @@ package fxms.nms.co.snmp.trap;
 
 import java.util.List;
 
-import subkjh.bas.co.log.Logger;
 import fxms.bas.ao.vo.Alarm;
 import fxms.bas.api.EventApi;
-import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.mo.Mo;
 import fxms.nms.api.TrapApi;
 import fxms.nms.co.cd.NmsCode;
-import fxms.nms.co.singnal.ResyncNode;
 import fxms.nms.co.snmp.mib.IFMIB;
-import fxms.nms.co.snmp.mo.TrapNode;
+import fxms.nms.co.snmp.mo.TrapMo;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
 import fxms.nms.co.snmp.vo.OidValue;
 import fxms.nms.co.snmp.vo.SNMP.TrapType;
+import subkjh.bas.co.log.Logger;
 
 public class StdTrapParser {
 
@@ -24,11 +22,13 @@ public class StdTrapParser {
 
 	}
 
-	public void parse(TrapNode node, TrapVo vo) {
+	public void parse(TrapNode n, TrapVo vo) {
 
-		if (node == null) {
+		if (n instanceof TrapMo) {
 			return;
 		}
+
+		TrapMo node = (TrapMo) n;
 
 		Alarm alarm = null;
 		String moInstance = vo.getValueString();
@@ -67,7 +67,7 @@ public class StdTrapParser {
 
 	}
 
-	private Alarm linkUpDown(TrapNode node, TrapVo vo, boolean up) {
+	private Alarm linkUpDown(TrapMo node, TrapVo vo, boolean up) {
 		List<OidValue> list = vo.find(IFMIB.ifIndex, true);
 		Mo mo;
 		Alarm alarm = null;

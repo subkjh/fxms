@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.BasCfg;
-import subkjh.bas.co.log.LOG_LEVEL;
-import subkjh.bas.co.log.Logger;
 import fxms.bas.ao.AoCode;
 import fxms.bas.ao.vo.Alarm;
 import fxms.bas.api.EventApi;
@@ -30,7 +27,7 @@ import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.mo.Mo;
 import fxms.bas.mo.property.HasIp;
 import fxms.nms.co.cd.NmsCode;
-import fxms.nms.co.snmp.mo.TrapNode;
+import fxms.nms.co.snmp.trap.TrapNode;
 import fxms.nms.co.snmp.trap.actor.TrapActor;
 import fxms.nms.co.snmp.trap.vo.TrapEventLog;
 import fxms.nms.co.snmp.trap.vo.TrapEventLogList;
@@ -39,6 +36,9 @@ import fxms.nms.co.snmp.trap.vo.TrapVo;
 import fxms.nms.mo.NeIfMo;
 import fxms.nms.mo.property.MoSnmppable;
 import fxms.nms.mo.property.SnmpPass;
+import subkjh.bas.BasCfg;
+import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
 
 /**
  * TrapService API
@@ -118,8 +118,7 @@ public abstract class TrapApi extends FxApi {
 	private BatchSaver<TrapEventLog> saver;
 
 	private List<TrapNode> nodeList;
-	private Map<String, TrapNode> ipNodeMap;/* key : IP주소 */
-	private Map<Long, TrapNode> noNodeMap; /* key : MO_NO */
+	private Map<String, TrapNode> ipMap;/* key : IP주소 */
 
 	private String trapLogFile;
 
@@ -131,8 +130,7 @@ public abstract class TrapApi extends FxApi {
 		trapAlarmMap = new HashMap<Long, Alarm>();
 		trapSeqno = 0;
 
-		noNodeMap = new HashMap<Long, TrapNode>();
-		ipNodeMap = new HashMap<String, TrapNode>();
+		ipMap = new HashMap<String, TrapNode>();
 	}
 
 	/**
@@ -179,16 +177,6 @@ public abstract class TrapApi extends FxApi {
 
 	public Alarm getAlarmTrapSeqno(long seqno) {
 		return trapAlarmMap.get(seqno);
-	}
-
-	/**
-	 * 
-	 * @param moNo
-	 * @return
-	 * @since 2013.03.12 by subkjh
-	 */
-	public TrapNode getMo(long moNo) {
-		return noNodeMap.get(moNo);
 	}
 
 	public Mo getMoByMac(String macAddr) {
@@ -242,10 +230,8 @@ public abstract class TrapApi extends FxApi {
 	/**
 	 * TRAP 화일을 제공합니다.
 	 * 
-	 * @param yyyymmdd
-	 *            받은일자
-	 * @param ipaddress
-	 *            IP주소
+	 * @param yyyymmdd  받은일자
+	 * @param ipaddress IP주소
 	 * @return 화일내용
 	 * @throws FileNotFoundException
 	 * @throws Exception
@@ -277,7 +263,7 @@ public abstract class TrapApi extends FxApi {
 	 * @return
 	 */
 	public TrapNode getTrapNode(TrapVo vo) {
-		return ipNodeMap.get(vo.getIpAddress());
+		return ipMap.get(vo.getIpAddress());
 	}
 
 	/**
@@ -286,7 +272,7 @@ public abstract class TrapApi extends FxApi {
 	 * @return IP주소에 해당되는 장비
 	 */
 	public TrapNode getTrapNodeByIpaddress(String ipAddress) {
-		return ipNodeMap.get(ipAddress);
+		return ipMap.get(ipAddress);
 	}
 
 	/**
@@ -341,8 +327,9 @@ public abstract class TrapApi extends FxApi {
 			// 등록되지 않은 장비로 부터의 SNMP TRAP 발생 경보가 존재하면 해제합니다.
 			if (noti instanceof HasIp) {
 				TrapNode node = TrapApi.api.getTrapNodeByIpaddress(((HasIp) noti).getIpAddress());
-				if (node != null)
-					EventApi.getApi().checkClear(node, "unknown-ne-trap", AoCode.ClearReason.Auto);
+				if (node instanceof Mo) {
+					EventApi.getApi().checkClear((Mo) node, "unknown-ne-trap", AoCode.ClearReason.Auto);
+				}
 			}
 
 		}
@@ -354,7 +341,9 @@ public abstract class TrapApi extends FxApi {
 	}
 
 	public void sendEventInvalidNode(TrapNode node) {
-		EventApi.getApi().check(node, null, NmsCode.AlarmCode.NOT_SET_TRAP, null, null);
+		if (node instanceof Mo) {
+			EventApi.getApi().check((Mo) node, null, NmsCode.AlarmCode.NOT_SET_TRAP, null, null);
+		}
 	}
 
 	/**
@@ -473,19 +462,18 @@ public abstract class TrapApi extends FxApi {
 	private void loadTrapNode() {
 
 		try {
-			List<TrapNode> list = doSelectTrapNode();
+			List<TrapNode> nodeList = doSelectTrapNode();
 
-			Map<String, TrapNode> map = new HashMap<String, TrapNode>();
-			Map<Long, TrapNode> map2 = new HashMap<Long, TrapNode>();
+			Map<String, TrapNode> ipMap = new HashMap<String, TrapNode>();
 
-			for (TrapNode node : list) {
-				map.put(node.getIpAddress(), node);
-				map2.put(node.getMoNo(), node);
+			for (TrapNode node : nodeList) {
+				if (node.getIpAddress() != null) {
+					ipMap.put(node.getIpAddress(), node);
+				}
 			}
 
-			nodeList = list;
-			ipNodeMap = map;
-			noNodeMap = map2;
+			this.nodeList = nodeList;
+			this.ipMap = ipMap;
 
 			Logger.logger.debug("count-mo={}", nodeList.size());
 
