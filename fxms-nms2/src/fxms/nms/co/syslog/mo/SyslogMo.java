@@ -8,7 +8,7 @@ import fxms.bas.mo.Mo;
  * @author subkjh
  * 
  */
-public class SyslogNode extends Mo {
+public class SyslogMo extends Mo implements SyslogNode {
 
 	/**
 	 * 
@@ -24,6 +24,7 @@ public class SyslogNode extends Mo {
 	/** 장비의 hostname으로 검색하기 위해 필요함. */
 	private String sysName;
 
+	@Override
 	public String getIpAddress() {
 		return ipAddress;
 	}
@@ -56,4 +57,8 @@ public class SyslogNode extends Mo {
 		this.sysName = sysName;
 	}
 
+	@Override
+	public boolean isSyslogRecv() {
+		return true;
+	}
 }

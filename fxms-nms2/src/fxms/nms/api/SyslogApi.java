@@ -28,7 +28,8 @@ import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.mo.Mo;
 import fxms.bas.mo.property.HasIp;
 import fxms.nms.co.cd.NmsCode;
-import fxms.nms.co.syslog.actor.SyslogActor;
+import fxms.nms.co.syslog.actor.SyslogAdapter;
+import fxms.nms.co.syslog.mo.SyslogMo;
 import fxms.nms.co.syslog.mo.SyslogNode;
 import fxms.nms.co.syslog.vo.SyslogEventLog;
 import fxms.nms.co.syslog.vo.SyslogEventLogList;
@@ -81,7 +82,7 @@ public abstract class SyslogApi extends FxApi {
 	/** 등록되지 않은 IP에서 올라온 SYSLOG를 기록할지 여부 */
 	private boolean acceptNotRegIp = false;
 	/** FilterSyslog 목록 */
-	private List<SyslogActor> actorList;
+	private List<SyslogAdapter> actorList;
 	/** Syslog 관리 장비 목록. key=ip주소 */
 	private Map<String, SyslogNode> nodeMapByIp;
 	/** Syslog 관리 장비 목록. key=명칭 */
@@ -142,7 +143,7 @@ public abstract class SyslogApi extends FxApi {
 		}
 	}
 
-	public List<SyslogActor> getActorList() {
+	public List<SyslogAdapter> getActorList() {
 		return actorList;
 	}
 
@@ -277,7 +278,7 @@ public abstract class SyslogApi extends FxApi {
 	 * @return 적용할 임계 조건<br>
 	 *         해당 사항이 없을 경우 size=0인 리스트 제공
 	 */
-	public List<SyslogThr> getThresholdList(SyslogNode node) {
+	public List<SyslogThr> getThresholdList(SyslogMo node) {
 
 		List<SyslogThr> ret = new ArrayList<SyslogThr>();
 
@@ -325,7 +326,7 @@ public abstract class SyslogApi extends FxApi {
 	 * @param alarmNo
 	 * @return
 	 */
-	public SyslogEventLog makeSyslogEvent(Mo mo, SyslogNode node, SyslogVo raw, int alarmLevel, int alarmCode,
+	public SyslogEventLog makeSyslogEvent(Mo mo, SyslogMo node, SyslogVo raw, int alarmLevel, int alarmCode,
 			String alarmName, long alarmNo) {
 		SyslogEventLog item = new SyslogEventLog();
 
@@ -424,7 +425,7 @@ public abstract class SyslogApi extends FxApi {
 		return instance;
 	}
 
-	public void sendEventInvalidNode(SyslogNode node) {
+	public void sendEventInvalidNode(SyslogMo node) {
 		EventApi.getApi().check(node, null, NmsCode.AlarmCode.NOT_SET_SYSLOG, null, null);
 	}
 
@@ -534,7 +535,7 @@ public abstract class SyslogApi extends FxApi {
 			saver.start();
 		}
 
-		actorList = FxActorParser.getParser().getActorList(SyslogActor.class);
+		actorList = FxActorParser.getParser().getActorList(SyslogAdapter.class);
 
 	}
 
@@ -552,11 +553,13 @@ public abstract class SyslogApi extends FxApi {
 			Map<String, SyslogNode> nmMap = new HashMap<String, SyslogNode>();
 			Map<String, SyslogNode> sysMap = new HashMap<String, SyslogNode>();
 
+			SyslogMo mo;
 			for (SyslogNode node : list) {
-				ipMap.put(node.getIpAddress(), node);
-				nmMap.put(node.getMoName(), node);
-				if (node.getSysName() != null && node.getSysName().trim().length() > 0) {
-					sysMap.put(node.getSysName(), node);
+				mo = ( SyslogMo)node;
+				ipMap.put(mo.getIpAddress(), node);
+				nmMap.put(mo.getMoName(), node);
+				if (mo.getSysName() != null && mo.getSysName().trim().length() > 0) {
+					sysMap.put(mo.getSysName(), node);
 				}
 			}
 

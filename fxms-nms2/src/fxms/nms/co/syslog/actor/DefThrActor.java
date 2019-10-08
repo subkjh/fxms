@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.co.log.Logger;
 import fxms.bas.ao.AlarmEvent;
 import fxms.bas.ao.AoCode;
 import fxms.bas.ao.vo.Alarm;
@@ -13,16 +12,19 @@ import fxms.bas.api.MoApi;
 import fxms.bas.fxo.FxActorImpl;
 import fxms.bas.mo.Mo;
 import fxms.nms.api.SyslogApi;
+import fxms.nms.co.syslog.mo.SyslogMo;
 import fxms.nms.co.syslog.mo.SyslogNode;
 import fxms.nms.co.syslog.vo.SyslogEventLog;
 import fxms.nms.co.syslog.vo.SyslogThr;
 import fxms.nms.co.syslog.vo.SyslogVo;
+import subkjh.bas.co.log.Logger;
 
-public class DefThrActor extends FxActorImpl implements SyslogActor {
+public class DefThrActor extends FxActorImpl implements SyslogAdapter {
 
 	@Override
-	public SyslogVo parse(SyslogNode node, SyslogVo vo) throws Exception {
+	public SyslogVo parse(SyslogNode syslogNode, SyslogVo vo) throws Exception {
 
+		SyslogMo node = (SyslogMo) syslogNode;
 		SyslogThr.LogStatus logStatus = null;
 		SyslogThr thr = null;
 
@@ -88,12 +90,13 @@ public class DefThrActor extends FxActorImpl implements SyslogActor {
 				} else if (logStatus == SyslogThr.LogStatus.occurIfNotExist) {
 					alarm = EventApi.getApi().getAlarm(mo, hasInstance ? instance : null, alarmCode);
 					if (alarm == null) {
-						event = EventApi.getApi().makeEvent(mo, hasInstance ? instance : null, alarmCode, vo.getMsg(), 0, 0, 0,
-								thr.getAlarmLevel(), null);
+						event = EventApi.getApi().makeEvent(mo, hasInstance ? instance : null, alarmCode, vo.getMsg(),
+								0, 0, 0, thr.getAlarmLevel(), null);
 						event.setTreatName(thr.getTreatName());
 					}
 				} else if (logStatus == SyslogThr.LogStatus.occur) {
-					event = EventApi.getApi().makeEvent(mo, instance, alarmCode, vo.getMsg(), 0, 0, 0, thr.getAlarmLevel(), null);
+					event = EventApi.getApi().makeEvent(mo, instance, alarmCode, vo.getMsg(), 0, 0, 0,
+							thr.getAlarmLevel(), null);
 					event.setTreatName(thr.getTreatName());
 				}
 

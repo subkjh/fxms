@@ -7,7 +7,7 @@ import fxms.bas.fxo.thread.FXTHREAD_STATUS;
 import fxms.bas.fxo.thread.FxThread;
 import fxms.nms.api.SyslogApi;
 import fxms.nms.co.syslog.actor.DefThrSyslogActor;
-import fxms.nms.co.syslog.actor.SyslogActor;
+import fxms.nms.co.syslog.actor.SyslogAdapter;
 import fxms.nms.co.syslog.mo.SyslogNode;
 import fxms.nms.co.syslog.vo.SyslogVo;
 
@@ -76,7 +76,7 @@ public class SyslogThread extends FxThread {
 
 						Logger.logger.debug((node == null ? vo.getIpAddress() : node.toString()));
 
-						for (SyslogActor actor : SyslogApi.getApi().getActorList()) {
+						for (SyslogAdapter actor : SyslogApi.getApi().getActorList()) {
 
 							Logger.logger.trace("{}", actor.getClass().getSimpleName());
 
