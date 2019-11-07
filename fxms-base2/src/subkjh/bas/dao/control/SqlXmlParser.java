@@ -139,12 +139,9 @@ public class SqlXmlParser {
 	/**
 	 * SQL XML 파서
 	 * 
-	 * @param _logger
-	 *            사용할 로거
-	 * @param _constMap
-	 *            상수맵
-	 * @param database
-	 *            데이터베이스
+	 * @param _logger   사용할 로거
+	 * @param _constMap 상수맵
+	 * @param database  데이터베이스
 	 */
 	public SqlXmlParser(Map<String, SqlConst> constMap, Map<String, ResultBean> resultMap, String database) {
 
@@ -218,10 +215,8 @@ public class SqlXmlParser {
 	/**
 	 * xmlfiles을 분석하여 SqlBean 목록을 제공합니다.
 	 * 
-	 * @param ignoreNotExist
-	 *            파일이 없어도 무시할 지 여부
-	 * @param xmlArr
-	 *            파일목록
+	 * @param ignoreNotExist 파일이 없어도 무시할 지 여부
+	 * @param xmlArr         파일목록
 	 * @return 분석된 쿼리빈
 	 * @throws Exception
 	 */
@@ -373,7 +368,7 @@ public class SqlXmlParser {
 					if (sqlConstOld != null) {
 						if (sqlConstOld.text.equals(text) == false) {
 							if (usedDatabase != null && usedDatabase.equalsIgnoreCase(sqlConst.database) == false) {
-								Logger.logger.check("DUP CONST", id);
+								Logger.logger.check("DUP CONST '{}'", id);
 							}
 						}
 					}
@@ -436,12 +431,9 @@ public class SqlXmlParser {
 	/**
 	 * include에 대한 화일을 가져옵니다.
 	 * 
-	 * @param child
-	 *            include가 포함된 항목
-	 * @param file
-	 *            현재 화일
-	 * @param fileList
-	 *            처리한 화일 목록
+	 * @param child    include가 포함된 항목
+	 * @param file     현재 화일
+	 * @param fileList 처리한 화일 목록
 	 * @return
 	 * @throws Exception
 	 */
@@ -551,7 +543,6 @@ public class SqlXmlParser {
 
 		if (child.getName().equals("test") && isEnable(child)) {
 
-
 			database = child.getAttributeValue("database");
 			if (database == null) {
 				te = new TestSqlElement(var, equals, replaceConst(child.getText()));
@@ -583,14 +574,10 @@ public class SqlXmlParser {
 	/**
 	 * 쿼리빈을 맵에 존재여부를 확인한 후 추가합니다.
 	 * 
-	 * @param sqlBean
-	 *            쿼리빈
-	 * @param sqlBeanMap
-	 *            맵
-	 * @param replace
-	 *            대체여부
-	 * @throws Exception
-	 *             추가되지 않은 경우
+	 * @param sqlBean    쿼리빈
+	 * @param sqlBeanMap 맵
+	 * @param replace    대체여부
+	 * @throws Exception 추가되지 않은 경우
 	 */
 	private void putSqlBean(SqlBean sqlBean) {
 
@@ -598,7 +585,7 @@ public class SqlXmlParser {
 
 		if (sqlBeanOld != null) {
 			if (sqlBeanOld.equals(sqlBean)) {
-				Logger.logger.check("Replace QID", sqlBean.getKey());
+				Logger.logger.check("Replace QID '{}'", sqlBean.getKey());
 			}
 		}
 
@@ -811,8 +798,7 @@ public class SqlXmlParser {
 	/**
 	 * ResultMap을 전역변수 resultMap에 추가합니다.
 	 * 
-	 * @param resultList
-	 *            추가할 ResultMap Element
+	 * @param resultList 추가할 ResultMap Element
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -859,7 +845,7 @@ public class SqlXmlParser {
 				resultBeanOld = resultMap.get(result.getResultId());
 				if (resultBeanOld != null) {
 					if (resultBeanOld.equals(result) == false) {
-						Logger.logger.check("Dup ResultMap", result.getResultId());
+						Logger.logger.check("Dup ResultMap {}", result.getResultId());
 					}
 				}
 

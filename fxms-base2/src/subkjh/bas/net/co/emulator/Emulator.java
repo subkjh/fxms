@@ -20,7 +20,7 @@ public abstract class Emulator {
 
 	class Reader extends Thread {
 
-		private StringBuffer sb;
+		private StringBuffer sb = new StringBuffer();
 		private boolean isContinue = true;
 
 		public synchronized String buffer(OP op, String... strArr) {
@@ -34,7 +34,7 @@ public abstract class Emulator {
 				sb = new StringBuffer();
 				return ret;
 			} else if (op == OP.get) {
-				return sb.toString();
+				return sb == null ? null : sb.toString();
 			} else if (op == OP.put) {
 				for (String s : strArr) {
 					sb.append(s);

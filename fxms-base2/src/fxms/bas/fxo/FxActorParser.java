@@ -33,10 +33,14 @@ public class FxActorParser {
 	private List<File> parsedFileList;
 	private long lastParesedTime = 0;
 
+	public static void main(String[] args) {
+		File file = new File("aaaa.xm");
+		FxActorParser p = new FxActorParser();
+		System.out.println(p.isXmlFile(file));
+	}
 	/**
 	 * 
-	 * @param classOfF
-	 *            가져올 필터의 종류
+	 * @param classOfF 가져올 필터의 종류
 	 */
 	private FxActorParser() {
 
@@ -171,13 +175,16 @@ public class FxActorParser {
 		StringBuffer sb = new StringBuffer();
 
 		for (File f : folder.listFiles()) {
-			try {
-				sb.append(Logger.makeSubString(0, f.getName(), "parsing"));
-				parse(f, fList, sb);
-				fileList.add(f);
-			} catch (Exception e) {
-				sb.append(Logger.makeSubString(0, f.getName(), "error"));
-				Logger.logger.error(e);
+
+			if (isXmlFile(f)) {
+				try {
+					sb.append(Logger.makeSubString(0, f.getName(), "parsing"));
+					parse(f, fList, sb);
+					fileList.add(f);
+				} catch (Exception e) {
+					sb.append(Logger.makeSubString(0, f.getName(), "error"));
+					Logger.logger.error(e);
+				}
 			}
 		}
 		Logger.logger.info(Logger.makeString("FxActor", folder.getPath(), sb.toString()));
@@ -334,5 +341,13 @@ public class FxActorParser {
 			}
 		}
 
+	}
+
+	private boolean isXmlFile(File f) {
+		if (f == null) {
+			return false;
+		}
+		String name = f.getName().toLowerCase();
+		return name.lastIndexOf("xml") == name.length() - 3;
 	}
 }
