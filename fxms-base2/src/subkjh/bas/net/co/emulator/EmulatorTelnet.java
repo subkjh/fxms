@@ -8,6 +8,8 @@ import java.net.Socket;
 
 public class EmulatorTelnet extends Emulator {
 
+	public static final String TELNET_NET_STATE_MsgRecv = "TelnetMsgRecv";
+
 	/** Telnet 접속 Control 상수값 ( 253, 0xfd ) */
 	public static final byte DO = (byte) 253;
 	/** Telnet 접속 Control 상수값 ( 254, 0xfe ) */
@@ -22,7 +24,7 @@ public class EmulatorTelnet extends Emulator {
 	private Socket socket;
 	/** 로그인 문구를 기다렸다가 계정을 보낼지 여부 */
 	private boolean waitLoginString = false;
-	
+
 	public static void main(String[] args) throws Exception {
 		EmulatorTelnet e = new EmulatorTelnet();
 		e.setPromptArr("$", "#", ">");
@@ -37,7 +39,6 @@ public class EmulatorTelnet extends Emulator {
 		e.disconnect();
 	}
 
-
 	public EmulatorTelnet() {
 
 	}
@@ -45,7 +46,8 @@ public class EmulatorTelnet extends Emulator {
 	/**
 	 * 로그인 문구를 기다렸다가 계정을 보낼지 여부를 설정합니다.
 	 * 
-	 * @param waitLoginString true이면 기다림.
+	 * @param waitLoginString
+	 *            true이면 기다림.
 	 */
 	public void setWaitLoginString(boolean waitLoginString) {
 		this.waitLoginString = waitLoginString;
@@ -59,20 +61,20 @@ public class EmulatorTelnet extends Emulator {
 		socket.connect(isa, getTimeoutMsConnection());
 		socket.setSoTimeout(getTimeoutMsRead());
 
-		logger.debug("connection ok");
+		logger.debug("host={}, port={} connection ok", host, port);
 
 		byte bytes[] = negotiation();
 
-		logger.debug("negotiation ok - " + new String(bytes));
+		logger.debug("negotiation ok - [" + new String(bytes) + "]");
 
-		startReader();
+		startReader(bytes);
 
 		doLogin(userId, password);
 
 	}
 
 	protected void doLogin(String userId, String password) throws Exception {
-		
+
 		// negotiation 과정에서 login 문자를 먼저 읽어 버림.
 		if (waitLoginString) {
 			if (waitfor(getStrLoginIndi()) == null) {

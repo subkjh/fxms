@@ -1,10 +1,11 @@
 package subkjh.bas.net.co.emulator;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import subkjh.bas.co.log.Logger;
+import subkjh.bas.net.co.vo.NetListener;
 
 /**
  * Telnet/Ssh 접속 에뮬레이터 공통 부분
@@ -14,34 +15,65 @@ import subkjh.bas.co.log.Logger;
  */
 public abstract class Emulator {
 
-	enum OP {
-		reset, get, put;
-	}
-
 	class Reader extends Thread {
 
-		private StringBuffer sb = new StringBuffer();
+		private Object lockObj = new Object();
 		private boolean isContinue = true;
+		private byte bytes[] = new byte[0];
 
-		public synchronized String buffer(OP op, String... strArr) {
+		public Reader(byte initBytes[]) {
+			if (initBytes != null) {
+				put(initBytes, 0, initBytes.length);
+			}
+		}
 
-			if (op == OP.reset) {
+		public String get() {
+			synchronized (lockObj) {
 
-				if (sb.length() == 0)
-					return null;
+				if (bytes == null || bytes.length == 0) {
+					return "";
+				}
 
-				String ret = sb.toString();
-				sb = new StringBuffer();
-				return ret;
-			} else if (op == OP.get) {
-				return sb == null ? null : sb.toString();
-			} else if (op == OP.put) {
-				for (String s : strArr) {
-					sb.append(s);
+				try {
+					return new String(bytes, charset);
+				} catch (UnsupportedEncodingException e) {
+					return new String(bytes);
 				}
 			}
+		}
 
-			return null;
+		public void put(byte b[], int offset, int len) {
+
+			synchronized (lockObj) {
+
+				if (listener != null) {
+					try {
+						listener.onNetState(EmulatorTelnet.TELNET_NET_STATE_MsgRecv, new String(b, offset, len, charset));
+					} catch (UnsupportedEncodingException e) {
+						listener.onNetState(EmulatorTelnet.TELNET_NET_STATE_MsgRecv, new String(b, offset, len));
+					}
+					bytes = null;
+					return;
+				}
+
+				if (bytes == null) {
+					bytes = new byte[len];
+					System.arraycopy(b, offset, bytes, 0, len);
+					return;
+				}
+
+				byte tmp[] = new byte[bytes.length + len];
+				System.arraycopy(bytes, 0, tmp, 0, bytes.length);
+				System.arraycopy(b, offset, tmp, bytes.length, len);
+
+				bytes = tmp;
+			}
+		}
+
+		public void reset() {
+			synchronized (lockObj) {
+				bytes = null;
+			}
 		}
 
 		@Override
@@ -50,7 +82,6 @@ public abstract class Emulator {
 			byte[] ba = new byte[4096];
 			int len = 0;
 			InputStream in = null;
-			sb = new StringBuffer();
 
 			while (isContinue) {
 				if (getInputStream() != null)
@@ -69,7 +100,7 @@ public abstract class Emulator {
 					}
 					len = in.read(ba);
 					if (len > 0) {
-						buffer(OP.put, new String(ba, 0, len));
+						put(ba, 0, len);
 					}
 				} catch (Exception e1) {
 					isContinue = false;
@@ -95,6 +126,29 @@ public abstract class Emulator {
 	/** 읽기 TIMEOUT. Milliseconds */
 	public static final int DEFAULT_READ_TIMEOUT = 10 * 1000;
 
+	public static boolean isPrompt(String result, String[] promptArr) {
+
+		if (result == null || promptArr == null) {
+			return false;
+		}
+
+		int index = 0;
+		int lenPrompt = 0;
+		int pos;
+
+		for (String prompt : promptArr) {
+			index = result.lastIndexOf(prompt);
+			if (index >= 0) {
+				lenPrompt = prompt.length();
+				break;
+			}
+		}
+
+		pos = result.length() - lenPrompt;
+
+		return index >= 0 && (index == pos || index == (pos - 1));
+	}
+
 	public static void main(String[] args) throws Exception {
 		// EmulatorSsh e = new EmulatorSsh();
 		// e.connect("167.1.21.31", 22, "nprism30", "nprism03!@");
@@ -119,6 +173,8 @@ public abstract class Emulator {
 
 	}
 
+	private String charset = "utf-8";
+
 	protected Logger logger = Logger.logger;
 
 	/** 계정 입력 지시자 */
@@ -126,6 +182,7 @@ public abstract class Emulator {
 
 	/** 암호 입력 지시자 */
 	private String strPassIndi[] = new String[] { "password:" };
+
 	protected Reader reader;
 	/** 프롬프트 */
 	private String promptArr[] = new String[] { "$", "#", ">" };
@@ -133,12 +190,11 @@ public abstract class Emulator {
 	private int timeoutMsConnection = DEFAULT_CONNECTION_TIMEOUT;
 	/** 메시지 수신 대기 시간 */
 	private int timeoutMsRead = DEFAULT_READ_TIMEOUT;
-
-	protected abstract void _disconnect();
+	private NetListener listener;
 
 	public String cmd(String cmd, String... waitStrArr) throws Exception {
 
-		reader.buffer(OP.reset);
+		reader.reset();
 
 		byte[] byte_msg = cmd.getBytes();
 
@@ -147,6 +203,10 @@ public abstract class Emulator {
 		out.write(byte_msg, 0, byte_msg.length);
 
 		out.flush();
+		
+		if (listener != null) {
+			return "";
+		}
 
 		if (waitStrArr.length == 0) {
 			return waitforPrompt();
@@ -178,7 +238,11 @@ public abstract class Emulator {
 			throw e;
 		}
 
-		startReader();
+	}
+
+	public void connect(String host, int port, String userId, String password, NetListener listener) throws Exception {
+		connect(host, port, userId, password);
+		this.listener = listener;
 	}
 
 	public void disconnect() {
@@ -192,6 +256,92 @@ public abstract class Emulator {
 		logger.debug("ok");
 	}
 
+	public String getCharset() {
+		return charset;
+	}
+
+	public Logger getLogger() {
+		return logger;
+	}
+
+	public String[] getStrLoginIndi() {
+		return strLoginIndi;
+	}
+
+	public String[] getStrPassIndi() {
+		return strPassIndi;
+	}
+
+	public int getTimeoutMsConnection() {
+		return timeoutMsConnection;
+	}
+
+	public int getTimeoutMsRead() {
+		return timeoutMsRead;
+	}
+
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	public void setPromptArr(String... promptArr) {
+		this.promptArr = promptArr;
+	}
+
+	public void setStrLoginIndi(String[] strLoginIndi) {
+		this.strLoginIndi = strLoginIndi;
+	}
+
+	public void setStrPassIndi(String[] strPassIndi) {
+		this.strPassIndi = strPassIndi;
+	}
+
+	public void setTimeoutMsConnection(int timeoutMsConnection) {
+		this.timeoutMsConnection = timeoutMsConnection;
+	}
+
+	public void setTimeoutMsRead(int timeoutMsRead) {
+		this.timeoutMsRead = timeoutMsRead;
+	}
+
+	/**
+	 * 
+	 * @param waitStrArr
+	 * @return
+	 */
+	public String waitfor(String waitStrArr[]) {
+
+		String result;
+		long ptime = System.currentTimeMillis();
+
+		while (true) {
+			result = reader.get();
+			if (result == null) {
+				if (ptime + timeoutMsRead < System.currentTimeMillis())
+					return null;
+				continue;
+			}
+
+			// Logger.logger.debug(Arrays.toString(waitStrArr) + " ..... " +
+			// result);
+
+			for (String f : waitStrArr) {
+				if (result.indexOf(f) >= 0) {
+					return result;
+				}
+			}
+
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+			}
+
+		}
+
+	}
+
+	protected abstract void _disconnect();
+
 	protected abstract void doConnect(String host, int port, String userId, String password) throws Exception;
 
 	/**
@@ -201,10 +351,6 @@ public abstract class Emulator {
 	 * @throws IOException
 	 */
 	protected abstract InputStream getInputStream();
-
-	public Logger getLogger() {
-		return logger;
-	}
 
 	/**
 	 * 
@@ -235,79 +381,11 @@ public abstract class Emulator {
 
 	}
 
-	public String[] getStrLoginIndi() {
-		return strLoginIndi;
-	}
-
-	public String[] getStrPassIndi() {
-		return strPassIndi;
-	}
-
-	public int getTimeoutMsConnection() {
-		return timeoutMsConnection;
-	}
-
-	public int getTimeoutMsRead() {
-		return timeoutMsRead;
-	}
-
-	public void setPromptArr(String... promptArr) {
-		this.promptArr = promptArr;
-	}
-
-	public void setStrLoginIndi(String[] strLoginIndi) {
-		this.strLoginIndi = strLoginIndi;
-	}
-
-	public void setStrPassIndi(String[] strPassIndi) {
-		this.strPassIndi = strPassIndi;
-	}
-
-	public void setTimeoutMsConnection(int timeoutMsConnection) {
-		this.timeoutMsConnection = timeoutMsConnection;
-	}
-
-	public void setTimeoutMsRead(int timeoutMsRead) {
-		this.timeoutMsRead = timeoutMsRead;
-	}
-
-	protected synchronized void startReader() {
+	protected synchronized void startReader(byte bytes[]) {
 		if (reader == null) {
-			reader = new Reader();
+			reader = new Reader(bytes);
 			reader.start();
 		}
-	}
-
-	/**
-	 * 
-	 * @param waitStrArr
-	 * @return
-	 */
-	public String waitfor(String waitStrArr[]) {
-
-		String s;
-		StringBuffer sb = new StringBuffer();
-		String result;
-		long ptime = System.currentTimeMillis();
-
-		while (true) {
-			s = reader.buffer(OP.get);
-			if (s == null) {
-				if (ptime + timeoutMsRead < System.currentTimeMillis())
-					return null;
-				continue;
-			}
-			
-			sb.append(s);
-			
-			result = sb.toString().toLowerCase();
-			for (String f : waitStrArr) {
-				if (result.indexOf(f.toLowerCase()) >= 0) {
-					return result;
-				}
-			}
-		}
-
 	}
 
 	/**
@@ -316,41 +394,19 @@ public abstract class Emulator {
 	 */
 	protected String waitforPrompt() {
 
-		String s;
-		int index = 0;
-		int pos;
-		StringBuffer sb = new StringBuffer();
 		String result;
-		boolean isExist = false;
 		long ptime = System.currentTimeMillis();
-		int lenPrompt = 0;
 
 		while (true) {
 
-			s = reader.buffer(OP.reset);
+			result = reader.get();
 
-			if (s == null) {
+			if (result == null) {
 				if (ptime + timeoutMsRead < System.currentTimeMillis())
 					return null;
-				if (isExist)
-					break;
 			} else {
-				sb.append(s);
-				result = sb.toString();
-				for (String prompt : promptArr) {
-					index = result.lastIndexOf(prompt);
-					if (index >= 0) {
-						lenPrompt = prompt.length();
-						break;
-					}
-				}
-
-				pos = result.length() - lenPrompt;
-
-				if (index >= 0 && (index == pos || index == (pos - 1))) {
-					isExist = true;
-					Thread.yield();
-					continue;
+				if (isPrompt(result, promptArr)) {
+					return result;
 				}
 			}
 
@@ -360,8 +416,5 @@ public abstract class Emulator {
 			}
 
 		}
-
-		return sb.toString();
 	}
-
 }
