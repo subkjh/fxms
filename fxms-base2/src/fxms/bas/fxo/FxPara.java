@@ -23,8 +23,7 @@ public class FxPara {
 		/**
 		 * 입력된 객체가 속성 조건이 맞는지 확인합니다.
 		 * 
-		 * @param target
-		 *            속성을 비교할 객체
+		 * @param target 속성을 비교할 객체
 		 * @return 조건이 맞으면 true
 		 */
 		boolean match(Object obj) {
@@ -107,6 +106,10 @@ public class FxPara {
 
 		Object s = get(name);
 
+		if (s == null) {
+			return defVal;
+		}
+
 		if (s instanceof Number) {
 			return ((Number) s).intValue();
 		} else {
@@ -121,6 +124,10 @@ public class FxPara {
 	public long getLong(String name, long defVal) {
 
 		Object s = get(name);
+
+		if (s == null) {
+			return defVal;
+		}
 
 		if (s instanceof Number) {
 			return ((Number) s).longValue();
