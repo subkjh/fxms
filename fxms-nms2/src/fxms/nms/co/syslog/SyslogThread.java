@@ -2,14 +2,13 @@ package fxms.nms.co.syslog;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import subkjh.bas.co.log.Logger;
 import fxms.bas.fxo.thread.FXTHREAD_STATUS;
 import fxms.bas.fxo.thread.FxThread;
 import fxms.nms.api.SyslogApi;
-import fxms.nms.co.syslog.actor.DefThrSyslogActor;
-import fxms.nms.co.syslog.actor.SyslogAdapter;
+import fxms.nms.co.syslog.adapter.SyslogAdapter;
 import fxms.nms.co.syslog.mo.SyslogNode;
 import fxms.nms.co.syslog.vo.SyslogVo;
+import subkjh.bas.co.log.Logger;
 
 /**
  * 큐에서 SYSLOG를 읽어 이벤트 처리하는 쓰레드
@@ -20,16 +19,13 @@ import fxms.nms.co.syslog.vo.SyslogVo;
 public class SyslogThread extends FxThread {
 
 	private LinkedBlockingQueue<SyslogVo> queue;
-	private DefThrSyslogActor parser;
 
 	/**
 	 * 
-	 * @param queue
-	 *            사용할 큐
+	 * @param queue 사용할 큐
 	 */
 	public SyslogThread(LinkedBlockingQueue<SyslogVo> queue) {
 		this.queue = queue;
-		parser = new DefThrSyslogActor();
 	}
 
 	@Override
@@ -55,6 +51,8 @@ public class SyslogThread extends FxThread {
 
 			if (vo != null) {
 
+				SyslogApi.getApi().writeSyslog2File(vo);
+
 				Logger.logger.debug("{} {}", vo.getIpAddress(), vo.getMsg());
 
 				try {
@@ -64,10 +62,6 @@ public class SyslogThread extends FxThread {
 
 					node = SyslogApi.getApi().getNode(vo);
 
-					SyslogApi.getApi().writeSyslog2File(node, vo);
-
-					parser.parse(node, vo);
-
 					if (node == null) {
 
 						SyslogApi.getApi().processUnknownLog(vo);
@@ -76,7 +70,7 @@ public class SyslogThread extends FxThread {
 
 						Logger.logger.debug((node == null ? vo.getIpAddress() : node.toString()));
 
-						for (SyslogAdapter actor : SyslogApi.getApi().getActorList()) {
+						for (SyslogAdapter actor : SyslogApi.getApi().getAdapterList()) {
 
 							Logger.logger.trace("{}", actor.getClass().getSimpleName());
 

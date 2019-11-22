@@ -1,8 +1,8 @@
 package fxms.nms.co.snmp.trap.vo;
 
 import fxms.bas.co.noti.FxEventImpl;
-import fxms.nms.co.snmp.mo.TrapMo;
 import fxms.nms.co.snmp.trap.TrapNode;
+import fxms.nms.mo.property.Modelable;
 
 /**
  * 비교 조건
@@ -10,7 +10,7 @@ import fxms.nms.co.snmp.trap.TrapNode;
  * @author subkjh
  * 
  */
-public class TrapThr extends FxEventImpl {
+public abstract class TrapPattern extends FxEventImpl implements Modelable {
 
 	public static final int ALARM_MSG_TYPE_CONTENT = 3;
 	public static final int ALARM_MSG_TYPE_OID = 1;
@@ -38,20 +38,16 @@ public class TrapThr extends FxEventImpl {
 	/** 사용여부 */
 	private boolean enable;
 	/** 발생위치검색필드 */
-	private String fieldMo;
+	protected String fieldMo;
 	/** 장비검색필드 */
 	private String fieldNode;
 	/** 최종 수정 일시 */
 	private long hstimeChg;
-	/** 발생위치검색MO분류 */
-	private String moClass;
-	/** 적용 모델 */
-	private int modelNo;
 	/** 동일경보판단OID */
 	private String oidKey;
 
 	/** 발생위치검색OID */
-	private String oidMo;
+	protected String oidMo;
 	/** 장비검색OID */
 	private String oidNode;
 	/** 자동해제시간(초) - 0이거나 작으면 경우 자동 해제하지 않습니다. */
@@ -68,8 +64,6 @@ public class TrapThr extends FxEventImpl {
 	private String trapOidClear;
 	/** 경보조치번호. 이 조건으로 이벤트가 발생되면 처리할 내용 */
 	private int treatName;
-	/** 최종 수정 운용자 */
-	private int userNoChg;
 	/** 비교 OID */
 	private String varOid;
 	/** 비교 OID (해제) */
@@ -79,7 +73,7 @@ public class TrapThr extends FxEventImpl {
 	/** 비교 값 (해제) */
 	private String varValClear;
 
-	public TrapThr() {
+	public TrapPattern() {
 		enable = true;
 	}
 
@@ -88,13 +82,12 @@ public class TrapThr extends FxEventImpl {
 	 * 
 	 * @param alarmCode 경보코드
 	 */
-	public TrapThr(int alarmCode) {
+	public TrapPattern(int alarmCode) {
 		this.alarmCode = alarmCode;
 	}
 
-	public TrapThr(int alarmCode, int modelNo, String trapOid, String varOid, String varVal, //
-			String alarmName, int alarmLevel, String alarmMsg, //
-			String trapOidClear, String varOidClear, String varValClear, int secRelease) {
+	public TrapPattern(int alarmCode, String trapOid, String varOid, String varVal, String alarmName, int alarmLevel,
+			String alarmMsg, String trapOidClear, String varOidClear, String varValClear, int secRelease) {
 
 		setAlarmCode(alarmCode);
 		setAlarmLevel(alarmLevel);
@@ -109,7 +102,6 @@ public class TrapThr extends FxEventImpl {
 		setSecRelease(secRelease);
 		setAlarmName(alarmName);
 		setThrowOut(false);
-		setModelNo(modelNo);
 	}
 
 	/**
@@ -117,7 +109,7 @@ public class TrapThr extends FxEventImpl {
 	 * 
 	 * @param alarmName 경보명
 	 */
-	public TrapThr(String alarmName) {
+	public TrapPattern(String alarmName) {
 		this.alarmName = alarmName;
 	}
 
@@ -161,14 +153,6 @@ public class TrapThr extends FxEventImpl {
 		return hstimeChg;
 	}
 
-	public String getMoClass() {
-		return moClass;
-	}
-
-	public int getModelNo() {
-		return modelNo;
-	}
-
 	public String getOidKey() {
 		return oidKey;
 	}
@@ -205,10 +189,6 @@ public class TrapThr extends FxEventImpl {
 		return treatName;
 	}
 
-	public int getUserNoChg() {
-		return userNoChg;
-	}
-
 	public String getVarOid() {
 		return varOid;
 	}
@@ -229,17 +209,6 @@ public class TrapThr extends FxEventImpl {
 		return enable;
 	}
 
-	/**
-	 * 발생위치정보가 설정되어 있는지 여부를 판단합니다.
-	 * 
-	 * @return 발생위치설정여부
-	 */
-	public boolean isSetMo() {
-		return oidMo != null && oidMo.length() > 0 //
-				&& moClass != null && moClass.length() > 0 //
-				&& fieldMo != null && fieldMo.length() > 0;
-	}
-
 	public boolean isSetNode() {
 		return oidNode != null && oidNode.length() > 0 //
 				&& fieldNode != null && fieldNode.length() > 0;
@@ -255,16 +224,7 @@ public class TrapThr extends FxEventImpl {
 	 * @param mo MO
 	 * @return 부합여부
 	 */
-	public boolean match(TrapNode node) {
-		if (modelNo <= 0)
-			return true;
-
-		if (node instanceof TrapMo) {
-			return ((TrapMo) node).getModelNo() == modelNo;
-		}
-
-		return false;
-	}
+	public abstract boolean match(TrapNode node);
 
 	/**
 	 * 이 임계가 입력된 TRAP_OID에 비교 대상인지 판단합니다.<br>
@@ -336,14 +296,6 @@ public class TrapThr extends FxEventImpl {
 		this.hstimeChg = hstimeChg;
 	}
 
-	public void setMoClass(String moClass) {
-		this.moClass = moClass;
-	}
-
-	public void setModelNo(int modelNo) {
-		this.modelNo = modelNo;
-	}
-
 	public void setOidKey(String oidKey) {
 		this.oidKey = oidKey;
 	}
@@ -384,10 +336,6 @@ public class TrapThr extends FxEventImpl {
 		this.treatName = treatName;
 	}
 
-	public void setUserNoChg(int userNoChg) {
-		this.userNoChg = userNoChg;
-	}
-
 	public void setVarOid(String varOid) {
 		this.varOid = varOid;
 	}
@@ -406,6 +354,7 @@ public class TrapThr extends FxEventImpl {
 
 	@Override
 	public String toString() {
-		return "TRAP-THR-CODE(" + alarmCode + ")TRAP-THR-NAME(" + alarmName + ")";
+		return "TRAP-PATTERN(code=" + alarmCode + ",name=" + alarmName + ")";
 	}
+
 }

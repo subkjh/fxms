@@ -5,7 +5,7 @@ import java.util.List;
 
 import fxms.nms.co.syslog.mo.SyslogNode;
 import fxms.nms.co.syslog.vo.SyslogEventLog;
-import fxms.nms.co.syslog.vo.SyslogThr;
+import fxms.nms.co.syslog.vo.SyslogPattern;
 
 public class SyslogApiTest extends SyslogApi {
 
@@ -25,8 +25,8 @@ public class SyslogApiTest extends SyslogApi {
 	}
 
 	@Override
-	protected List<SyslogThr> doSelectSyslogThr() throws Exception {
-		return new ArrayList<SyslogThr>();
+	protected List<SyslogPattern> doSelectSyslogPattern() throws Exception {
+		return new ArrayList<SyslogPattern>();
 	}
 
 }

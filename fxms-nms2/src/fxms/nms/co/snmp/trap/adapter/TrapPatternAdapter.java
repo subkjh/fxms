@@ -1,4 +1,4 @@
-package fxms.nms.co.snmp.trap.actor;
+package fxms.nms.co.snmp.trap.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import fxms.bas.fxo.FxActorImpl;
 import fxms.nms.api.TrapApi;
 import fxms.nms.co.snmp.mo.TrapMo;
 import fxms.nms.co.snmp.trap.TrapNode;
-import fxms.nms.co.snmp.trap.vo.TrapThr;
+import fxms.nms.co.snmp.trap.vo.TrapPattern;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
 import fxms.nms.co.snmp.vo.OidValue;
 import subkjh.bas.co.log.Logger;
@@ -24,7 +24,7 @@ import subkjh.bas.co.log.Logger;
  * @author subkjh(김종훈)
  *
  */
-public class DefThrTrapActor extends FxActorImpl implements TrapActor {
+public class TrapPatternAdapter extends FxActorImpl implements TrapAdapter {
 
 	@Override
 	public TrapVo parse(TrapNode node, TrapVo vo) {
@@ -37,7 +37,7 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 
 		TrapMo trapMo = (TrapMo) node;
 
-		List<TrapThr> thrList = TrapApi.getApi().getThrByNode(node);
+		List<TrapPattern> thrList = TrapApi.getApi().getThrByNode(node);
 		if (thrList == null || thrList.size() == 0) {
 			return null;
 		}
@@ -53,7 +53,7 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 
 		for (OidValue ov : vo.getList()) {
 
-			for (TrapThr th : thrList) {
+			for (TrapPattern th : thrList) {
 
 				try {
 					matchTrapOid = th.matchTrapOid(vo.getTrapOid());
@@ -109,7 +109,7 @@ public class DefThrTrapActor extends FxActorImpl implements TrapActor {
 		return ret;
 	}
 
-	private boolean isMatch(TrapVo trap, TrapThr th, String oid, String var) {
+	private boolean isMatch(TrapVo trap, TrapPattern th, String oid, String var) {
 
 		boolean matchVal = false;
 		boolean matchOid = false;

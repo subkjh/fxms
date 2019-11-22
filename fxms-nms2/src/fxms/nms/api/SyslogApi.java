@@ -24,20 +24,23 @@ import fxms.bas.co.signal.ReloadSignal;
 import fxms.bas.co.thread.BatchSaver;
 import fxms.bas.co.vo.FileVo;
 import fxms.bas.fxo.FxActorParser;
+import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.mo.Mo;
 import fxms.bas.mo.property.HasIp;
 import fxms.nms.co.cd.NmsCode;
-import fxms.nms.co.syslog.actor.SyslogAdapter;
+import fxms.nms.co.syslog.adapter.SyslogAdapter;
 import fxms.nms.co.syslog.mo.SyslogMo;
 import fxms.nms.co.syslog.mo.SyslogNode;
 import fxms.nms.co.syslog.vo.SyslogEventLog;
 import fxms.nms.co.syslog.vo.SyslogEventLogList;
-import fxms.nms.co.syslog.vo.SyslogThr;
+import fxms.nms.co.syslog.vo.SyslogParsingResultVo;
+import fxms.nms.co.syslog.vo.SyslogPattern;
 import fxms.nms.co.syslog.vo.SyslogVo;
 import subkjh.bas.BasCfg;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
+import subkjh.bas.co.utils.FileUtil;
 
 /**
  * SyslogService에서 사용하는 API
@@ -79,33 +82,25 @@ public abstract class SyslogApi extends FxApi {
 	private boolean saveSyslog = false;
 	/** 받은 SYSLOG에 대해서 브로드캐스팅 할지 여부 */
 	private boolean broadcastSyslog = false;
-	/** 등록되지 않은 IP에서 올라온 SYSLOG를 기록할지 여부 */
-	private boolean acceptNotRegIp = false;
 	/** FilterSyslog 목록 */
-	private List<SyslogAdapter> actorList;
+	private List<SyslogAdapter> adapterList;
 	/** Syslog 관리 장비 목록. key=ip주소 */
 	private Map<String, SyslogNode> nodeMapByIp;
 	/** Syslog 관리 장비 목록. key=명칭 */
 	private Map<String, SyslogNode> nodeMapByName;
-	/** hostname으로 찾기 위한 Map */
-	private Map<String, SyslogNode> nodeMapBySysName;
 	/** 큐 내에 처리할 내용이 아래 이상인 경우 이벤트를 발생합니다. */
 	private int sizeMaxInQueueForEvent = 100;
-	/** SyslogVo 기록 여부 */
-	private boolean writeToFile = false;
 	/** 동일한 경보에 대해서 한 번만 발생할 것인지 계속발생시킬것인지 */
 	private boolean allowSameEvent;
 	private NotiSender syslogSender;
 	private BatchSaver<SyslogEventLog> saver;
-	private List<SyslogThr> thrList = null;
+	private List<SyslogPattern> patternList = null;
 	private List<SyslogNode> nodeList = null;
-
-	private String syslogFile;
+	private String syslogFolder;
 
 	public SyslogApi() {
 		nodeMapByIp = new HashMap<String, SyslogNode>();
 		nodeMapByName = new HashMap<String, SyslogNode>();
-		nodeMapBySysName = new HashMap<String, SyslogNode>();
 	}
 
 	public void broadcastLog(List<SyslogEventLog> logList) {
@@ -143,42 +138,8 @@ public abstract class SyslogApi extends FxApi {
 		}
 	}
 
-	public List<SyslogAdapter> getActorList() {
-		return actorList;
-	}
-
-	/**
-	 * 
-	 * @return SyslogVo 보관 일
-	 */
-	public int getDays2KeepFile() {
-		int days = CoApi.getApi().getVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, -1);
-		if (days <= 0) {
-			days = 30;
-			try {
-				CoApi.getApi().setVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, days, false);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-			}
-		}
-		return days;
-	}
-
-	/**
-	 * 
-	 * @return ZIP으로 압축할 경과 일자
-	 */
-	public int getDays2Zip() {
-		int days = CoApi.getApi().getVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, -1);
-		if (days <= 0) {
-			days = 7;
-			try {
-				CoApi.getApi().setVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, days, false);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-			}
-		}
-		return days;
+	public List<SyslogAdapter> getAdapterList() {
+		return adapterList;
 	}
 
 	/**
@@ -206,10 +167,6 @@ public abstract class SyslogApi extends FxApi {
 			node = nodeMapByName.get(vo.getHostname());
 		}
 
-		if (node == null && vo.getHostname() != null) {
-			node = nodeMapBySysName.get(vo.getHostname());
-		}
-
 		return node;
 	}
 
@@ -223,19 +180,35 @@ public abstract class SyslogApi extends FxApi {
 		return nodeMapByIp.get(ipAddress);
 	}
 
+	/**
+	 * 노드에 적용할 임계 조건을 검색합니다.
+	 * 
+	 * @param node 노드
+	 * @return 적용할 임계 조건<br>
+	 *         해당 사항이 없을 경우 size=0인 리스트 제공
+	 */
+	public List<SyslogPattern> getPatternList(SyslogNode node) {
+
+		List<SyslogPattern> ret = new ArrayList<SyslogPattern>();
+
+		for (SyslogPattern th : patternList) {
+			if (th.equalModel(node)) {
+				ret.add(th);
+			}
+		}
+
+		return ret;
+	}
+
 	@Override
 	public String getState(LOG_LEVEL level) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getClass().getName());
-		sb.append("ACTOR-SIZE(" + actorList.size() + ")");
+		sb.append("ADAPTER-SIZE(" + adapterList.size() + ")");
 		sb.append("NODE-SIZE(" + nodeList.size() + ")");
-		sb.append("SYSLOG-THR-SIZE(" + thrList.size() + ")");
+		sb.append("PATTERN-SIZE(" + patternList.size() + ")");
 
 		return sb.toString();
-	}
-
-	public String getSyslogFile() {
-		return syslogFile;
 	}
 
 	/**
@@ -271,24 +244,8 @@ public abstract class SyslogApi extends FxApi {
 		return BasCfg.getFile(BasCfg.getHomeDatas(), "syslog", yyyymmdd, ipAddress + ".log");
 	}
 
-	/**
-	 * 노드에 적용할 임계 조건을 검색합니다.
-	 * 
-	 * @param node 노드
-	 * @return 적용할 임계 조건<br>
-	 *         해당 사항이 없을 경우 size=0인 리스트 제공
-	 */
-	public List<SyslogThr> getThresholdList(SyslogMo node) {
-
-		List<SyslogThr> ret = new ArrayList<SyslogThr>();
-
-		for (SyslogThr th : thrList) {
-			if (th.getModelNo() == 0 || th.getModelNo() == node.getModelNo()) {
-				ret.add(th);
-			}
-		}
-
-		return ret;
+	public String getSyslogFolder() {
+		return syslogFolder;
 	}
 
 	public void insertLog(SyslogEventLog event) {
@@ -326,8 +283,17 @@ public abstract class SyslogApi extends FxApi {
 	 * @param alarmNo
 	 * @return
 	 */
-	public SyslogEventLog makeSyslogEvent(Mo mo, SyslogMo node, SyslogVo raw, int alarmLevel, int alarmCode,
+	public SyslogEventLog makeSyslogEvent(Mo mo, SyslogNode syslognode, SyslogVo raw, int alarmLevel, int alarmCode,
 			String alarmName, long alarmNo) {
+
+		SyslogMo node = null;
+
+		if (syslognode instanceof SyslogMo) {
+			node = (SyslogMo) syslognode;
+		} else {
+			return null;
+		}
+
 		SyslogEventLog item = new SyslogEventLog();
 
 		item.setAlarmCode(alarmCode);
@@ -338,10 +304,11 @@ public abstract class SyslogApi extends FxApi {
 		item.setHstimeRecv(FxApi.getDate(raw.getMsTime()));
 		item.setLogMsg(raw.getMsg());
 
-		if (node != null) {
+		if (node != null && node instanceof SyslogMo) {
+			SyslogMo syslogMo = (SyslogMo) node;
 			item.setIpAddress(node.getIpAddress());
-			item.setModelNo(node.getModelNo());
-			item.setModelName(node.getModelName());
+			item.setModelNo(syslogMo.getModelNo());
+			item.setModelName(syslogMo.getModelName());
 		}
 		item.setAlarmNo(alarmNo);
 
@@ -362,11 +329,11 @@ public abstract class SyslogApi extends FxApi {
 		if (noti instanceof ReloadSignal) {
 			ReloadSignal r = (ReloadSignal) noti;
 			if (r.contains(NmsCode.EventType.SYSLOG_THR)) {
-				loadSyslogThr();
+				loadSyslogPattern();
 			} else if (r.contains(ReloadSignal.RELOAD_TYPE_MO)) {
 				loadSyslogNode();
 			} else if (r.contains(ReloadSignal.RELOAD_TYPE_ALL)) {
-				loadSyslogThr();
+				loadSyslogPattern();
 				loadSyslogNode();
 			}
 		} else if (noti instanceof Mo) {
@@ -383,6 +350,48 @@ public abstract class SyslogApi extends FxApi {
 
 		}
 
+	}
+
+	public SyslogParsingResultVo parse(SyslogNode node, SyslogVo vo) throws Exception {
+
+		Logger.logger.trace("{} {}", node, vo);
+
+		List<SyslogPattern> thrList = getPatternList(node);
+		if (thrList == null || thrList.size() == 0) {
+			return null;
+		}
+
+		SyslogPattern.LogStatus logStatus = null;
+		SyslogPattern pattern = null;
+
+		String instance = null;
+
+		for (int i = 0, size = thrList.size(); i < size; i++) {
+			pattern = thrList.get(i);
+			logStatus = pattern.check(vo.getMsg());
+			if (logStatus != SyslogPattern.LogStatus.nothing) {
+				instance = pattern.getInstance(vo.getMsg());
+				if (instance == null && isAllowSameEvent() == false) {
+					instance = "No." + System.currentTimeMillis();
+				}
+				break;
+			} else {
+				pattern = null;
+			}
+		}
+
+		if (pattern == null) {
+			return null;
+		}
+
+		instance = SyslogApi.getApi().remakeInstance(instance);
+
+		SyslogParsingResultVo ret = new SyslogParsingResultVo();
+		ret.setInstance(instance);
+		ret.setPattern(pattern);
+		ret.setStatus(logStatus);
+
+		return ret;
 	}
 
 	/**
@@ -425,8 +434,12 @@ public abstract class SyslogApi extends FxApi {
 		return instance;
 	}
 
-	public void sendEventInvalidNode(SyslogMo node) {
-		EventApi.getApi().check(node, null, NmsCode.AlarmCode.NOT_SET_SYSLOG, null, null);
+//	public void sendEventInvalidNode(SyslogNode node) {
+//		EventApi.getApi().check(node, null, NmsCode.AlarmCode.NOT_SET_SYSLOG, null, null);
+//	}
+
+	public void setSyslogFolder(String syslogFolder) {
+		this.syslogFolder = syslogFolder;
 	}
 
 	/**
@@ -435,14 +448,15 @@ public abstract class SyslogApi extends FxApi {
 	 * @param node 노드
 	 * @param vo   메시지
 	 */
-	public void writeSyslog2File(SyslogNode node, SyslogVo vo) {
+	public void writeSyslog2File(SyslogVo vo) {
 
-		if (writeToFile == false) {
+		if (syslogFolder == null) {
 			return;
 		}
 
-		if (node == null && acceptNotRegIp == false) {
-			return;
+		File folder = new File(syslogFolder);
+		if (folder.exists() == false) {
+			folder.mkdirs();
 		}
 
 		FileWriter fileWriter = null;
@@ -451,7 +465,7 @@ public abstract class SyslogApi extends FxApi {
 		Calendar cal = Calendar.getInstance();
 		String dateString = String.format("%04d%02d%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
 				cal.get(Calendar.DAY_OF_MONTH));
-		String filename = BasCfg.getFile(BasCfg.getHomeDatas(), "syslog", dateString, vo.getIpAddress() + ".log");
+		String filename = BasCfg.getFile(syslogFolder, dateString, vo.getIpAddress() + ".log");
 
 		String msTimeString;
 		msTimeString = HHMMSS.format(new Date(vo.getMsTime()));
@@ -474,6 +488,79 @@ public abstract class SyslogApi extends FxApi {
 			}
 		}
 
+	}
+
+	/**
+	 * 파일로 기록된 내용을 압축한다.
+	 */
+	public void zipSyslogFiles() throws Exception {
+
+		if (syslogFolder == null) {
+			return;
+		}
+
+		File folder = new File(syslogFolder);
+
+		int delCnt = 0, zipCnt = 0;
+		int ret;
+		int trapLogFileTermDays = getFxPara().getInt(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, getDays2KeepFile()); // 파일 보관 기간
+		int zipAfterDays = getFxPara().getInt(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, getDays2Zip()); // ZIP으로 적용할 시간
+		boolean zipOneFile = getFxPara().getBoolean("zipOneFile", true);
+
+		String delYmd = FxApi.getYmd(System.currentTimeMillis() - (86400000 * trapLogFileTermDays)) + "";
+		String zipYmd = FxApi.getYmd(System.currentTimeMillis() - (86400000 * zipAfterDays)) + "";
+
+		// 보관 기간이 지난 자료 삭제
+		if (trapLogFileTermDays > 0) {
+			delCnt = 0;
+			for (File e : folder.listFiles()) {
+				if (e.getName().compareTo(delYmd) < 0) {
+					ret = FileUtil.delete(e);
+					if (ret > 0) {
+						Logger.logger.info("delete={}", e.getPath());
+						delCnt += ret;
+					} else {
+						Logger.logger.fail("cannot delete={}", e.getPath());
+					}
+				}
+			}
+		}
+
+		// log -> zip
+		if (zipAfterDays > 0) {
+			zipCnt = 0;
+			File dst;
+			for (File e : folder.listFiles()) {
+				if (e.getName().compareTo(zipYmd) < 0) {
+
+					if (zipOneFile) {
+						dst = new File(e.getPath() + ".zip");
+						FileUtil.zip(e, dst.getPath());
+						FileUtil.delete(e);
+						Logger.logger.info("zip {}->{}, delete={}", e.getPath(), dst.getPath(), e.getPath());
+						zipCnt++;
+					} else {
+						for (File e1 : e.listFiles()) {
+							if (e1.getName().endsWith("zip") == false) {
+								dst = new File(e1.getPath() + ".zip");
+								FileUtil.zipFile(e1, dst);
+								zipCnt++;
+								e1.delete();
+								Logger.logger.info("zip {}->{}, delete={}", e1.getPath(), dst.getPath(), e1.getPath());
+							}
+						}
+					}
+				}
+			}
+
+		}
+
+		StringBuffer sb = new StringBuffer();
+		sb.append(Logger.makeString("SYSLOG-ZIP", "zip=" + zipCnt + ",del=" + delCnt));
+		sb.append(Logger.makeSubString("folder", folder.getPath()));
+		sb.append(Logger.makeSubString("to-del-date", delYmd));
+		sb.append(Logger.makeSubString("to-zip-date", zipYmd));
+		Logger.logger.info(sb.toString());
 	}
 
 	/**
@@ -501,26 +588,27 @@ public abstract class SyslogApi extends FxApi {
 	 * 
 	 * @return SYSLOG 경보 조건 목록
 	 */
-	protected abstract List<SyslogThr> doSelectSyslogThr() throws Exception;
+	protected abstract List<SyslogPattern> doSelectSyslogPattern() throws Exception;
 
 	@Override
 	protected void initApi() throws Exception {
 
 		saveSyslog = getFxPara().getBoolean("saveSyslog", true);
 		broadcastSyslog = getFxPara().getBoolean("broadcastSyslog", false);
-		acceptNotRegIp = getFxPara().getBoolean("acceptNotRegIp", false);
 		sizeMaxInQueueForEvent = getFxPara().getInt("sizeMaxInQueueForEvent", 100);
-		writeToFile = getFxPara().getBoolean("writeToFile", false);
 		allowSameEvent = getFxPara().getBoolean("allowSameEvent", false);
 
-		syslogFile = getFxPara().getString("syslog-file-folder");
-		if (syslogFile.charAt(0) != '/')
-			syslogFile = BasCfg.getHome() + File.separator + syslogFile;
+		syslogFolder = getFxPara().getString("syslog-file-folder");
+		if (syslogFolder == null) {
+			syslogFolder = FxCfg.getHome() + File.separator + "datas" + File.separator + "syslog";
+		} else if (syslogFolder.charAt(0) != '/') {
+			syslogFolder = BasCfg.getHome() + File.separator + syslogFolder;
+		}
 
 		if (saveSyslog) {
 			saver = new BatchSaver<SyslogEventLog>("SyslogSaver" //
 					, getFxPara().getInt("insert-batch-size", 30) //
-					, syslogFile + File.separator + "NotSend") {
+					, syslogFolder + File.separator + "NotSend") {
 
 				@Override
 				public void doInsert(List<SyslogEventLog> logList) throws Exception {
@@ -535,14 +623,48 @@ public abstract class SyslogApi extends FxApi {
 			saver.start();
 		}
 
-		actorList = FxActorParser.getParser().getActorList(SyslogAdapter.class);
+		adapterList = FxActorParser.getParser().getActorList(SyslogAdapter.class);
 
 	}
 
 	@Override
 	protected void reload() {
-		loadSyslogThr();
+		loadSyslogPattern();
 		loadSyslogNode();
+	}
+
+	/**
+	 * 
+	 * @return SyslogVo 보관 일
+	 */
+	private int getDays2KeepFile() {
+		int days = CoApi.getApi().getVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, -1);
+		if (days <= 0) {
+			days = 30;
+			try {
+				CoApi.getApi().setVarValue(NmsCode.Var.KEEP_DAYS_LOG_SYSLOG, days, false);
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+		}
+		return days;
+	}
+
+	/**
+	 * 
+	 * @return ZIP으로 압축할 경과 일자
+	 */
+	private int getDays2Zip() {
+		int days = CoApi.getApi().getVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, -1);
+		if (days <= 0) {
+			days = 7;
+			try {
+				CoApi.getApi().setVarValue(NmsCode.Var.SYSLOG_MAKE_ZIP_AFTER_DAYS, days, false);
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+		}
+		return days;
 	}
 
 	private void loadSyslogNode() {
@@ -551,21 +673,16 @@ public abstract class SyslogApi extends FxApi {
 
 			Map<String, SyslogNode> ipMap = new HashMap<String, SyslogNode>();
 			Map<String, SyslogNode> nmMap = new HashMap<String, SyslogNode>();
-			Map<String, SyslogNode> sysMap = new HashMap<String, SyslogNode>();
 
-			SyslogMo mo;
 			for (SyslogNode node : list) {
-				mo = ( SyslogMo)node;
-				ipMap.put(mo.getIpAddress(), node);
-				nmMap.put(mo.getMoName(), node);
-				if (mo.getSysName() != null && mo.getSysName().trim().length() > 0) {
-					sysMap.put(mo.getSysName(), node);
+				ipMap.put(node.getIpAddress(), node);
+				if (node.getNodeName() != null) {
+					nmMap.put(node.getNodeName(), node);
 				}
 			}
 
 			nodeMapByName = nmMap;
 			nodeMapByIp = ipMap;
-			nodeMapBySysName = sysMap;
 			nodeList = list;
 
 		} catch (Exception e) {
@@ -573,13 +690,13 @@ public abstract class SyslogApi extends FxApi {
 		}
 	}
 
-	private void loadSyslogThr() {
+	private void loadSyslogPattern() {
 		try {
-			List<SyslogThr> tmpList = doSelectSyslogThr();
+			List<SyslogPattern> tmpList = doSelectSyslogPattern();
 
-			Collections.sort(tmpList, new Comparator<SyslogThr>() {
+			Collections.sort(tmpList, new Comparator<SyslogPattern>() {
 				@Override
-				public int compare(SyslogThr o1, SyslogThr o2) {
+				public int compare(SyslogPattern o1, SyslogPattern o2) {
 					if (o1.getOrderBy() == o2.getOrderBy()) {
 						return o1.getAlarmLevel() - o2.getAlarmLevel();
 					}
@@ -587,10 +704,11 @@ public abstract class SyslogApi extends FxApi {
 				}
 			});
 
-			thrList = tmpList;
+			patternList = tmpList;
 
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
 	}
+
 }

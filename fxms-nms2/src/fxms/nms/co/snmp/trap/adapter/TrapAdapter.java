@@ -1,4 +1,4 @@
-package fxms.nms.co.snmp.trap.actor;
+package fxms.nms.co.snmp.trap.adapter;
 
 import fxms.bas.fxo.FxActor;
 import fxms.nms.co.snmp.trap.TrapNode;
@@ -10,7 +10,7 @@ import fxms.nms.co.snmp.trap.vo.TrapVo;
  * @author subkjh(김종훈)
  *
  */
-public interface TrapActor extends FxActor {
+public interface TrapAdapter extends FxActor {
 
 	/**
 	 * 

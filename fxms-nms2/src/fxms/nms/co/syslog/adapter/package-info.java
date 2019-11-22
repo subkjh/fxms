@@ -5,4 +5,4 @@
  * @author subkjh(김종훈)
  *
  */
-package fxms.nms.co.snmp.trap.actor;
+package fxms.nms.co.syslog.adapter;

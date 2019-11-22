@@ -5,7 +5,7 @@ import java.util.List;
 
 import fxms.nms.co.snmp.trap.TrapNode;
 import fxms.nms.co.snmp.trap.vo.TrapEventLog;
-import fxms.nms.co.snmp.trap.vo.TrapThr;
+import fxms.nms.co.snmp.trap.vo.TrapPattern;
 
 public class TrapApiTest extends TrapApi {
 
@@ -25,8 +25,8 @@ public class TrapApiTest extends TrapApi {
 	}
 
 	@Override
-	protected List<TrapThr> doSelectTrapThr() throws Exception {
+	protected List<TrapPattern> doSelectTrapPattern() throws Exception {
 		// TODO Auto-generated method stub
-		return new ArrayList<TrapThr>();
+		return new ArrayList<TrapPattern>();
 	}
 }

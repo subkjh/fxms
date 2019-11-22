@@ -12,7 +12,7 @@ import fxms.nms.api.TrapApi;
 import fxms.nms.co.snmp.mib.IFMIB;
 import fxms.nms.co.snmp.mib.SNMPV2_MIB;
 import fxms.nms.co.snmp.mib.TrapMib;
-import fxms.nms.co.snmp.trap.actor.TrapActor;
+import fxms.nms.co.snmp.trap.adapter.TrapAdapter;
 import fxms.nms.co.snmp.trap.vo.RecvTrapVo;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
 import fxms.nms.co.snmp.vo.OidValue;
@@ -95,14 +95,11 @@ public class TrapThread extends FxThread {
 						}
 					}
 
-					// Thread.currentThread().setName("TrapNode-" +
-					// vo.getIpAddress());
-
 					Logger.logger.debug((node == null ? vo.getIpAddress() : node.toString()));
 
 					if (node != null) {
 
-						for (TrapActor actor : TrapApi.getApi().getActorList()) {
+						for (TrapAdapter actor : TrapApi.getApi().getAdapterList()) {
 
 							Logger.logger.trace("{}", actor.getClass().getSimpleName());
 
@@ -117,8 +114,6 @@ public class TrapThread extends FxThread {
 					}
 
 					getCounter().addOk(System.currentTimeMillis() - ptime);
-
-					// Thread.currentThread().setName(getName());
 
 				} catch (Exception e) {
 					Logger.logger.error(e);

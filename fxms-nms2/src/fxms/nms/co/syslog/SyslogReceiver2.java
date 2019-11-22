@@ -7,11 +7,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import subkjh.bas.co.log.Logger;
+import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.fxo.service.property.FxServiceMember;
 import fxms.bas.fxo.thread.FxThread;
 import fxms.nms.api.SyslogApi;
 import fxms.nms.co.syslog.vo.SyslogVo;
+import subkjh.bas.co.log.Logger;
 
 public class SyslogReceiver2 extends FxThread implements FxServiceMember {
 
@@ -24,19 +25,41 @@ public class SyslogReceiver2 extends FxThread implements FxServiceMember {
 	/**
 	 * SYSLOG 서버
 	 * 
-	 * @param syslogProc
-	 *            받은 로그를 처리하는 객체
+	 * @param syslogProc 받은 로그를 처리하는 객체
 	 */
 	public SyslogReceiver2() {
 		queue = new LinkedBlockingQueue<SyslogVo>();
 	}
 
+	public static final String PORT = "syslog-port";
+	public static final String PARSER_COUNT = "syslog-parser-count";
+	public static final String BUFFER_SIZE = "syslog-buffer-size";
+
+	public void setPort(int port) {
+		setPara(PORT, String.valueOf(port));
+	}
+
+	public void setThreadSize(int size) {
+		setPara(PARSER_COUNT, String.valueOf(size));
+	}
+
+	public void setBufferSize(int size) {
+		setPara(BUFFER_SIZE, String.valueOf(size));
+	}
+
 	@Override
 	public void startMember() throws Exception {
 
-		port = getFxPara().getInt("port", 514);
-		int thrSize = getFxPara().getInt("thread-size", 3);
-		int bufsize = getFxPara().getInt("buffer-size", 100000);
+		port = getFxPara().getInt(PORT, 514);
+		int thrSize = getFxPara().getInt(PARSER_COUNT, 3);
+		int bufsize = getFxPara().getInt(BUFFER_SIZE, 100000);
+
+		StringBuffer sb = new StringBuffer();
+		sb.append(Logger.makeString("SYSLOG-RECEIVER", getName()));
+		sb.append(Logger.makeSubString(PORT, port));
+		sb.append(Logger.makeSubString(PARSER_COUNT, thrSize));
+		sb.append(Logger.makeSubString(BUFFER_SIZE, bufsize));
+		FxServiceImpl.logger.info(sb.toString());
 
 		SyslogThread th;
 		for (int i = 0; i < thrSize; i++) {
@@ -130,4 +153,11 @@ public class SyslogReceiver2 extends FxThread implements FxServiceMember {
 
 	}
 
+	public void put(SyslogVo vo) {
+		try {
+			queue.put(vo);
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+	}
 }

@@ -1,6 +1,8 @@
 package fxms.nms.co.syslog.mo;
 
 import fxms.bas.mo.Mo;
+import fxms.nms.mo.property.ModelNoable;
+import fxms.nms.mo.property.Modelable;
 
 /**
  * Syslog 노드
@@ -8,7 +10,7 @@ import fxms.bas.mo.Mo;
  * @author subkjh
  * 
  */
-public class SyslogMo extends Mo implements SyslogNode {
+public class SyslogMo extends Mo implements SyslogNode, ModelNoable {
 
 	/**
 	 * 
@@ -60,5 +62,18 @@ public class SyslogMo extends Mo implements SyslogNode {
 	@Override
 	public boolean isSyslogRecv() {
 		return true;
+	}
+
+	@Override
+	public String getNodeName() {
+		return getMoName();
+	}
+
+	@Override
+	public boolean equalModel(Modelable o) {
+		if (o instanceof ModelNoable) {
+			return ((ModelNoable) o).getModelNo() == modelNo;
+		}
+		return false;
 	}
 }

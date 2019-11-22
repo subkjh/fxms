@@ -1,6 +1,8 @@
 package fxms.nms.co.snmp.trap;
 
-public interface TrapNode {
+import fxms.nms.mo.NmsNode;
+
+public interface TrapNode extends NmsNode {
 
 	/**
 	 * 
@@ -8,10 +10,5 @@ public interface TrapNode {
 	 */
 	public boolean isTrapRecv();
 
-	/**
-	 * 
-	 * @return
-	 */
-	public String getIpAddress();
 
 }

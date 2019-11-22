@@ -14,6 +14,7 @@ import java.util.Map;
 
 import fxms.bas.ao.AoCode;
 import fxms.bas.ao.vo.Alarm;
+import fxms.bas.api.CoApi;
 import fxms.bas.api.EventApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.api.MoApi;
@@ -23,15 +24,16 @@ import fxms.bas.co.signal.ReloadSignal;
 import fxms.bas.co.thread.BatchSaver;
 import fxms.bas.co.vo.FileVo;
 import fxms.bas.fxo.FxActorParser;
+import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.mo.Mo;
 import fxms.bas.mo.property.HasIp;
 import fxms.nms.co.cd.NmsCode;
 import fxms.nms.co.snmp.trap.TrapNode;
-import fxms.nms.co.snmp.trap.actor.TrapActor;
+import fxms.nms.co.snmp.trap.adapter.TrapAdapter;
 import fxms.nms.co.snmp.trap.vo.TrapEventLog;
 import fxms.nms.co.snmp.trap.vo.TrapEventLogList;
-import fxms.nms.co.snmp.trap.vo.TrapThr;
+import fxms.nms.co.snmp.trap.vo.TrapPattern;
 import fxms.nms.co.snmp.trap.vo.TrapVo;
 import fxms.nms.mo.NeIfMo;
 import fxms.nms.mo.property.MoSnmppable;
@@ -39,6 +41,7 @@ import fxms.nms.mo.property.SnmpPass;
 import subkjh.bas.BasCfg;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
+import subkjh.bas.co.utils.FileUtil;
 
 /**
  * TrapService API
@@ -103,33 +106,25 @@ public abstract class TrapApi extends FxApi {
 	}
 
 	private boolean broadcastTrap;
-	/** 미등록 장비의 TRAP을 기록할지 여부 */
-	private boolean acceptNotRegIp = true;
 	private boolean allowSameEvent; /* 동일한 경보에 대해서 한 번만 발생할 것인지 계속발생시킬것인지 */
-	private boolean writeToFile; /* 화일로 기록 여부 */
 	private boolean writeToDatabase; /* trap을 DB에 기록할지 여부 */
 	private long trapSeqno;
-
-	private List<TrapThr> thrList = null;
-
+	private List<TrapPattern> patternList = null;
 	private Map<Long, Alarm> trapAlarmMap; /* 트랩 일련번호에 대한 경보를 가지고 있습니다. */
-	private List<TrapActor> actorList; /* 필터 목록 */
+	private List<TrapAdapter> adapterList; /* 필터 목록 */
 	private NotiSender trapSender;
 	private BatchSaver<TrapEventLog> saver;
 
 	private List<TrapNode> nodeList;
 	private Map<String, TrapNode> ipMap;/* key : IP주소 */
 
-	private String trapLogFile;
-
 	/**
 	 * 
 	 */
 	public TrapApi() {
-		actorList = new ArrayList<TrapActor>();
+		adapterList = new ArrayList<TrapAdapter>();
 		trapAlarmMap = new HashMap<Long, Alarm>();
 		trapSeqno = 0;
-
 		ipMap = new HashMap<String, TrapNode>();
 	}
 
@@ -171,8 +166,8 @@ public abstract class TrapApi extends FxApi {
 	 * 
 	 * @return 필터목록
 	 */
-	public List<TrapActor> getActorList() {
-		return actorList;
+	public List<TrapAdapter> getAdapterList() {
+		return adapterList;
 	}
 
 	public Alarm getAlarmTrapSeqno(long seqno) {
@@ -202,9 +197,9 @@ public abstract class TrapApi extends FxApi {
 	public String getState(LOG_LEVEL level) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getClass().getName());
-		sb.append("TRAP-THR-SIZE(" + thrList.size() + ")");
-		sb.append("ACTOR-SIZE(" + actorList.size() + ")");
-		sb.append("TRAP-NODE-SIZE(" + nodeList.size() + ")");
+		sb.append("PATTERN-SIZE(" + patternList.size() + ")");
+		sb.append("ADAPTER-SIZE(" + adapterList.size() + ")");
+		sb.append("NODE-SIZE(" + nodeList.size() + ")");
 
 		return sb.toString();
 	}
@@ -215,10 +210,10 @@ public abstract class TrapApi extends FxApi {
 	 * @param node
 	 * @return 트랩경보조건목록
 	 */
-	public List<TrapThr> getThrByNode(TrapNode node) {
+	public List<TrapPattern> getThrByNode(TrapNode node) {
 
-		List<TrapThr> retList = new ArrayList<TrapThr>();
-		for (TrapThr th : thrList) {
+		List<TrapPattern> retList = new ArrayList<TrapPattern>();
+		for (TrapPattern th : patternList) {
 			if (th.match(node)) {
 				retList.add(th);
 			}
@@ -250,10 +245,6 @@ public abstract class TrapApi extends FxApi {
 			throw new FileNotFoundException(filename);
 
 		return new FileVo(file);
-	}
-
-	public String getTrapLogFile() {
-		return trapLogFile;
 	}
 
 	/**
@@ -318,7 +309,7 @@ public abstract class TrapApi extends FxApi {
 			} else if (r.contains(ReloadSignal.RELOAD_TYPE_MO)) {
 				loadTrapNode();
 			} else if (r.contains("TRAP-ALARM-CFG")) {
-				loadTrapThr();
+				loadTrapPattern();
 			}
 		} else if (noti instanceof Mo) {
 
@@ -354,6 +345,8 @@ public abstract class TrapApi extends FxApi {
 		EventApi.getApi().check(null, ipAddress, NmsCode.AlarmCode.UNKNOWN_TRAP, "ip:" + ipAddress, null);
 	}
 
+	private String trapFolder;
+
 	/**
 	 * 받은 TRAP을 화일에 기록합니다.
 	 * 
@@ -361,8 +354,13 @@ public abstract class TrapApi extends FxApi {
 	 */
 	public synchronized void write2File(TrapVo vo) {
 
-		if (writeToFile == false) {
+		if (trapFolder == null) {
 			return;
+		}
+
+		File folder = new File(trapFolder);
+		if (folder.exists() == false) {
+			folder.mkdirs();
 		}
 
 		FileWriter fileWriter = null;
@@ -372,7 +370,7 @@ public abstract class TrapApi extends FxApi {
 		cal.setTimeInMillis(vo.getMstimeRecv());
 		String dateString = String.format("%04d%02d%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
 				cal.get(Calendar.DAY_OF_MONTH));
-		String filename = BasCfg.getFile(trapLogFile, dateString, vo.getIpAddress() + ".log");
+		String filename = BasCfg.getFile(trapFolder, dateString, vo.getIpAddress() + ".log");
 
 		String msTimeString;
 		msTimeString = HHMMSS.format(new Date(vo.getMstimeRecv()));
@@ -418,24 +416,26 @@ public abstract class TrapApi extends FxApi {
 	 * 
 	 * @return 임계목록
 	 */
-	protected abstract List<TrapThr> doSelectTrapThr() throws Exception;
+	protected abstract List<TrapPattern> doSelectTrapPattern() throws Exception;
 
 	@Override
 	protected void initApi() throws Exception {
 
 		broadcastTrap = getFxPara().getBoolean("broadcastTrap", false);
-		writeToFile = getFxPara().getBoolean("writeToFile", false);
 		writeToDatabase = getFxPara().getBoolean("writeToDatabase", false);
 		allowSameEvent = getFxPara().getBoolean("allowSameEvent", false);
+		trapFolder = getFxPara().getString("trap-file-folder");
 
-		trapLogFile = getFxPara().getString("trap-file-folder");
-		if (trapLogFile.charAt(0) != '/')
-			trapLogFile = BasCfg.getHome() + File.separator + trapLogFile;
+		if (trapFolder == null) {
+			trapFolder = FxCfg.getHome() + File.separator + "datas" + File.separator + "syslog";
+		} else if (trapFolder.charAt(0) != '/') {
+			trapFolder = BasCfg.getHome() + File.separator + trapFolder;
+		}
 
 		if (writeToDatabase) {
 			saver = new BatchSaver<TrapEventLog>("TrapSaver" //
 					, getFxPara().getInt("insert-batch-size", 30) //
-					, trapLogFile + File.separator + "NotSend") {
+					, trapFolder + File.separator + "NotSend") {
 
 				@Override
 				public void doInsert(List<TrapEventLog> logList) throws Exception {
@@ -450,12 +450,12 @@ public abstract class TrapApi extends FxApi {
 			saver.start();
 		}
 
-		actorList = FxActorParser.getParser().getActorList(TrapActor.class);
+		adapterList = FxActorParser.getParser().getActorList(TrapAdapter.class);
 	}
 
 	@Override
 	protected void reload() {
-		loadTrapThr();
+		loadTrapPattern();
 		loadTrapNode();
 	}
 
@@ -483,18 +483,130 @@ public abstract class TrapApi extends FxApi {
 
 	}
 
-	private void loadTrapThr() {
+	private void loadTrapPattern() {
 
 		try {
-			List<TrapThr> list = doSelectTrapThr();
+			List<TrapPattern> list = doSelectTrapPattern();
 
-			thrList = list;
+			patternList = list;
 
-			Logger.logger.debug("count-threshold={}", thrList.size());
+			Logger.logger.debug("pattern-size={}", patternList.size());
 
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
 
+	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public void zipTrapFiles() throws Exception {
+
+		if (trapFolder == null) {
+			return;
+		}
+
+		File folder = new File(trapFolder);
+
+		if (folder.exists() == false) {
+			return;
+		}
+
+		int zipCnt = 0, delCnt = 0;
+		int ret;
+		int trapLogFileTermDays = getFxPara().getInt(NmsCode.Var.KEEP_DAYS_LOG_TRAP, getDays2KeepFile());
+		int zipAfterDays = getFxPara().getInt(NmsCode.Var.TRAP_MAKE_ZIP_AFTER_DAYS, getDays2Zip());
+		boolean zipOneFile = getFxPara().getBoolean("zipOneFile", true);
+
+		String delYmd = FxApi.getYmd(System.currentTimeMillis() - (86400000 * trapLogFileTermDays)) + "";
+		String zipYmd = FxApi.getYmd(System.currentTimeMillis() - (86400000 * zipAfterDays)) + "";
+
+		Logger.logger.info("paramters : folder={}, del={}, zip={}", folder.getPath(), delYmd, zipYmd);
+
+		// 보관 기간이 지난 자료 삭제
+		if (trapLogFileTermDays > 0) {
+			delCnt = 0;
+			for (File e : folder.listFiles()) {
+				if (e.getName().compareTo(delYmd) < 0) {
+					ret = FileUtil.delete(e);
+					if (ret > 0) {
+						Logger.logger.info("delete={}", e.getPath());
+						delCnt += ret;
+					} else {
+						Logger.logger.fail("cannot delete={}", e.getPath());
+					}
+				}
+			}
+		}
+
+		// log -> zip
+		if (zipAfterDays > 0) {
+			zipCnt = 0;
+			File dst;
+			for (File e : folder.listFiles()) {
+				if (e.getName().compareTo(zipYmd) < 0) {
+					if (zipOneFile) {
+						dst = new File(e.getPath() + ".zip");
+						FileUtil.zip(e, dst.getPath());
+						FileUtil.delete(e);
+						Logger.logger.info("zip {}->{}, delete={}", e.getPath(), dst.getPath(), e.getPath());
+						zipCnt++;
+					} else {
+						for (File e1 : e.listFiles()) {
+							if (e1.getName().endsWith("zip") == false) {
+								dst = new File(e1.getPath() + ".zip");
+								FileUtil.zipFile(e1, dst);
+								zipCnt++;
+								e1.delete();
+								Logger.logger.info("zip {}->{}, delete={}", e1.getPath(), dst.getPath(), e1.getPath());
+							}
+						}
+					}
+				}
+			}
+		}
+
+		StringBuffer sb = new StringBuffer();
+		sb.append(Logger.makeString("SYSLOG-ZIP", "zip=" + zipCnt + ",del=" + delCnt));
+		sb.append(Logger.makeSubString("folder", folder.getPath()));
+		sb.append(Logger.makeSubString("to-del-date", delYmd));
+		sb.append(Logger.makeSubString("to-zip-date", zipYmd));
+		Logger.logger.info(sb.toString());
+	}
+
+	/**
+	 * 
+	 * @return SyslogVo 보관 일
+	 */
+	private int getDays2KeepFile() {
+		int days = CoApi.getApi().getVarValue(NmsCode.Var.KEEP_DAYS_LOG_TRAP, -1);
+		if (days <= 0) {
+			days = 30;
+			try {
+				CoApi.getApi().setVarValue(NmsCode.Var.KEEP_DAYS_LOG_TRAP, days, false);
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+		}
+		return days;
+	}
+
+	/**
+	 * 
+	 * @return ZIP으로 압축할 경과 일자
+	 */
+	private int getDays2Zip() {
+		int days = CoApi.getApi().getVarValue(NmsCode.Var.TRAP_MAKE_ZIP_AFTER_DAYS, -1);
+		if (days <= 0) {
+			days = 7;
+			try {
+				CoApi.getApi().setVarValue(NmsCode.Var.TRAP_MAKE_ZIP_AFTER_DAYS, days, false);
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+		}
+		return days;
 	}
 }

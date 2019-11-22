@@ -3,6 +3,7 @@ package fxms.nms.co.snmp.trap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import subkjh.bas.co.log.LOG_LEVEL;
+import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.log.Loggable;
 
 import com.adventnet.snmp.snmp2.Snmp3Message;
@@ -92,31 +93,56 @@ public class TrapReceiver extends FxActorImpl implements Loggable, FxServiceMemb
 
 	/**
 	 * 
-	 * @param port
-	 *            사용할 포트
-	 * @param community
-	 *            커뮤니티
-	 * @param countThread
-	 *            사용할 스레드 수
-	 * @param receiveAll
-	 *            모두 받을지 여부
+	 * @param port        사용할 포트
+	 * @param community   커뮤니티
+	 * @param countThread 사용할 스레드 수
+	 * @param receiveAll  모두 받을지 여부
 	 * @throws Exception
 	 */
 	public void receiveTrap(int port, String community, int countThread, boolean receiveAll) throws Exception {
-		setPara("snmp-port", String.valueOf(port));
-		setPara("snmp-trap-community", String.valueOf(community));
-		setPara("thread-size", String.valueOf(countThread));
+		setPara(PORT, String.valueOf(port));
+		setPara(COMMUNITY, community);
+		setPara(PARSER_COUNT, String.valueOf(countThread));
 
 		startMember();
+	}
+
+	public static final String PORT = "snmp-port";
+	public static final String PARSER_COUNT = "snmp-parser-count";
+	public static final String BUFFER_SIZE = "snmp-buffer-size";
+	public static final String COMMUNITY = "snmp-trap-community";
+
+	public void setCommunity(String s) {
+		setPara("snmp-trap-community", s);
+	}
+
+	public void setPort(int port) {
+		setPara(PORT, String.valueOf(port));
+	}
+
+	public void setThreadSize(int size) {
+		setPara(PARSER_COUNT, String.valueOf(size));
+	}
+
+	public void setBufferSize(int size) {
+		setPara(BUFFER_SIZE, String.valueOf(size));
 	}
 
 	@Override
 	public void startMember() throws Exception {
 
-		int port = getFxPara().getInt("snmp-port", 162);
-		int thrSize = getFxPara().getInt("thread-size", 3);
-		int bufSize = getFxPara().getInt("recv-buffer-size", 1000000);
-		String community = getFxPara().getString("snmp-trap-community");
+		int port = getFxPara().getInt(PORT, 162);
+		int thrSize = getFxPara().getInt(PARSER_COUNT, 3);
+		int bufSize = getFxPara().getInt(BUFFER_SIZE, 1000000);
+		String community = getFxPara().getString(COMMUNITY);
+
+		StringBuffer sb = new StringBuffer();
+		sb.append(Logger.makeString("TRAP-RECEIVER", getName()));
+		sb.append(Logger.makeSubString(PORT, port));
+		sb.append(Logger.makeSubString(PARSER_COUNT, thrSize));
+		sb.append(Logger.makeSubString(BUFFER_SIZE, bufSize));
+		sb.append(Logger.makeSubString(COMMUNITY, community));
+		FxServiceImpl.logger.info(sb.toString());
 
 		TrapThread th;
 		for (int i = 0; i < thrSize; i++) {

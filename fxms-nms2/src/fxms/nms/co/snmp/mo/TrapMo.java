@@ -2,6 +2,8 @@ package fxms.nms.co.snmp.mo;
 
 import fxms.bas.mo.Mo;
 import fxms.nms.co.snmp.trap.TrapNode;
+import fxms.nms.mo.property.ModelNoable;
+import fxms.nms.mo.property.Modelable;
 
 /**
  * 트랩을 보내는 노드
@@ -9,7 +11,7 @@ import fxms.nms.co.snmp.trap.TrapNode;
  * @author subkjh
  * 
  */
-public class TrapMo extends Mo implements TrapNode {
+public class TrapMo extends Mo implements TrapNode, ModelNoable {
 
 	/**
 	 * 
@@ -79,6 +81,19 @@ public class TrapMo extends Mo implements TrapNode {
 
 	public void setTrapRecv(boolean trapRecv) {
 		this.trapRecv = trapRecv;
+	}
+
+	@Override
+	public String getNodeName() {
+		return getMoName();
+	}
+
+	@Override
+	public boolean equalModel(Modelable o) {
+		if (o instanceof ModelNoable) {
+			return ((ModelNoable) o).getModelNo() == modelNo;
+		}
+		return false;
 	}
 
 }

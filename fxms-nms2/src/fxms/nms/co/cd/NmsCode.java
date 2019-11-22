@@ -62,6 +62,8 @@ public class NmsCode {
 		public static final String KEEP_DAYS_LOG_SYSLOG = "KEEP_DAYS_LOG_SYSLOG";
 		/** 시스로그 발생 후 얼마 후 ZIP으로 묶을 것인지 */
 		public static final String SYSLOG_MAKE_ZIP_AFTER_DAYS = "SYSLOG_MAKE_ZIP_AFTER_DAYS";
+		/** 시스로그 발생 후 얼마 후 ZIP으로 묶을 것인지 */
+		public static final String TRAP_MAKE_ZIP_AFTER_DAYS = "TRAP_MAKE_ZIP_AFTER_DAYS";
 		/** 보관기간-TRAP(일) */
 		public static final String KEEP_DAYS_LOG_TRAP = "KEEP_DAYS_LOG_TRAP";
 		/** 보관기간-경보통계(년) */

@@ -4,4 +4,5 @@ import fxms.bas.fxo.service.FxService;
 
 public interface SyslogService extends FxService {
 
+	
 }
