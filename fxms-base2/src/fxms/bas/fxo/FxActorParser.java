@@ -38,6 +38,7 @@ public class FxActorParser {
 		FxActorParser p = new FxActorParser();
 		System.out.println(p.isXmlFile(file));
 	}
+
 	/**
 	 * 
 	 * @param classOfF 가져올 필터의 종류
@@ -144,16 +145,18 @@ public class FxActorParser {
 		}
 
 		A: for (File f : folder.listFiles()) {
-			for (File parsed : parsedFileList) {
-				if (f.getPath().equals(parsed.getPath())) {
-					if (f.lastModified() != parsed.lastModified()) {
-						return true;
+			if (this.isXmlFile(f)) {
+				for (File parsed : parsedFileList) {
+					if (f.getPath().equals(parsed.getPath())) {
+						if (f.lastModified() != parsed.lastModified()) {
+							return true;
+						}
+						continue A;
 					}
-					continue A;
 				}
-			}
 
-			return true;
+				return true;
+			}
 		}
 
 		return false;
