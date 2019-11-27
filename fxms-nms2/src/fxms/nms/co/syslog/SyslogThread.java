@@ -64,7 +64,7 @@ public class SyslogThread extends FxThread {
 
 					if (node == null) {
 
-						SyslogApi.getApi().processUnknownLog(vo);
+						// SyslogApi.getApi().processUnknownLog(vo);
 
 					} else {
 
