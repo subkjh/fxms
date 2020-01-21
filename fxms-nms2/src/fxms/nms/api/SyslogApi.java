@@ -413,6 +413,10 @@ public abstract class SyslogApi extends FxApi {
 					// 경보번호
 					0);
 
+			if (syslogEvent == null) {
+				return;
+			}
+
 			syslogEvent.setMoInstance("");
 			syslogEvent.setIpAddress(vo.getIpAddress());
 
