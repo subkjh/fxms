@@ -197,8 +197,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 정상적으로 설정되었는지 확인합니다.
 	 * 
-	 * @throws Exception
-	 *             정상적이지 않은 경우에 예외가 발생합니다.
+	 * @throws Exception 정상적이지 않은 경우에 예외가 발생합니다.
 	 */
 	public void check() throws Exception {
 
@@ -231,8 +230,7 @@ public abstract class DataBase implements Serializable {
 	 * POOL에 존재하는 Connection이면 사용여부만 해제하고 존재하지 않으면 실제 Connection.close()을 호출합니다.
 	 * 
 	 * @param connection
-	 * @param closeRealConnection
-	 *            POOL인 경우 실제 CONNECTION을 닫을지 여부
+	 * @param closeRealConnection POOL인 경우 실제 CONNECTION을 닫을지 여부
 	 * @throws Exception
 	 */
 	public void close(Connection connection, boolean closeRealConnection) throws Exception {
@@ -342,13 +340,10 @@ public abstract class DataBase implements Serializable {
 
 	/**
 	 * 테이블에 인덱스가 존재하는지 확인 합니다.<br>
-	 * 데이터베이스의 종류에 따라 테이블명은 null일 수 있습니다. 이 경우는 인덱스명이 데이터베이스에서 유일해야 하는 경우 입니다.
-	 * <br>
+	 * 데이터베이스의 종류에 따라 테이블명은 null일 수 있습니다. 이 경우는 인덱스명이 데이터베이스에서 유일해야 하는 경우 입니다. <br>
 	 * 
-	 * @param tableName
-	 *            테이블명
-	 * @param indexName
-	 *            인덱스명
+	 * @param tableName 테이블명
+	 * @param indexName 인덱스명
 	 * @return 존재여부
 	 * @throws Exception
 	 */
@@ -374,8 +369,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 테이블의 존재 여부를 확인합니다.
 	 * 
-	 * @param tableName
-	 *            테이블명
+	 * @param tableName 테이블명
 	 * @return 존재여부
 	 * @throws Exception
 	 */
@@ -414,8 +408,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 각 데이터베이스에서 사용할 컬럼의 데이터 Type를 가져옵니다.
 	 * 
-	 * @param col
-	 *            컬럼
+	 * @param col 컬럼
 	 * @return 쿼리용 데이터 타입
 	 */
 	public String getColumnDataType(Column col) {
@@ -429,10 +422,8 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 테이블을 구성하는 컬럼 목록을 제공합니다.
 	 * 
-	 * @param t
-	 *            사용할 트랜잭션. null이면 새롭게 연결한 후 조회하고 다시 닫음
-	 * @param tableName
-	 *            테이블명
+	 * @param t         사용할 트랜잭션. null이면 새롭게 연결한 후 조회하고 다시 닫음
+	 * @param tableName 테이블명
 	 * @return 컬럼목록
 	 * @throws Exception
 	 */
@@ -460,8 +451,7 @@ public abstract class DataBase implements Serializable {
 	 * POOL 크기가 0이면 새롭게 생성해서 제공합니다.
 	 * 
 	 * @return 콘넥션
-	 * @throws ConPollOverException
-	 *             , Exception
+	 * @throws ConPollOverException , Exception
 	 */
 	public synchronized Connection getConnection() throws IOException, Exception {
 
@@ -570,8 +560,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 테이블의 인덱스 목록을 조회합니다.
 	 * 
-	 * @param tableName
-	 *            테이블 명
+	 * @param tableName 테이블 명
 	 * @return 인덱스 목록
 	 * @throws Exception
 	 */
@@ -710,8 +699,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 테이블에 컬럼을 추가하는 쿼리 제공
 	 * 
-	 * @param tableName
-	 *            테이블명
+	 * @param tableName 테이블명
 	 * @return 쿼리
 	 */
 	public String getSqlAdd(Column column, String tableName) {
@@ -721,8 +709,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 커멘트 쿼리를 생성합니다.
 	 * 
-	 * @param tableName
-	 *            테이블명
+	 * @param tableName 테이블명
 	 * @return 커맨트 쿼리
 	 */
 	public String getSqlComment(Column column, String tableName) {
@@ -767,10 +754,8 @@ public abstract class DataBase implements Serializable {
 
 	/**
 	 * 
-	 * @param idx
-	 *            생성할 인데스
-	 * @param tab
-	 *            관련 테이블
+	 * @param idx 생성할 인데스
+	 * @param tab 관련 테이블
 	 * @return 인덱스 생성 쿼리
 	 */
 	public String getSqlCreate(Index idx, Table tab) {
@@ -787,8 +772,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 시퀀스를 생성하는 쿼리
 	 * 
-	 * @param seq
-	 *            시퀀스
+	 * @param seq 시퀀스
 	 * @return 시퀀스를 생성하는 쿼리
 	 */
 	public String getSqlCreate(Sequence seq) {
@@ -800,8 +784,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 테이블 생성용 쿼리를 만듭니다.
 	 * 
-	 * @param table
-	 *            테이블
+	 * @param table 테이블
 	 * @return 테이블 생성 쿼리
 	 * @throws Exception
 	 */
@@ -880,8 +863,7 @@ public abstract class DataBase implements Serializable {
 
 	/**
 	 * 
-	 * @param table
-	 *            테이블
+	 * @param table 테이블
 	 * @return 테이블 삭제 쿼리
 	 */
 	public String getSqlDrop(Table table) {
@@ -910,10 +892,8 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 테이블의 컬럼, 인덱스 정보를 조회합니다.
 	 * 
-	 * @param tran
-	 *            트랜잭션
-	 * @param tableName
-	 *            테이블명
+	 * @param tran      트랜잭션
+	 * @param tableName 테이블명
 	 * @return 테이블 정보
 	 * @throws Exception
 	 */
@@ -1083,8 +1063,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 입력된 트랜잭션을 이용하여 뷰를 조회합니다.
 	 * 
-	 * @param tran
-	 *            트랜잭션
+	 * @param tran 트랜잭션
 	 * @return 뷰 목록
 	 * @throws Exception
 	 */
@@ -1150,8 +1129,7 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 입력된 인수를 이용하여 URL으을 만듭니다.
 	 * 
-	 * @param para
-	 *            인수
+	 * @param para 인수
 	 * @return URL
 	 */
 	public abstract String makeUrl(Map<String, Object> para);
@@ -1159,12 +1137,9 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 데이터베이스 종류에 따라 연결할 때 사용한 URL을 만듭니다.
 	 * 
-	 * @param ipAddress
-	 *            IP주소
-	 * @param port
-	 *            포트
-	 * @param para
-	 *            기타 속성값
+	 * @param ipAddress IP주소
+	 * @param port      포트
+	 * @param para      기타 속성값
 	 * @return URL 문자열
 	 */
 	public String makeUrl(String ipAddress, int port, Map<String, Object> para) {
@@ -1214,8 +1189,7 @@ public abstract class DataBase implements Serializable {
 
 	/**
 	 * 
-	 * @param countConnectionMax
-	 *            풀 컨넥션 개수
+	 * @param countConnectionMax 풀 컨넥션 개수
 	 */
 	public void setCountConnectionMax(int countConnectionMax) {
 		this.countConnectionMax = countConnectionMax;
@@ -1226,8 +1200,7 @@ public abstract class DataBase implements Serializable {
 	}
 
 	/**
-	 * @param driver
-	 *            사용할 드라이버
+	 * @param driver 사용할 드라이버
 	 */
 	public void setDriver(String driver) {
 		this.driver = driver;
@@ -1238,8 +1211,7 @@ public abstract class DataBase implements Serializable {
 	}
 
 	/**
-	 * @param name
-	 *            명칭
+	 * @param name 명칭
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -1256,8 +1228,7 @@ public abstract class DataBase implements Serializable {
 
 	/**
 	 * 
-	 * @param permitConnectionPoolOver
-	 *            컨넥션 풀 초과인 경우 새로운 컨넥션 생성 여부
+	 * @param permitConnectionPoolOver 컨넥션 풀 초과인 경우 새로운 컨넥션 생성 여부
 	 */
 	public void setPermitConnectionPoolOver(boolean permitConnectionPoolOver) {
 		this.permitConnectionPoolOver = permitConnectionPoolOver;
@@ -1277,24 +1248,21 @@ public abstract class DataBase implements Serializable {
 	}
 
 	/**
-	 * @param readOnly
-	 *            읽기 전용 여부
+	 * @param readOnly 읽기 전용 여부
 	 */
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
 
 	/**
-	 * @param reconnectRetry
-	 *            재 연결 시도 회수
+	 * @param reconnectRetry 재 연결 시도 회수
 	 */
 	public void setReconnectRetry(int reconnectRetry) {
 		this.reconnectRetry = reconnectRetry;
 	}
 
 	/**
-	 * @param reconnectWaitTimeSec
-	 *            재 연결 중간의 휴식 시간
+	 * @param reconnectWaitTimeSec 재 연결 중간의 휴식 시간
 	 */
 	public void setReconnectWaitTimeSec(int reconnectWaitTimeSec) {
 		this.reconnectWaitTimeSec = reconnectWaitTimeSec;
@@ -1354,12 +1322,9 @@ public abstract class DataBase implements Serializable {
 	/**
 	 * 인덱스 생성 쿼리를 만듭니다.
 	 * 
-	 * @param idx
-	 *            인덱스
-	 * @param table
-	 *            테이블
-	 * @param tablespace
-	 *            사용할 테이블 스페이스
+	 * @param idx        인덱스
+	 * @param table      테이블
+	 * @param tablespace 사용할 테이블 스페이스
 	 * @return
 	 */
 	protected String getSqlCreate0(Index idx, Table tab) {
@@ -1389,8 +1354,7 @@ public abstract class DataBase implements Serializable {
 
 	/**
 	 * 
-	 * @param table
-	 *            테이블정보
+	 * @param table 테이블정보
 	 * @return 쿼리문
 	 * @throws Exception
 	 */
@@ -1526,7 +1490,7 @@ public abstract class DataBase implements Serializable {
 	 * @return 콘넥션
 	 * @throws Exception
 	 */
-	private Connection createConnection() throws IOException {
+	private Connection createConnection() throws Exception {
 
 		long ptime = System.currentTimeMillis();
 
@@ -1572,7 +1536,7 @@ public abstract class DataBase implements Serializable {
 
 		} catch (Exception ex) {
 			Logger.logger.error(ex);
-			throw new IOException("DATABASE(" + name + ") ERRMSG:" + ex.getMessage());
+			throw makeException(ex, "DATABASE(" + name + ")");
 		}
 	}
 
