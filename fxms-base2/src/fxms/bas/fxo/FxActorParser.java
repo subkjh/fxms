@@ -140,23 +140,29 @@ public class FxActorParser {
 		if (folder.exists() == false) {
 			return false;
 		}
-		if (folder.listFiles().length != parsedFileList.size()) {
+
+		// XML 파일만 가져온다.
+		List<File> xmlFileList = new ArrayList<File>();
+		for (File f : folder.listFiles()) {
+			if (this.isXmlFile(f)) {
+				xmlFileList.add(f);
+			}
+		}
+
+		if (xmlFileList.size() != parsedFileList.size()) {
 			return true;
 		}
 
-		A: for (File f : folder.listFiles()) {
-			if (this.isXmlFile(f)) {
-				for (File parsed : parsedFileList) {
-					if (f.getPath().equals(parsed.getPath())) {
-						if (f.lastModified() != parsed.lastModified()) {
-							return true;
-						}
-						continue A;
+		A: for (File f : xmlFileList) {
+			for (File parsed : parsedFileList) {
+				if (f.getPath().equals(parsed.getPath())) {
+					if (f.lastModified() != parsed.lastModified()) {
+						return true;
 					}
+					continue A;
 				}
-
-				return true;
 			}
+			return true;
 		}
 
 		return false;
