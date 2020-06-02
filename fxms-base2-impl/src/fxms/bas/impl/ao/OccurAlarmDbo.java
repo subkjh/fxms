@@ -148,7 +148,7 @@ public class OccurAlarmDbo extends FxEventImpl implements Moable, MoOwnership, O
 	@FxColumn(name = "CLEAR_MEMO", size = 200, nullable = true, comment = "경보해제메모")
 	private String clearMemo;
 
-	public OccurAlarmDbo() {
+	public OccurAlarmDbo() { 
 	}
 
 	public long getAckDate() {
