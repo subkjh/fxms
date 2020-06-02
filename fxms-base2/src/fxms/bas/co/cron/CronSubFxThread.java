@@ -3,17 +3,25 @@ package fxms.bas.co.cron;
 import fxms.bas.fxo.thread.QueueFxThread;
 import subkjh.bas.co.log.Logger;
 
+/**
+ * CronFxThread의 하위 스레드
+ * 
+ * @author subkjh(Kim,JongHoon)
+ *
+ */
 public class CronSubFxThread extends QueueFxThread<Crontab> {
 
-	private CronListener listener;
+	private CronFxThread listener;
 
-	public void setListener(CronListener listener) {
+	CronSubFxThread(String name, CronFxThread listener) {
+		super(0);
+		setName(name);
 		this.listener = listener;
 	}
 
-	public CronSubFxThread(String name) {
-		super(0);
-		setName(name);
+	@Override
+	protected void doInit() {
+
 	}
 
 	@Override
@@ -21,33 +29,24 @@ public class CronSubFxThread extends QueueFxThread<Crontab> {
 
 		String name = Thread.currentThread().getName();
 		if (e.getName() != null) {
-			Thread.currentThread().setName(e.getName());
+			Thread.currentThread().setName(name + "." + e.getName());
 		}
 
 		Logger.logger.info(e.getName());
 
 		long ptime = System.currentTimeMillis();
 
+		listener.onStart(e);
+
 		try {
-			if (listener != null)
-				listener.onStart(e);
-
 			e.cron();
-
-			if (listener != null)
-				listener.onFinished(e, true, System.currentTimeMillis() - ptime);
+			listener.onFinished(e, true, System.currentTimeMillis() - ptime);
 		} catch (Exception e2) {
-			if (listener != null)
-				listener.onFinished(e, false, System.currentTimeMillis() - ptime);
+			listener.onFinished(e, false, System.currentTimeMillis() - ptime);
 			throw e2;
 		} finally {
 			Thread.currentThread().setName(name);
 		}
-
-	}
-
-	@Override
-	protected void doInit() {
 
 	}
 

@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import subkjh.bas.net.co.vo.NetListener;
+
 public class EmulatorTelnet extends Emulator {
 
 	public static final String TELNET_NET_STATE_MsgRecv = "TelnetMsgRecv";
@@ -24,6 +26,8 @@ public class EmulatorTelnet extends Emulator {
 	private Socket socket;
 	/** 로그인 문구를 기다렸다가 계정을 보낼지 여부 */
 	private boolean waitLoginString = false;
+	
+	private NetListener listener;
 
 	public static void main(String[] args) throws Exception {
 		EmulatorTelnet e = new EmulatorTelnet();
@@ -40,7 +44,10 @@ public class EmulatorTelnet extends Emulator {
 	}
 
 	public EmulatorTelnet() {
-
+	}
+	
+	public EmulatorTelnet(NetListener listener) {
+		this.listener = listener;
 	}
 
 	/**
@@ -94,6 +101,10 @@ public class EmulatorTelnet extends Emulator {
 			throw new Exception("login fail");
 		}
 
+		if (listener != null) {
+			listener.onNetState(NetListener.tcpConnected, "");
+		}
+		
 		logger.debug("login ok", ret);
 	}
 

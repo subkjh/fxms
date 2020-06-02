@@ -29,8 +29,24 @@ public class FxActorParser {
 		return parser;
 	}
 
+	/**
+	 * 분석된 파일
+	 * 
+	 * @author subkjh(Kim,JongHoon)
+	 *
+	 */
+	class ParsedFile {
+		String path;
+		long lastModified;
+
+		ParsedFile(File f) {
+			path = f.getPath();
+			lastModified = f.lastModified();
+		}
+	}
+
 	private List<FxActor> actorList;
-	private List<File> parsedFileList;
+	private List<ParsedFile> parsedFileList;
 	private long lastParesedTime = 0;
 
 	public static void main(String[] args) {
@@ -45,7 +61,7 @@ public class FxActorParser {
 	 */
 	private FxActorParser() {
 
-		parsedFileList = new ArrayList<File>();
+		parsedFileList = new ArrayList<ParsedFile>();
 		actorList = new ArrayList<FxActor>();
 
 		reload();
@@ -154,9 +170,9 @@ public class FxActorParser {
 		}
 
 		A: for (File f : xmlFileList) {
-			for (File parsed : parsedFileList) {
-				if (f.getPath().equals(parsed.getPath())) {
-					if (f.lastModified() != parsed.lastModified()) {
+			for (ParsedFile parsed : parsedFileList) {
+				if (f.getPath().equals(parsed.path)) {
+					if (f.lastModified() != parsed.lastModified) {
 						return true;
 					}
 					continue A;
@@ -180,16 +196,15 @@ public class FxActorParser {
 			return;
 		}
 
-		List<File> fileList = new ArrayList<File>();
+		List<ParsedFile> fileList = new ArrayList<ParsedFile>();
 		StringBuffer sb = new StringBuffer();
 
 		for (File f : folder.listFiles()) {
-
 			if (isXmlFile(f)) {
 				try {
 					sb.append(Logger.makeSubString(0, f.getName(), "parsing"));
 					parse(f, fList, sb);
-					fileList.add(f);
+					fileList.add(new ParsedFile(f));
 				} catch (Exception e) {
 					sb.append(Logger.makeSubString(0, f.getName(), "error"));
 					Logger.logger.error(e);

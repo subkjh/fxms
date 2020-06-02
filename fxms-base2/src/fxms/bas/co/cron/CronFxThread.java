@@ -9,6 +9,12 @@ import fxms.bas.fxo.thread.CycleFxThread;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
 
+/**
+ * 크론 실행용 스레드
+ * 
+ * @author subkjh(Kim,JongHoon)
+ *
+ */
 public class CronFxThread extends CycleFxThread implements CronListener {
 
 	public static void main(String[] args) throws Exception {
@@ -25,8 +31,6 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 	private Map<String, CronSubFxThread> workerMap;
 
-	private CronListener listener;
-
 	public CronFxThread() throws Exception {
 
 		super("CronFxThread", Cron.CYCLE_1_SECOND);
@@ -36,14 +40,14 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 	@Override
 	public String getState(LOG_LEVEL level) {
-		
+
 		StringBuffer sb = new StringBuffer();
-		
+
 		List<Crontab> tabList = getCrontabList();
 
 		sb.append("crontab-size=" + tabList.size());
 		sb.append(",thread-size=" + workerMap.size());
-		
+
 		if (LOG_LEVEL.trace.contains(level)) {
 			for (Crontab t : tabList) {
 				sb.append("\n\tcrontab=" + t);
@@ -64,12 +68,6 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 		Logger.logger.info(e + " ** NOW(RESULT({})STIME({}))", isOk, stime);
 
-		// if (TROS.tros != null)
-		// TROS.tros.addHst(e.getOpcode(), e.getLog(), isOk, stime);
-
-		if (listener != null)
-			listener.onFinished(e, isOk, stime);
-
 	}
 
 	@Override
@@ -77,11 +75,13 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 		Logger.logger.info("{}", e);
 
-		if (listener != null)
-			listener.onStart(e);
-
 	}
 
+	/**
+	 * 
+	 * @param name 실행한 크론명
+	 * @throws Exception
+	 */
 	public void runCron(String name) throws Exception {
 
 		for (Crontab ct : getCrontabList()) {
@@ -112,7 +112,7 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 	private void runCron(Crontab ct) {
 		try {
 
-			Logger.logger.debug(ct.getName());
+			Logger.logger.debug("{}.{}", ct.getGroup(), ct.getName());
 
 			if (ct.getGroup() == null || ct.getGroup().length() == 0) {
 				new Thread() {
@@ -129,15 +129,14 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 					}
 				}.start();
 			} else {
-				CronSubFxThread trot = workerMap.get("CRON-" + ct.getGroup());
-				if (trot == null) {
-					trot = new CronSubFxThread("CRON-" + ct.getGroup());
-					workerMap.put("CRON-" + ct.getGroup(), trot);
-					trot.setListener(this);
-					trot.start();
+				CronSubFxThread th = workerMap.get("CRON-" + ct.getGroup());
+				if (th == null) {
+					th = new CronSubFxThread("CRON-" + ct.getGroup(), this);
+					workerMap.put("CRON-" + ct.getGroup(), th);
+					th.start();
 				}
 
-				trot.put(ct);
+				th.put(ct);
 			}
 		} catch (Exception e) {
 			Logger.logger.error(e);

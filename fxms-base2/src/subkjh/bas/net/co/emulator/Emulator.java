@@ -1,4 +1,5 @@
 package subkjh.bas.net.co.emulator;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -194,6 +195,8 @@ public abstract class Emulator {
 
 	public String cmd(String cmd, String... waitStrArr) throws Exception {
 
+		logger.debug("cmd : {}", cmd);
+
 		reader.reset();
 
 		byte[] byte_msg = cmd.getBytes();
@@ -203,7 +206,7 @@ public abstract class Emulator {
 		out.write(byte_msg, 0, byte_msg.length);
 
 		out.flush();
-		
+
 		if (listener != null) {
 			return "";
 		}
@@ -310,34 +313,7 @@ public abstract class Emulator {
 	 * @return
 	 */
 	public String waitfor(String waitStrArr[]) {
-
-		String result;
-		long ptime = System.currentTimeMillis();
-
-		while (true) {
-			result = reader.get();
-			if (result == null) {
-				if (ptime + timeoutMsRead < System.currentTimeMillis())
-					return null;
-				continue;
-			}
-
-			// Logger.logger.debug(Arrays.toString(waitStrArr) + " ..... " +
-			// result);
-
-			for (String f : waitStrArr) {
-				if (result.indexOf(f) >= 0) {
-					return result;
-				}
-			}
-
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-			}
-
-		}
-
+		return waitfor0(waitStrArr);
 	}
 
 	protected abstract void _disconnect();
@@ -393,22 +369,45 @@ public abstract class Emulator {
 	 * @return
 	 */
 	protected String waitforPrompt() {
+		return waitfor0();
+	}
+
+	private String waitfor0(String... waitStrArr) {
 
 		String result;
+		String resultPrev = null;
 		long ptime = System.currentTimeMillis();
 
 		while (true) {
 
 			result = reader.get();
 
-			if (result == null) {
-				if (ptime + timeoutMsRead < System.currentTimeMillis())
-					return null;
-			} else {
-				if (isPrompt(result, promptArr)) {
-					return result;
+			if (result != null) {
+
+				if (waitStrArr == null || waitStrArr.length == 0) {
+					// 프롬프트로 비교
+					if (isPrompt(result, promptArr)) {
+						return result;
+					}
+				} else {
+					// 포함여부로 비교
+					for (String s : waitStrArr) {
+						if (result.indexOf(s) >= 0) {
+							return result;
+						}
+					}
+				}
+
+				if (result.equals(resultPrev) == false) {
+					resultPrev = result;
+					// 받은 시간 리셋
+					ptime = System.currentTimeMillis();
 				}
 			}
+
+			// 데이터가 있던 없든 상관없이 시간이 지나면 리턴한다.
+			if (ptime + timeoutMsRead < System.currentTimeMillis())
+				return null;
 
 			try {
 				Thread.sleep(20);

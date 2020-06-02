@@ -8,7 +8,6 @@ import java.util.Map;
 import subkjh.bas.dao.data.Column;
 import subkjh.bas.dao.exception.ColumnNotFoundException;
 import subkjh.bas.dao.exception.DBObjectDupException;
-import subkjh.bas.dao.exception.InvalidUserPwdException;
 import subkjh.bas.dao.exception.TableNotFoundException;
 
 /**
@@ -16,9 +15,13 @@ import subkjh.bas.dao.exception.TableNotFoundException;
  * 
  * @author subkjh
  * @since 2007-01-01
+ *
  * 
+ * <pre>
+ * 
+ * 
+ * </pre>
  */
-@SuppressWarnings("unused")
 public class Oracle extends DataBase {
 
 	public static final int PORT = 1521;
@@ -64,11 +67,6 @@ public class Oracle extends DataBase {
 	private final int SQL_CHILD_FOUND = 2292;
 
 	/**
-	 * ORA-01017: invalid username/password; login denied
-	 */
-	private final int INVALID_USERNAME_PASSWORD = 1017;
-
-	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6955990073628408762L;
@@ -106,50 +104,41 @@ public class Oracle extends DataBase {
 	@Override
 	public Exception makeException(Exception e, String msg2) {
 
+		String msg = msg2 == null ? "" : msg2;
+		msg += " ex=[" + e.getMessage() + "]";
+
 		if (e instanceof IOException) {
 			return e;
 		} else if (e instanceof SQLException) {
 			SQLException sqle = (SQLException) e;
-
-			StringBuffer sb = new StringBuffer();
-			if (msg2 != null) {
-				sb.append(msg2);
-			}
-
-			if (e.getMessage() != null) {
-				if (sb.length() > 0) {
-					sb.append(", ");
-				}
-				sb.append(e.getMessage());
-			}
+			
+			String message = e.getMessage() + msg;
 
 			if (sqle.getErrorCode() == 17002) {
-				return new IOException(sb.toString());
+				return new IOException(message);
 			} else if (sqle.getErrorCode() == 1062) {
-				return new DBObjectDupException(sb.toString());
+				return new DBObjectDupException(message);
 			}
 			//
 			else if (sqle.getErrorCode() == 1060) {
-				return new DBObjectDupException(sb.toString());
+				return new DBObjectDupException(message);
 			}
 
 			// ROW 중복
 			else if (sqle.getErrorCode() == SQL_DUPLICATE) {
-				return new DBObjectDupException(sb.toString());
+				return new DBObjectDupException(message);
 			}
 			// 이미 사용된 객체명입니다
 			else if (sqle.getErrorCode() == SQL_TABLEALREADYEXIST) {
-				return new DBObjectDupException(sb.toString());
+				return new DBObjectDupException(message);
 			} else if (sqle.getErrorCode() == SQL_TABLENOTFOUND) {
-				return new TableNotFoundException(sb.toString());
+				return new TableNotFoundException(message);
 			} else if (sqle.getErrorCode() == SQL_CHILD_FOUND) {
-				return new ColumnNotFoundException(sb.toString());
-			} else if (sqle.getErrorCode() == INVALID_USERNAME_PASSWORD) {
-				return new InvalidUserPwdException(sb.toString());
+				return new ColumnNotFoundException(message);
 			}
 		}
 
-		return e;
+		return new SQLException(msg);
 	}
 
 	@Override
