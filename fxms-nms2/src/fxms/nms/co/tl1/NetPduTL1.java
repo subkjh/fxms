@@ -24,36 +24,6 @@ public class NetPduTL1 extends NetPdu {
 		, Autonomous
 	}
 
-	public static NetPduTL1 makePdu(String s) throws Exception {
-
-		String contents = s.trim();
-		String line[] = contents.split("\n");
-
-		if (line.length == 2 && line[1].charAt(0) == '<') {
-			return new ACK(s);
-		}
-
-		// 2015-07-03 by subkjh
-		// 서버에서 보내는 keep-alive 신호 ( 텔레필드 )
-		if (line[0].startsWith("HELLO")) {
-			TL1KeepAlive pdu = new TL1KeepAlive();
-			pdu.setContents(line[0]);
-			return pdu;
-		}
-
-		ORMF_HEADER header = new ORMF_HEADER(line[0]);
-
-		if (line[1].trim().toCharArray()[0] == 'M') {
-			ORMF pdu = new ORMF(s);
-			pdu.setHeader(header);
-			return pdu;
-		} else {
-			AM pdu = new AM(s);
-			pdu.setHeader(header);
-			return pdu;
-		}
-	}
-
 	private String contents;
 
 	@Override
@@ -78,4 +48,34 @@ public class NetPduTL1 extends NetPdu {
 	public String toString() {
 		return contents;
 	}
+
+	public static NetPduTL1 makePdu(String s) throws Exception {
+
+		String contents = s.trim();
+		String line[] = contents.split("\n");
+
+		if (line.length == 2 && line[1].charAt(0) == '<') {
+			return new ACK(s);
+		}
+
+		// 2015-07-03 by subkjh
+		// 서버에서 보내는 keep-alive 신호 ( 텔레필드 )
+		if (line[0].startsWith("HELLO")) {
+			TL1KeepAlive pdu = new TL1KeepAlive();
+			pdu.setContents(line[0]);
+			return pdu;
+		}
+
+		ORMF_HEADER header = new ORMF_HEADER(line[0]);
+
+		if (line[1].trim().toCharArray()[0] == 'M') {
+			ORMF pdu = new ORMF(s, 0);
+			pdu.setHeader(header);
+			return pdu;
+		} else {
+			AM pdu = new AM(header, s);
+			return pdu;
+		}
+	}
+
 }

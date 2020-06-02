@@ -13,9 +13,16 @@ import subkjh.bas.net.co.vo.NetPdu;
  * 
  */
 public class AM_AI {
+
 	private String almcode;
 	private String atag;
 	private List<String> verb;
+
+	public static final String TL1_ALARM_CRITICAL = "cri";
+	public static final String TL1_ALARM_MAJOR = "maj";
+	public static final String TL1_ALARM_MINOR = "min";
+	public static final String TL1_ALARM_WARNING = "war";
+	public static final String TL1_ALARM_CLEAR = "clr";
 
 	public static void main(String[] args) {
 		String str = "A  32 REPT ALM EQPT";
@@ -30,14 +37,17 @@ public class AM_AI {
 		List<String> list = NetPdu.split(line);
 
 		String ac = list.get(0);
-		if ("*C".equals(ac))
-			almcode = "cri";
-		else if ("**".equals(ac))
-			almcode = "maj";
-		else if ("*".equals(ac))
-			almcode = "min";
-		else if ("A".equals(ac))
-			almcode = "non";
+		if ("*C".equals(ac)) {
+			almcode = TL1_ALARM_CRITICAL;
+		} else if ("**".equals(ac)) {
+			almcode = TL1_ALARM_MAJOR;
+		} else if ("*".equals(ac)) {
+			almcode = TL1_ALARM_MINOR;
+		} else if ("WN".equals(ac)) {
+			almcode = TL1_ALARM_WARNING;
+		} else if ("A".equals(ac)) {
+			almcode = TL1_ALARM_CLEAR;
+		}
 
 		atag = list.get(1);
 

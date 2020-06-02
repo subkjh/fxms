@@ -15,47 +15,48 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 
 	public static final String TL1_NET_STATE_TL1PduRecv = "TL1PduRecv";
 
-	public static void main(String[] args) throws Exception {
-
-		Logger logger = Logger.createLogger(".", "a");
-		logger.setLevel(LOG_LEVEL.trace);
-
-		NetListener listener = new NetListener() {
-
-			@Override
-			public void onNetState(String arg0, Object arg1) {
-			}
-
-		};
-
-		// String host = "211.197.229.20";
-		// String host = "70.70.250.228";
-		String host = "167.1.21.79";
-		int port = 9032;
-
-		if (args.length > 0)
-			host = args[0];
-		if (args.length > 1)
-			port = Integer.parseInt(args[1]);
-
-		final TL1Client tl1 = new TL1Client("test", host, port, logger, listener);
-
-		tl1.open();
-		byte bytes[] = new byte[1024];
-		int len;
-
-		String command;
-		while (true) {
-			len = System.in.read(bytes);
-			command = new String(bytes, 0, len);
-			tl1.send(command);
-
-		}
-		// for (int i = 0; i < 1000; i++) {
-		// Thread.sleep(3000);
-		// tl1.send("RTRV-EQPT", "AdvTL1Sim", "SLOT-1", null, null);
-		// }
-	}
+	// public static void main(String[] args) throws Exception {
+	//
+	// Logger logger = Logger.createLogger(".", "a");
+	// logger.setLevel(LOG_LEVEL.trace);
+	//
+	// NetListener listener = new NetListener() {
+	//
+	// @Override
+	// public void onNetState(String arg0, Object arg1) {
+	// }
+	//
+	// };
+	//
+	// // String host = "211.197.229.20";
+	// // String host = "70.70.250.228";
+	// String host = "167.1.21.79";
+	// int port = 9032;
+	//
+	// if (args.length > 0)
+	// host = args[0];
+	// if (args.length > 1)
+	// port = Integer.parseInt(args[1]);
+	//
+	// final TL1Client tl1 = new TL1Client("test", host, port, logger,
+	// listener);
+	//
+	// tl1.open();
+	// byte bytes[] = new byte[1024];
+	// int len;
+	//
+	// String command;
+	// while (true) {
+	// len = System.in.read(bytes);
+	// command = new String(bytes, 0, len);
+	// tl1.send(command);
+	//
+	// }
+	// // for (int i = 0; i < 1000; i++) {
+	// // Thread.sleep(3000);
+	// // tl1.send("RTRV-EQPT", "AdvTL1Sim", "SLOT-1", null, null);
+	// // }
+	// }
 
 	private NetPduMakerTL1 pduMaker;
 	private NetClientTcp<NetPduTL1> netClient;
@@ -68,15 +69,24 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 	private Thread thread;
 	/** correlation tag */
 	private int ctag = 0;
-
 	private long countRecv = 0;
+	private String charset = "utf-8";
 
-	public TL1Client(String name, String host, int port, Logger logger, NetListener listener) {
+	public String getCharset() {
+		return charset;
+	}
+
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	public TL1Client(String name, String host, int port, Logger logger, NetListener listener, NetPduMakerTL1 pduMaker) {
 		this.name = name;
 		this.host = host;
 		this.port = port;
 		this.logger = logger;
 		this.listener = listener;
+		this.pduMaker = pduMaker;
 	}
 
 	/**
@@ -151,7 +161,6 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 
 		if (thread == null) {
 
-			pduMaker = new NetPduMakerTL1("R-PDU-Maker-TL1", logger);
 			pduMaker.setListener(this);
 			pduMaker.open();
 
@@ -181,7 +190,11 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 					}
 				}
 
+				if (netClient == null)
+					continue;
+
 				pdu = netClient.getQueuePdu().poll(5, TimeUnit.SECONDS);
+
 				if (pdu == null)
 					continue;
 
@@ -207,10 +220,13 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 	 * @throws Exception
 	 */
 	public int send(String command) throws Exception {
-		return netClient.send(command.getBytes());
+		logger.debug("SEND=[{}]", command);
+		return netClient.send(command.getBytes(charset));
 	}
 
 	/**
+	 * 
+	 * cmd:tid:aid:ctag:[generalBlock:][paylog:];
 	 * 
 	 * @param cmd
 	 * @param tid
@@ -220,30 +236,28 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 	 * @return correlation tag
 	 * @throws Exception
 	 */
-	public int send(String cmd, String tid, String aid, String generalBlock, String payload) throws Exception {
+	public int send(String cmd, String tid, String aid, String datas[]) throws Exception {
 		int ctag = getNextCTag();
+		StringBuffer sb = new StringBuffer();
+		sb.append(cmd);
+		sb.append(":").append(tid == null ? "" : tid);
+		sb.append(":").append(aid == null ? "" : aid);
+		sb.append(":").append(ctag);
 
-		String str = cmd;
-		str += ":" + (tid == null ? "" : tid);
-		str += ":" + (aid == null ? "" : aid);
-		str += ":" + ctag;
-
-		if (generalBlock != null) {
-			str += ":" + generalBlock;
+		if (datas != null) {
+			for (String s : datas) {
+				sb.append(":").append(s == null ? "" : s);
+			}
 		}
 
-		if (payload != null) {
-			str += ":" + payload;
-		}
-
-		str += ";";
+		sb.append(";");
 
 		if (netClient == null)
 			throw new Exception("Not Connected Yet");
 
-		logger.debug(str);
+		logger.debug("SEND=[{}]", sb.toString());
 
-		netClient.send(str.getBytes());
+		netClient.send(sb.toString().getBytes(charset));
 
 		return ctag;
 	}
@@ -272,15 +286,14 @@ public class TL1Client implements Runnable, Loggable, NetListener {
 		netClient = new NetClientTcp<NetPduTL1>(name + "#Socket", pduMaker, this);
 
 		try {
-			logger.trace("connecting... " + host + ":" + port);
+			logger.info("connecting... " + host + ":" + port);
 			netClient.connect(host, port, 5000);
 			logger.info("--- connected " + host + ":" + port + " ---");
-
 			return true;
 		} catch (SocketTimeoutException e) {
-			logger.fail(host, port, e.getMessage());
+			logger.fail("timeout error {}:{}", host, port, e.getMessage());
 		} catch (ConnectException e) {
-			logger.fail(host, port, e.getMessage());
+			logger.fail("connection error {}:{}", host, port, e.getMessage());
 		} catch (Exception e) {
 		}
 

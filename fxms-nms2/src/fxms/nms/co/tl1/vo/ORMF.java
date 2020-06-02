@@ -18,7 +18,7 @@ public class ORMF extends NetPduTL1 {
 	private ORMF_RI ri;
 	private List<String> dataList;
 
-	public ORMF(String s) throws Exception {
+	public ORMF(String s, int index) throws Exception {
 
 		String contents = s.trim();
 		setContents(contents);
@@ -26,12 +26,12 @@ public class ORMF extends NetPduTL1 {
 		String line[] = contents.split("\n");
 
 		// header = new ORMF_HEADER(line[0]);
-		ri = new ORMF_RI(line[1]);
+		ri = new ORMF_RI(line[index + 1]);
 
 		dataList = new ArrayList<String>();
 
-		for (int index = 2; index < line.length; index++) {
-			dataList.add(line[index].trim());
+		for (int i = index + 2; i < line.length; i++) {
+			dataList.add(line[i].trim());
 		}
 	}
 
