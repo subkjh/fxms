@@ -1,4 +1,10 @@
 
+2021.01.26 by subkjh
+        host : 125.7.128.42
+	port : 10005
+	user : test
+	pass : test
+
 2019.01.02 by subkjh
 
 	1. C/S용 클라이언트 실행 방법
