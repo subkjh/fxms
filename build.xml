@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="fxms.2023.jar" name="fxms">
+
+	<property file="build.properties" />
+
+	<!-- set global properties for this build -->
+	<property location="." name="project.dir" />
+	<property location="${project.dir}/classes" name="classes.dir" />
+	<property location="${project.dir}/src" name="src.dir" />
+	<property location="${project.dir}/javadoc" name="javadoc.dir" />
+	<property location="${project.dir}/deploy" name="deploy.dir" />
+	<property location="${project.dir}/deploy/conf" name="conf.dir" />
+	<property location="${project.dir}/deploy/conf/sql" name="sql.dir" />
+	<property location="${project.dir}/deploy/javadoc" name="javadoc.dir" />
+	<property location="${deploy.dir}/libext" name="libext.dir" />
+	<property location="${deploy.dir}/lib" name="lib.dir" />
+	<property location="C:/SW/Java/jdk1.8.0_321/bin" name="java.bin" />
+
+
+	<!-- sets the standard DSTAMP, make output directory -->
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<target name="print-version">
+		<echo>Java/JVM version: ${ant.java.version}</echo>
+		<echo>Java/JVM detail version: ${java.version}</echo>
+	</target>
+
+	<path id="project.class.path">
+		<pathelement path="${project.dir}" />
+		<pathelement path="${conf.dir}" />
+		<fileset dir="${libext.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target depends="init" name="compile">
+		<javac debug="true" destdir="${classes.dir}" encoding="UTF-8" fork="yes" memoryMaximumSize="256m">
+			<src path="${src.dir}/" />
+			<classpath refid="project.class.path" />
+			<classpath>
+				<pathelement path="${classes.dir}" />
+				<fileset dir="${libext.dir}/">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="clean">
+		<echo message="remove all from ${classes.dir}">
+		</echo>
+		<delete failonerror="false">
+			<fileset dir="${classes.dir}" />
+		</delete>
+		<echo message="remove all from ${lib.dir}">
+		</echo>
+		<delete failonerror="false">
+			<fileset dir="${lib.dir}" />
+		</delete>
+	</target>
+
+	<target name="rebuild">
+		<antcall target="clean" />
+		<antcall target="print-version" />
+		<antcall target="compile" />
+		<antcall target="makeRmi" />
+		<antcall target="copy_key" />
+		<antcall target="dfc3.2.jar" />
+		<antcall target="dutil.jar" />
+	</target>
+
+
+
+	<target name="makeRmi">
+		<echo message="* rmic *" />
+		<exec dir="./classes" executable="${java.bin}/rmic.exe">
+			<arg line="-extdirs ${libext.dir}" />
+			<arg line="-g" />
+			<arg line="-v1.2" />
+
+			<arg line="FX.MS" />
+
+			<arg line="fxms.bas.fxo.service.AppServiceImpl" />
+			<arg line="fxms.bas.fxo.service.UserServiceImpl" />
+			<arg line="fxms.bas.fxo.service.WebServiceImpl" />
+			<arg line="fxms.bas.fxo.service.MoServiceImpl" />
+			<arg line="fxms.bas.fxo.service.NotiServiceImpl" />
+			<arg line="fxms.bas.fxo.service.ValueServiceImpl" />
+			<arg line="fxms.bas.fxo.service.AlarmServiceImpl" />
+
+			<!-- 비즈니스 룰 엔진 서비스 -->
+			<arg line="fxms.rule.RuleServiceImpl" />
+
+		</exec>
+		<echo message="* rmic end *" />
+	</target>
+
+
+
+	<target name="copy_sql">
+		<copydir dest="${classes.dir}/subkjh/dao/queries" src="${sql.dir}">
+		</copydir>
+	</target>
+
+
+	<target name="fxms.2023.jar">
+
+		<antcall target="copy_sql" />
+
+		<jar destfile="${lib.dir}/fxms.2023.jar" update="false">
+			<fileset dir="${classes.dir}">
+				<include name="fxms/bas/**/*" />
+				<include name="fxms/rule/**/*" />
+				<include name="fems/bas/**/*" />
+				<include name="subkjh/**/*" />
+				<include name="FX/**/*" />
+			</fileset>
+		</jar>
+
+
+	</target>
+
+</project>
+
+
+
