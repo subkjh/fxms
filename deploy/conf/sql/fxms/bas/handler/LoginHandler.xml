@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+
+
+	<!-- -->
+	<!-- 설치 위치 -->
+	<!-- -->
+
+	<insert id="MAKE_USER_OBJECT__INLO_BASIC">
+	<![CDATA[
+		insert into FX_UR_USER_INLO (
+				USER_NO
+				, INLO_NO
+				, AUTO_REG_YN
+				, REG_MEMO
+				, REG_USER_NO
+				, REG_DTM
+		)
+		select 	$userNo					as USER_NO
+				, a.INLO_NO				as INLO_NO
+				, 'Y'					as AUTO_REG_YN
+				, 'BASIC'				as REG_MEMO
+				, 0						as REG_USER_NO
+				, $regDtm				as REG_DTM
+		from 	FX_CF_INLO a
+		where	a.INLO_NO = 0
+		
+		on duplicate key
+		update REG_DTM = $regDtm		
+	]]>
+	</insert>
+	
+	<insert id="MAKE_USER_OBJECT__MERGE_INLO">
+	<![CDATA[
+		insert into FX_UR_USER_INLO (
+				USER_NO
+				, INLO_NO
+				, AUTO_REG_YN
+				, REG_MEMO
+				, REG_USER_NO
+				, REG_DTM
+		)
+		select 	A.USER_NO				as USER_NO
+				, A.INLO_NO				as INLO_NO
+				, 'Y'					as AUTO_REG_YN
+				, 'USER.INLO_NO'		as REG_MEMO
+				, 0						as REG_USER_NO
+				, $regDtm				as REG_DTM
+		from 	FX_UR_USER 			A
+				, FX_CF_INLO		B
+		where 	A.USER_NO 		= $userNo
+		and		A.INLO_NO		= B.INLO_NO
+		
+		on duplicate key
+		update REG_DTM = $regDtm		
+	]]>
+	</insert>
+
+	<insert id="MAKE_USER_OBJECT__MERGE_INLO_LOWER">
+	<![CDATA[
+		insert into FX_UR_USER_INLO (
+				USER_NO
+				, INLO_NO
+				, AUTO_REG_YN
+				, REG_MEMO				
+				, REG_USER_NO
+				, REG_DTM
+		)
+		select 	A.USER_NO				as USER_NO
+				, B.LOWER_INLO_NO		as INLO_NO
+				, 'Y'					as AUTO_REG_YN
+				, 'INLO.LOWER_INLO_NO'	as REG_MEMO
+				, 0						as REG_USER_NO
+				, $regDtm				as REG_DTM
+		from 	FX_UR_USER 			A
+				, FX_CF_INLO_MEM 	B
+				, FX_CF_INLO		C
+		where 	A.USER_NO 			= $userNo
+		and		A.INLO_NO 			= B.INLO_NO
+		and		B.INLO_NO			= C.INLO_NO
+
+		on duplicate key
+		update REG_DTM = $regDtm
+	]]>
+	</insert>
+
+	<delete id="MAKE_USER_OBJECT__DELETE_INLO__EXPIRED">
+	<![CDATA[
+		delete 
+		from 	FX_UR_USER_INLO
+		where	USER_NO		= $userNo
+		and		REG_DTM 	< $regDtm 
+		and		AUTO_REG_YN	= 'Y'
+	]]>
+	</delete>
+
+	<!-- -->
+	<!-- 관리대상 -->
+	<!-- -->
+
+	<!-- 운용자 담당 관리대상을 넣는다. -->
+	<insert id="MAKE_USER_OBJECT__MERGE_MO">
+	<![CDATA[
+		insert into FX_UR_USER_MO (
+				USER_NO
+				, MO_NO
+				, AUTO_REG_YN
+				, REG_MEMO 
+				, REG_USER_NO
+				, REG_DTM
+		)
+		select 	$userNo			as USER_NO
+				, B.MO_NO		as MO_NO
+				, 'Y'			as AUTO_REG_YN
+				, C.INLO_NAME	as REG_MEMO
+				, 0				as REG_USER_NO
+				, $regDtm		as REG_DTM
+		from 	FX_UR_USER_INLO		A
+				, FX_MO				B
+				, FX_CF_INLO		C
+		where 	A.USER_NO		= $userNo
+		and		B.INLO_NO		= A.INLO_NO
+		and		B.UPPER_MO_NO	<= 0
+		and		C.INLO_NO		= B.INLO_NO
+		
+		on duplicate key
+		update REG_DTM = $regDtm
+	]]>
+	</insert>
+
+	<!-- 현재 설정된 관리대상 삭제 -->
+	<delete id="MAKE_USER_OBJECT__DELETE_MO__EXPIRED">
+	<![CDATA[
+		delete 
+		from 	FX_UR_USER_MO
+		where	USER_NO		= $userNo
+		and		REG_DTM 	< $regDtm 
+		and		AUTO_REG_YN	= 'Y'
+	]]>
+	</delete>
+
+</queries>
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<script src="js/fxms.js"></script>
+
+<script>
+	window.onload = function() {
+		
+		var userId = window.localStorage.getItem("FXMSTEST.user.id");
+		var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+
+		let alarmReceiver;
+		// 소켓이 연결되면 데이터를 한 번 읽어온다.
+		let fxms = new FxMS(userId, userPwd, function(session) {
+			alarmReceiver = new AlarmReceiver(fxms, userId, userPwd);
+			alarmReceiver.addCallback(recvAlarm);
+			alarmReceiver.open();
+		});
+
+		function recvAlarm(recvObj, e) {
+			if (recvObj != undefined && recvObj.eventType == 'Alarm') {
+				showAlarmList();
+			}
+		}
+
+		function showAlarmList() {
+
+			let txtRecv = document.getElementById('alarmShowDiv');
+			txtRecv.innerHTML = '';
+
+			let alarmList = alarmReceiver.getAlarmHstList();
+			var a;
+			var p = '';
+			var cls;
+
+			for (var i = 0; i < alarmList.length; i++) {
+
+				a = alarmList[i];
+				cls = a.rlseDtm > 0 ? 'blue' : 'red';
+
+				p += "<p class='" + cls + "'>" + (a.rlseDtm > 0 ? '해제' : '발생')
+						+ '  *** ' + a.moNo + ',' + a.moName + ' ::: '
+						+ a.alarmNo + ', ' + a.alarmLevel + ', ' + a.alarmMsg
+						+ ', ' + a.occurDtm + ', ' + a.rlseDtm + "</p>"
+
+			}
+
+			txtRecv.innerHTML = p;
+
+		}
+
+	}
+</script>
+<style>
+.red {
+	color: red;
+}
+
+.blue {
+	color: blue;
+}
+</style>
+</head>
+<body>
+	<h2>알람 목록 보이기</h2>
+	<h3>실시간으로 보여지므로 기다립니다.</h3>
+
+	<div id="alarmShowDiv"></div>
+
+</body>
+</html>

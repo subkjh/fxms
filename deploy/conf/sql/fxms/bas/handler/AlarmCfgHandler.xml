@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<queries>
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" keyCase="java" />
+	<resultMap id="AlarmCfgVo" javaClass="fxms.bas.impl.vo.AlarmCfgVo" />
+
+	<select id="select_alarm_cfg_grid_list" resultMap="RESULT_MAP">
+		<![CDATA[		
+		select	A.ALARM_CFG_NO			as ALARM_CFG_NO
+				, A.ALARM_CFG_NAME		as ALARM_CFG_NAME
+				, A.ALARM_CFG_DESC		as ALARM_CFG_DESC
+				, A.MO_CLASS			as MO_CLASS
+				, ( select max(CD_NAME) from FX_CO_CD where CD_CLASS = 'MO_CLASS' and CD_CODE = A.MO_CLASS )
+										as MO_CLASS_NAME
+				, ( select 	count(1) 
+					from 	FX_MO 				T1
+							, FX_UR_USER_MO 	T2
+					where 	T1.ALARM_CFG_NO = A.ALARM_CFG_NO
+					and		T2.MO_NO		= T1.MO_NO
+					and		T2.USER_NO		= $userNo					
+					 )
+										as MO_COUNT
+		from	FX_AL_CFG 			A
+				, FX_UR_USER_INLO	B
+		where	1 = 1
+		and		B.USER_NO	= $userNo
+		and		A.INLO_NO	= B.INLO_NO
+		]]>
+		<test var="moClass"> and A.MO_CLASS = $moClass </test>
+	</select>
+
+	<select id="select_alarm_cfg_simple_list" resultMap="AlarmCfgVo">
+		<![CDATA[		
+		with DATAS as ( 
+			select	C.ALARM_CFG_NO			as ALARM_CFG_NO
+					, C.ALARM_CFG_NAME		as ALARM_CFG_NAME
+					, C.MO_CLASS			as MO_CLASS
+					, C.MO_TYPE
+			from	FX_UR_USER			A
+					, FX_CF_INLO_MEM	B
+					, FX_AL_CFG 		C
+			where	A.USER_NO		= $userNo
+			and		B.INLO_NO		= A.INLO_NO
+			and		C.INLO_NO		= B.LOWER_INLO_NO
+		
+			union 
+		
+			select	C.ALARM_CFG_NO			as ALARM_CFG_NO
+					, C.ALARM_CFG_NAME		as ALARM_CFG_NAME
+					, C.MO_CLASS			as MO_CLASS
+					, C.MO_TYPE
+			from	FX_AL_CFG 		C
+			where	C.INLO_NO		= 0
+		)
+		]]>
+		select *
+		from DATAS A
+		<test var="moClass"> where A.MO_CLASS = $moClass </test>
+		order by
+		A.ALARM_CFG_NAME
+	</select>
+
+
+	<!-- 관리대상 기준으로 설정된 임계 정보를 조회한다. -->
+	<select id="select_alarm_cfg_mem_list_for_mono" resultMap="RESULT_MAP">
+		<![CDATA[		
+		select 	mo.MO_NO				as MO_NO
+				, al.PS_ID 				as PS_ID
+				, al.CMPR_CD 			as CMPR_CD
+				, al.ALCD_NAME 			as ALCD_NAME
+				, cfg.ALARM_CFG_NO		as ALARM_CFG_NO
+				, cfg.AL_CRI_CMPR_VAL	as AL_CRI_CMPR_VAL
+				, cfg.AL_MAJ_CMPR_VAL	as AL_MAJ_CMPR_VAL
+				, cfg.AL_MIN_CMPR_VAL	as AL_MIN_CMPR_VAL
+				, cfg.AL_WAR_CMPR_VAL	as AL_WAR_CMPR_VAL
+		from 	FX_MO mo
+				, FX_AL_CFG_MEM cfg
+				, FX_AL_CD al
+		where 	mo.mo_no 			= $moNo
+		and 	mo.ALARM_CFG_NO 	= cfg.ALARM_CFG_NO 
+		and 	al.ALCD_NO			= cfg.ALCD_NO
+		and		cfg.USE_YN 			= 'Y'
+		order by 
+				al.PS_ID
+		]]>
+	</select>
+
+</queries>
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_PS_VALUE" javaClass="fxms.bas.vo.PsMinMaxAvgValue">
+		<result attr="setPsDate()" field="PS_DATE" />
+		<result attr="setMinValue()" field="MIN_VALUE" />
+		<result attr="setMaxValue()" field="MAX_VALUE" />
+		<result attr="setAvgValue()" field="AVG_VALUE" />
+	</resultMap>
+	
+	<!-- -->
+	<!-- 성능 수집용 관리대상 조회 -->
+	<select id="select-ps-value-min-max-hourly-list" resultMap="RESULT_PS_VALUE">
+		<![CDATA[
+		with fx_co_time as (
+			select 	CD_CODE			as HH
+			from 	FX_CO_CD	
+			where	CD_CLASS = 'PS_TIME_HOUR_CL_CD'
+			order by	
+					CD_CODE 
+		)
+		, ps_value as (
+				select	
+						substring(CONVERT(PS_DATE, CHAR), 9, 2)		as HH
+						, min(#psItem)								as MIN_VALUE
+						, max(#psItem)								as MAX_VALUE
+						, avg(#psItem)								as AVG_VALUE
+				from	#tableName
+				where	1 = 1
+				and		MO_NO 		= 	$moNo
+				group by 
+						substring(CONVERT(PS_DATE, CHAR), 9, 2)				
+		)
+		select	a.HH					as PS_DATE
+				, b.MIN_VALUE			as MIN_VALUE
+				, b.MAX_VALUE			as MAX_VALUE
+				, b.AVG_VALUE			as AVG_VALUE
+		from	fx_co_time a
+				left join ps_value b on a.HH = b.HH
+		]]>
+	</select>
+	
+	<!-- -->
+	<!-- 성능 수집용 관리대상 조회 -->
+	<select id="select-ps-value-min-max-avg-list" resultMap="RESULT_PS_VALUE">
+		<![CDATA[
+		select	
+				concat(substring(CONVERT(PS_DATE, CHAR), 1, 11), '000')
+											as PS_DATE
+				, min(#psItem)				as MIN_VALUE
+				, max(#psItem)				as MAX_VALUE
+				, avg(#psItem)				as AVG_VALUE
+		from	#tableName
+		where	1 = 1
+		and		MO_NO 		= 	$moNo
+		group by 
+				substring(CONVERT(PS_DATE, CHAR), 1, 11)				
+		]]>
+	</select>
+
+</queries>

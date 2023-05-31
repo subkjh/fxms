@@ -1,0 +1,69 @@
+/*
+	적용 순서
+	속성값 !important  > 인라인 스타일  >  내부 스타일  >  외부 스타일 > 브라우저 기본값
+*/
+
+/* element */
+fxms {
+	color: '#ff6666'
+}
+
+/* id */
+#fxms {
+	color: '#ff6666'
+}
+
+/* class */
+.fxms {
+	color: '#ff6666'
+}
+
+.alarm-level-critical {
+	background-color: #ff6666;
+}
+
+.alarm-level-major {
+	background-color: #FFB266;
+}
+
+.alarm-level-minor {
+	background-color: #FFE5CC;
+}
+
+.alarm-level-warning {
+	background-color: #66B2FF;
+}
+
+.alarm-level-normal {
+	background-color: #E0E0E0;
+}
+
+.mo-state-online {
+	background-color: #FFB266;
+}
+
+.mo-state-offline {
+	background-color: #FFE5CC;
+}
+
+.mo-state {
+	color: black;
+	border: 2px solid #4CAF50;
+}
+
+.mo-state:hover {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.mo-state-button {
+	border: 2px solid #008CBA;
+	padding: 16px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+}

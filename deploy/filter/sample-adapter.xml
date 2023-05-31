@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<!-- -->
+	<!-- 샘플용 ADAPTER -->
+	<!-- -->
+	<java-class name="SampleStatAdapter"
+		class="test.bas.adapter.SampleStatAdapter">
+	</java-class>
+
+</class-list>

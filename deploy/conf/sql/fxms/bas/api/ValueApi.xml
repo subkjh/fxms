@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<!-- -->
+	<!-- 성능 수집용 관리대상 조회 -->
+	<insert id="INSERT_FX_V_ACUR" >
+		<![CDATA[
+		insert into FX_V_ACUR                 /* 성능수집최신값 */
+		(
+			  MO_NO                     /* MO번호 */ 
+			, MO_INSTANCE               /* MO인스턴스 */ 
+			, PS_ID                     /* 성능ID */ 
+			, PRE_COLL_VAL              /* 이전수집값 */ 
+			, CUR_COLL_VAL              /* 최근수집값 */ 
+			, PRE_COLL_DTM              /* 이전수집일시 */ 
+			, CUR_COLL_DTM              /* 최근수집일시 */ 
+		) values ( 
+			 $getMoNo()
+			, $getMoInstance()
+			, $getPsId()
+			, $getPreCollVal()
+			, $getCurCollVal()
+			, $getPreCollDtm()
+			, $getCurCollDtm()
+		)
+		ON DUPLICATE KEY UPDATE
+			PRE_COLL_VAL 	= CUR_COLL_VAL
+			, PRE_COLL_DTM 	= CUR_COLL_DTM
+			, CUR_COLL_VAL 	= $getCurCollVal()
+			, CUR_COLL_DTM 	= $getCurCollDtm()
+
+		]]>
+	</insert>
+
+</queries>

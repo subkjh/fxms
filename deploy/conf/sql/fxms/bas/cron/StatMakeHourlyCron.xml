@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<!-- -->
+	<!-- 발생 경보 통계 fxms-filter-list.xml에 정의하여 사용함. -->
+	<!-- -->
+
+	<insert id="MAKE_ALARM_STAT_HH_ALCD">
+		<![CDATA[
+		insert into FX_AL_STAT_HH_ALCD (
+				ST_DATE
+				, HH
+				, ALCD_NO
+				, ALARM_OCCUR_CNT
+				, ALARM_RLSE_CNT
+				, REG_USER_NO
+				, REG_DTM
+				, CHG_USER_NO
+				, CHG_DTM
+		)
+		with datas as (
+		
+			select	$stDate			as ST_DATE
+					, TRUNCATE((OCCUR_DTM % 1000000) / 10000, 0) 
+									as HH
+					, ALCD_NO		as ALCD_NO
+					, count(1) 		as ALARM_OCCUR_CNT
+					, 0				as ALARM_RLSE_CNT
+			from 	FX_AL_ALARM_HST
+			where	cast(OCCUR_DTM / 1000000 as UNSIGNED) 		= $stDate
+			group by TRUNCATE((OCCUR_DTM % 1000000) / 10000, 0)
+					, ALCD_NO
+					
+
+			union all
+			
+			select	$stDate			as ST_DATE
+					, TRUNCATE((RLSE_DTM % 1000000) / 10000, 0) 
+									as HH
+					, ALCD_NO		as ALCD_NO
+					, 0				as ALARM_OCCUR_CNT
+					, count(1) 		as ALARM_RLSE_CNT
+			from 	FX_AL_ALARM_HST
+			where	cast(RLSE_DTM / 1000000 as UNSIGNED) 		= $stDate
+			group by TRUNCATE((RLSE_DTM % 1000000) / 10000, 0)
+					, ALCD_NO
+		)
+		, tmp as (
+			select	a.ST_DATE
+					, a.HH
+					, a.ALCD_NO
+					, sum(a.ALARM_OCCUR_CNT)	as ALARM_OCCUR_CNT
+					, sum(a.ALARM_RLSE_CNT) 	as ALARM_RLSE_CNT
+			from 	datas a
+			group by a.ST_DATE
+					, a.HH
+					, a.ALCD_NO
+		)
+		select	tmp.*
+				, $regUserNo		as REG_USER_NO
+				, $regDtm			as REG_DTM
+				, $chgUserNo		as CHG_USER_NO
+				, $chgDtm			as CHG_DTM
+		from 	tmp
+								
+		on duplicate key
+		update 	ALARM_OCCUR_CNT 	= tmp.ALARM_OCCUR_CNT			
+				, ALARM_RLSE_CNT 	= tmp.ALARM_RLSE_CNT
+				, CHG_USER_NO		= $chgUserNo				
+				, CHG_DTM			= $chgDtm
+				
+		]]>
+	</insert>
+	
+
+	<insert id="MAKE_ALARM_STAT_HH_INLO">
+		<![CDATA[
+		insert into FX_AL_STAT_HH_INLO (
+				ST_DATE
+				, HH
+				, INLO_NO
+				, ALARM_OCCUR_CNT
+				, ALARM_RLSE_CNT
+				, REG_USER_NO
+				, REG_DTM
+				, CHG_USER_NO
+				, CHG_DTM
+		)
+		with datas as (
+		
+			select	$stDate			as ST_DATE
+					, TRUNCATE((OCCUR_DTM % 1000000) / 10000, 0) 
+									as HH
+					, INLO_NO		as INLO_NO
+					, count(1) 		as ALARM_OCCUR_CNT
+					, 0				as ALARM_RLSE_CNT
+			from 	FX_AL_ALARM_HST
+			where	cast(OCCUR_DTM / 1000000 as UNSIGNED) 		= $stDate
+			group by TRUNCATE((OCCUR_DTM % 1000000) / 10000, 0)
+					, INLO_NO
+					
+
+			union all
+			
+			select	$stDate			as ST_DATE
+					, TRUNCATE((RLSE_DTM % 1000000) / 10000, 0) 
+									as HH
+					, INLO_NO		as INLO_NO
+					, 0				as ALARM_OCCUR_CNT
+					, count(1) 		as ALARM_RLSE_CNT
+			from 	FX_AL_ALARM_HST
+			where	cast(RLSE_DTM / 1000000 as UNSIGNED) 		= $stDate
+			group by TRUNCATE((RLSE_DTM % 1000000) / 10000, 0)
+					, INLO_NO
+		)
+		, tmp as (
+			select	a.ST_DATE
+					, a.HH
+					, a.INLO_NO
+					, sum(a.ALARM_OCCUR_CNT)	as ALARM_OCCUR_CNT
+					, sum(a.ALARM_RLSE_CNT) 	as ALARM_RLSE_CNT
+			from 	datas a
+			group by a.ST_DATE
+					, a.HH
+					, a.INLO_NO
+		)
+		select	tmp.*
+				, $regUserNo		as REG_USER_NO
+				, $regDtm			as REG_DTM
+				, $chgUserNo		as CHG_USER_NO
+				, $chgDtm			as CHG_DTM
+		from 	tmp
+								
+		on duplicate key
+		update 	ALARM_OCCUR_CNT 	= tmp.ALARM_OCCUR_CNT			
+				, ALARM_RLSE_CNT 	= tmp.ALARM_RLSE_CNT
+				, CHG_USER_NO		= $chgUserNo
+				, CHG_DTM			= $chgDtm
+				
+		]]>
+	</insert>
+
+
+</queries>
+

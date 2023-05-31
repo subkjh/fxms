@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your page title</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+
+<script src="js/fxms.js"></script>
+<script src="js/fxms_jquery.js"></script>
+
+<script>
+	$(document)
+			.ready(
+					function(param) {
+						console.log(param);
+						
+						var userId = window.localStorage.getItem("FXMSTEST.user.id");
+						var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+						
+						let fxms = new FxMS(userId, userPwd, function(session) {
+							showData();
+						});
+
+						function showData() {
+							fxms
+									.call(
+											'ps/select-ps-value-list',
+											{
+												moNo : 0,
+												psId : 'flowRate',
+												psDataCd : 'DAY1',
+												psStatFuncList : 'MIN,MAX,AVG,SUM',
+												startPsDate : DateUtil
+														.getYmd(-86400000)
+														+ '000000',
+												endPsDate : DateUtil
+														.getYmd(-86400000)
+														+ '235959'
+											},
+											function(isOk, result) {
+
+												console.log(isOk, result);
+												if (isOk) {
+
+													var list = [];
+													var obj;
+													var item;
+													var columns = [];
+
+													for (var i = 0; i < result.length; i++) {
+														obj = result[i];
+														item = {
+															moName : obj.mo.moName,
+															ymd : obj.valueList[0][0],
+															psName : obj.psItem.psName
+														};
+
+														if (i == 0) {
+															columns
+																	.push('LS020:moName:센서');
+															columns
+																	.push('CD008:ymd:일자');
+															columns
+																	.push('LS012:psName:항목');
+														}
+
+														for (var j = 0; j < obj.psStatFuncArray.length; j++) {
+															item[obj.psStatFuncArray[j]] = obj.valueList[0][j + 1];
+															if (i == 0) {
+																columns
+																		.push('RN010:'
+																				+ obj.psStatFuncArray[j]
+																				+ ':'
+																				+ obj.psStatFuncArray[j]);
+															}
+
+														}
+														list.push(item);
+													}
+
+													new jQGrid(list, columns)
+															.draw('grid1');
+												}
+											});
+						}
+					});
+</script>
+</head>
+<body>
+	<table id="grid1"></table>
+</body>
+</html>

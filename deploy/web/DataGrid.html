@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your page title</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+
+<script src="js/fxms.js"></script>
+<script src="js/fxms_jquery.js"></script>
+
+<script>
+	$(function() {
+
+		var userId = window.localStorage.getItem("FXMSTEST.user.id");
+		var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+		
+		let fxms = new FxMS(userId, userPwd, function(session) {
+			showData();
+		});
+
+		$('#get').click(function() {
+			var url = $('#inUrl').val();
+
+			console.log(url);
+
+			fxms.call(url, {}, function(isOk, result) {
+
+				if (isOk) {
+					new jQGrid(result).draw('grid1');
+				}
+			});
+		})
+
+		function showData() {
+			fxms.call('alarmcfg/select-alarm-cfg-grid-list', {}, function(isOk,
+					result) {
+				console.log(isOk, result);
+				if (isOk) {
+					new jQGrid(result).draw('dataGrid');
+				}
+			});
+		}
+
+	});
+</script>
+</head>
+<body>
+	<form>
+		<input type='text' id='inUrl' class='inputClass'></input>
+		<button type='button' id='get'>get</button>
+	</form>
+	<table id="dataGrid"></table>
+</body>
+</html>

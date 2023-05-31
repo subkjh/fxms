@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+
+<script src="js/ext/gojs/go.js"></script>
+<script src="js/ext/gojs/Figures.js"></script>
+
+<script type="module">
+	import { DateUtil } from "./js/subkjh.js";
+	import * as FxMS from "./js/fxms2.js";
+
+	window.onload = function(param) {
+
+		let component;
+
+		var userId = window.localStorage.getItem("FXMSTEST.user.id");
+		var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+
+		let fxms = new FxMS.FxCall(userId, userPwd, function(session) {
+
+			component = new FxMS.Component(fxms, function() {
+			});
+
+			let confObj = {
+				type : 'Pipe',
+				searchPara : {}
+			};
+			confObj.callback = function(selectedPipeId, selectedPipeObj) {
+				showPipe(selectedPipeId, selectedPipeObj);
+			};
+			confObj.prompt = '확인할 배관을 선택하세요.';
+
+			component.setCombo('testId', confObj);
+
+		});
+
+		function showPipe(selectedPipeId, selectedPipeObj) {
+
+			var func = function(isOk, drawPipeObj) {
+				console.log(drawPipeObj);
+				if (isOk) {
+					document.getElementById("diagName").innerHTML = drawPipeObj.pipeName;
+					document.getElementById("save").disabled = false;
+					pipeObj = drawPipeObj;
+				} else {
+					document.getElementById("diagName").innerHTML = drawPipeObj;
+					document.getElementById("save").disabled = true;
+
+				}
+			};
+
+			component.draw('goDiv', 'Pipe', {
+				pipeId : selectedPipeId,
+				pipeObj : selectedPipeObj,
+				callback : func
+			});
+
+		}
+
+	}
+</script>
+
+<style>
+</style>
+
+</head>
+<body>
+
+	<div>
+		배관정보 <select id="testId" style="width: 300px"></select>
+	</div>
+
+	<h2 id='diagName'>프로세스 플로우</h2>
+	<form></form>
+
+	<div id="goDiv"
+		style="border: 1px solid black; width: 100%; height: 800px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);"></div>
+
+
+</body>
+</html>

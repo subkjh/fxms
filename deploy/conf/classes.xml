@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE classes[
+
+<!ELEMENT classes (class*) >
+
+<!ELEMENT class (para*) >
+<!ATTLIST class org CDATA #REQUIRED >
+<!ATTLIST class use CDATA #REQUIRED >
+<!ATTLIST class service CDATA #IMPLIED >
+<!ATTLIST class enable CDATA #IMPLIED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #REQUIRED>
+
+]>
+
+<classes>
+
+	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.api.AppApiService" />
+	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.api.AppApiDfo" service="AppService" />
+
+	<class org="fxms.bas.api.CodeApi" use="fxms.bas.impl.api.CodeApiDfo" />
+
+	<class org="fxms.bas.api.AlarmApi" use="fxms.bas.impl.api.AlarmApiService" />
+	<class org="fxms.bas.api.AlarmApi" use="fxms.bas.impl.api.AlarmApiDfo"
+		service="AlarmService" enable="true" />
+
+	<class org="fxms.bas.api.VarApi" use="fxms.bas.impl.api.VarApiDfo" />
+
+	<class org="fxms.bas.api.OpApi" use="fxms.bas.impl.api.OpApiDfo" />
+
+	<class org="fxms.bas.api.EventApi" use="fxms.bas.api.EventApi" />
+
+	<class org="fxms.bas.api.UserApi" use="fxms.bas.impl.api.UserApiService" />
+	<class org="fxms.bas.api.UserApi" use="fxms.bas.impl.api.UserApiDfo" service="UserService"
+		enable="true" />
+
+	<class org="fxms.bas.api.MoApi" use="fxms.bas.impl.api.MoApiService" />
+	<class org="fxms.bas.api.MoApi" use="fxms.bas.impl.api.MoApiDfo" service="MoService"
+		enable="true" />
+
+	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.api.ValueApiService" />
+	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.api.ValueApiDfo"
+		service="ValueService" enable="true" />
+
+	<class org="fxms.bas.api.ModelApi" use="fxms.bas.impl.api.ModelApiDfo" />
+
+	<class org="fxms.bas.api.InloApi" use="fxms.bas.impl.api.InloApiDB" />
+
+	<class org="fxms.bas.api.MappingApi" use="fxms.bas.impl.api.MappingApiDB" />
+
+	<class org="fxms.bas.api.PsApi" use="fxms.bas.impl.api.PsApiDfo">
+		<!-- 통계데이터를 실시간으로 만들지 여부. 예) 일일통계인 경우 5분마다 새롭게 생성할 경우 -->
+		<para name="stat.realtime.made" value="true" />
+	</class>
+
+	<class org="fxms.bas.api.LogApi" use="fxms.bas.impl.api.LogApiDB" />
+
+	<class org="fxms.bas.api.AdapterApi" use="fxms.bas.impl.api.AdapterApiDfo" />
+
+	<class org="fxms.rule.RuleApi" use="fxms.rule.RuleApiDB" />
+
+	<class org="fxms.bas.api.ServiceApi" use="fxms.bas.impl.api.ServiceApiDB" />
+
+	<class org="fxms.nms.api.SyslogApi" use="fxms.nms.impl.api.SyslogApiSample"
+		service="SyslogService">
+		<para name="syslog.save" value="true" />
+		<para name="syslog.broadcast" value="false" />
+		<para name="syslog.max.size.in.queue" value="100" />
+		<para name="syslog.jam.alarm.name" value="syslog-queue-jam" />
+		<para name="syslog.allow.same" value="false" />
+		<para name="syslog.folder" value="datas/syslog" />
+		<para name="syslog.batch.size" value="30" />
+	</class>
+
+	<class org="fxms.nms.api.SnmptrapApi" use="fxms.nms.impl.api.SnmptrapApiSample"
+		service="SnmptrapService">
+		<para name="snmptrap.save" value="true" />
+		<para name="snmptrap.broadcast" value="false" />
+		<para name="snmptrap.max.size.in.queue" value="100" />
+		<para name="snmptrap.jam.alarm.name" value="snmptrap-queue-jam" />
+		<para name="snmptrap.allow.same" value="false" />
+		<para name="snmptrap.folder" value="datas/snmptrap" />
+		<para name="snmptrap.batch.size" value="30" />
+	</class>
+
+	<!-- InfuxDB -->
+	<!-- When using InfluxDB, use the API below. -->
+	<!-- ValueApi writes collected data to InfluxDB, and AppApi reads data from InfluxDB and writes statistical 
+		data to RDB. -->
+	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.api.AppApiInfluxDb"
+		service="AppService" enable="false"/>
+	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.api.ValueApiInfluxDb"
+		service="ValueService" />
+
+</classes>

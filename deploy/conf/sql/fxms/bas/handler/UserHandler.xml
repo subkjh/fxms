@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_INT" javaClass="java.lang.Integer" />
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+
+	<!-- -->
+	<!-- 신규 계정 생성 요청 운용자 조회 -->
+	<!-- -->
+	<select id="select_user_new_apply_grid_list"
+		resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	A.APPLY_DTM
+				, A.APPLY_USER_ID
+				, A.APPLY_USER_NAME
+				, A.APPLY_USER_MAIL
+				, A.APPLY_TEL_NO
+				, A.APPLY_INLO_NO
+				, a1.INLO_NAME
+				, A.PROC_DTM	
+				, A.PROC_RSN
+				, A.NEW_USER_REG_ST_CD		as NEW_USER_REG_ST_CD 	
+				, ( select CD_NAME from FX_CO_CD where CD_CLASS = 'NEW_USER_REG_ST_CD' and CD_CODE = A.NEW_USER_REG_ST_CD )
+											as NEW_USER_REG_ST_NAME				
+		from    FX_UR_USER_NEW_REQ  	A
+					left join FX_CF_INLO	a1 on a1.INLO_NO = A.APPLY_INLO_NO
+		where	1 = 1
+		and		A.APPLY_DTM			>= concat($startApplyDate, '000000')
+		and		A.APPLY_DTM			<= concat($endApplyDate, '235959')
+		]]>
+		<test var="applyUserId"> and A.APPLY_USER_ID = $applyUserId </test>
+		<test var="applyUserName"> and A.APPLY_USER_NAME = $applyUserName </test>
+		<test var="newUserRegStCd"> and A.NEW_USER_REG_ST_CD = $newUserRegStCd </test>
+		<test var="inloName"> and a1.INLO_NAME like concat('%', $inloName, '%') </test>
+	</select>
+
+
+	<!-- -->
+	<!-- 사용자 조회 -->
+	<!-- -->
+	<select id="select-user-grid-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	A.USER_NO
+				, A.USER_ID
+				, A.USER_NAME
+				, A.USER_TEL_NO
+				, A.USER_MAIL
+				, A.USE_STRT_DATE
+				, A.USE_END_DATE
+				, A.USE_YN
+				
+				, A.UGRP_NO			
+				, B.UGRP_NAME
+				
+				, A.INLO_NO
+				, C.INLO_NAME
+
+		from    FX_UR_USER_INLO U
+				, FX_UR_USER  	A
+				, FX_UR_UGRP 	B
+				, FX_CF_INLO	C
+		where	1 = 1
+		and		U.USER_NO 	= $userNo
+		and		A.INLO_NO 	= U.INLO_NO
+		and		B.UGRP_NO	= A.UGRP_NO
+		and		C.INLO_NO	= A.INLO_NO
+		]]>
+		<test var="userId"> and A.USER_ID = $userId </test>
+		<test var="userName"> and A.USER_NAME = $userName </test>
+		<test var="ugrpNo"> and A.UGRP_NO = $ugrpNo </test>
+		<test var="inloNo"> and ( A.INLO_NO in ( select lower_inlo_no from
+			FX_CF_INLO_MEM where INLO_NO = $inloNo ) or A.INLO_NO = $inloNo )
+		</test>
+
+	</select>
+
+	<!-- -->
+	<!-- 사용자 그룹 그리드용 조회 -->
+	<!-- -->
+	<select id="select-user-group-grid-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	A.UGRP_NO
+				, A.UGRP_NAME
+				, A.UGRP_DESC
+				, A.INLO_NO
+				, A1.INLO_NAME
+				, A.REG_DTM
+				, ( select count(1) from FX_UR_USER where UGRP_NO = A.UGRP_NO )
+									as USER_COUNT
+		from    FX_UR_USER_INLO U
+				, FX_UR_UGRP  A
+					left join FX_CF_INLO A1 on A1.INLO_NO = A.INLO_NO
+		where	U.USER_NO 		= $userNo
+		and		A.INLO_NO 		= U.INLO_NO
+		and		A.UI_DISP_YN	= 'Y'
+		order by
+				A.UGRP_NAME
+		]]>
+	</select>
+
+
+	<!-- -->
+	<!-- 사용자 그룹 그리드용 조회 -->
+	<!-- -->
+	<select id="select-user-group-op-grid-list"
+		resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	A.UPPER_OP_ID		as UPPER_OP_ID
+				, A1.OP_NAME		as UPPER_OP_NAME
+				, A.OP_ID			as OP_ID
+				, A.OP_NAME			as OP_NAME
+				, A.OP_DESC			as OP_DESC
+				, A.OP_TYPE_CD		as OP_TYPE_CD
+				, if ( A.UGRP_NO = 0, 'Y', if( is null(A2.OP_ID), 'N', 'Y') ) 
+									as OP_ENABLE
+		from	FX_CO_OP	A
+					left join FX_CO_OP 		A1 on A1.OP_ID = A.UPPER_OP_ID
+					left join FX_UR_UGRP_OP A2 on A2.UGRP_NO = $ugrpNo and A2.OP_ID = A.OP_ID 
+		where 	1 = 1 
+		order	by
+				A1.OP_NAME
+				, A.OP_NAME
+		]]>
+	</select>
+
+
+	<!-- -->
+	<!-- 사용자 접속 조회 -->
+	<!-- -->
+	<select id="select-user-access-hst-grid-list"
+		resultMap="RESULT_MAP">
+		<![CDATA[
+		select A.LOGIN_DTM
+				, A.LOGOUT_DTM
+				, A.ACCS_IP_ADDR
+				, A.ACCS_MEDIA
+				, A.ACCS_ST_CD
+				, ( select max(CD_NAME) from FX_CO_CD where CD_CLASS = 'ACCS_ST_CD' and CD_CODE = A.ACCS_ST_CD )
+								 	as ACCS_ST_NAME 
+		from 	FX_UR_USER_INLO 		U
+				, FX_UR_USER_ACCS_HST 	A
+				, FX_UR_USER 			B
+		where	U.USER_NO 		= $userNo
+		and		B.INLO_NO		= U.INLO_NO
+		and		A.USER_NO		= B.USER_NO
+		]]>
+		<test var="startLoginDtm"><![CDATA[ and A.LOGIN_DTM >= $startLoginDtm ]]></test>
+		<test var="endLoginDtm"><![CDATA[ and A.LOGIN_DTM <= $endLoginDtm ]]></test>
+		<![CDATA[
+			order by
+				A.LOGIN_DTM desc
+		]]>
+	</select>
+
+	<!-- -->
+	<!-- 사용자 작업 이력 조회 -->
+	<!-- -->
+	<select id="select-user-work-hst-grid-list"
+		resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	A.USER_NO
+				, A.USER_NAME
+				, A.STRT_DTM
+				, A.OP_ID
+				, A.OP_NAME
+				, A.STRT_DTM
+				, A.END_DTM
+				, if(A.RST_NO = 0, 'SUCCESS', 'FAIL')
+								as RST_ST_VAL
+		from 	FX_UR_USER_INLO 		U
+				, FX_UR_USER_WORK_HST 	A
+				, FX_UR_USER 			B
+		where	U.USER_NO 		= $userNo
+		and		B.INLO_NO		= U.INLO_NO
+		and		A.USER_NO		= B.USER_NO
+		]]>
+		<test var="startStrtDtm"><![CDATA[ and A.STRT_DTM >= $startStrtDtm ]]></test>
+		<test var="endStrtDtm"><![CDATA[ and A.STRT_DTM <= $endStrtDtm ]]></test>
+		<![CDATA[
+			order by
+				A.STRT_DTM desc
+		]]>
+
+	</select>
+
+
+</queries>
+

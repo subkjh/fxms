@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+
+<body>
+
+	<!-- 
+	<script type="module" src="./test.js"></script>
+	<script type="module" src="./test2.js"></script>
+	 -->
+
+	<script>
+		
+	</script>
+
+	<script type="module">
+
+		// Alias
+		import * as currency from "./test.js";
+		import { usToCanadian } from "./test.js";
+
+		window.onload = function() {
+			console.log('aaaaaaaaaaaaaa');
+
+
+		console.log("30 US dollars equals this amount of Canadian dollars:");
+		console.log(currency.usToCanadian(30));
+		console.log(usToCanadian(111));
+
+		}
+		
+		
+	</script>
+
+
+	<h1>JavaScript Modules</h1>
+	<p id="demo"></p>
+</body>
+</html>

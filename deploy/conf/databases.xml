@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE databases [
+
+<!ELEMENT databases (database*) >
+
+<!ELEMENT database (driver, url, dbname?, user?, password?, isReadOnly?
+					,countConnectionMax, isAutoCommit?,permitConnectionPoolOver?,reconnectTimeout?,sqlSelectKeepAlive?,const*)>
+<!ATTLIST database name CDATA #REQUIRED >
+<!ATTLIST database java-class CDATA #REQUIRED >
+
+<!ELEMENT driver (#PCDATA) >
+<!ELEMENT url (#PCDATA) >
+<!ELEMENT dbname (#PCDATA) >
+<!ELEMENT user (#PCDATA) >
+<!ELEMENT password (#PCDATA) >
+<!ELEMENT isReadOnly (#PCDATA) >
+<!ELEMENT countConnectionMax (#PCDATA) >
+<!ELEMENT isAutoCommit (#PCDATA) >
+<!ELEMENT permitConnectionPoolOver (#PCDATA) >
+<!ELEMENT reconnectTimeout (#PCDATA) >
+<!ELEMENT sqlSelectKeepAlive (#PCDATA) >
+<!ELEMENT const (#PCDATA) >
+<!ATTLIST const id CDATA #REQUIRED >
+
+]>
+
+<databases>
+
+	<!-- VUP 운용 DB -->
+	<database name="FXMSDB11" java-class="subkjh.dao.database.MySql">
+		<driver>com.mysql.cj.jdbc.Driver</driver>
+		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
+		<url>jdbc:mysql://10.0.1.11:3306/vup?useUnicode=true&amp;characterEncoding=utf8</url>
+		<user>vup</user>
+		<password>vup</password>
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+	</database>
+
+	<database name="FXMSDB" java-class="subkjh.dao.database.MySql">
+		<driver>com.mysql.cj.jdbc.Driver</driver>
+		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
+		<url>
+			jdbc:mysql://10.0.1.11:3306/vup_test?useUnicode=true&amp;characterEncoding=utf8
+		</url>
+		<user>thingspire_dev</user>
+		<password>things1945</password>
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+	<!-- VUP 공통 Db -->
+	<database name="VUPCOMMDB" java-class="subkjh.dao.database.MySql">
+		<driver>com.mysql.cj.jdbc.Driver</driver>
+		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
+		<url>
+			jdbc:mysql://10.0.1.11:3306/vupcommdb?useUnicode=true&amp;characterEncoding=utf8
+		</url>
+		<user>vupcomm</user>
+		<password>vupcomm12#$</password>
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+
+	<database name="VUPDB" java-class="subkjh.dao.database.MySql">
+
+		<driver>com.mysql.cj.jdbc.Driver</driver>
+		<url>
+			jdbc:mysql://3.37.10.157:3306/vup_ansan?useUnicode=true&amp;user=admin&amp;password=thingspire1945&amp;characterEncoding=utf8
+		</url>
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+	<database name="FEMSDB_SSH" java-class="subkjh.dao.database.MariaDb">
+		<!-- <driver>org.gjt.mm.mysql.Driver</driver> -->
+		<driver>org.mariadb.jdbc.Driver</driver>
+		<url>
+			jdbc:mariadb://localhost:3306/FEMSDB?useUnicode=true&amp;user=fems&amp;password=fems12#$&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+
+	<database name="ENITTDB" java-class="subkjh.dao.database.MariaDb">
+		<!-- <driver>org.gjt.mm.mysql.Driver</driver> -->
+		<driver>org.mariadb.jdbc.Driver</driver>
+		<url>
+			jdbc:mariadb://enitt.co.kr:13301/ems?useUnicode=true&amp;user=enitt&amp;password=enitt12#$&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+	<database name="GEMVAXDB" java-class="subkjh.dao.database.MariaDb">
+		<!-- <driver>org.gjt.mm.mysql.Driver</driver> -->
+		<driver>org.mariadb.jdbc.Driver</driver>
+		<url>
+			jdbc:mariadb://112.172.129.203:13306/vuptessdb?useUnicode=true&amp;user=view_user&amp;password=view_user_pw2023&amp;characterEncoding=utf8
+		</url>
+
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<permitConnectionPoolOver>false</permitConnectionPoolOver>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+
+	</database>
+
+
+	<!-- VUP 운용 DB -->
+	<database name="INFLUXDB" java-class="subkjh.dao.database.InfluxDB">
+		<driver>com.wisecoders.dbschema.influxdb.JdbcDriver</driver>
+		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
+		<url>http://10.0.1.11:8086</url>
+		<dbname>FXMSDB</dbname>
+		<user>fxms</user>
+		<password>fxms12#$</password>
+	</database>
+
+</databases>

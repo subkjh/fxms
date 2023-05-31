@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/annotations.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script src="js/fxms.js"></script>
+
+<script>
+	$(document)
+			.ready(
+					function() {
+
+							
+							var userId = window.localStorage.getItem("FXMSTEST.user.id");
+							var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+							
+							fxms = new FxMS(userId, userPwd, function() {
+								showPsValue();
+							});
+
+						function showPsValue() {
+							fxms.call('ps/select-ps-value-list', {
+								moNo : 0,
+								psId : 'ePower',
+								psDataCd : 'HOUR1',
+								psStatFuncList : 'AVG',
+								startPsDate : DateUtil.getDtm(-86400000 * 21),
+								endPsDate : DateUtil.getDtm()
+
+							}, displayGrid);
+
+						}
+
+						function displayGrid(isOk, result) {
+
+							console.log(result);
+
+							if (isOk) {
+
+								var data;
+								var series = [];
+								var categories = [];
+								var valueList;
+								var psItem;
+								var minDtm = 99999999000000;
+
+								for (var n = 0; n < result.length; n++) {
+									valueList = result[n].valueList;
+									psItem = result[n].psItem;
+
+									data = [];
+									for (var i = 0; i < valueList.length; i++) {
+
+										valueList[i][0] = DateUtil.makeDate(
+												valueList[i][0]).getTime();
+
+										if (valueList[i][0] < minDtm) {
+											minDtm = valueList[i][0];
+										}
+
+										if (n == 0) {
+											categories.push(DateUtil.getDdHh(
+													valueList[i][0], '일 '));
+										}
+
+										data.push(parseFloat(valueList[i][1]
+												.toFixed(3)));
+
+									}
+
+									series.push({
+										name : result[n].mo.moName,
+										data : data
+									});
+
+								}
+
+								makeChart(series, categories);
+
+							} else {
+								alert(result);
+							}
+
+						}
+
+						function makeChart(series, categories) {
+
+							console.log(series, categories);
+
+							// 로컬 시간 사용
+							Highcharts.setOptions({
+								global : {
+									useUTC : false
+								}
+							});
+
+							var colors = Highcharts.getOptions().colors;
+							Highcharts
+									.chart(
+											'container',
+											{
+
+												chart : {
+													type : 'streamgraph',
+													marginBottom : 30,
+													zoomType : 'x'
+												},
+
+												// Make sure connected countries have similar colors
+												colors : [
+														colors[0],
+														colors[1],
+														colors[2],
+														colors[3],
+														colors[4],
+														// East Germany, West Germany and Germany
+														Highcharts.color(
+																colors[5])
+																.brighten(0.2)
+																.get(),
+														Highcharts.color(
+																colors[5])
+																.brighten(0.1)
+																.get(),
+
+														colors[5],
+														colors[6],
+														colors[7],
+														colors[8],
+														colors[9],
+														colors[0],
+														colors[1],
+														colors[3],
+														// Soviet Union, Russia
+														Highcharts.color(
+																colors[2])
+																.brighten(-0.1)
+																.get(),
+														Highcharts.color(
+																colors[2])
+																.brighten(-0.2)
+																.get(),
+														Highcharts.color(
+																colors[2])
+																.brighten(-0.3)
+																.get() ],
+
+												title : {
+													floating : true,
+													align : 'left',
+													text : '안산 전력 사용량'
+												},
+												subtitle : {
+													floating : true,
+													align : 'left',
+													y : 30,
+													text : 'Source: vup'
+												},
+
+												xAxis : {
+													maxPadding : 0,
+													type : 'category',
+													crosshair : true,
+													categories : categories, // x축 라벨
+													labels : {
+														align : 'left',
+														reserveSpace : false,
+														rotation : 270
+													},
+													lineWidth : 0,
+													margin : 20,
+													tickWidth : 0
+												},
+
+												yAxis : {
+													visible : false,
+													startOnTick : false,
+													endOnTick : false
+												},
+
+												legend : {
+													enabled : false
+												},
+
+												plotOptions : {
+													series : {
+														label : {
+															minFontSize : 5,
+															maxFontSize : 15,
+															style : {
+																color : 'rgba(255,255,255,0.75)'
+															}
+														},
+														accessibility : {
+															exposeAsGroupOnly : true
+														}
+													}
+												},
+
+												// Data parsed with olympic-medals.node.js
+												series : series,
+
+												exporting : {
+													sourceWidth : 800,
+													sourceHeight : 600
+												}
+
+											});
+						}
+					});
+</script>
+
+
+<style>
+#container {
+	height: 600px;
+}
+
+.highcharts-figure, .highcharts-data-table table {
+	min-width: 310px;
+	max-width: 800px;
+	overflow: auto;
+	margin: 1em auto;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #ebebeb;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+
+.highcharts-data-table caption {
+	padding: 1em 0;
+	font-size: 1.2em;
+	color: #555;
+}
+
+.highcharts-data-table th {
+	font-weight: 600;
+	padding: 0.5em;
+}
+
+.highcharts-data-table td, .highcharts-data-table th,
+	.highcharts-data-table caption {
+	padding: 0.5em;
+}
+
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even)
+	{
+	background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+	background: #f1f7ff;
+}
+</style>
+
+</head>
+<body>
+	<h2>HighChart Scatter Plot</h2>
+
+	<div id="Recv"></div>
+	<figure class="highcharts-figure">
+		<div id="container"></div>
+		<p class="highcharts-description"></p>
+	</figure>
+</body>
+</html>

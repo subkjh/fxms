@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script src="js/fxms.js"></script>
+
+<script>
+	var ws;
+
+	$(document).ready(function() {
+		
+		window.localStorage.setItem("FXMSTEST.user.id", "subkjh");
+		window.localStorage.setItem("FXMSTEST.user.pwd","1111");
+
+	});
+
+	function openUrl(popUrl) {
+
+		// $('#viewDiv').load(popUrl);
+
+		var popOption = "top=10, left=10, width=500, height=600, status=no, menubar=no, toolbar=no, resizable=no";
+		window.open(popUrl, "_blank", popOption);
+
+	}
+</script>
+
+
+<style>
+.button {
+	border: none;
+	color: white;
+	padding: 16px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+}
+
+.button1 {
+	background-color: white;
+	color: black;
+	border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.button2 {
+	background-color: white;
+	color: black;
+	border: 2px solid #008CBA;
+}
+
+.button2:hover {
+	background-color: #008CBA;
+	color: white;
+}
+</style>
+
+</head>
+<body>
+	<h2>FxMS 테스트</h2>
+
+	<div style='width: 100%'>
+		<button class="button button2" onclick="openUrl('FxBroadClient2.html')">실시간알람수신테스트</button>
+		<button class="button button2" onclick="openUrl('WsPsValueClient2.html')">수집값엿보기테스트</button>
+		<button class="button button2" onclick="openUrl('HighChart_scatter_plot.html')">시간대별 알람 발생/해제 ( HighChart scatter plot )</button>
+		<button class="button button2" onclick="openUrl('DataGrid.html')">데이터 그리드 테스트</button>
+		<button class="button button2" onclick="openUrl('NetworkGraph.html')">VUP 공장 네트워크 테스트</button>
+
+		<br>
+		<button class="button button2" onclick="openUrl('MoOnlineStateList.html')">관리대상 온라인 상태 테스트</button>
+
+		<button class="button button2" onclick="openUrl('MoAlarmStateList.html')">관리대상 알람 상태 테스트</button>
+
+		<button class="button button2" onclick="openUrl('HighChart_column_range.html')">HighChart Column Range 테스트</button>
+
+		<button class="button button2" onclick="openUrl('HighChart_Time_series_zoomable.html')">HighChart 시계열 그래프(줌가능) 테스트</button>
+
+		<br>
+		<button class="button button2" onclick="openUrl('HighChart_Area_range_line.html')">HighChart Area+Line 시계열 그래표 테스트</button>
+		<button class="button button2" onclick="openUrl('gojsProcessFlow.html')">GOJS 프로세스 플로우 테스트</button>
+		<button class="button button2" onclick="openUrl('MoAlarmGrid.html')">알람 이력 조회 테스트</button>
+		<button class="button button2" onclick="openUrl('LocationOnlineStateList.html')">공장 온라인 상태 테스트</button>
+
+		<br>
+		<button class="button button2" onclick="openUrl('HighChart_Spline_with_plot_bands.html')">HighChart Spline(전력계 KW) 테스트</button>
+		<button class="button button2" onclick="openUrl('HighChart_StreamGraph.html')">HighChart StreamGraph(전력계 KW) 테스트</button>
+		<button class="button button2" onclick="openUrl('MoPsGrid.html')">수집 데이터 그리드 테스트</button>
+		<button class="button button2" onclick="openUrl('HighChart_Gauge.html')">HighChart 계측값 테스트</button>
+
+		<br>
+		<button class="button button2" onclick="openUrl('HighChart_Test.html')">콤포넌트 기반 테스트</button>
+		<button class="button button2" onclick="openUrl('HighChart_Sankey.html')">VUP 압축 공기 사용 현황(HighChart Sankey) 테스트</button>
+		<button class="button button2" onclick="openUrl('gojsProcessFlow2.html')">VUP 인천압공 공정 테스트</button>
+
+	</div>
+
+
+</body>
+</html>

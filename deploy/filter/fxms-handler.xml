@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<java-class name="fxms-handler" class="fxms.bas.handler.vo.HandlerVo"
+		service="WebService">
+
+		<para name="context" value="/, fxms.bas.handler.RootHandler" />
+
+		<para name="context" value="/echo, fxms.bas.handler.EchoHandler" />
+
+		<para name="context" value="/login, fxms.bas.impl.handler.LoginHandler" />
+
+		<para name="context" value="/community, fxms.bas.impl.handler.CommHandler" />
+
+		<para name="context" value="/model, fxms.bas.impl.handler.ModelHandler" />
+
+		<para name="context" value="/location, fxms.bas.impl.handler.InloHandler" />
+
+		<para name="context" value="/mo, fxms.bas.impl.handler.MoHandler" />
+
+		<para name="context" value="/ps, fxms.bas.impl.handler.PsHandler" />
+
+		<para name="context" value="/alarm, fxms.bas.impl.handler.AlarmHandler" />
+
+		<para name="context" value="/alarmcfg, fxms.bas.impl.handler.AlarmCfgHandler" />
+
+		<para name="context" value="/code, fxms.bas.impl.handler.CodeHandler" />
+
+		<para name="context" value="/diagram, fxms.bas.impl.handler.DiagramHandler" />
+
+		<para name="context" value="/system, fxms.bas.impl.handler.SystemHandler" />
+
+		<para name="context" value="/test, fxms.bas.impl.handler.TestHandler" />
+
+		<para name="context" value="/user, fxms.bas.impl.handler.UserHandler" />
+
+		<para name="context" value="/ui, fxms.bas.impl.handler.UiHandler" />
+
+		<para name="context" value="/rule, fxms.rule.handler.RuleHandler" />
+
+		<para name="context" value="/download, fxms.bas.impl.handler.DownloadHandler" />
+
+		<para name="port" value="10005" />
+		<para name="port2db" value="10005" />
+		<para name="host2db" value="10.0.1.11" />
+
+	</java-class>
+
+
+</class-list>

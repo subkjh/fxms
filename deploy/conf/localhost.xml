@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<service>
+
+	<para name="fxsvr.ip.addr" value="localhost" />
+
+	<para name="PORT-SERVICE" value="0" service="MoService" />
+	<para name="PORT-SERVICE" value="0" service="NotiService" />
+	<para name="PORT-SERVICE" value="0" service="AppService" />
+	<para name="PORT-SERVICE" value="0" service="ExtService" />
+	<para name="PORT-SERVICE" value="0" service="WsBroadcaster" />
+
+
+
+</service>

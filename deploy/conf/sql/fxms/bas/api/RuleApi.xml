@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="FX_BR_RULE" javaClass="fxms.rule.dbo.all.FX_BR_RULE" />
+
+	<select id="select-rule-to-run" resultMap="FX_BR_RULE">
+		<![CDATA[
+		select 	A.*
+		from    FX_BR_RULE A
+		where	exists ( select 1 from FX_BR_RULE_RUN_HST A1 where A1.RUN_FNSH_DTM is null and A1.BR_RULE_NO = A.BR_RULE_NO)
+		]]>
+	</select>
+
+</queries>

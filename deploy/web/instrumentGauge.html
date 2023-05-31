@@ -1,0 +1,211 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <body>
+  <script src="https://unpkg.com/gojs@2.2.11/release/go.js"></script>
+  <p>
+    This is a minimalist HTML and JavaScript skeleton of the GoJS Sample
+    <a href="https://gojs.net/latest/samples/instrumentGauge.html">instrumentGauge.html</a>. It was automatically generated from a button on the sample page,
+    and does not contain the full HTML. It is intended as a starting point to adapt for your own usage.
+    For many samples, you may need to inspect the
+    <a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/instrumentGauge.html">full source on Github</a>
+    and copy other files or scripts.
+  </p>
+  <div id="allSampleContent" class="p-4 w-full">
+    <script id="code">
+    function init() {
+
+      // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
+      // For details, see https://gojs.net/latest/intro/buildingObjects.html
+      const $ = go.GraphObject.make;
+
+      myDiagram = $(go.Diagram, "myDiagramDiv");
+
+      myDiagram.nodeTemplate =
+        $(go.Node, "Auto",
+          $(go.Shape, "Circle",
+            { stroke: "orange", strokeWidth: 5, spot1: go.Spot.TopLeft, spot2: go.Spot.BottomRight },
+            new go.Binding("stroke", "color")),
+          $(go.Panel, "Spot",
+            $(go.Panel, "Graduated",
+              {
+                name: "SCALE", margin: 14,
+                graduatedTickUnit: 2.5,  // tick marks at each multiple of 2.5
+                graduatedMax: 100,  // this is actually the default value
+                stretch: go.GraphObject.None  // needed to avoid unnecessary re-measuring!!!
+              },
+              new go.Binding("graduatedMax", "max"),  // controls the range of the gauge
+              // the main path of the graduated panel, an arc starting at 135 degrees and sweeping for 270 degrees
+              $(go.Shape, { name: "SHAPE", geometryString: "M-70.7107 70.7107 B135 270 0 0 100 100 M0 100", stroke: "white", strokeWidth: 4 }),
+              // three differently sized tick marks
+              $(go.Shape, { geometryString: "M0 0 V10", stroke: "white", strokeWidth: 1.5 }),
+              $(go.Shape, { geometryString: "M0 0 V12", stroke: "white", strokeWidth: 2.5, interval: 2 }),
+              $(go.Shape, { geometryString: "M0 0 V15", stroke: "white", strokeWidth: 3.5, interval: 4 }),
+              $(go.TextBlock,
+                { // each tick label
+                  interval: 4,
+                  alignmentFocus: go.Spot.Center,
+                  font: "bold italic 14pt sans-serif", stroke: "white",
+                  segmentOffset: new go.Point(0, 30)
+                })
+            ),
+            $(go.TextBlock,
+              { alignment: new go.Spot(0.5, 0.9), stroke: "orange", font: "bold italic 14pt sans-serif" },
+              new go.Binding("text", "key"),
+              new go.Binding("stroke", "color")),
+            $(go.Shape, { fill: "red", strokeWidth: 0, geometryString: "F1 M-6 0 L0 -6 100 0 0 6z x M-100 0" },
+              new go.Binding("angle", "value", convertValueToAngle)),
+            $(go.Shape, "Circle", { width: 2, height: 2, fill: "#444" })
+          )
+        );
+
+      // this determines the angle of the needle, based on the data.value argument
+      function convertValueToAngle(v, shape) {
+        var scale = shape.part.findObject("SCALE");
+        var p = scale.graduatedPointForValue(v);
+        var shape = shape.part.findObject("SHAPE");
+        var c = shape.actualBounds.center;
+        return c.directionPoint(p);
+      }
+
+      myDiagram.model = new go.GraphLinksModel([
+          { key: "Alpha", value: 35 },
+          { key: "Beta", color: "green", max: 140, value: 70 }
+        ], [
+          { from: "Alpha", to: "Beta" }
+        ]);
+
+      loop();
+    }
+
+    // change each gauge's value several times a second
+    function loop() {
+      setTimeout(() => {
+        myDiagram.startTransaction();
+        myDiagram.nodes.each(node => {
+          var scale = node.findObject("SCALE");
+          if (scale === null || scale.type !== go.Panel.Graduated) return;
+          // keep the new value within the range of the graduated panel
+          var min = scale.graduatedMin;
+          var max = scale.graduatedMax;
+          var v = node.data.value;
+          if (v === undefined) v = Math.floor((max - min) / 2);  // default to middle value
+          if (v < min) v++;
+          else if (v > max) v--;
+          else v += (Math.random() < 0.5) ? -0.5 : 0.5;  // random walk
+          myDiagram.model.setDataProperty(node.data, "value", v);
+        });
+        myDiagram.commitTransaction("modified Graduated Panel");
+        loop();
+      }, 1000 / 6);
+    }
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+
+  <div id="sample">
+    <div id="myDiagramDiv" style="border: 1px solid black; width: 100%; height: 350px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);"><canvas tabindex="0" width="1054" height="348" style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 348px;">This text is displayed if your browser does not support the Canvas HTML element.</canvas><div style="position: absolute; overflow: auto; width: 1054px; height: 348px; z-index: 1;"><div style="position: absolute; width: 1px; height: 1px;"></div></div></div>
+    <p>
+      This makes use of a <a href="../intro/graduatedPanels.html">"Graduated"</a> <a href="../api/symbols/Panel.html" target="api">Panel</a>,
+      which holds the main path of the scale, a Shape whose <a href="../api/symbols/Shape.html#geometry" target="api">Shape.geometry</a> is a circular arc.
+      In addition that Graduated Panel holds three different Shapes acting as templates for tick marks and
+      a TextBlock acting as a template for tick labels.
+    </p>
+    <p>
+      In a Spot Panel with the Graduated Panel scale are an italic TextBlock showing the node identifier and a red elongated diamond "needle" Shape.
+      The needle's angle is determined by <code>convertValueToAngle</code>, which finds the point on the Graduated Panel's
+      main path element corresponding to <code>data.value</code> and computes the angle from the center to that point.
+      The data value is updated several times per second.
+      A circle Shape surrounds the Spot Panel.
+    </p>
+  <p class="text-xs">GoJS version 2.2.11. Copyright 1998-2022 by Northwoods Software.</p></div>
+    <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/instrumentGauge.html" target="_blank">View this sample page's source on GitHub</a></p><pre class=" language-js">
+    <span class="token keyword">function</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+      <span class="token comment">// Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make</span>
+      <span class="token comment">// For details, see https://gojs.net/latest/intro/buildingObjects.html</span>
+      <span class="token keyword">const</span> $ <span class="token operator">=</span> go<span class="token punctuation">.</span>GraphObject<span class="token punctuation">.</span>make<span class="token punctuation">;</span>
+
+      myDiagram <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Diagram<span class="token punctuation">,</span> <span class="token string">"myDiagramDiv"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      myDiagram<span class="token punctuation">.</span>nodeTemplate <span class="token operator">=</span>
+        <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Node<span class="token punctuation">,</span> <span class="token string">"Auto"</span><span class="token punctuation">,</span>
+          <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token string">"Circle"</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span> stroke<span class="token operator">:</span> <span class="token string">"orange"</span><span class="token punctuation">,</span> strokeWidth<span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span> spot1<span class="token operator">:</span> go<span class="token punctuation">.</span>Spot<span class="token punctuation">.</span>TopLeft<span class="token punctuation">,</span> spot2<span class="token operator">:</span> go<span class="token punctuation">.</span>Spot<span class="token punctuation">.</span>BottomRight <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"stroke"</span><span class="token punctuation">,</span> <span class="token string">"color"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Panel<span class="token punctuation">,</span> <span class="token string">"Spot"</span><span class="token punctuation">,</span>
+            <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Panel<span class="token punctuation">,</span> <span class="token string">"Graduated"</span><span class="token punctuation">,</span>
+              <span class="token punctuation">{</span>
+                name<span class="token operator">:</span> <span class="token string">"SCALE"</span><span class="token punctuation">,</span> margin<span class="token operator">:</span> <span class="token number">14</span><span class="token punctuation">,</span>
+                graduatedTickUnit<span class="token operator">:</span> <span class="token number">2.5</span><span class="token punctuation">,</span>  <span class="token comment">// tick marks at each multiple of 2.5</span>
+                graduatedMax<span class="token operator">:</span> <span class="token number">100</span><span class="token punctuation">,</span>  <span class="token comment">// this is actually the default value</span>
+                stretch<span class="token operator">:</span> go<span class="token punctuation">.</span>GraphObject<span class="token punctuation">.</span>None  <span class="token comment">// needed to avoid unnecessary re-measuring!!!</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"graduatedMax"</span><span class="token punctuation">,</span> <span class="token string">"max"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment">// controls the range of the gauge</span>
+              <span class="token comment">// the main path of the graduated panel, an arc starting at 135 degrees and sweeping for 270 degrees</span>
+              <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"SHAPE"</span><span class="token punctuation">,</span> geometryString<span class="token operator">:</span> <span class="token string">"M-70.7107 70.7107 B135 270 0 0 100 100 M0 100"</span><span class="token punctuation">,</span> stroke<span class="token operator">:</span> <span class="token string">"white"</span><span class="token punctuation">,</span> strokeWidth<span class="token operator">:</span> <span class="token number">4</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+              <span class="token comment">// three differently sized tick marks</span>
+              <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token punctuation">{</span> geometryString<span class="token operator">:</span> <span class="token string">"M0 0 V10"</span><span class="token punctuation">,</span> stroke<span class="token operator">:</span> <span class="token string">"white"</span><span class="token punctuation">,</span> strokeWidth<span class="token operator">:</span> <span class="token number">1.5</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+              <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token punctuation">{</span> geometryString<span class="token operator">:</span> <span class="token string">"M0 0 V12"</span><span class="token punctuation">,</span> stroke<span class="token operator">:</span> <span class="token string">"white"</span><span class="token punctuation">,</span> strokeWidth<span class="token operator">:</span> <span class="token number">2.5</span><span class="token punctuation">,</span> interval<span class="token operator">:</span> <span class="token number">2</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+              <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token punctuation">{</span> geometryString<span class="token operator">:</span> <span class="token string">"M0 0 V15"</span><span class="token punctuation">,</span> stroke<span class="token operator">:</span> <span class="token string">"white"</span><span class="token punctuation">,</span> strokeWidth<span class="token operator">:</span> <span class="token number">3.5</span><span class="token punctuation">,</span> interval<span class="token operator">:</span> <span class="token number">4</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+              <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>TextBlock<span class="token punctuation">,</span>
+                <span class="token punctuation">{</span> <span class="token comment">// each tick label</span>
+                  interval<span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+                  alignmentFocus<span class="token operator">:</span> go<span class="token punctuation">.</span>Spot<span class="token punctuation">.</span>Center<span class="token punctuation">,</span>
+                  font<span class="token operator">:</span> <span class="token string">"bold italic 14pt sans-serif"</span><span class="token punctuation">,</span> stroke<span class="token operator">:</span> <span class="token string">"white"</span><span class="token punctuation">,</span>
+                  segmentOffset<span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Point</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">)</span>
+                <span class="token punctuation">}</span><span class="token punctuation">)</span>
+            <span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>TextBlock<span class="token punctuation">,</span>
+              <span class="token punctuation">{</span> alignment<span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Spot</span><span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">0.9</span><span class="token punctuation">)</span><span class="token punctuation">,</span> stroke<span class="token operator">:</span> <span class="token string">"orange"</span><span class="token punctuation">,</span> font<span class="token operator">:</span> <span class="token string">"bold italic 14pt sans-serif"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"text"</span><span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+              <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"stroke"</span><span class="token punctuation">,</span> <span class="token string">"color"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token punctuation">{</span> fill<span class="token operator">:</span> <span class="token string">"red"</span><span class="token punctuation">,</span> strokeWidth<span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span> geometryString<span class="token operator">:</span> <span class="token string">"F1 M-6 0 L0 -6 100 0 0 6z x M-100 0"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"angle"</span><span class="token punctuation">,</span> <span class="token string">"value"</span><span class="token punctuation">,</span> convertValueToAngle<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span> <span class="token string">"Circle"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> width<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> height<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> fill<span class="token operator">:</span> <span class="token string">"#444"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+          <span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// this determines the angle of the needle, based on the data.value argument</span>
+      <span class="token keyword">function</span> <span class="token function">convertValueToAngle</span><span class="token punctuation">(</span><span class="token parameter">v<span class="token punctuation">,</span> shape</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> scale <span class="token operator">=</span> shape<span class="token punctuation">.</span>part<span class="token punctuation">.</span><span class="token function">findObject</span><span class="token punctuation">(</span><span class="token string">"SCALE"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> p <span class="token operator">=</span> scale<span class="token punctuation">.</span><span class="token function">graduatedPointForValue</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> shape <span class="token operator">=</span> shape<span class="token punctuation">.</span>part<span class="token punctuation">.</span><span class="token function">findObject</span><span class="token punctuation">(</span><span class="token string">"SHAPE"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> c <span class="token operator">=</span> shape<span class="token punctuation">.</span>actualBounds<span class="token punctuation">.</span>center<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> c<span class="token punctuation">.</span><span class="token function">directionPoint</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      myDiagram<span class="token punctuation">.</span>model <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>GraphLinksModel</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+          <span class="token punctuation">{</span> key<span class="token operator">:</span> <span class="token string">"Alpha"</span><span class="token punctuation">,</span> value<span class="token operator">:</span> <span class="token number">35</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          <span class="token punctuation">{</span> key<span class="token operator">:</span> <span class="token string">"Beta"</span><span class="token punctuation">,</span> color<span class="token operator">:</span> <span class="token string">"green"</span><span class="token punctuation">,</span> max<span class="token operator">:</span> <span class="token number">140</span><span class="token punctuation">,</span> value<span class="token operator">:</span> <span class="token number">70</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span> from<span class="token operator">:</span> <span class="token string">"Alpha"</span><span class="token punctuation">,</span> to<span class="token operator">:</span> <span class="token string">"Beta"</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token function">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// change each gauge's value several times a second</span>
+    <span class="token keyword">function</span> <span class="token function">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        myDiagram<span class="token punctuation">.</span><span class="token function">startTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        myDiagram<span class="token punctuation">.</span>nodes<span class="token punctuation">.</span><span class="token function">each</span><span class="token punctuation">(</span><span class="token parameter">node</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+          <span class="token keyword">var</span> scale <span class="token operator">=</span> node<span class="token punctuation">.</span><span class="token function">findObject</span><span class="token punctuation">(</span><span class="token string">"SCALE"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>scale <span class="token operator">===</span> <span class="token keyword">null</span> <span class="token operator">||</span> scale<span class="token punctuation">.</span>type <span class="token operator">!==</span> go<span class="token punctuation">.</span>Panel<span class="token punctuation">.</span>Graduated<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+          <span class="token comment">// keep the new value within the range of the graduated panel</span>
+          <span class="token keyword">var</span> min <span class="token operator">=</span> scale<span class="token punctuation">.</span>graduatedMin<span class="token punctuation">;</span>
+          <span class="token keyword">var</span> max <span class="token operator">=</span> scale<span class="token punctuation">.</span>graduatedMax<span class="token punctuation">;</span>
+          <span class="token keyword">var</span> v <span class="token operator">=</span> node<span class="token punctuation">.</span>data<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>v <span class="token operator">===</span> <span class="token keyword">undefined</span><span class="token punctuation">)</span> v <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span><span class="token punctuation">(</span>max <span class="token operator">-</span> min<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// default to middle value</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>v <span class="token operator">&lt;</span> min<span class="token punctuation">)</span> v<span class="token operator">++</span><span class="token punctuation">;</span>
+          <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>v <span class="token operator">&gt;</span> max<span class="token punctuation">)</span> v<span class="token operator">--</span><span class="token punctuation">;</span>
+          <span class="token keyword">else</span> v <span class="token operator">+=</span> <span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0.5</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token operator">-</span><span class="token number">0.5</span> <span class="token operator">:</span> <span class="token number">0.5</span><span class="token punctuation">;</span>  <span class="token comment">// random walk</span>
+          myDiagram<span class="token punctuation">.</span>model<span class="token punctuation">.</span><span class="token function">setDataProperty</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>data<span class="token punctuation">,</span> <span class="token string">"value"</span><span class="token punctuation">,</span> v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        myDiagram<span class="token punctuation">.</span><span class="token function">commitTransaction</span><span class="token punctuation">(</span><span class="token string">"modified Graduated Panel"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">1000</span> <span class="token operator">/</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'DOMContentLoaded'</span><span class="token punctuation">,</span> init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  </pre></div>
+  </body>
+  </html>

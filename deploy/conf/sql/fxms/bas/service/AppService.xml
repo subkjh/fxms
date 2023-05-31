@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+	<update id="update_auto_logout">
+		<![CDATA[
+		update FX_UR_USER_ACCS_HST set
+			ACCS_ST_CD 		= '2'
+			, LOGOUT_DTM 	= DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+			, CHG_USER_NO 	= 0
+			, CHG_DTM 		= DATE_FORMAT(now(), '%Y%m%d%H%i%s')
+		where SESSION_ID IN (
+			with DATAS as (
+				select 	a.*
+						, ( select 	max(strt_dtm) from FX_UR_USER_WORK_HST t where t.session_id = a.session_id ) as LAST_OP_DTM
+				from 	FX_UR_USER_ACCS_HST a
+				where 	a.LOGIN_DTM >= $loginDtmStart
+				and		a.LOGIN_DTM <= $loginDtmEnd
+				and 	a.ACCS_ST_CD = '0'
+			)
+			select 	a.SESSION_ID
+			from 	DATAS a
+			where 	LAST_OP_DTM is NULL 
+			or  	a.AUTO_LOGOUT_TIME_OUT < now() - STR_TO_DATE(LAST_OP_DTM, '%Y%m%d%H%i%s')
+		)
+		]]>
+	</update>
+
+
+</queries>

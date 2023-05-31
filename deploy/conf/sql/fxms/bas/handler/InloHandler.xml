@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" keyCase="java" />
+
+	<!-- -->
+	<!-- 설치위치 상태별 조회 -->
+	<!-- -->
+	<select id="select-inlo-online-state-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	C.INLO_NO
+				, C.INLO_NAME
+				, cast(sum(if(B.MO_ONLINE_ST_VAL = 1, 1, 0)) as integer) 
+											as ONLINE_COUNT
+				, cast(sum(if(B.MO_ONLINE_ST_VAL = 1, 0, 1)) as integer) 
+											as OFFLINE_COUNT
+		from	FX_CF_INLO_MEM 	A
+				, FX_MO 		B
+				, FX_CF_INLO	C
+		where	1 = 1
+		and		A.INLO_NO 		= $inloNo
+		and		B.INLO_NO 		= A.LOWER_INLO_NO
+		and		B.MO_CLASS 		= $moClass
+		and		C.INLO_CL_CD	= $inloClCd
+		and		C.INLO_NO		= B.INLO_NO
+		group by
+				C.INLO_NO
+				, C.INLO_NAME
+		order by
+				C.INLO_NAME
+		]]>
+	</select>
+
+	<!-- 설치 위치명 알람 상태 조회 -->
+	<select id="select-inlo-alarm-state-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		with DATAS as (
+				select 	A.INLO_NO
+						, max(ifnull(( select min(alarm_level) from FX_AL_ALARM_CUR where MO_NO = A.MO_NO ), 5))
+												as ALARM_LEVEL
+						, count(1)				as MO_COUNT
+				from    FX_MO A
+						, FX_CF_INLO_MEM B
+				where	1 = 1
+				and		B.INLO_NO 	= $inloNo
+				and		A.INLO_NO 	= B.LOWER_INLO_NO
+				and		A.MO_CLASS 	= $moClass
+				group by 
+						A.INLO_NO
+		)				
+		select 	C.INLO_NO				as INLO_NO
+				, C.INLO_NAME			as INLO_NAME
+				, C.INLO_CL_CD			as INLO_CL_CD
+				, C.UPPER_INLO_NO		as UPPER_INLO_NO
+				, ( select max(CD_NAME) from FX_CO_CD where CD_CLASS = 'INLO_CL_CD' and CD_CODE = C.INLO_CL_CD )
+										as INLO_CL_NAME
+				, ifnull(min(B.ALARM_LEVEL), 5)	
+										as ALARM_LEVEL
+				, cast(sum(B.MO_COUNT) as integer)		
+										as MO_COUNT										
+		from	FX_CF_INLO_MEM		A    
+				, DATAS 			B
+				, FX_CF_INLO 		C				
+		where	B.INLO_NO		= A.LOWER_INLO_NO
+		and		C.INLO_NO		= A.INLO_NO
+		and		C.INLO_CL_CD 	= $inloClCd
+		group by
+				C.INLO_NO
+				, C.INLO_NAME
+		order by
+				C.INLO_NAME
+		]]>
+	</select>
+
+</queries>
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_INT" javaClass="java.lang.Integer" />
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+	<!-- -->
+	<!-- 메뉴 목록 가져오기 -->
+	<!-- 권한이 있는 메뉴만 가져온다. -->
+	<!-- -->
+	<select id="select-my-menu-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	B.OP_ID					as OP_ID
+				, B.UPPER_OP_ID			as UPPER_OP_ID
+				, B.OP_NAME				as OP_NAME
+				, B1.OP_NAME			as UPPER_OP_NAME
+				, B.OP_URI				as OP_URI
+		from    FX_UR_UGRP_OP 			A
+        		, FX_CO_OP 				B
+        			left join FX_CO_OP 	B1	on B1.OP_ID	= B.UPPER_OP_ID
+				, FX_UR_USER			C        			
+		where	C.USER_NO    	= $userNo
+		and		A.UGRP_NO		= C.UGRP_NO	
+		and		B.OP_ID      	= A.OP_ID
+		and		B.OP_TYPE_CD 	= 'MENU'
+		order by 
+				B.SORT_SEQ
+		]]>
+	</select>
+
+	<!-- -->
+	<!-- 기능 목록 가져오기 -->
+	<!-- 권한이 있는 기능만 가져온다. -->
+	<!-- -->
+	<select id="select-my-op-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	B.OP_ID				as OP_ID
+				, B.UPPER_OP_ID		as UPPER_OP_ID
+				, B.OP_NAME			as OP_NAME
+				, C.OP_NAME			as UPPER_OP_NAME
+				, B.OP_URI			as OP_URI
+				, B.OP_MTHD			as OP_MTHD
+				, B.OP_TYPE_CD		as OP_TYPE_CD
+		from    FX_UR_UGRP_OP 			A
+        		, FX_CO_OP 				B
+        			left join FX_CO_OP 	C	on C.OP_ID	= B.UPPER_OP_ID
+				, FX_UR_USER			D        			
+		where	D.USER_NO    	= $userNo
+		and		A.UGRP_NO		= D.UGRP_NO	
+		and		B.OP_ID      	= A.OP_ID
+		]]>
+	</select>
+
+
+</queries>
+

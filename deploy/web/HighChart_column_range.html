@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script src="js/fxms.js"></script>
+
+<script>
+	$(document).ready(function() {
+
+		var psItemMap = new Map();
+
+		var userId = window.localStorage.getItem("FXMSTEST.user.id");
+		var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+		
+		let fxms = new FxMS(userId, userPwd, function() {
+			loadPsItem();
+		});
+
+		function loadPsItem() {
+
+			fxms.call('ps/select-ps-item-list', {}, function(isOk, result) {
+				if (isOk) {
+					for (var i = 0; i < result.length; i++) {
+						psItemMap.set(result[i].psId, result[i]);
+					}
+
+					selectPsValue();
+				}
+			});
+		}
+
+		function selectPsValue() {
+
+			var psItem = psItemMap.get('IfOutPackets');
+
+			fxms.call('ps/select-ps-value-min-max-hourly-list', {
+				moNo : 1000017,
+				psId : psItem.psId
+			}, function(isOk, result) {
+
+				console.log(result);
+
+				if (isOk) {
+
+					result.sort(function(a, b) {
+						return parseInt(a.psDate) - parseInt(b.psDate);
+					});
+
+					var categories = [];
+					var datas = [];
+					var obj;
+					for (var i = 0; i < result.length; i++) {
+						obj = result[i];
+						categories.push(obj.psDate);
+						datas.push([ obj.minValue, obj.maxValue ]);
+					}
+
+					makeChart(psItem, categories, datas);
+				} else {
+					alert(result);
+				}
+
+			});
+		}
+
+		// 사용자가 입력한 메시지를 서버로 전송한다.
+		function sendMessage() {
+			var txtSend = $('#Send');
+
+			ws.send(txtSend.val());
+			txtSend.val("");
+		}
+
+		function makeChart(psItem, categories, datas) {
+
+			Highcharts.chart('container', {
+
+				chart : {
+					type : 'columnrange',
+					inverted : true
+				},
+
+				accessibility : {
+					description : ''
+				},
+
+				title : {
+					text : psItem.psName + ' 시간대별 최소/최대'
+				},
+
+				subtitle : {
+					text : 'Fxms'
+				},
+
+				xAxis : {
+					categories : categories
+				},
+
+				yAxis : {
+					title : {
+						text : psItem.psName + '(' + psItem.psUnit + ')'
+					}
+				},
+
+				tooltip : {
+					valueSuffix : psItem.psUnit
+				},
+
+				plotOptions : {
+					columnrange : {
+						dataLabels : {
+							enabled : true,
+							format : '{y} ' + psItem.psUnit
+						}
+					}
+				},
+
+				legend : {
+					enabled : false
+				},
+
+				series : [ {
+					name : psItem.psName,
+					data : datas
+				} ]
+
+			});
+		}
+	});
+</script>
+
+
+<style>
+.highcharts-figure, .highcharts-data-table table {
+	min-width: 320px;
+	max-width: 800px;
+	margin: 1em auto;
+}
+
+#container {
+	height: 600px;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #ebebeb;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+
+.highcharts-data-table caption {
+	padding: 1em 0;
+	font-size: 1.2em;
+	color: #555;
+}
+
+.highcharts-data-table th {
+	font-weight: 600;
+	padding: 0.5em;
+}
+
+.highcharts-data-table td, .highcharts-data-table th,
+	.highcharts-data-table caption {
+	padding: 0.5em;
+}
+
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even)
+	{
+	background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+	background: #f1f7ff;
+}
+</style>
+
+</head>
+<body>
+	<h2>HighChart Column Range</h2>
+
+	<div id="Recv"></div>
+	<figure class="highcharts-figure">
+		<div id="container"></div>
+		<p class="highcharts-description"></p>
+	</figure>
+</body>
+</html>

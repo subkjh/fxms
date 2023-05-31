@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE service[
+
+<!ELEMENT service (para*) >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #REQUIRED>
+
+<!-- match condition -->
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para service CDATA #IMPLIED >
+<!ATTLIST para ip CDATA #IMPLIED >
+
+]>
+
+<service>
+
+	<!-- Set Site Name -->
+	<para name="project" value="VUP" />
+
+	<!-- IP주소 설정 -->
+	<para name="fxsvr.ip.addr" value="localhost" />
+
+	<!-- PORT-FXMS PORT-FXMS-RMI PORT-ALIVE PORT-RMI PORT-SERVICE -->
+	<para name="fxms.port" value="63805" />
+	<para name="fxms.rmi.port" value="63804" />
+	<para name="fxms.alive.port" value="63803" />
+
+	<para name="fxservice.rmi.port" value="63810" />
+	<para name="fxservice.port" value="63811" service="MoService" />
+	<para name="fxservice.port" value="63812" service="NotiService" />
+	<para name="fxservice.port" value="63813" service="AppService" />
+	<para name="fxservice.port" value="63814" service="ValueService" />
+	<para name="fxservice.port" value="63815" service="AlarmService" />
+	<para name="fxservice.port" value="63816" service="WebService" />
+	<para name="fxservice.port" value="63817" service="UserService" />
+
+	<para name="fxservice.port" value="63820" service="NmsService" />
+	<para name="fxservice.port" value="63821" service="PingService" />
+	<para name="fxservice.port" value="63822" service="VupService" />
+	<para name="fxservice.port" value="63823" service="FlareService" />
+	<para name="fxservice.port" value="63824" service="RuleService" />
+
+	<!-- Set Charset For SNMP -->
+	<para name="charset.snmp" value="euc-kr" />
+
+	<!-- Set Default Charset -->
+	<para name="charset.default" value="utf-8" />
+
+
+	<!-- 로그 등급을 나타낸다. info | debug | trace | raw : Default info -->
+	<para name="log.level" value="debug" />
+	<!-- 일단위로 생기는 로그 파일의 개수를 나타낸다. -->
+	<para name="log.file.size" value="21" />
+	<!-- 로그를 기록할 때 화면에도 보일지 나타낸다. -->
+	<para name="log.is.print.console" value="true" />
+
+	<!-- 시간대 지정 -->
+	<para name="timezone" value="Asia/Seoul" />
+
+	<!-- JWT(JSON Web Token)에사 사용하는 KEY -->
+	<para name="jwt.secret"
+		value="c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK" />
+
+	<!-- 행위가 없을 때 자동 로그아웃할 시간(초) -->
+	<para name="auto.logout.seconds" value="3600" />
+
+</service>

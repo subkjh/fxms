@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mo-list[
+
+<!ELEMENT mo-list ( mo* ) >
+
+<!ELEMENT mo EMPTY >
+
+<!ATTLIST mo mo-class CDATA #REQUIRED >
+<!ATTLIST mo java-class CDATA #REQUIRED >
+<!ATTLIST mo dbo-java-class CDATA #IMPLIED >
+
+
+]>
+
+<mo-list>
+
+	<!--mo-class : 관리대상의 분류 -->
+	<!--java-class : 사용할 자바 클래스 -->
+	<!--dbo-java-class : 데이터베이스 처리용 클래스 -->
+
+	<mo mo-class="MO" java-class="fxms.bas.mo.FxMo"
+		dbo-java-class="fxms.bas.impl.dbo.all.FX_MO" />
+		
+	<mo mo-class="FXSERVICE" java-class="fxms.bas.mo.FxServiceMo"
+		dbo-java-class="fxms.bas.impl.dbo.all.FX_MO_FXSERVICE" />
+
+	<mo mo-class="NODE" java-class="fxms.bas.mo.NodeMo"
+		dbo-java-class="fxms.bas.impl.dbo.all.FX_MO_NODE" />
+
+</mo-list>

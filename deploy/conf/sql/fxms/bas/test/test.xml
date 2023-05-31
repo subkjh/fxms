@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<queries>
+
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+
+	<!--
+		############################################################################################
+		#
+		# O R A C L E
+		#
+		############################################################################################
+	-->
+
+	<select id="QID_SELECT_EXCEL_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+			select	a.EQUIP_ID				as GSC100장비ID
+					, a.EQUIP_NM 			as GSL200장비명
+					, a.equip_tid_val 		as GSL200장비TID
+					, b.equip_port_id		as DSC120포트ID
+					, b.port_desc			as DSL150포트설명					
+					, c.equip_cons_itm_nm	as GSL200카드명
+			from 	oiv10100 a
+					, oiv10400 b
+					, oiv10210 c
+			where	a.equip_tid_val like '%CR_'
+			and		a.equip_id = c.equip_id
+			and		a.equip_id = b.equip_id
+			and		c.equip_cons_itm_id = b.equip_cons_itm_id
+			order by a.equip_id, c.equip_cons_itm_nm
+		]]>
+	</select>
+
+
+
+</queries>

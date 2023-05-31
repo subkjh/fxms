@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<queries>
+
+	<!--
+		############################################################################################
+		#
+		# QID_SELECT_TABLE_INFO : RESULT_TABLE_INFO
+		# QID_SELECT_TABLE_INDEX : RID_TABLE_INDEX
+		# col #1 : 인덱스명
+		# col #2 : 인덱스 종류 ( PK, FK, UK, KEY )
+		# col #3 : 컬럼
+		# QID_SELECT_TABLE_COMMENT : RID_TABLE_COMMENT
+		# SELECT_TABLE_NAME, SELECT_TABLE_NAME__ALL, SELECT_TABLE_NAME__LIKE : RESULT_TABLE_NAME
+		# SELECT_INDEX_NAME : RESULT_INDEX_NAME
+		#
+		############################################################################################
+	-->
+
+
+	<resultMap id="RESULT_TABLE_INFO" javaClass="subkjh.dao.def.Column">
+		<result attr="setColumnNo()" field="COLUMN_NO" />
+		<result attr="setName()" field="COLUMN_NAME" />
+		<result attr="setPk()" field="IS_PK" />
+		<result attr="setNullable()" field="IS_NULLABLE" />
+		<result attr="setComments()" field="COMMENTS" />
+		<result attr="setDataType()" field="DATA_TYPE" />
+		<result attr="setDataLength()" field="DATA_LENGTH" />
+		<result attr="setDataScale()" field="DATA_SCALE" />
+		<result attr="setDataDefault()" field="DATA_DEFAULT" />
+	</resultMap>
+
+	<resultMap id="RESULT_DB_SCHEMA_STRING" javaClass="java.lang.String" />
+
+	<resultMap id="RESULT_TABLE_NAME" javaClass="java.lang.String" />
+	<resultMap id="RESULT_INDEX_NAME" javaClass="java.lang.String" />
+	<resultMap id="RESULT_VERSION" javaClass="java.lang.String" />
+
+	<resultMap id="RID_TABLE_INDEX" javaClass="java.lang.String" />
+	<resultMap id="RID_TABLE_COMMENT" javaClass="java.lang.String" />
+	<resultMap id="RID_TABLE_SCHEMA" javaClass="java.lang.String" />
+
+	<resultMap id="RESULT_DB_SEQUENCE" javaClass="subkjh.dao.def.Sequence">
+		<result attr="setCycle()" field="IS_CYCLE" />
+		<result attr="setIncBy()" field="INC_BY" />
+		<result attr="setSequenceName()" field="SEQUENCE_NAME" />
+		<result attr="setValueMax()" field="VALUE_MAX" />
+		<result attr="setValueMin()" field="VALUE_MIN" />
+		<result attr="setValueNext()" field="VALUE_NEXT" />
+	</resultMap>
+
+	<resultMap id="RESULT_DB_VIEW" javaClass="subkjh.dao.def.View">
+		<result attr="setQuery()" field="QUERY" />
+		<result attr="setName()" field="NAME" />
+	</resultMap>
+
+	<resultMap id="RESULT_INDEX_MYSQL" javaClass="subkjh.dao.def.IndexDto">
+		<result attr="setTableName()" field="TABLE_NAME" />
+		<result attr="setIndexType()" field="INDEX_TYPE" />
+		<result attr="setIndexName()" field="INDEX_NAME" />
+		<result attr="setColumnName()" field="COLUMN_NAME" />
+		<result attr="setFkColumnName()" field="FK_COLUMN" />
+		<result attr="setFkTableName()" field="FK_TABLE" />
+	</resultMap>
+
+
+	<!--
+		############################################################################################
+		#
+		# O R A C L E
+		#
+		############################################################################################
+	-->
+
+	<select id="QID_SELECT_TABLE_INFO" resultMap="RESULT_TABLE_INFO" database="oracle">
+		<![CDATA[
+		SELECT 
+				a.COLUMN_ID				COLUMN_NO,
+				a.COLUMN_NAME,
+				decode(b.CONSTRAINT_TYPE,null,'N','Y') IS_PK, 
+				a.NULLABLE IS_NULLABLE,
+				c.COMMENTS,
+				a.DATA_TYPE,
+				NVL(a.DATA_PRECISION, a.DATA_LENGTH ) DATA_LENGTH,
+				NVL(a.DATA_SCALE, -1) DATA_SCALE,
+				a.DATA_DEFAULT
+		FROM 
+				USER_TAB_COLUMNS a, 
+				(	SELECT 
+							a.TABLE_NAME,
+							a.COLUMN_NAME,
+							b.CONSTRAINT_TYPE
+					FROM 
+							USER_CONS_COLUMNS a, 
+							USER_CONSTRAINTS b
+					WHERE 
+							a.TABLE_NAME = b.TABLE_NAME
+					AND 
+							a.CONSTRAINT_NAME = b.CONSTRAINT_NAME
+					AND 
+							b.CONSTRAINT_TYPE='P'
+				) b, USER_COL_COMMENTS c
+		WHERE 
+				a.TABLE_NAME = b.TABLE_NAME (+)
+		AND 
+				a.COLUMN_NAME = b.COLUMN_NAME (+)
+		AND 
+				a.TABLE_NAME = c.TABLE_NAME (+)
+		AND 
+				a.COLUMN_NAME = c.COLUMN_NAME (+)
+		AND 
+				a.TABLE_NAME = $tableName
+		ORDER BY 
+				a.COLUMN_ID 
+		]]>
+	</select>
+
+
+
+	<select id="QID_SELECT_TABLE_COMMENT" resultMap="RID_TABLE_COMMENT" database="oracle">
+		<![CDATA[
+		SELECT 
+				COMMENTS
+		FROM 
+				USER_TAB_COMMENTS
+		WHERE 
+				TABLE_NAME = $tableName
+		]]>
+	</select>
+
+
+	<select id="QID_SELECT_TABLE_INDEX" resultMap="RID_TABLE_INDEX" database="oracle">
+		<![CDATA[
+		select 	INDEX_NAME
+				, IDX_TYPE
+				, COLUMN_NAME
+		from ( 
+				select 	IDX.INDEX_NAME
+						, DECODE(C.CONSTRAINT_TYPE, NULL, decode(IDX.UNIQUENESS, 'UNIQUE', 'UK', 'KEY'), 'P', 'PK', 'R', 'FK', 'KEY' ) IDX_TYPE    
+		       			, COL.COLUMN_NAME
+		       			, COL.COLUMN_POSITION
+				from 	
+						USER_INDEXES IDX
+							left join USER_CONSTRAINTS C on C.CONSTRAINT_NAME = IDX.INDEX_NAME
+						, USER_IND_COLUMNS COL
+				where   IDX.INDEX_NAME = COL.INDEX_NAME
+		    	and 	IDX.TABLE_NAME = $tableName
+				
+						
+				union all
+				
+				select 	C.CONSTRAINT_NAME										INDEX_NAME
+						, 'FK' 													IDX_TYPE
+						, COL.COLUMN_NAME || '@' || IDX.TABLE_NAME				COLUMN_NAME	
+						, COL.COLUMN_POSITION
+				from 	USER_CONSTRAINTS C
+						, USER_INDEXES IDX
+						, USER_IND_COLUMNS COL
+				where 	C.TABLE_NAME = $tableName
+				and 	C.CONSTRAINT_TYPE = 'R'
+				and 	IDX.INDEX_NAME = C.R_CONSTRAINT_NAME
+				and 	COL.INDEX_NAME = IDX.INDEX_NAME		
+			)
+		order by INDEX_NAME, COLUMN_POSITION
+		]]>
+	</select>
+
+
+	<select id="SELECT_TABLE_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		SELECT 	TABLE_NAME
+		FROM 	ALL_TABLES
+		WHERE	TABLE_NAME = $tableName
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__ALL" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		SELECT 	TABLE_NAME
+		FROM 	ALL_TABLES
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__LIKE" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		select 	TABLE_NAME
+		from 	ALL_TABLES
+		where 	upper(TABLE_NAME) like '%#tableName%'
+		]]>
+	</select>
+
+	<select id="SELECT_INDEX_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		select 	INDEX_NAME
+		from 	USER_INDEXES
+		where	upper(TABLE_NAME) = $tableName
+		]]>
+	</select>
+
+	<select id="SELECT_INDEX_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		select 	INDEX_NAME
+		from 	USER_INDEXES
+		where	upper(INDEX_NAME) = $indexName
+		]]>
+	</select>
+
+	<select id="SELECT_COLUMN_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		select 	COLUMN_NAME
+		from 	USER_TAB_COLUMNS
+		where	upper(TABLE_NAME) = $tableName
+		]]>
+	</select>
+
+	<select id="SELECT_SEQUENCE__ALL" resultMap="RESULT_DB_SEQUENCE" database="oracle">
+		<![CDATA[
+		select	SEQUENCE_NAME		
+       			, MIN_VALUE			VALUE_MIN
+      			, MAX_VALUE			VALUE_MAX
+       			, INCREMENT_BY	 	INC_BY
+				, CYCLE_FLAG		IS_CYCLE
+				, LAST_NUMBER + INCREMENT_BY			VALUE_NEXT
+ 		from 	USER_SEQUENCES
+		]]>
+	</select>
+
+	<select id="SELECT_VIEW__ALL" resultMap="RESULT_DB_VIEW" database="oracle">
+		<![CDATA[
+		select	VIEW_NAME		NAME
+				, TEXT			QUERY
+ 		from 	USER_VIEWS
+		]]>
+	</select>
+
+
+	<select id="SELECT_VERSION" resultMap="RESULT_VERSION" database="oracle">
+		<![CDATA[
+		select 	* 
+		from 	v$version 
+		where 	banner LIKE 'Oracle%'
+		]]>
+	</select>
+
+	<!--
+		############################################################################################
+		#
+		# M Y S Q L
+		#
+		############################################################################################
+	-->
+
+	<select id="QID_SELECT_TABLE_INFO" resultMap="RESULT_TABLE_INFO" database="mysql,mariadb">
+		<![CDATA[
+		select 	ORDINAL_POSITION			COLUMN_NO
+				, upper(COLUMN_NAME)		COLUMN_NAME
+				, if(COLUMN_KEY = 'PRI', 'Y', 'N') 
+    										IS_PK
+				, IS_NULLABLE
+				, COLUMN_COMMENT			COMMENTS
+				, DATA_TYPE
+				, ifnull(CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION)             
+    										DATA_LENGTH
+    			, ifnull(NUMERIC_SCALE, -1)	DATA_SCALE
+    			, COLUMN_DEFAULT 				DATA_DEFAULT    
+		from	INFORMATION_SCHEMA.COLUMNS
+		where	upper(TABLE_NAME) = $tableName
+		and		TABLE_SCHEMA = $dbName
+		order by 
+				ORDINAL_POSITION
+		]]>
+	</select>
+
+	<select id="QID_SELECT_TABLE_COMMENT" resultMap="RID_TABLE_COMMENT" database="mysql,mariadb">
+		<![CDATA[
+		select	TABLE_COMMENT
+		from 	INFORMATION_SCHEMA.TABLES
+		where	upper(TABLE_NAME) = $tableName
+		and		TABLE_SCHEMA = $dbName
+
+		]]>
+	</select>
+
+	<select id="QID_SELECT_TABLE_INDEX" resultMap="RESULT_INDEX_MYSQL" database="mysql,mariadb">
+		<![CDATA[
+		select	kcu.table_name					as TABLE_NAME 	
+				, kcu.CONSTRAINT_NAME 			as INDEX_NAME
+   				, tc.CONSTRAINT_TYPE 			as INDEX_TYPE
+   				, kcu.COLUMN_NAME				as COLUMN_NAME
+   				, kcu.REFERENCED_TABLE_NAME 	as FK_TABLE_NAME
+   				, kcu.REFERENCED_COLUMN_NAME 	as FK_COLUMN_NAME
+		from 	information_schema.KEY_COLUMN_USAGE kcu
+				, information_schema.TABLE_CONSTRAINTS tc 
+		where 	kcu.table_name = $tableName
+		and		tc.table_name = $tableName
+		and		tc.TABLE_SCHEMA = $dbName
+		and		kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME		
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="mysql,mariadb">
+		<![CDATA[
+		select 	upper(TABLE_NAME)	as TABLE_NAME
+		from 	INFORMATION_SCHEMA.TABLES
+		where 	upper(TABLE_NAME) = $tableName
+		and		TABLE_SCHEMA = $dbName
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__ALL" resultMap="RESULT_TABLE_NAME" database="mysql,mariadb">
+		<![CDATA[
+		select 	TABLE_NAME
+		from 	INFORMATION_SCHEMA.TABLES
+		where	TABLE_SCHEMA = $dbName
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__LIKE" resultMap="RESULT_TABLE_NAME" database="mysql,mariadb">
+		<![CDATA[
+		select 	upper(TABLE_NAME)	as TABLE_NAME
+		from 	INFORMATION_SCHEMA.TABLES
+		where 	upper(TABLE_NAME) like '%#tableName%'
+		and		TABLE_SCHEMA = $dbName
+		]]>
+	</select>
+
+	<select id="SELECT_SEQUENCE__ALL" resultMap="RESULT_DB_SEQUENCE" database="mysql,mariadb">
+		<![CDATA[
+		select	SEQ_NAME			SEQUENCE_NAME		
+       			, VALUE_MIN
+      			, VALUE_MAX
+       			, INC_BY
+				, IS_CYCLE
+				, VALUE_NEXT
+ 		from 	FX_TBL_SEQ
+		]]>
+	</select>
+
+	<select id="SELECT_COLUMN_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="mysql,mariadb">
+		<![CDATA[
+		select 	upper(COLUMN_NAME)	as COLUMN_NAME
+		from	INFORMATION_SCHEMA.COLUMNS
+		where	upper(TABLE_NAME) = $tableName
+		and		TABLE_SCHEMA = $dbName
+		]]>
+	</select>
+
+
+	<select id="SELECT_INDEX_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="mysql">
+		<![CDATA[
+			select 	kcu.CONSTRAINT_NAME 			INDEX_NAME
+			from 	information_schema.KEY_COLUMN_USAGE kcu
+					, information_schema.TABLE_CONSTRAINTS tc 
+			where 	kcu.table_name = $tableName
+			and		tc.table_name = $tableName
+			and		tc.TABLE_SCHEMA = $dbName
+			and		kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME 
+		]]>
+	</select>
+
+	<select id="SELECT_INDEX_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="mysql">
+		<![CDATA[
+			select 	kcu.CONSTRAINT_NAME 			INDEX_NAME
+			from 	information_schema.KEY_COLUMN_USAGE kcu
+					, information_schema.TABLE_CONSTRAINTS tc 
+			where 	kcu.table_name = $tableName
+			and		tc.table_name = $tableName
+			and		tc.TABLE_SCHEMA = $dbName
+			and		kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME 
+		]]>
+	</select>
+
+
+
+
+
+	<!--
+		############################################################################################
+		#
+		# I N F O R M I X
+		#
+		############################################################################################
+	-->
+
+	<select id="QID_SELECT_TABLE_INFO" resultMap="RESULT_TABLE_INFO" database="informix">
+		<![CDATA[
+		SELECT 	
+				COLNO						COLUMN_NO,
+    			COLNAME						COLUMN_NAME,
+    			'N'							IS_PK,
+    			'Y'							IS_NULLABLE,
+    			'' 							COMMENTS,
+    			COLTYPE						DATA_TYPE,
+    			COLLENGTH        			DATA_LENGTH,
+    			0							DATA_SCALE,
+    			''			 				DATA_DEFAULT    
+		FROM 
+				INFORMIX.SYSCOLUMNS COL,
+				INFORMIX.SYSTABLES TBL
+		WHERE 
+				TBL.TABNAME = $tableName
+		AND		COL.TABID = TBL.TABID
+		ORDER BY 
+				COLNO
+		]]>
+
+	</select>
+
+	<select id="QID_SELECT_TABLE_INDEX" resultMap="RID_TABLE_INDEX" database="informix">
+		<![CDATA[
+		SELECT 	IDXNAME						INDEX_NAME,
+				'KEY'						IDX_TYPE,
+       			''							COLUMN_NAME
+		FROM 	
+				INFORMIX.SYSINDEXES I,
+				INFORMIX.SYSTABLES T
+		WHERE 	
+				T.TABNAME = '테이블 지정 안함 왜냐구 인덱스 구하기 싫으니깐..'
+		AND		I.TABID = T.TABID
+		]]>
+	</select>
+
+	<!--
+		############################################################################################
+		#
+		# S Q L - S E R V E R
+		#
+		############################################################################################
+	-->
+
+	<select id="QID_SELECT_TABLE_INFO" resultMap="RESULT_TABLE_INFO" database="sqlserver">
+		<![CDATA[
+		SELECT 	
+				ORDINAL_POSITION				COLUMN_NO,
+    			COLUMN_NAME						COLUMN_NAME,
+    			'N'								IS_PK,
+    			IS_NULLABLE						IS_NULLABLE,
+    			'' 								COMMENTS,
+    			DATA_TYPE						DATA_TYPE,
+    			ISNULL(NUMERIC_PRECISION, 0)	DATA_LENGTH,
+    			ISNULL(NUMERIC_SCALE, 0)		DATA_SCALE,
+    			''			 					DATA_DEFAULT    
+		FROM 
+				information_schema.COLUMNS 
+		WHERE 
+				TABLE_NAME = $tableName
+		ORDER BY 
+				ORDINAL_POSITION
+		]]>
+
+	</select>
+
+	<select id="QID_SELECT_TABLE_INDEX" resultMap="RID_TABLE_INDEX" database="sqlserver">
+		<![CDATA[
+		SELECT 	CONSTRAINT_NAME				INDEX_NAME,
+				'KEY'							IDX_TYPE,
+       			COLUMN_NAME					COLUMN_NAME
+		FROM 	
+				information_schema.key_column_usage
+		WHERE 	
+				TABLE_NAME = $tableName
+		]]>
+	</select>
+
+	<!--
+		############################################################################################
+		#
+		# A L T I B A S E
+		#
+		############################################################################################
+	-->
+
+	<!--
+		Category Data Type Constant
+		Number FLOAT 6
+		NUMERIC 2
+		DOUBLE 8
+		REAL 7
+		BIGINT (UInt)-5
+		INTEGER 4
+		SMALLINT 5
+		Date/Time DATE 9
+		Character/Binary CHAR 1
+		VARCHAR 12
+		NCHAR (UInt)-8
+		NVARCHAR (UInt)-9
+		BYTE 20001
+		NIBBLE 20002
+		BIT (UInt)-7
+		VARBIT (UInt)-100
+		BLOB 30
+		CLOB 40
+		Spatial GEOMETRY 10003
+	-->
+
+	<select id="QID_SELECT_TABLE_INFO" resultMap="RESULT_TABLE_INFO" database="altibase">
+		<![CDATA[		
+		select 	COLUMN_ORDER				COLUMN_NO
+				, COLUMN_NAME
+    			, 'N'						IS_PK
+    			, DECODE(IS_NULLABLE, 'T', 'Y', 'N')						
+    										IS_NULLABLE
+    			, '' 						COMMENTS
+    			, decode(DATA_TYPE
+    					, 2, 'NUMERIC'
+    					, 1, 'CHAR'
+    					, 'VARCHAR')		DATA_TYPE
+    			, NVL(PRECISION, 0)			DATA_LENGTH
+    			, NVL(SCALE, 0)				DATA_SCALE
+    			, DEFAULT_VAL			 	DATA_DEFAULT    
+		from 
+				SYSTEM_.SYS_COLUMNS_
+		where 
+				TABLE_ID in ( 	select 	T.TABLE_ID 
+								from 	SYSTEM_.SYS_TABLES_ T
+										, SYSTEM_.SYS_USERS_ U
+								where 	T.TABLE_NAME = $tableName
+								and		T.USER_ID = U.USER_ID
+								and		U.USER_NAME = $user								
+								)
+		order by 
+				COLUMN_ORDER
+		]]>
+
+	</select>
+
+
+
+	<select id="QID_SELECT_TABLE_COMMENT" resultMap="RID_TABLE_COMMENT" database="altibase">
+		<![CDATA[
+		select 	T.TABLE_NAME		COMMENTS
+		from 	SYSTEM_.SYS_TABLES_ T
+				, SYSTEM_.SYS_USERS_ U
+		where 	T.TABLE_NAME = $tableName
+		and		T.USER_ID = U.USER_ID
+		and		U.USER_NAME = $user
+		]]>
+	</select>
+
+	<select id="QID_SELECT_TABLE_INDEX" resultMap="RID_TABLE_INDEX" database="altibase">
+		<![CDATA[
+		select	INDEX_NAME
+				, IDX_TYPE
+				, COLUMN_NAME
+		from ( 
+				select 	IDX.INDEX_NAME
+						, decode(CONSTRAINT_NAME, null, decode(IS_UNIQUE, 'T', 'UK', 'KEY'), 'PK') IDX_TYPE
+						,  C.COLUMN_NAME
+						, IDXC.INDEX_COL_ORDER ORDERBY
+				from 	SYSTEM_.SYS_INDICES_ IDX
+							left join SYSTEM_.SYS_CONSTRAINTS_ SC on SC.CONSTRAINT_NAME = IDX.INDEX_NAME and SC.TABLE_ID = IDX.TABLE_ID
+						, SYSTEM_.SYS_INDEX_COLUMNS_ IDXC
+						, SYSTEM_.SYS_COLUMNS_ C
+				where 	IDX.TABLE_ID in (	select 	T.TABLE_ID 
+											from 	SYSTEM_.SYS_TABLES_ T
+													, SYSTEM_.SYS_USERS_ U
+											where 	T.TABLE_NAME = $tableName
+											and		T.USER_ID = U.USER_ID
+											and		U.USER_NAME = $user				
+										)
+				and 	IDX.INDEX_ID = IDXC.INDEX_ID
+				and 	C.COLUMN_ID = IDXC.COLUMN_ID					
+				
+				union all
+		
+				select 	IDX.CONSTRAINT_NAME INDEX_NAME
+						, 'FK' IDX_TYPE
+						,  CC2.COLUMN_NAME || ':' || C.COLUMN_NAME || '@' || T.TABLE_NAME
+						, IDXC.INDEX_COL_ORDER ORDERBY
+				from 	SYSTEM_.SYS_CONSTRAINTS_ IDX
+						, SYSTEM_.SYS_CONSTRAINT_COLUMNS_ CC
+						, SYSTEM_.SYS_INDEX_COLUMNS_ IDXC
+						, SYSTEM_.SYS_COLUMNS_ C
+						, SYSTEM_.SYS_TABLES_ T
+						, SYSTEM_.SYS_COLUMNS_ CC2
+				where 	
+					IDX.TABLE_ID in (	select 	T.TABLE_ID 
+										from 	SYSTEM_.SYS_TABLES_ T
+												, SYSTEM_.SYS_USERS_ U
+										where 	T.TABLE_NAME = $tableName
+										and		T.USER_ID = U.USER_ID
+										and		U.USER_NAME = $user					
+									)
+				and 	CONSTRAINT_TYPE = 0
+				and 	IDX.REFERENCED_INDEX_ID = IDXC.INDEX_ID
+				and 	C.COLUMN_ID = IDXC.COLUMN_ID		
+				and 	T.TABLE_ID = IDX.REFERENCED_TABLE_ID
+				and 	CC.CONSTRAINT_ID = IDX.CONSTRAINT_ID
+				and 	CC2.COLUMN_ID = CC.COLUMN_ID
+			)
+			
+		order by 
+				INDEX_NAME
+				, ORDERBY				
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="altibase">
+		<![CDATA[
+		select 	TABLE_NAME
+		from 	SYSTEM_.SYS_TABLES_	T
+				, SYSTEM_.SYS_USERS_ U	
+		where   U.USER_NAME = $user
+		and		T.USER_ID = U.USER_ID
+		and		upper(T.TABLE_NAME) = $tableName
+		and		T.TABLE_TYPE = 'T'
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__LIKE" resultMap="RESULT_TABLE_NAME" database="altibase">
+		<![CDATA[
+		select 	TABLE_NAME
+		from 	SYSTEM_.SYS_TABLES_	T
+				, SYSTEM_.SYS_USERS_ U	
+		where   U.USER_NAME = $user
+		and		T.USER_ID = U.USER_ID
+		and		upper(T.TABLE_NAME) like '%#tableName%'
+		and		T.TABLE_TYPE = 'T'
+		]]>
+	</select>
+
+	<select id="SELECT_TABLE_NAME__ALL" resultMap="RESULT_TABLE_NAME" database="altibase">
+		<![CDATA[
+		select 	TABLE_NAME
+		from 	SYSTEM_.SYS_TABLES_	T
+				, SYSTEM_.SYS_USERS_ U	
+		where   U.USER_NAME = $user
+		and		T.USER_ID = U.USER_ID
+		and		T.TABLE_TYPE = 'T'
+		]]>
+	</select>
+
+	<select id="SELECT_INDEX_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="altibase">
+		<![CDATA[
+		select 	IDX.INDEX_NAME
+		from 	SYSTEM_.SYS_INDICES_ IDX
+				, SYSTEM_.SYS_TABLES_ T
+				, SYSTEM_.SYS_USERS_ U	
+		where   U.USER_NAME = $user
+		and		T.USER_ID = U.USER_ID
+		and		IDX.TABLE_ID = T.TABLE_ID
+		and		upper(T.TABLE_NAME) = $tableName
+		]]>
+	</select>
+
+	<!-- 
+	<select id="SELECT_INDEX_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="altibase">
+		<![CDATA[
+		select 	IDX.INDEX_NAME
+		from 	SYSTEM_.SYS_INDICES_ IDX
+				, SYSTEM_.SYS_USERS_ U	
+		where   U.USER_NAME = $user
+		and		IDX.USER_ID = U.USER_ID
+		and		upper(IDX.INDEX_NAME) = $indexName
+		]]>
+	</select>
+	 -->
+
+	<!--
+
+		<select id="" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+	-->
+	<select id="SELECT_COLUMN_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="altibase">
+		<![CDATA[
+		select 	COLUMN_NAME
+		from 	SYSTEM_.SYS_COLUMNS_
+		where	TABLE_ID in ( 	select 	T.TABLE_ID 
+								from 	SYSTEM_.SYS_TABLES_ T
+										, SYSTEM_.SYS_USERS_ U
+								where 	upper(T.TABLE_NAME) = $tableName
+								and		T.USER_ID = U.USER_ID
+								and		U.USER_NAME = $user								
+								)
+		]]>
+	</select>
+
+	<select id="SELECT_SEQUENCE__ALL" resultMap="RESULT_DB_SEQUENCE" database="altibase">
+		<![CDATA[
+		select	TABLE_NAME 			SEQUENCE_NAME
+       			, MIN_SEQ 			VALUE_MIN
+      			, MAX_SEQ 			VALUE_MAX
+       			, INCREMENT_SEQ 	INC_BY
+				, IS_CYCLE
+ 		from 	V\\$SEQ S
+ 				, SYSTEM_.SYS_USERS_ U
+       			, SYSTEM_.SYS_TABLES_ T
+ 		where	S.SEQ_OID = T.table_oid
+  		and 	T.user_id = U.user_id
+   		and 	U.USER_NAME = $user
+		]]>
+	</select>
+
+
+	<select id="SELECT_VERSION" resultMap="RESULT_VERSION" database="altibase">
+		<![CDATA[
+		select 	product_version
+		from 	V$VERSION 
+		]]>
+	</select>
+
+
+	<!--
+		********************************************************************** TABLE SCHEMA ***
+	-->
+
+	<select id="QID_SELECT_TABLE_SCHEMA" resultMap="RID_TABLE_SCHEMA" database="mysql">
+		<![CDATA[
+		show create table #tableName
+		]]>
+	</select>
+
+	<!--
+		<select id="QID_SELECT_TABLE_INFO" resultMap="RESULT_TABLE_INFO" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="QID_SELECT_TABLE_COMMENT" resultMap="RID_TABLE_COMMENT" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="QID_SELECT_TABLE_INDEX" resultMap="RID_TABLE_INDEX" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_TABLE_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_TABLE_NAME__ALL" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_TABLE_NAME__LIKE" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_INDEX_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_INDEX_NAME__BY_NAME" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_COLUMN_NAME__BY_TABLE" resultMap="RESULT_TABLE_NAME" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+
+		<select id="SELECT_SEQUENCE__ALL" resultMap="RESULT_DB_SEQUENCE" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+		<select id="SELECT_VIEW__ALL" resultMap="RESULT_DB_VIEW" database="oracle">
+		<![CDATA[
+		]]>
+		</select>
+
+
+	-->
+
+	<!--
+		############################################################################################
+		#
+		# S E Q U E N C E
+		#
+		############################################################################################
+	-->
+
+	<create id="INIT_SEQUENCE__1" database="mariadb,mysql">
+		<![CDATA[
+		create table if not exists FX_TBL_SEQ ( 
+			  SEQ_NAME                       varchar(20) binary  not null  COMMENT '시퀀스명'
+			, INC_VAL                        int not null  COMMENT '증가값'
+			, MIN_VAL                        bigint not null  COMMENT '최소값'
+			, MAX_VAL                        bigint not null  COMMENT '최대값'
+			, NEXT_VAL                       bigint not null  COMMENT '다음값'
+			, CYCLE_YN                       char(1) not null  COMMENT '순환여부'
+			, REG_USER_NO                    int default 0 COMMENT '등록사용자번호'
+			, REG_DTM                        bigint COMMENT '등록일시'
+			, CHG_USER_NO                    int default 0 COMMENT '수정사용자번호'
+			, CHG_DTM                        bigint COMMENT '수정일시'
+		
+			, constraint FX_TBL_SEQ__PK                   primary key ( SEQ_NAME )
+		 ) ENGINE=InnoDB COMMENT '테이블시퀀스테이블'
+		]]>
+	</create>
+
+
+	<create id="INIT_SEQUENCE__2" database="mariadb,mysql">
+		<![CDATA[
+		drop function if exists nextval
+		]]>
+	</create>
+
+
+	<create id="INIT_SEQUENCE__3" database="mariadb,mysql">
+		<![CDATA[
+		create function nextval (name varchar(100))
+		
+			RETURNS bigint(20) READS SQL DATA
+		
+		BEGIN
+    			DECLARE cur_val bigint(20);
+				
+				select
+						NEXT_VAL into 	cur_val
+				from
+						FX_TBL_SEQ
+				where
+						SEQ_NAME = name
+    			;
+ 
+    			IF cur_val IS NOT NULL THEN
+        			UPDATE
+						FX_TBL_SEQ
+					SET
+						NEXT_VAL = IF (
+											(NEXT_VAL + INC_VAL) > MAX_VAL
+											, IF ( CYCLE_YN = 'Y', MIN_VAL, NULL )
+                							, NEXT_VAL + INC_VAL
+            							)
+        			WHERE
+            			SEQ_NAME = name
+        			;
+    			END IF;
+		    RETURN cur_val;
+		END
+		]]>
+	</create>
+
+	<delete id="DELETE_SEQUENCE_ALL" database="mariadb,mysql">
+		<![CDATA[
+		delete	
+		from 	FX_TBL_SEQ
+		]]>
+	</delete>
+
+	<delete id="CREATE_SEQUENCE" database="mariadb,mysql">
+		<![CDATA[
+		insert into FX_TBL_SEQ (
+			  	SEQ_NAME
+			  	, VALUE_MIN
+			  	, VALUE_MAX
+			  	, VALUE_NEXT
+			  	, INC_BY
+			  	, IS_CYCLE
+		) values (
+				$seqName
+				, $valueMin
+				, $valueMax
+				, $valueNext
+				, $incBy
+				, $isCycle
+		)				
+		]]>
+	</delete>
+	
+	<create id="GRANT_1" database="mariadb,mysql">
+		<![CDATA[
+		grant all on vup.* to 'vup'@'%' identified by 'vup';
+		flush privileges;
+		]]>
+	</create>
+	
+
+
+
+	
+
+</queries>

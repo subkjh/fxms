@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="js/fxms.js"></script>
+
+<script>
+	$(function() {
+		
+		var userId = window.localStorage.getItem("FXMSTEST.user.id");
+		var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+
+		let fxms = new FxMS(userId, userPwd, function(session) {
+			showMoList();
+		});
+
+		setInterval(function() {
+			showMoList();
+		}, 60000);
+
+		function showMoList() {
+
+			fxms.call('location/select-inlo-online-state-list', {
+				moClass : 'SENSOR',
+				inloClCd : 'COMPANY',
+				inloNo : 6000
+			}, function(isOk, result) {
+				if (isOk) {
+					console.log(isOk, result);
+					var mo;
+					$('#companyList').html('');
+					for (var i = 0; i < result.length; i++) {
+						mo = result[i];
+						addMo(mo);
+					}
+				} else {
+					alert(result);
+				}
+			});
+
+		}
+
+		function myFunction(element) {
+			alert(element);
+		}
+
+		function addMo(mo) {
+
+			var style = 'mo-state-button';
+
+			if (mo.INLO_ONLINE_ST_VAL == 1) {
+				style += ' mo-state-online';
+			} else if (mo.INLO_ONLINE_ST_VAL == 0) {
+				style += ' mo-state-offline';
+			} else {
+				style += ' mo-state-mix';
+			}
+
+			var moInfo = '<button class="' + style + '" onclick="myFunction(\''
+					+ mo.INLO_NAME + '\')">' + mo.INLO_NAME + '</button>';
+
+			var pList = $('#companyList');
+			pList.append(moInfo);
+		}
+	});
+</script>
+<!-- 
+<link rel="stylesheet" type="text/css" href="css/fxms.css">
+ -->
+<style>
+.mo-state-online {
+	background-color: #FFB266;
+}
+
+.mo-state-mix {
+	background-color: #FFD500;
+}
+
+.mo-state-offline {
+	background-color: #FFE5CC;
+}
+
+.mo-state {
+	color: black;
+	border: 2px solid #4CAF50;
+}
+
+.mo-state:hover {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.mo-state-button {
+	border: 2px solid #008CBA;
+	padding: 16px 16px;
+	width: 150px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+	<h2>공장 온라인 상태 테스트</h2>
+
+	<div id='companyList'></div>
+</body>
+</html>

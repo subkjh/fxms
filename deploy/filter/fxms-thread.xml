@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE class-list[
+
+<!ELEMENT class-list ( java-class* ) >
+
+<!ELEMENT java-class (para*, compare*) >
+<!ATTLIST java-class name CDATA #REQUIRED >
+<!ATTLIST java-class class CDATA #REQUIRED >
+<!ATTLIST java-class service CDATA #IMPLIED >
+<!ATTLIST java-class all-match (true|false) #IMPLIED > <!-- default : false -->
+
+<!ELEMENT compare EMPTY >
+<!ATTLIST compare field CDATA #REQUIRED >
+<!ATTLIST compare result CDATA #IMPLIED >
+<!ATTLIST compare method CDATA #REQUIRED >
+<!ATTLIST compare value CDATA #REQUIRED >
+
+<!ELEMENT para EMPTY >
+<!ATTLIST para name CDATA #REQUIRED >
+<!ATTLIST para value CDATA #IMPLIED>
+<!ATTLIST para os CDATA #IMPLIED >
+<!ATTLIST para descr CDATA #IMPLIED>
+
+]>
+
+<class-list>
+
+	<!-- 알람 공유하는 서버 -->
+	<java-class name="AlarmBroadServer" class="fxms.bas.ws.ao.AlarmBroadServer"
+		service="AlarmService">
+		<para name="host" value="10.0.1.11" />
+		<para name="port" value="63818" />
+		<para name="host2db" value="10.0.1.11" />
+		<para name="port2db" value="63818" />
+		<para name="notify.class" value="fxms.bas.event.FxEvent" />
+		<para name="var.name" value="fxms-alarm-broadcaster" />
+	</java-class>
+
+	<!-- 성능을 엿보는 서버 -->
+	<java-class name="WsPsValueServer" class="fxms.bas.ws.ps.WsPsValueServer"
+		service="ValueService">
+		<para name="host" value="10.0.1.11" />
+		<para name="port" value="63819" />
+		<para name="host2db" value="10.0.1.11" />
+		<para name="port2db" value="63819" />
+		<para name="var.name" value="fxms-value-peeker" />
+	</java-class>
+
+</class-list>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+
+
+<script>
+	var ws;
+
+	$(document).ready(
+			function() {
+				var txtRecv = $('#Recv');
+
+				var alarmList = [];
+				var userId = window.localStorage.getItem("FXMSTEST.user.id");
+				var userPwd = window.localStorage.getItem("FXMSTEST.user.pwd");
+
+				ws = new WebSocket("ws://10.0.1.11:63818");
+
+				// websocket 서버에 연결되면 연결 메시지를 화면에 출력한다.
+				ws.onopen = function(e) {
+					txtRecv.append("connected<br>");
+
+					var map = {};
+					map.userId = userId;
+					map.userPwd = userPwd;
+					var sendStr = JSON.stringify(map);
+					ws.send(sendStr);
+				};
+
+				// websocket 에서 수신한 메시지를 화면에 출력한다.
+				ws.onmessage = function(e) {
+					var recvObj = JSON.parse(e.data);
+
+					if (recvObj.eventType == 'Alarm') {
+
+						if (recvObj.rlseDtm == 0) {
+							alarmList.push(recvObj);
+						} else {
+							for (var i = 0; i < alarmList.length; i++) {
+								if (alarmList[i].alarmNo == recvObj.alarmNo) {
+									alarmList.splice(i, 1);
+									console.log(recvObj.alarmNo, i);
+									break;
+								}
+							}
+						}
+						txtRecv.html('');
+						var a;
+						for (var i = 0; i < alarmList.length; i++) {
+							a = alarmList[i]
+							txtRecv.append(a.moNo + ',' + a.moName + ' ::: '
+									+ a.alarmNo + ', ' + a.alarmLevel + ', '
+									+ a.alarmMsg + ', ' + a.occurDtm + ', '
+									+ a.rlseDtm + "<br>");
+						}
+
+					} else {
+						txtRecv.append(e.data + "<br>");
+					}
+				};
+
+				// websocket 세션이 종료되면 화면에 출력한다.
+				ws.onclose = function(e) {
+					txtRecv.append("closed<br>");
+				}
+			});
+
+	// 사용자가 입력한 메시지를 서버로 전송한다.
+	function sendMessage() {
+		var txtSend = $('#Send');
+
+		ws.send(txtSend.val());
+		txtSend.val("");
+	}
+
+</script>
+</head>
+<body>
+	<h2>알람 목록 보이기</h2>
+
+	<div id="Recv"></div>
+
+</body>
+</html>

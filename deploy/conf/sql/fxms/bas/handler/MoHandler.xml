@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" />
+
+
+	<select id="SELECT_MO_COUNT_LIST" resultMap="RESULT_MAP">
+		<![CDATA[
+		select	MO_CLASS
+				, COUNT(1)		as MO_COUNT
+		from 	FX_MO
+		where	1 = 1
+		]]>
+		<test var="userNo">
+		<![CDATA[ 
+			and (  MO_NO in ( select MO_NO from FX_UR_MO where USER_NO = $userNo ) or UPPER_MO_NO in ( select MO_NO from FX_UR_MO where USER_NO = $userNo ) )
+		]]>
+		</test>
+		
+		<![CDATA[
+		group by MO_CLASS
+		]]>
+	</select>
+
+	<!-- -->
+	<!-- 관리대상 상태별 조회 -->
+	<!-- -->
+	<select id="select-mo-online-state-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select A.MO_NO						as MO_NO
+				, A.MO_NAME					as MO_NAME
+				, A.INLO_NO					as INLO_NO
+				, A1.INLO_NAME				as INLO_NAME
+				, A.MO_ONLINE_ST_VAL		as MO_ONLINE_ST_VAL
+		from    FX_MO 				A
+					left join FX_CF_INLO	A1 on A1.INLO_NO = A.INLO_NO
+				, FX_UR_USER_INLO 	B
+				, FX_CF_INLO_MEM	C
+		where	1 = 1
+		and		B.USER_NO 		= $userNo
+		and		A.INLO_NO 		= B.INLO_NO
+		and		A.MO_CLASS 		= $moClass
+		and		C.INLO_NO		= $inloNo
+		and		C.LOWER_INLO_NO = A.INLO_NO
+		order by
+				A.MO_NAME
+		]]>
+	</select>
+	<select id="select-mo-alarm-state-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	A.MO_NO						as MO_NO
+				, A.MO_NAME					as MO_NAME
+				, A.INLO_NO					as INLO_NO
+				, A1.INLO_NAME				as INLO_NAME
+				, ifnull( ( select min(alarm_level) from FX_AL_ALARM_CUR where MO_NO = A.MO_NO ), 0 )
+											as MO_ALARM_ST_VAL
+				, ( select count(1) from FX_AL_ALARM_CUR where MO_NO = A.MO_NO )
+											as MO_ALARM_COUNT
+		from    FX_MO 				A
+					left join FX_CF_INLO	A1 on A1.INLO_NO = A.INLO_NO
+				, FX_UR_USER_INLO 	B
+				, FX_CF_INLO_MEM	C				
+		where	1 = 1
+		and		B.USER_NO 		= $userNo
+		and		A.INLO_NO 		= B.INLO_NO
+		and		A.MO_CLASS 		= $moClass
+		and		C.INLO_NO		= $inloNo
+		and		C.LOWER_INLO_NO = A.INLO_NO
+		order by
+				A.MO_NAME
+		]]>
+	</select>
+
+
+
+	<select id="select-mo-count-grid-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		with DATAS as (
+				select 	
+						C.MODEL_NO
+						, C.INLO_NO				
+						, C.MO_CLASS
+						, sum(if(C.MO_ONLINE_ST_VAL = 1, 1, 0))		as MO_ONLINE_COUNT
+						, sum(if(C.MO_ONLINE_ST_VAL = 1, 0, 1))		as MO_OFFLINE_COUNT
+						, count(1)									as MO_COUNT
+				from    FX_UR_USER			A
+						, FX_CF_INLO_MEM	B
+						, FX_MO				C
+				where	A.USER_NO    	= $userNo
+				and		B.INLO_NO		= A.INLO_NO
+				and		C.INLO_NO		= B.LOWER_INLO_NO
+				group by
+						C.MODEL_NO
+						, C.INLO_NO
+						, C.MO_CLASS
+		)
+		select 	A.MODEL_NAME		as MODEL_NAME
+				, A.MODEL_CL_CD		as MODEL_CL_CD
+				, A.VENDR_NAME		as VENDR_NAME
+				, ( select max(CD_NAME) from FX_CO_CD where CD_CLASS = 'MODEL_CL_CD' and CD_CODE = A.MODEL_CL_CD )
+									as MODEL_CL_NAME
+				, B.INLO_NAME		as INLO_NAME
+				, B.INLO_CL_CD		as INLO_CL_CD
+				, ( select max(CD_NAME) from FX_CO_CD where CD_CLASS = 'INLO_CL_CD' and CD_CODE = B.INLO_CL_CD )
+									as INLO_CL_NAME
+				, T.*
+		from 	DATAS T
+					left join FX_CF_MODEL 	A on A.MODEL_NO = T.MODEL_NO
+					left join FX_CF_INLO	B on B.INLO_NO	= T.INLO_NO
+		where 1 = 1 					
+		]]>
+		<test var="vendrName"> and A.VENDR_NAME = $vendrName </test>
+		<test var="inloClCd"> and B.INLO_CL_CD = $inloClCd </test>
+		<test var="modelClCd"> and A.MODEL_CL_CD = $modelClCd </test>
+		<test var="moClass"> and T.MO_CLASS = $moClass </test>
+	</select>
+</queries>
+

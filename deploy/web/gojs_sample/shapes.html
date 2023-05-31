@@ -1,0 +1,168 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <body>
+  <script src="https://unpkg.com/gojs@2.2.12/release/go.js"></script>
+  <p>
+    This is a minimalist HTML and JavaScript skeleton of the GoJS Sample
+    <a href="https://gojs.net/latest/samples/shapes.html">shapes.html</a>. It was automatically generated from a button on the sample page,
+    and does not contain the full HTML. It is intended as a starting point to adapt for your own usage.
+    For many samples, you may need to inspect the
+    <a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/shapes.html">full source on Github</a>
+    and copy other files or scripts.
+  </p>
+  <div id="allSampleContent" class="p-4 w-full">
+  <script src="https://unpkg.com/gojs@2.2.12/extensions/Figures.js"></script>
+    <script id="code">
+    function init() {
+
+      // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
+      // For details, see https://gojs.net/latest/intro/buildingObjects.html
+      const $ = go.GraphObject.make;  // for conciseness in defining templates
+
+      myDiagram =
+        $(go.Diagram, "myDiagramDiv",  // create the Diagram for the HTML DIV element
+          {
+            layout: $(go.GridLayout, { sorting: go.GridLayout.Forward }), // use a GridLayout
+            padding: new go.Margin(5, 5, 25, 5) // to see the names of shapes on the bottom row
+          });
+
+      // Names of the built in shapes, which we will color green instead of pink.
+      // The pinks shapes are instead defined in the "https://unpkg.com/gojs@2.2.12/extensions/Figures.js" file.
+      var builtIn = ["Rectangle", "Square", "RoundedRectangle", "Border", "Ellipse", "Circle", "TriangleRight", "TriangleDown", "TriangleLeft", "TriangleUp", "Triangle", "Diamond", "LineH", "LineV", "None", "BarH", "BarV", "MinusLine", "PlusLine", "XLine"];
+      function isBuiltIn(shapeName) {
+        return builtIn.indexOf(shapeName) >= 0;
+      }
+
+      myDiagram.nodeTemplate =
+        $(go.Node, "Vertical",
+          {
+            mouseEnter: (e, node) => node.isHighlighted = true,
+            mouseLeave: (e, node) => node.isHighlighted = false,
+            locationSpot: go.Spot.Center,  // the location is the center of the Shape
+            locationObjectName: "SHAPE",
+            selectionAdorned: false,  // no selection handle when selected
+            resizable: true, resizeObjectName: "SHAPE",  // user can resize the Shape
+            rotatable: true, rotateObjectName: "SHAPE",  // rotate the Shape without rotating the label
+            // don't re-layout when node changes size
+            layoutConditions: go.Part.LayoutStandard & ~go.Part.LayoutNodeSized
+          },
+          new go.Binding("layerName", "isHighlighted", h => h ? "Foreground" : "").ofObject(),
+          $(go.Shape,
+            {
+              name: "SHAPE",  // named so that the above properties can refer to this GraphObject
+              width: 70, height: 70,
+              strokeWidth: 3
+            },
+            // Color the built in shapes green, and the figures.js shapes Pink
+            new go.Binding("fill", "key", k => isBuiltIn(k) ? "palegreen" : "lightpink"),
+            new go.Binding("stroke", "key", k => isBuiltIn(k) ? "darkgreen" : "#C2185B"),
+            // bind the Shape.figure to the figure name, which automatically gives the Shape a Geometry
+            new go.Binding("figure", "key")),
+          $(go.TextBlock,  // the label
+            {
+              margin: 4,
+              font: "bold 18px sans-serif",
+              background: 'white'
+            },
+            new go.Binding("visible", "isHighlighted").ofObject(),
+            new go.Binding("text", "key"))
+        );
+
+      // initialize the model
+      myDiagram.model.nodeDataArray = go.Shape.getFigureGenerators().toArray();
+      
+      console.log(myDiagram.model.nodeDataArray);
+    }
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+
+<div id="sample">
+  <div id="myDiagramDiv" style="border: 1px solid black; height: 600px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);"><canvas tabindex="0" width="1229" height="598" style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1229px; height: 598px;">This text is displayed if your browser does not support the Canvas HTML element.</canvas><div style="position: absolute; overflow: auto; width: 1246px; height: 598px; z-index: 1;"><div style="position: absolute; width: 1px; height: 1658.13px;"></div></div></div>
+  <p>
+    This sample showcases all predefined <b>GoJS</b> figures.
+    This sample also makes use of <a href="../intro/highlighting.html">GoJS Highlighting</a> data bindings: Mouse-hover over a shape to see its name.
+  </p>
+  <p>
+    You can specify a predefined geometry for a <a href="../api/symbols/Shape.html" target="api">Shape</a> by setting its <a href="../api/symbols/Shape.html#figure" target="api">Shape.figure</a>.
+  </p>
+  <p>
+    In order to reduce the size of the GoJS library, most predefined figures are in the <a href="https://unpkg.com/gojs@2.2.12/extensions/Figures.js" target="_blank">Figures.js</a> file.
+    You can load this file or simply load only those figures that you want to use by copying their definitions into your code.
+  </p>
+  <p>
+    A number of very common figures are predefined in go.js: <code>"Rectangle", "Square", "RoundedRectangle", "Border", "Ellipse", "Circle", "TriangleRight",
+      "TriangleDown", "TriangleLeft", "TriangleUp", "Triangle", "Diamond", "LineH", "LineV", "BarH", "BarV", "MinusLine", "PlusLine", "XLine"</code>.
+    These figures are filled green above, instead of pink.
+  </p>
+  <p>
+    With GoJS you can also define your own custom shapes with SVG-like path syntax, see the <a href="icons.html">SVG icons</a>
+    sample for examples or the <a href="../intro/geometry.html">Geometry Path Strings intro page</a> to learn more.
+  </p>
+  <p>
+    For predefined arrowheads, see the <a href="arrowheads.html">Arrowheads</a> sample.
+  </p>
+<p class="text-xs">GoJS version 2.2.12. Copyright 1998-2022 by Northwoods Software.</p></div>
+    <p><a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/shapes.html" target="_blank">View this sample page's source on GitHub</a></p><pre class=" language-js">
+    <span class="token keyword">function</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+      <span class="token comment">// Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make</span>
+      <span class="token comment">// For details, see https://gojs.net/latest/intro/buildingObjects.html</span>
+      <span class="token keyword">const</span> $ <span class="token operator">=</span> go<span class="token punctuation">.</span>GraphObject<span class="token punctuation">.</span>make<span class="token punctuation">;</span>  <span class="token comment">// for conciseness in defining templates</span>
+
+      myDiagram <span class="token operator">=</span>
+        <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Diagram<span class="token punctuation">,</span> <span class="token string">"myDiagramDiv"</span><span class="token punctuation">,</span>  <span class="token comment">// create the Diagram for the HTML DIV element</span>
+          <span class="token punctuation">{</span>
+            layout<span class="token operator">:</span> <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>GridLayout<span class="token punctuation">,</span> <span class="token punctuation">{</span> sorting<span class="token operator">:</span> go<span class="token punctuation">.</span>GridLayout<span class="token punctuation">.</span>Forward <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// use a GridLayout</span>
+            padding<span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Margin</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token comment">// to see the names of shapes on the bottom row</span>
+          <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// Names of the built in shapes, which we will color green instead of pink.</span>
+      <span class="token comment">// The pinks shapes are instead defined in the "https://unpkg.com/gojs@2.2.12/extensions/Figures.js" file.</span>
+      <span class="token keyword">var</span> builtIn <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"Rectangle"</span><span class="token punctuation">,</span> <span class="token string">"Square"</span><span class="token punctuation">,</span> <span class="token string">"RoundedRectangle"</span><span class="token punctuation">,</span> <span class="token string">"Border"</span><span class="token punctuation">,</span> <span class="token string">"Ellipse"</span><span class="token punctuation">,</span> <span class="token string">"Circle"</span><span class="token punctuation">,</span> <span class="token string">"TriangleRight"</span><span class="token punctuation">,</span> <span class="token string">"TriangleDown"</span><span class="token punctuation">,</span> <span class="token string">"TriangleLeft"</span><span class="token punctuation">,</span> <span class="token string">"TriangleUp"</span><span class="token punctuation">,</span> <span class="token string">"Triangle"</span><span class="token punctuation">,</span> <span class="token string">"Diamond"</span><span class="token punctuation">,</span> <span class="token string">"LineH"</span><span class="token punctuation">,</span> <span class="token string">"LineV"</span><span class="token punctuation">,</span> <span class="token string">"None"</span><span class="token punctuation">,</span> <span class="token string">"BarH"</span><span class="token punctuation">,</span> <span class="token string">"BarV"</span><span class="token punctuation">,</span> <span class="token string">"MinusLine"</span><span class="token punctuation">,</span> <span class="token string">"PlusLine"</span><span class="token punctuation">,</span> <span class="token string">"XLine"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      <span class="token keyword">function</span> <span class="token function">isBuiltIn</span><span class="token punctuation">(</span><span class="token parameter">shapeName</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> builtIn<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>shapeName<span class="token punctuation">)</span> <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      myDiagram<span class="token punctuation">.</span>nodeTemplate <span class="token operator">=</span>
+        <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Node<span class="token punctuation">,</span> <span class="token string">"Vertical"</span><span class="token punctuation">,</span>
+          <span class="token punctuation">{</span>
+            <span class="token function-variable function">mouseEnter</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">e<span class="token punctuation">,</span> node</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> node<span class="token punctuation">.</span>isHighlighted <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token function-variable function">mouseLeave</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">e<span class="token punctuation">,</span> node</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> node<span class="token punctuation">.</span>isHighlighted <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            locationSpot<span class="token operator">:</span> go<span class="token punctuation">.</span>Spot<span class="token punctuation">.</span>Center<span class="token punctuation">,</span>  <span class="token comment">// the location is the center of the Shape</span>
+            locationObjectName<span class="token operator">:</span> <span class="token string">"SHAPE"</span><span class="token punctuation">,</span>
+            selectionAdorned<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>  <span class="token comment">// no selection handle when selected</span>
+            resizable<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> resizeObjectName<span class="token operator">:</span> <span class="token string">"SHAPE"</span><span class="token punctuation">,</span>  <span class="token comment">// user can resize the Shape</span>
+            rotatable<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> rotateObjectName<span class="token operator">:</span> <span class="token string">"SHAPE"</span><span class="token punctuation">,</span>  <span class="token comment">// rotate the Shape without rotating the label</span>
+            <span class="token comment">// don't re-layout when node changes size</span>
+            layoutConditions<span class="token operator">:</span> go<span class="token punctuation">.</span>Part<span class="token punctuation">.</span>LayoutStandard <span class="token operator">&amp;</span> <span class="token operator">~</span>go<span class="token punctuation">.</span>Part<span class="token punctuation">.</span>LayoutNodeSized
+          <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"layerName"</span><span class="token punctuation">,</span> <span class="token string">"isHighlighted"</span><span class="token punctuation">,</span> <span class="token parameter">h</span> <span class="token operator">=&gt;</span> h <span class="token operator">?</span> <span class="token string">"Foreground"</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ofObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>Shape<span class="token punctuation">,</span>
+            <span class="token punctuation">{</span>
+              name<span class="token operator">:</span> <span class="token string">"SHAPE"</span><span class="token punctuation">,</span>  <span class="token comment">// named so that the above properties can refer to this GraphObject</span>
+              width<span class="token operator">:</span> <span class="token number">70</span><span class="token punctuation">,</span> height<span class="token operator">:</span> <span class="token number">70</span><span class="token punctuation">,</span>
+              strokeWidth<span class="token operator">:</span> <span class="token number">3</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token comment">// Color the built in shapes green, and the figures.js shapes Pink</span>
+            <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"fill"</span><span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">,</span> <span class="token parameter">k</span> <span class="token operator">=&gt;</span> <span class="token function">isBuiltIn</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token string">"palegreen"</span> <span class="token operator">:</span> <span class="token string">"lightpink"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"stroke"</span><span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">,</span> <span class="token parameter">k</span> <span class="token operator">=&gt;</span> <span class="token function">isBuiltIn</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token string">"darkgreen"</span> <span class="token operator">:</span> <span class="token string">"#C2185B"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token comment">// bind the Shape.figure to the figure name, which automatically gives the Shape a Geometry</span>
+            <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"figure"</span><span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          <span class="token function">$</span><span class="token punctuation">(</span>go<span class="token punctuation">.</span>TextBlock<span class="token punctuation">,</span>  <span class="token comment">// the label</span>
+            <span class="token punctuation">{</span>
+              margin<span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+              font<span class="token operator">:</span> <span class="token string">"bold 18px sans-serif"</span><span class="token punctuation">,</span>
+              background<span class="token operator">:</span> <span class="token string">'white'</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"visible"</span><span class="token punctuation">,</span> <span class="token string">"isHighlighted"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ofObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token keyword">new</span> <span class="token class-name">go<span class="token punctuation">.</span>Binding</span><span class="token punctuation">(</span><span class="token string">"text"</span><span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// initialize the model</span>
+      myDiagram<span class="token punctuation">.</span>model<span class="token punctuation">.</span>nodeDataArray <span class="token operator">=</span> go<span class="token punctuation">.</span>Shape<span class="token punctuation">.</span><span class="token function">getFigureGenerators</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'DOMContentLoaded'</span><span class="token punctuation">,</span> init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  </pre></div>
+  </body>
+  </html>

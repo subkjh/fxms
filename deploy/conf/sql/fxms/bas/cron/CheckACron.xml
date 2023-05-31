@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<queries>
+
+
+	<resultMap id="RESULT_CollectInfoVo" javaClass="fxms.bas.fxo.cron.vo.CollectInfoVo">
+		<result attr="setMoNo()" field="MO_NO" />
+		<result attr="setMoName()" field="MO_NAME" />
+		<result attr="setPollCycle()" field="POLL_CYCLE" />
+		<result attr="setAlarmCfgNo()" field="ALARM_CFG_NO" />
+		<result attr="setAlcdNo()" field="ALCD_NO" />
+		<result attr="setCriDtm()" field="CRI_DTM" />
+		<result attr="setMajDtm()" field="MAJ_DTM" />
+		<result attr="setMinDtm()" field="MIN_DTM" />
+		<result attr="setWarDtm()" field="WAR_DTM" />
+		<result attr="setCollDtm()" field="COLL_DTM" />
+	</resultMap>
+
+	<!-- 센서에 대한 수집 상태 확인 -->
+	<select id="select_not_collected_sensor_list" resultMap="RESULT_CollectInfoVo">
+		<![CDATA[
+		select 	a.MO_NO
+				, a.MO_NAME
+				, a.POLL_CYCLE
+				, a.ALARM_CFG_NO 
+				, d.ALCD_NO				
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_CRI_CMPR_VAL  second , '%Y%m%d%H%i%s') as CRI_DTM
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_MAJ_CMPR_VAL  second , '%Y%m%d%H%i%s') as MAJ_DTM
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_MIN_CMPR_VAL  second , '%Y%m%d%H%i%s') as MIN_DTM
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_WAR_CMPR_VAL  second , '%Y%m%d%H%i%s') as WAR_DTM		
+				, ( select 	max(CUR_COLL_DTM) 
+					from 	FX_V_ACUR t 
+					where 	t.MO_NO = a.MO_NO 
+					and 	t.PS_ID != $moStatusPsId 
+					)  			as COLL_DTM					
+		from 	FX_MO 			a
+				, FE_MO_SENSOR	a1
+				, FX_AL_CFG 	b
+				, FX_AL_CFG_MEM c
+				, FX_AL_CD		d		
+		where 	a.MNG_YN 		= 'Y'
+		and 	a.poll_cycle 	> 0
+		and		a1.MO_NO		= a.MO_NO
+		and 	a.ALARM_CFG_NO 	= b.ALARM_CFG_NO 
+		and 	b.ALARM_CFG_NO 	= c.ALARM_CFG_NO 
+		and 	c.ALCD_NO 		= 11003		/* NO_DATAS_PS_COLLECT */
+		and		d.ALCD_NO		= c.ALCD_NO
+		]]>
+	</select>
+	
+	<!-- PLC별 수집 상태 확인 -->	
+	<select id="select_not_collected_node_list" resultMap="RESULT_CollectInfoVo">
+		<![CDATA[
+		select 	a.MO_NO
+				, a.MO_NAME
+				, a.POLL_CYCLE
+				, a.ALARM_CFG_NO 
+				, d.ALCD_NO
+				, a.INLO_NO				
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_CRI_CMPR_VAL  second , '%Y%m%d%H%i%s') as CRI_DTM
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_MAJ_CMPR_VAL  second , '%Y%m%d%H%i%s') as MAJ_DTM
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_MIN_CMPR_VAL  second , '%Y%m%d%H%i%s') as MIN_DTM
+				, DATE_FORMAT(now() + interval -1 * a.POLL_CYCLE * c.AL_WAR_CMPR_VAL  second , '%Y%m%d%H%i%s') as WAR_DTM		
+				, ( select 	max(CUR_COLL_DTM) 
+					from 	FX_V_ACUR 	t
+							, FX_MO 	t2 
+					where 	t.MO_NO 	= t2.MO_NO
+					and		t2.INLO_NO	= a.INLO_NO
+					and 	t.PS_ID != $moStatusPsId
+					) 				as COLL_DTM
+		from 	FX_MO			a
+				, FX_AL_CFG 	b
+				, FX_AL_CFG_MEM c
+				, FX_AL_CD		d		
+				, FX_MO_NODE	e
+		where 	a.MNG_YN 		= 'Y'
+		and 	a.ALARM_CFG_NO 	= b.ALARM_CFG_NO
+		and		a.MO_NO			= e.MO_NO 
+		and 	b.ALARM_CFG_NO 	= c.ALARM_CFG_NO 
+		and 	c.ALCD_NO 		= 11003		/* NO_DATAS_PS_COLLECT */
+		and		d.ALCD_NO		= c.ALCD_NO		
+		]]>
+	</select>
+
+
+</queries>
