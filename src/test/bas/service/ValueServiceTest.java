@@ -44,8 +44,7 @@ public class ValueServiceTest {
 		long endDtm = 20230410235959L;
 		PsItem item = PsApi.getApi().getPsItem(psId);
 
-		Map<Long, Number> ret = service.getStatValue(item.getPsId(), psKind, item.getDefKindCol(), startDtm, endDtm,
-				StatFunction.Avg);
+		Map<Long, Number> ret = service.getStatValue(item.getPsId(), psKind, startDtm, endDtm, StatFunction.Avg);
 		System.out.println(FxmsUtil.toJson(ret));
 
 		for (Long moNo : ret.keySet()) {

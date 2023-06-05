@@ -52,7 +52,7 @@ public class ValueApiTest {
 
 		PsValueComp val1 = api.getCurValue(moNo, null, psId);
 		List<PsValueSeries> val2 = api.getValues(moNo, psId, psKindName, startDtm, endDtm);
-		Map<Long, Number> val3 = api.getStatValue(psId, PsApi.getApi().getPsKind(psKindName), psKindCol, startDtm,
+		Map<Long, Number> val3 = api.getStatValue(psId, PsApi.getApi().getPsKind(psKindName), startDtm,
 				endDtm, StatFunction.Count);
 		List<PsValues> val4 = api.getValues(moNo, psKindName, startDtm, endDtm);
 		List<PsValues> val5 = api.getValues(psId, psKindName, psKindCol, startDtm, endDtm);

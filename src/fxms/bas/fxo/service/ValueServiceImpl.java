@@ -86,13 +86,13 @@ public class ValueServiceImpl extends FxServiceImpl implements ValueService {
 	}
 
 	@Override
-	public Map<Long, Number> getStatValue(String psId, String psKindName, String psKindCol, long startDtm, long endDtm,
+	public Map<Long, Number> getStatValue(String psId, String psKindName, long startDtm, long endDtm,
 			StatFunction statFunc) throws RemoteException, Exception {
 
 		Map<Long, Number> ret = null;
 		try {
 			PsKind psKind = PsApi.getApi().getPsKind(psKindName);
-			ret = ValueApi.getApi().getStatValue(psId, psKind, psKindCol, startDtm, endDtm, statFunc);
+			ret = ValueApi.getApi().getStatValue(psId, psKind, startDtm, endDtm, statFunc);
 			return ret;
 		} catch (Exception e) {
 			logger.error(e);

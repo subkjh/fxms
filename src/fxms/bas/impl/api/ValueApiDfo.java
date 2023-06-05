@@ -147,12 +147,12 @@ public class ValueApiDfo extends ValueApi {
 	}
 
 	@Override
-	public Map<Long, Number> getStatValue(String psId, PsKind psKind, String psKindCol, long startDtm, long endDtm,
-			StatFunction statFunc) throws Exception {
+	public Map<Long, Number> getStatValue(String psId, PsKind psKind, long startDtm, long endDtm, StatFunction statFunc)
+			throws Exception {
 
 		PsItem item = PsApi.getApi().getPsItem(psId);
 
-		return new SelectStatValuesDfo().selectStatValue(item, psKind, psKindCol, startDtm, endDtm, statFunc);
+		return new SelectStatValuesDfo().selectStatValue(item, psKind, startDtm, endDtm, statFunc);
 	}
 
 	@Override

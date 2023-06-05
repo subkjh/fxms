@@ -83,10 +83,10 @@ public class ValueApiService extends ValueApi implements FxApiServiceTag {
 	}
 
 	@Override
-	public Map<Long, Number> getStatValue(String psId, PsKind psKind, String psKindCol, long startDtm, long endDtm,
-			StatFunction stat) throws Exception {
+	public Map<Long, Number> getStatValue(String psId, PsKind psKind, long startDtm, long endDtm, StatFunction stat)
+			throws Exception {
 		ValueService svc = getValueService();
-		return svc.getStatValue(psId, psKind.getPsKindName(), psKindCol, startDtm, endDtm, stat);
+		return svc.getStatValue(psId, psKind.getPsKindName(), startDtm, endDtm, stat);
 	}
 
 	@Override

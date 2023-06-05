@@ -18,7 +18,7 @@ import subkjh.dao.def.Column;
 import subkjh.dao.def.DaoListener;
 
 /**
- * 수집 데이터 알람 확인
+ * 수집 데이터 통계를 조회한다.
  * 
  * @author subkjh
  *
@@ -31,19 +31,30 @@ public class SelectStatValuesDfo implements FxDfo<Void, Map<Long, Number>> {
 		StatFunction stat = fact.getObject(StatFunction.class, "stat");
 		PsItem psItem = fact.getObject(PsItem.class, "psItem");
 		PsKind psKind = fact.getObject(PsKind.class, "psKind");
-		String psKindCol = fact.getString("psKindCol");
 		long startDtm = fact.getLong("startDtm");
 		long endDtm = fact.getLong("endDtm");
 
-		return selectStatValue(psItem, psKind, psKindCol, startDtm, endDtm, stat);
+		return selectStatValue(psItem, psKind, startDtm, endDtm, stat);
 	}
 
-	public Map<Long, Number> selectStatValue(PsItem psItem, PsKind psKind, String psKindCol, long startDtm, long endDtm,
+	/**
+	 * 
+	 * @param psItem
+	 * @param psKind
+	 * @param psKindCol
+	 * @param startDtm
+	 * @param endDtm
+	 * @param statFunc
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<Long, Number> selectStatValue(PsItem psItem, PsKind psKind, long startDtm, long endDtm,
 			StatFunction statFunc) throws Exception {
 
 		if (psKind.isPartition()) {
 
-			List<PsValues> list = new SelectValuesDfo().selectValues(psItem, psKind, psKindCol, startDtm, endDtm);
+			List<PsValues> list = new SelectValuesDfo().selectValues(psItem, psKind, psItem.getDefKindCol(), startDtm,
+					endDtm);
 
 			Map<Long, Number> retMap = new HashMap<Long, Number>();
 			for (PsValues value : list) {
@@ -53,7 +64,7 @@ public class SelectStatValuesDfo implements FxDfo<Void, Map<Long, Number>> {
 
 		} else {
 
-			return selectGroupBy(psItem, psKind, psKindCol, startDtm, endDtm, statFunc, null);
+			return selectGroupBy(psItem, psKind, psItem.getDefKindCol(), startDtm, endDtm, statFunc, null);
 
 		}
 

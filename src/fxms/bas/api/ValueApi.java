@@ -153,14 +153,15 @@ public abstract class ValueApi extends FxApi {
 	 * 성능항목 기준으로 관리대상의 통계값을 구한다.
 	 * 
 	 * @param psId
+	 * @param psKind
 	 * @param startDtm
 	 * @param endDtm
 	 * @param stat
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Map<Long, Number> getStatValue(String psId, PsKind psKind, String psKindCol, long startDtm,
-			long endDtm, StatFunction statFunc) throws Exception;
+	public abstract Map<Long, Number> getStatValue(String psId, PsKind psKind, long startDtm, long endDtm,
+			StatFunction statFunc) throws Exception;
 
 	/**
 	 * 관리대상이 수집한 성능을 조회한다.
@@ -173,8 +174,8 @@ public abstract class ValueApi extends FxApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract List<PsValueSeries> getValues(long moNo, String psId, String psKindName, long startDtm,
-			long endDtm) throws Exception;
+	public abstract List<PsValueSeries> getValues(long moNo, String psId, String psKindName, long startDtm, long endDtm)
+			throws Exception;
 
 	/**
 	 * 관리대상의 모든 수집 데이터를 조회한다.

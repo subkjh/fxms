@@ -59,7 +59,6 @@ public interface ValueService extends FxService {
 	 * 
 	 * @param psId       수집항목
 	 * @param psKindName 통계종류
-	 * @param psKindCol  컬럼
 	 * @param startDtm   조회시작일시
 	 * @param endDtm     조회종료일시
 	 * @param statFunc   통계함수
@@ -67,7 +66,7 @@ public interface ValueService extends FxService {
 	 * @throws RemoteException
 	 * @throws Exception
 	 */
-	public Map<Long, Number> getStatValue(String psId, String psKindName, String psKindCol, long startDtm, long endDtm,
+	public Map<Long, Number> getStatValue(String psId, String psKindName, long startDtm, long endDtm,
 			StatFunction statFunc) throws RemoteException, Exception;
 
 	/**
