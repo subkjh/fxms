@@ -352,7 +352,9 @@ public class Column {
 	}
 
 	public String getDataType2Define() {
+		
 		String type = getDataType().toLowerCase();
+		
 		if (type.indexOf("text") >= 0 || type.indexOf("bigint") >= 0 || type.indexOf("int") >= 0
 				|| type.indexOf("double") >= 0 || type.indexOf("date") >= 0) {
 			return type;

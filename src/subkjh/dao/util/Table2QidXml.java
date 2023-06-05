@@ -27,7 +27,7 @@ import subkjh.dao.model.TestSqlElement;
  * @since 2009-10-28
  * 
  */
-class Table2QidXml {
+public class Table2QidXml {
 
 	/**
 	 * 접속할 데이터 베이스를 설정합니다.<br>

@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fxms.bas.impl.dbo.all.FX_TBL_DEF;
-import fxms.bas.impl.vo.AlarmCfgVo;
 import subkjh.bas.co.utils.DateUtil;
 import subkjh.bas.co.utils.FileUtil;
 import subkjh.dao.database.DataBase;
-import subkjh.dao.database.MySql;
+import subkjh.dao.database.PostgreSQL;
 import subkjh.dao.def.Column;
 import subkjh.dao.def.Sequence;
 import subkjh.dao.def.Table;
@@ -37,7 +36,7 @@ public class SqlTool {
 
 //		tool.makeInsertSql(new MySql());
 //		tool.printDropSql(new MySql(), "datas/setup/tables.txt");
-//		tool.printCreateSql(new MySql(), "datas/setup/tables.txt");
+		tool.printCreateSql(new PostgreSQL(), "datas/tables.txt");
 //		tool.makeSelectSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeInsertSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeUpdateSampleSql(new MySql(), "datas/setup/tables.txt");
@@ -46,9 +45,9 @@ public class SqlTool {
 //		tool.makeJpaSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
 //		tool.makeDtoSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dto", "tmp");
 //		tool.makeDtoSource(FX_UR_UGRP.class, "tmp");
-		tool.printXml(AlarmCfgVo.class);
+//		tool.printXml(AlarmCfgVo.class);
 //
-//		tool.printInsertSql(new MySql(), "datas/setup/datas.txt");
+//		tool.printInsertSql(new PostgreSQL(), "datas/datas.txt");
 		// tool.printSequenceSql(new MySql(), "datas/setup/sequence.txt");
 
 		// System.out.println( new MakeQueryXml().make(FX_BR_RULE.class));

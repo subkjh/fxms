@@ -1,4 +1,4 @@
-package fxms.bas.impl.dpo.vo;
+package fxms.bas.impl.ext.influxdb;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

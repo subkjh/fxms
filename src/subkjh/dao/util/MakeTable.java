@@ -145,9 +145,8 @@ public class MakeTable {
 			sList = database.getSqlComment(table);
 			if (sList != null) {
 				for (String s : sList) {
-					printSql(s);
 					ret.append(s);
-					ret.append(";\n\n");
+					ret.append(";\n");
 				}
 			}
 		}

@@ -4,8 +4,8 @@
 
 <!ELEMENT databases (database*) >
 
-<!ELEMENT database (driver, url, dbname?, user?, password?, isReadOnly?
-					,countConnectionMax, isAutoCommit?,permitConnectionPoolOver?,reconnectTimeout?,sqlSelectKeepAlive?,const*)>
+<!ELEMENT database (driver?, url, dbname?, user?, password?, isReadOnly?
+					,countConnectionMax?, isAutoCommit?,permitConnectionPoolOver?,reconnectTimeout?,sqlSelectKeepAlive?,const*)>
 <!ATTLIST database name CDATA #REQUIRED >
 <!ATTLIST database java-class CDATA #REQUIRED >
 
@@ -157,14 +157,21 @@
 	</database>
 
 
-	<!-- VUP 운용 DB -->
-	<database name="INFLUXDB" java-class="subkjh.dao.database.InfluxDB">
-		<driver>com.wisecoders.dbschema.influxdb.JdbcDriver</driver>
-		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
+	<!-- TSDB TEST -->
+	<database name="FXMSTSDB" java-class="subkjh.dao.database.InfluxDB">
 		<url>http://10.0.1.11:8086</url>
 		<dbname>FXMSDB</dbname>
 		<user>fxms</user>
 		<password>fxms12#$</password>
+	</database>
+
+
+	<!-- TSDB TEST -->
+	<database name="POSTGREESQL" java-class="subkjh.dao.database.PostgreSQL">
+		<driver>org.postgresql.Driver</driver>	
+		<url>jdbc:postgresql://10.0.1.11:5432/tisp_data</url>
+		<user>postgres</user>
+		<password>thingspire1945</password>
 	</database>
 
 </databases>

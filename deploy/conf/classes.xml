@@ -90,9 +90,9 @@
 	<!-- When using InfluxDB, use the API below. -->
 	<!-- ValueApi writes collected data to InfluxDB, and AppApi reads data from InfluxDB and writes statistical 
 		data to RDB. -->
-	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.api.AppApiInfluxDb"
+	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.ext.influxdb.AppApiInfluxDb"
 		service="AppService" enable="false"/>
-	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.api.ValueApiInfluxDb"
+	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.ext.influxdb.ValueApiInfluxDb"
 		service="ValueService" />
 
 </classes>

@@ -19,4 +19,15 @@ public class InfluxDB extends DataBase {
 		return null;
 	}
 
+	/**
+	 * InfluxDB에 맞는 함수를 
+	 * @param func
+	 * @return
+	 */
+	public static String toFunction(String func) {
+		if (func.equalsIgnoreCase("avg")) {
+			return "MEAN";
+		}
+		return func;
+	}
 }

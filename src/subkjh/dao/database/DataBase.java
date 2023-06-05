@@ -1392,13 +1392,19 @@ public abstract class DataBase implements Serializable {
 
 		List<Column> colList = table.getColumns();
 
+		boolean first = true;
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("create table \t" + table.getName() + " ( ");
-		sb.append("\n\t  " + getSqlCreate(colList.get(0)));
-
-		for (int index = 1; index < colList.size(); index++) {
-			sb.append("\n\t, " + getSqlCreate(colList.get(index)));
+		sb.append("create table ").append(table.getName()).append(" ( \n");
+		for (Column col : colList) {
+			sb.append("\t");
+			if (first == false) {
+				sb.append(", ");
+			} else {
+				sb.append("  ");
+				first = false;
+			}
+			sb.append(getSqlCreate(col)).append("\n");
 		}
 
 		for (Index idx : table.getIndexList()) {

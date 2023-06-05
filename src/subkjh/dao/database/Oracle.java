@@ -2,8 +2,11 @@ package subkjh.dao.database;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.net.ntp.TimeStamp;
 
 import subkjh.dao.def.Column;
 import subkjh.dao.exp.ColumnNotFoundException;
@@ -25,6 +28,38 @@ import subkjh.dao.exp.TableNotFoundException;
 public class Oracle extends DataBase {
 
 	public static final int PORT = 1521;
+
+	public enum DATA_TYPE {
+
+		CHAR("n", " 고정길이 문자 / 최대 2000byte / 디폴트 값은 1byte", String.class) //
+		, VARCHAR2("n", " 가변길이 문자 / 최대 4000BYTE / 디폴트 값은 1byte ", String.class) //
+
+		, NCHAR("n", " 고정길이 유니코드 문자(다국어 입력가능) / 최대 2000byte / 디폴트 값은 1byte ", String.class) //
+		, NVARCHAR("n", "가변길이 유니코드 문자(다국어 입력가능) / 최대 2000byte / 디폴트 값은 1byte  ", String.class) //
+		, LONG("n", "최대 2GB 크기의 가변길이 문자형 ", String.class) //
+
+		// Character Large Object
+		, CLOB("n", "대용량 텍스트 데이터 타입(최대 4Gbyte", String.class) //
+		, NCLOB("n", "대용량 텍스트 유니코드 데이터 타입(최대 4Gbyte)", String.class) //
+
+		, NUMBER("n", "가변숫자 / P (1 ~ 38, 디폴트 : 38) / S (-84 ~ 127, 디폴트 값 : 0)  / 최대 22byte", Number.class) //
+		, FLOAT("n", "NUMBER의 하위타입 / P (1~128 .디폴트 : 128) / 이진수 기준 / 최대 22byte ", Float.class) //
+		, BINARY_FLOAT("n", "32비트 부동소수점 수 / 최대 4byte", Float.class) //
+		, BINARY_DOUBLE("n", "64비트 부동소수점 수 / 최대 8byte ", Double.class) //
+
+		, DATE("n", "BC 4712년 1월 1일부터 9999년 12월 31일, 연, 월, 일, 시, 분, 초 까지 입력 가능 ", Date.class) //
+		, TIMESTAMP("n", "연도, 월, 일, 시, 분, 초 + 밀리초까지 입력가능 ", TimeStamp.class) //
+
+		, BLOB("n", "이진형 대용량 객체", Object.class) //
+		, BFILE("n", "대용량 이진 파일에 대한 위치,이름 저장 ", Object.class) //
+
+		;
+
+		DATA_TYPE(Object len, String descr, Class<?> classOfJava) {
+
+		}
+
+	}
 
 	/**
 	 * no data found

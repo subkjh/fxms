@@ -1,6 +1,6 @@
-package fxms.bas.impl.api;
+package fxms.bas.impl.ext.influxdb;
 
-import fxms.bas.impl.dpo.ps.PsStatMakeInfluxDfo;
+import fxms.bas.impl.api.AppApiDfo;
 
 /**
  * AppApi를 구현한 API
@@ -15,4 +15,5 @@ public class AppApiInfluxDb extends AppApiDfo {
 		int size = new PsStatMakeInfluxDfo().generateStatistics(psTbl, psKindName, psDtm);
 		return size;
 	}
+	
 }

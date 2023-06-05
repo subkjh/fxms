@@ -15,20 +15,61 @@ import subkjh.bas.co.log.Logger;
 import subkjh.dao.QidDao;
 import subkjh.dao.def.Column;
 import subkjh.dao.def.Index;
-import subkjh.dao.def.IndexDto;
 import subkjh.dao.def.Index.INDEX_TYPE;
-import subkjh.dao.exp.DBObjectDupException;
-import subkjh.dao.exp.TableNotFoundException;
+import subkjh.dao.def.IndexDto;
 import subkjh.dao.def.Sequence;
 import subkjh.dao.def.Table;
+import subkjh.dao.exp.DBObjectDupException;
+import subkjh.dao.exp.TableNotFoundException;
 
 /**
- * MYSQL 데이터베이스
+ * MYSQL 데이터베이스<br>
  * 
  * @author subkjh
  * @since 2007-01-01
  */
 public class MySql extends DataBase {
+
+	public enum DATA_TYPE {
+		BIT(0, "1 ~ 64bit를 표현합니다. b'0000' 과 같이 표현", Byte.class) //
+		, TINYINT(1, "-128 ~ 127", Byte.class) //
+		, SMALLINT(2, "-32,768 ~ 32,767", Short.class) //
+		, MEDIUMINT(3, "-8,388,608 ~ 8,388,607", Integer.class) //
+		, INT(4, "-21억 ~ +21억", Integer.class) //
+		, INTEGER(4, "-21억 ~ +21억", Integer.class) //
+		, BIGINT(8, "약 -900경 ~ +900경", Long.class)//
+		, FLOAT(4, "-3.40E+38 ~ -1.17E-38", Float.class) //
+		, DOUBLE(8, "1.22E-308 ~ 1.79E+308", Double.class) //
+		, REAL(8, "1.22E-308 ~ 1.79E+308", Double.class) //
+		, DECIMAL("5~17", "-10^38+1 ~ +10^38-1", Number.class) //
+		, NUMERIC("5~17", "-10^38+1 ~ +10^38-1", Number.class)
+
+		, CHAR("1 ~ 255", "고정길이 문자형. n을 1부터 255까지 지정.", String.class) //
+		, VARCHAR("1 ~ 65535", "가변길이 문자형. n을 사용하면 1부터 65535까지 지정", String.class) //
+		, BINARY("1 ~ 255", "고정길이 이진 데이터 값", String.class) //
+		, VARBINARY("1 ~ 255", "가변길이 이진 데이터 값", String.class)
+
+		, TINYTEXT("1 ~ 255", "255 크기의 TEXT 데이터 값", String.class) //
+		, TEXT("1 ~ 65535", "N 크기의 TEXT 데이터 값", String.class) //
+		, MEDIUMTEXT("1 ~ 16777215", "16777215 크기의 TEXT 데이터 값", String.class) //
+		, LONGTEXT("1 ~ 4294967295", "최대 4GB 크기의 TEXT 데이터 값", String.class)
+
+		// BLOB : Binary Large Object
+
+		, TINYBLOB("1 ~ 255", "255 크기의 BLOB 데이터 값", Object.class)//
+		, BLOB("1 ~ 65535", "N 크기의 BLOB 데이터 값", Object.class) //
+		, MEDIUMBLOB("1 ~ 16777215", "16777215 크기의 BLOB 데이터 값", Object.class)//
+		, LONGBLOB("1 ~ 4294967295", "최대 4GB 크기의 BLOB 데이터 값", Object.class)
+
+		, ENUM("1 또는 2", "최대 65535개의 열거형 데이터 값", Object.class),
+		SET("1, 2, 3, 4, 8", "최대 64개의 중복되지 않는 데이터 값", Object.class)
+
+		;
+
+		DATA_TYPE(Object len, String descr, Class<?> classOfJava) {
+
+		}
+	}
 
 	/**
 	 * 

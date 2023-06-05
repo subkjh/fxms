@@ -1,6 +1,6 @@
-package fxms.bas.impl.api;
+package fxms.bas.impl.ext.influxdb;
 
-import fxms.bas.impl.dpo.vo.ValueAddInfluxDfo;
+import fxms.bas.impl.api.ValueApiDfo;
 import fxms.bas.vo.PsVoList;
 import subkjh.bas.co.log.Logger;
 

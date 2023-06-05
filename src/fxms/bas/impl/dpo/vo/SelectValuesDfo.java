@@ -360,7 +360,17 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		return selectValues(mo, item, psKind, psKindCol, startDtm, endDtm);
 	}
 
-	
+	/**
+	 * 
+	 * @param mo
+	 * @param item
+	 * @param psKind
+	 * @param psKindCol
+	 * @param startDtm
+	 * @param endDtm
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PsValueSeries> selectSeriesValues(Mo mo, PsItem item, PsKind psKind, String psKindCol[], long startDtm,
 			long endDtm) throws Exception {
 
@@ -410,6 +420,17 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param mo
+	 * @param item
+	 * @param psKind
+	 * @param psKindCol
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PsValues> selectValues(Mo mo, PsItem item, PsKind psKind, String psKindCol, long startDate,
 			long endDate) throws Exception {
 
@@ -452,6 +473,15 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param mo
+	 * @param psKind
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PsValues> selectValues(Mo mo, PsKind psKind, long startDate, long endDate) throws Exception {
 
 		DataBase database = DBManager.getMgr().getDataBase(FxCfg.DB_PSVALUE);
@@ -487,6 +517,16 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param item
+	 * @param psKind
+	 * @param psKindCol
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PsValues> selectValues(PsItem item, PsKind psKind, String psKindCol, long startDate, long endDate)
 			throws Exception {
 

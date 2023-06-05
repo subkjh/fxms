@@ -1,4 +1,4 @@
-package fxms.bas.impl.dpo.ps;
+package fxms.bas.impl.ext.influxdb;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.influxdb.InfluxDB;
+//import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -17,6 +18,7 @@ import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.dbo.StatMakeReqDbo;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
+import fxms.bas.impl.dpo.ps.PsDpo;
 import fxms.bas.vo.PsItem;
 import fxms.bas.vo.PsKind;
 import subkjh.bas.co.log.Logger;
@@ -95,7 +97,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 
 		final List<Object[]> ret = new ArrayList<>();
 		Object[] row;
-		final DataBase database = DBManager.getMgr().getDataBase("INFLUXDB");
+		final DataBase database = DBManager.getMgr().getDataBase("FXMSTSDB");
 		final InfluxDB influxDB = InfluxDBFactory.connect(database.getUrl(), database.getUser(),
 				database.getPassword());
 		influxDB.setDatabase(database.getDbName());
@@ -105,7 +107,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 		try {
 			Query query = new Query(sql);
 			QueryResult queryResult = influxDB.query(query, TimeUnit.MILLISECONDS);
-			System.out.println(queryResult);
+//			System.out.println(queryResult);
 
 			Object moNo;
 
@@ -194,7 +196,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 		long mstimeEnd = DateUtil.toMstime(psKindDst.getHstimeEnd(psDtm)) + 1000;
 
 		List<PsItem> itemList = PsApi.getApi().getPsItemList(psTable);
-		String startTime = String.valueOf(mstimeStart) + "000000";
+		String startTime = String.valueOf(mstimeStart) + "000000"; // microseconds
 		String endTime = String.valueOf(mstimeEnd) + "000000";
 		String interval = psKindDst.getInterval();
 
@@ -209,7 +211,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 			sql.append("count(").append(item.getPsColumn()).append(") as ").append(item.getPsColumn()).append("_COUNT");
 
 			for (String func : item.getPsKindCols()) {
-				func = func.equalsIgnoreCase("avg") ? "MEAN" : func;
+				func = subkjh.dao.database.InfluxDB.toFunction(func);
 				colName = item.getPsColumn() + "_" + func;
 
 				sql.append(",");
