@@ -83,22 +83,21 @@ public class AlarmApiDfo extends AlarmApi {
 	}
 
 	@Override
-	public Alarm fireAlarm(AlarmOccurEvent event) throws Exception {
+	public Alarm fireAlarm(AlarmOccurEvent event, Map<String, Object> etcData) throws Exception {
 
 		if (event == null)
 			return null;
 
 		Alarm curAlarm, madeAlarm = null;
 
-		AlarmOccurEvent oe = (AlarmOccurEvent) event;
-		curAlarm = getCurAlarm(oe.getAlarmKey());
+		curAlarm = getCurAlarm(event.getAlarmKey());
 		if (curAlarm == null) {
 			// 신규생성
-			OccurAlarm oa = new AlarmMakeDfo().makeAlarm(oe);
-			madeAlarm = new AlarmInsertDfo().insertAlarm(oa);
+			OccurAlarm oa = new AlarmMakeDfo().makeAlarm(event);
+			madeAlarm = new AlarmInsertDfo().insertAlarm(oa, etcData);
 		} else {
 			// 업데이트
-			madeAlarm = new AlarmUpdateDfo().updateAlarm(curAlarm, oe);
+			madeAlarm = new AlarmUpdateDfo().updateAlarm(curAlarm, event, etcData);
 		}
 
 		if (madeAlarm != null) {

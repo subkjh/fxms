@@ -5,21 +5,18 @@ import fxms.bas.api.MoApi;
 import fxms.bas.api.ModelApi;
 import fxms.bas.api.PsApi;
 import fxms.bas.event.FxEvent;
-import fxms.bas.exp.MoException;
 import fxms.bas.exp.NotFoundException;
 import fxms.bas.exp.PsItemNotFoundException;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.mo.Mo;
 import fxms.bas.vo.Alarm;
-import fxms.bas.vo.AlarmCfg;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
 import fxms.bas.vo.Inlo;
 import fxms.bas.vo.MoModel;
 import fxms.bas.vo.OccurAlarm;
 import fxms.bas.vo.PsItem;
-import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.DateUtil;
 import subkjh.bas.co.utils.ObjectUtil;
@@ -37,6 +34,12 @@ public class AlarmMakeDfo implements FxDfo<AlarmOccurEvent, Alarm> {
 		return makeAlarm(event);
 	}
 
+	/**
+	 * 
+	 * @param event
+	 * @return
+	 * @throws Exception
+	 */
 	public OccurAlarm makeAlarm(AlarmOccurEvent event) throws Exception {
 		Mo mo = MoApi.getApi().getMo(event.getMoNo());
 		Mo upper = mo;
@@ -46,16 +49,23 @@ public class AlarmMakeDfo implements FxDfo<AlarmOccurEvent, Alarm> {
 		return makeAlarm(event, mo, upper);
 	}
 
+	/**
+	 * 
+	 * @param event
+	 * @param mo
+	 * @param upper
+	 * @return
+	 * @throws Exception
+	 */
 	public OccurAlarm makeAlarm(AlarmOccurEvent event, Mo mo, Mo upper) throws Exception {
 
 		AlarmCode alarmCode = AlcdMap.getMap().getAlarmCode(event.getAlcdNo());
 
 		// 장비정보가 없고 해당 MO가 없거나 비관리이면 경보를 생성하지 않습니다.
-		if (upper != null) {
-			if (upper.isMngYn() == false || upper.getAlarmCfgNo() == AlarmCfg.NO_ALARM_CFG) {
-				throw new MoException(upper.getMoNo(),
-						Lang.get("Parent MO unmanagement or alarm occurrence condition is not"));
-			}
+		if (upper != null && upper.isMngYn() == false) {
+//				throw new MoException(upper.getMoNo(),
+//						Lang.get("Parent MO unmanagement or alarm occurrence condition is not"));
+			return null;
 		}
 
 		OccurAlarm alarm = new OccurAlarm();
@@ -68,16 +78,25 @@ public class AlarmMakeDfo implements FxDfo<AlarmOccurEvent, Alarm> {
 			alarm.setUpperMoDispName(upper.getMoName());
 		}
 
+		try {
+			ObjectUtil.initObject(mo, alarm);
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+
 		alarm.setAlcdNo(alarmCode.getAlcdNo());
 		alarm.setAlarmKey(event.getAlarmKey());
+
 		alarm.setAlarmLevel(event.getAlarmLevel());
 		alarm.setMoInstance(event.getMoInstance());
 		alarm.setFpactCd(event.getFpactCd());
 		alarm.setAlarmCfgNo(event.getAlarmCfgNo());
 		alarm.setAlarmMsg(event.getAlarmMsg());
 		alarm.setOccurDtm(DateUtil.getDtm(event.getEventMstime())); // 발생일시
+
 		if (event.getPsVal() != null)
 			alarm.setPsVal(event.getPsVal().doubleValue());
+
 		if (event.getCmprVal() != null)
 			alarm.setCmprVal(event.getCmprVal().doubleValue());
 
@@ -89,12 +108,6 @@ public class AlarmMakeDfo implements FxDfo<AlarmOccurEvent, Alarm> {
 			}
 			alarm.setPsId(event.getPsId());
 			alarm.setPsDtm(event.getPsDate());
-		}
-
-		try {
-			ObjectUtil.initObject(mo, alarm);
-		} catch (Exception e) {
-			Logger.logger.error(e);
 		}
 
 		alarm.setAlcdName(alarmCode.getAlcdName());

@@ -37,7 +37,7 @@ public interface AlarmService extends FxService {
 	 * @throws RemoteException
 	 * @throws Exception
 	 */
-	public Alarm fireAlarm(AlarmOccurEvent event) throws RemoteException, Exception;
+	public Alarm fireAlarm(AlarmOccurEvent event, Map<String, Object> etcData) throws RemoteException, Exception;
 
 	/**
 	 * 알람을 생성한다.

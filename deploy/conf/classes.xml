@@ -13,6 +13,7 @@
 <!ELEMENT para EMPTY >
 <!ATTLIST para name CDATA #REQUIRED >
 <!ATTLIST para value CDATA #REQUIRED>
+<!ATTLIST para descr CDATA #IMPLIED >
 
 ]>
 
@@ -91,8 +92,10 @@
 	<!-- ValueApi writes collected data to InfluxDB, and AppApi reads data from InfluxDB and writes statistical 
 		data to RDB. -->
 	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.ext.influxdb.AppApiInfluxDb"
-		service="AppService" enable="false"/>
+		service="AppService" enable="false" />
 	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.ext.influxdb.ValueApiInfluxDb"
-		service="ValueService" />
+		service="ValueService">
+		<para name="use.tsdb.for.select" value="false" descr="Sets whether to retrieve data from TSDB."/>
+	</class>
 
 </classes>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.api.AppApi;
+import fxms.bas.impl.dpo.DateSelectSameDfo;
 import fxms.bas.impl.dpo.ps.PsCreateTableDfo;
 import fxms.bas.impl.dpo.ps.PsRemoveExpiredDataDfo;
 import fxms.bas.impl.dpo.ps.PsStatMakeDfo;
@@ -77,5 +78,10 @@ public class AppApiDfo extends AppApi {
 	public int generateStatistics(String psTbl, String psKindName, long psDtm) throws Exception {
 		int size = new PsStatMakeDfo().generateStatistics(psTbl, psKindName, psDtm);
 		return size;
+	}
+
+	@Override
+	public List<String> getSameDays(String date, int count) throws Exception {
+		return new DateSelectSameDfo().selectSameDates(date, count);
 	}
 }

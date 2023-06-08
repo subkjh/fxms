@@ -1,5 +1,8 @@
 package test.bas.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fxms.bas.api.AlarmApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.co.ALARM_CODE;
@@ -9,7 +12,6 @@ import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.api.AlarmApiService;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmClearEvent;
-import fxms.bas.vo.ExtraAlarm;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.DateUtil;
@@ -24,7 +26,6 @@ public class AlarmApiTest {
 		try {
 			test.test();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -53,16 +54,9 @@ public class AlarmApiTest {
 
 	public void test2() {
 
-		ExtraAlarm ea = new ExtraAlarm();
-		ea.setAlarmKey("fems_12345");
-		ea.setAlarmLevel(null);
-		ea.setCmprVal(null);
-		ea.setEventMstime(0);
-		ea.setFpactCd(null);
-		ea.setPsVal(null);
-		ea.setRecvEventMstime(0);
-
-		api.fireAlarm(null, null, ALARM_CODE.TestAlarm.getAlcdNo(), null, null, ea);
+		Map<String, Object> etcData = new HashMap<>();
+		etcData.put("alarmKey", "fems_12345");
+		api.fireAlarm(null, null, ALARM_CODE.TestAlarm.getAlcdNo(), null, null, etcData);
 
 	}
 }

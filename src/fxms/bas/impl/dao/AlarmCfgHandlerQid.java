@@ -2,7 +2,7 @@ package fxms.bas.impl.dao;
 
 /**
 * File : deploy/conf/sql/fxms/bas/handler/AlarmCfgHandler.xml<br>
-* @since 20230523152416
+* @since 20230607165339
 * @author subkjh 
 *
 */
@@ -41,7 +41,7 @@ public final String select_alarm_cfg_mem_list_for_mono = "select_alarm_cfg_mem_l
 * ---------------------------------------------------------------------------------- <br>
 * database : null<br>
 * sql <br><br>
- * <br>with DATAS as ( <br>			select	C.ALARM_CFG_NO			as ALARM_CFG_NO<br>					, C.ALARM_CFG_NAME		as ALARM_CFG_NAME<br>					, C.MO_CLASS			as MO_CLASS<br>			from	FX_UR_USER			A<br>					, FX_CF_INLO_MEM	B<br>					, FX_AL_CFG 		C<br>			where	A.USER_NO		= $userNo<br>			and		B.INLO_NO		= A.INLO_NO<br>			and		C.INLO_NO		= B.LOWER_INLO_NO<br>		<br>			union <br>		<br>			select	C.ALARM_CFG_NO			as ALARM_CFG_NO<br>					, C.ALARM_CFG_NAME		as ALARM_CFG_NAME<br>					, C.MO_CLASS			as MO_CLASS<br>			from	FX_AL_CFG 		C<br>			where	C.INLO_NO		= 0<br>		)<br><br>and A.MO_CLASS = $moClass<br><br>select	*<br>		from 	DATAS A		<br>		order by <br>			A.ALARM_CFG_NAME<br><br> <br>
+ * <br>with DATAS as ( <br>			select	C.ALARM_CFG_NO			as ALARM_CFG_NO<br>					, C.ALARM_CFG_NAME		as ALARM_CFG_NAME<br>					, C.MO_CLASS			as MO_CLASS<br>					, C.MO_TYPE<br>			from	FX_UR_USER			A<br>					, FX_CF_INLO_MEM	B<br>					, FX_AL_CFG 		C<br>			where	A.USER_NO		= $userNo<br>			and		B.INLO_NO		= A.INLO_NO<br>			and		C.INLO_NO		= B.LOWER_INLO_NO<br>		<br>			union <br>		<br>			select	C.ALARM_CFG_NO			as ALARM_CFG_NO<br>					, C.ALARM_CFG_NAME		as ALARM_CFG_NAME<br>					, C.MO_CLASS			as MO_CLASS<br>					, C.MO_TYPE<br>			from	FX_AL_CFG 		C<br>			where	C.INLO_NO		= 0<br>		)<br>select *<br>		from DATAS A<br>where A.MO_CLASS = $moClass<br>order by<br>		A.ALARM_CFG_NAME<br> <br>
 */
 public final String select_alarm_cfg_simple_list = "select_alarm_cfg_simple_list";
 

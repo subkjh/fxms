@@ -8,6 +8,8 @@ import java.util.Map;
 
 import fxms.bas.api.AlarmApi;
 import fxms.bas.api.FxApi;
+import fxms.bas.co.CoCode.CMPR_CD;
+import fxms.bas.exp.AlcdNotFoundException;
 import fxms.bas.exp.NotFoundException;
 import fxms.bas.vo.AlarmCode;
 import subkjh.bas.co.log.Logger;
@@ -71,6 +73,95 @@ public class AlcdMap {
 		this.psAlcdMap = new HashMap<>();
 	}
 
+	/**
+	 * 
+	 * @param alcdNo
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public AlarmCode getAlarmCode(int alcdNo) throws AlcdNotFoundException {
+		synchronized (this.codeMap) {
+			AlarmCode ret = this.codeMap.get(alcdNo);
+			if (ret == null) {
+				throw new AlcdNotFoundException(alcdNo);
+			}
+			return ret;
+		}
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws AlcdNotFoundException
+	 */
+	public AlarmCode getAlarmCode(String name) throws AlcdNotFoundException {
+
+		synchronized (this.codeMap) {
+			AlarmCode code = this.nameMap.get(name);
+			if (code == null) {
+				code = this.nameMap.get(name.toLowerCase());
+			}
+			if (code == null) {
+				throw new AlcdNotFoundException(name);
+			}
+			return code;
+		}
+	}
+
+	/**
+	 * 
+	 * @param moClass
+	 * @return
+	 */
+	public List<AlarmCode> getAlarmCodeList(String moClass) {
+		List<AlarmCode> list = new ArrayList<AlarmCode>();
+		synchronized (this.codeMap) {
+			for (AlarmCode ac : codeMap.values()) {
+				if (moClass != null && ("all".equalsIgnoreCase(moClass) || moClass.equals(ac.getMoClass()))) {
+					list.add(ac);
+				}
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * IQR 처리하는 성능항목을 조회한다.
+	 * 
+	 * @return IQR적용 성능 항목
+	 */
+	public List<String> getPsIdForIQR() {
+	
+		synchronized (this.codeMap) {
+			List<String> list = new ArrayList<>();
+			for (AlarmCode ac : codeMap.values()) {
+				
+				if ( "none".equalsIgnoreCase(ac.getPsId())) continue;
+				
+				if (CMPR_CD.IQR.name().equalsIgnoreCase(ac.getCompareCode())) {
+					if (list.contains(ac.getPsId()) == false) {
+						list.add(ac.getPsId());
+					}
+				}
+			}
+			return list;
+		}
+	}
+
+	/**
+	 * 성능항목에 해당되는 알람코드를 가져온다.
+	 * 
+	 * @param psId
+	 * @return
+	 */
+	public List<Integer> getAlcdNos(String psId) {
+		synchronized (this.psAlcdMap) {
+			return this.psAlcdMap.get(psId);
+		}
+	}
+
 	public void load() throws NotBoundException, Exception {
 
 		List<AlarmCode> list = AlarmApi.getApi().getAlCds();
@@ -111,49 +202,6 @@ public class AlcdMap {
 		FxApi.save2file("alarm.code.list", list);
 
 		Logger.logger.info(Logger.makeString("AlarmCode loaded", codeMap.size()));
-	}
-
-	public AlarmCode getAlarmCode(int alcdNo) throws NotFoundException {
-		synchronized (this.codeMap) {
-			AlarmCode ret = this.codeMap.get(alcdNo);
-			if (ret == null) {
-				throw new NotFoundException("AlarmCode", alcdNo);
-			}
-			return ret;
-		}
-	}
-
-	public AlarmCode getAlarmCode(String name) throws NotFoundException {
-
-		synchronized (this.codeMap) {
-			AlarmCode code = this.nameMap.get(name);
-			if (code == null) {
-				code = this.nameMap.get(name.toLowerCase());
-			}
-			if (code == null) {
-				throw new NotFoundException("AlarmCode", name);
-			}
-			return code;
-		}
-	}
-
-	public List<Integer> getAlcdNos(String psId) {
-		synchronized (this.psAlcdMap) {
-			return this.psAlcdMap.get(psId);
-		}
-	}
-
-	public List<AlarmCode> getAlarmCodeList(String moClass) {
-		List<AlarmCode> list = new ArrayList<AlarmCode>();
-		synchronized (this.codeMap) {
-			for (AlarmCode ac : codeMap.values()) {
-				if (moClass != null && ("all".equalsIgnoreCase(moClass) || moClass.equals(ac.getMoClass()))) {
-					list.add(ac);
-				}
-			}
-		}
-
-		return list;
 	}
 
 	public int size() {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+
+	<resultMap id="STRING" javaClass="java.lang.String" />
+
+	<select id="select-date-same-dow" resultMap="STRING">
+		<![CDATA[
+		select 	a.YMD
+		from 	FX_CO_DATE a
+		where	ifnull(a.SPECL_DOW_CD, a.DOW_CD) = ( select DOW_CD from FX_CO_DATE a1 where a1.YMD = $date )
+		and		a.YMD < $date
+		order by a.YMD desc
+		limit	0, $count
+		]]>
+	</select>
+
+</queries>

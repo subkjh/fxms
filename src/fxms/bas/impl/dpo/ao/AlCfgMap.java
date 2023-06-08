@@ -1,5 +1,6 @@
 package fxms.bas.impl.dpo.ao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,6 @@ public class AlCfgMap {
 	public static final int NOALARM_ALARM_CFG_NO = 1;
 
 	private static final Object lockObj = new Object();
-
-	public static void main(String[] args) {
-		AlCfgMap.getInstance();
-	}
 
 	private static AlCfgMap map = null;
 
@@ -71,6 +68,10 @@ public class AlCfgMap {
 		return map;
 	}
 
+	public static void main(String[] args) {
+		AlCfgMap.getInstance();
+	}
+
 	/** 경보조건템플릿맵. 키:경보조건템플릿번호 */
 	private final Map<Integer, AlarmCfg> alarmCfgMap;
 	private final Map<String, AlarmCfg> moClassAlarmCfgMap;
@@ -78,6 +79,67 @@ public class AlCfgMap {
 	private AlCfgMap() {
 		this.alarmCfgMap = new HashMap<>();
 		this.moClassAlarmCfgMap = new HashMap<>();
+	}
+
+	/**
+	 * 
+	 * @param alarmCfgNo
+	 * @return
+	 */
+	public AlarmCfg getAlarmCfg(int alarmCfgNo) {
+		synchronized (this.alarmCfgMap) {
+			return this.alarmCfgMap.get(alarmCfgNo);
+		}
+	}
+
+	/**
+	 * 알람 구성 내역 조회
+	 * 
+	 * @param alarmCfgNo
+	 * @param alcdNo
+	 * @return
+	 */
+	public AlarmCfgMem getAlarmCfgMem(int alarmCfgNo, int alcdNo) {
+		AlarmCfg cfg = AlCfgMap.getMap().getAlarmCfg(alarmCfgNo);
+		if (cfg == null) {
+			return null;
+		}
+
+		return cfg.getMem4AlcdNo(alcdNo);
+	}
+
+	/**
+	 * 성능항목에 해당되는 알람내역을 조회한다.
+	 * 
+	 * @param alarmCfgNo
+	 * @param psId
+	 * @return
+	 */
+	public List<AlarmCfgMem> getAlarmCfgMem(int alarmCfgNo, String psId) {
+		AlarmCfg cfg = AlCfgMap.getMap().getAlarmCfg(alarmCfgNo);
+		if (cfg == null) {
+			return new ArrayList<AlarmCfgMem>();
+		}
+
+		return cfg.getMemList(psId);
+	}
+
+	/**
+	 * 
+	 * @param moClass
+	 * @param moType
+	 * @return
+	 */
+	public int getAlarmCfgNo(String moClass, String moType) {
+
+		synchronized (moClassAlarmCfgMap) {
+			AlarmCfg cfg = moClassAlarmCfgMap.get(moClass + "\t" + moType);
+			if (cfg == null) {
+				cfg = moClassAlarmCfgMap.get(moClass);
+			}
+			return cfg == null ? NONE_ALARM_CFG_NO : cfg.getAlarmCfgNo();
+		}
+
 	}
 
 	public void load() throws Exception {
@@ -93,7 +155,7 @@ public class AlCfgMap {
 				for (int i = cfg.getMemList().size() - 1; i >= 0; i--) {
 					mem = cfg.getMemList().get(i);
 					try {
-						alarmCode = AlcdMap.getInstance().getAlarmCode(mem.getAlcdNo());
+						alarmCode = AlcdMap.getMap().getAlarmCode(mem.getAlcdNo());
 						mem.setAlarmCode(alarmCode);
 					} catch (NotFoundException e) {
 						cfg.getMemList().remove(i);
@@ -128,27 +190,10 @@ public class AlCfgMap {
 		Logger.logger.info(Logger.makeString("AlarmCfg loaded", cfgList.size()));
 	}
 
-	public AlarmCfg getAlarmCfg(int alarmCfgNo) {
-		synchronized (this.alarmCfgMap) {
-			return this.alarmCfgMap.get(alarmCfgNo);
-		}
-	}
-
 	public int size() {
 		synchronized (this.alarmCfgMap) {
 			return this.alarmCfgMap.size();
 		}
 	}
 
-	public int getAlarmCfgNo(String moClass, String moType) {
-
-		synchronized (moClassAlarmCfgMap) {
-			AlarmCfg cfg = moClassAlarmCfgMap.get(moClass + "\t" + moType);
-			if (cfg == null) {
-				cfg = moClassAlarmCfgMap.get(moClass);
-			}
-			return cfg == null ? NONE_ALARM_CFG_NO : cfg.getAlarmCfgNo();
-		}
-
-	}
 }

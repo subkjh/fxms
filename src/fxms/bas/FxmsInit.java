@@ -14,6 +14,7 @@ import fxms.bas.impl.adapter.SmsBizppurioAlarmAfterAdapter;
 import fxms.bas.impl.api.AdapterApiDfo;
 import fxms.bas.impl.cron.AlarmReleaseCron;
 import fxms.bas.impl.cron.PsStatMakeCron;
+import fxms.bas.impl.dpo.ao.iqr.IqrCron;
 import fxms.bas.signal.ReloadSignal.ReloadType;
 import fxms.rule.RuleApi;
 import fxms.rule.RuleApiDB;
@@ -46,8 +47,8 @@ public class FxmsInit {
 
 	public static void main(String[] args) {
 		FxmsInit init = new FxmsInit();
-//		init.initAdapter();
-		init.makeSource();
+		init.initAdapter();
+//		init.makeSource();
 	}
 
 	public void initAdapter() {
@@ -55,7 +56,7 @@ public class FxmsInit {
 		AdapterApiDfo api = new AdapterApiDfo();
 
 		try {
-//				api.insert(AlarmStatDailyCron.class);
+			api.insert(IqrCron.class);
 //				api.insert(CalcTrnsChrgCron.class);
 
 			VarApi.getApi().setTimeUpdated(ReloadType.Adapter, DateUtil.getDtm());
@@ -77,6 +78,8 @@ public class FxmsInit {
 
 			api.insert(AlarmReleaseCron.class);
 			api.insert(PsStatMakeCron.class);
+			
+			api.insert(IqrCron.class);
 
 			Map<String, Object> varInfo = new HashMap<String, Object>();
 			varInfo.put("varGrpName", "TIME");
@@ -143,42 +146,44 @@ public class FxmsInit {
 				"src/subkjh/dao/queries");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/test/test.xml", "fxms.bas.impl.dao.TestQid",
 				"src/fxms/bas/impl/dao");
-		
+
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/service/AppService.xml", "fxms.bas.impl.dao.AppServiceQid",
 				"src/fxms/bas/impl/dao");
-		
+
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/cron/CheckACron.xml", "fxms.bas.impl.dao.CheckACronQid",
 				"src/fxms/bas/impl/dao");
-		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/cron/StatMakeDailyCron.xml", "fxms.bas.impl.dao.StatMakeDailyCronQid",
-				"src/fxms/bas/impl/dao");
-		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/cron/StatMakeHourlyCron.xml", "fxms.bas.impl.dao.StatMakeHourlyCronQid",
-				"src/fxms/bas/impl/dao");
-		
+		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/cron/StatMakeDailyCron.xml",
+				"fxms.bas.impl.dao.StatMakeDailyCronQid", "src/fxms/bas/impl/dao");
+		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/cron/StatMakeHourlyCron.xml",
+				"fxms.bas.impl.dao.StatMakeHourlyCronQid", "src/fxms/bas/impl/dao");
+
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/api/ValueApi.xml", "fxms.bas.impl.dao.ValueApiQid",
 				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/api/RuleApi.xml", "fxms.bas.impl.dao.RuleApiQid",
-				"src/fxms/bas/impl/dao");		
-
-		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/AlarmCfgHandler.xml", "fxms.bas.impl.dao.AlarmCfgHandlerQid",
 				"src/fxms/bas/impl/dao");
+
+		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/AlarmCfgHandler.xml",
+				"fxms.bas.impl.dao.AlarmCfgHandlerQid", "src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/AlarmHandler.xml", "fxms.bas.impl.dao.AlarmHandlerQid",
-				"src/fxms/bas/impl/dao");		
+				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/InloHandler.xml", "fxms.bas.impl.dao.InloHandlerQid",
-				"src/fxms/bas/impl/dao");		
+				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/LoginHandler.xml", "fxms.bas.impl.dao.LoginHandlerQid",
-				"src/fxms/bas/impl/dao");		
+				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/ModelHandler.xml", "fxms.bas.impl.dao.ModelHandlerQid",
-				"src/fxms/bas/impl/dao");		
+				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/MoHandler.xml", "fxms.bas.impl.dao.MoHandlerQid",
-				"src/fxms/bas/impl/dao");		
+				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/PsHandler.xml", "fxms.bas.impl.dao.PsHandlerQid",
-				"src/fxms/bas/impl/dao");		
-		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/UiDashbHandler.xml", "fxms.bas.impl.dao.UiDashbHandlerQid",
-				"src/fxms/bas/impl/dao");		
+				"src/fxms/bas/impl/dao");
+		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/UiDashbHandler.xml",
+				"fxms.bas.impl.dao.UiDashbHandlerQid", "src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/UiHandler.xml", "fxms.bas.impl.dao.UiHandlerQid",
-				"src/fxms/bas/impl/dao");	
+				"src/fxms/bas/impl/dao");
 		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/handler/UserHandler.xml", "fxms.bas.impl.dao.UserHandlerQid",
-				"src/fxms/bas/impl/dao");	
+				"src/fxms/bas/impl/dao");
+
+		tool.makeXml2JavaQid("deploy/conf/sql/fxms/bas/comm.xml", "fxms.bas.impl.dao.CommQid", "src/fxms/bas/impl/dao");
 
 	}
 }

@@ -8,6 +8,7 @@ import fxms.bas.impl.dbo.all.FX_TBL_DEF;
 import subkjh.bas.co.utils.DateUtil;
 import subkjh.bas.co.utils.FileUtil;
 import subkjh.dao.database.DataBase;
+import subkjh.dao.database.MySql;
 import subkjh.dao.database.PostgreSQL;
 import subkjh.dao.def.Column;
 import subkjh.dao.def.Sequence;
@@ -36,18 +37,18 @@ public class SqlTool {
 
 //		tool.makeInsertSql(new MySql());
 //		tool.printDropSql(new MySql(), "datas/setup/tables.txt");
-		tool.printCreateSql(new PostgreSQL(), "datas/tables.txt");
+//		tool.printCreateSql(new MySql(), "datas/tables.txt");
+//		tool.printAddColumnSql(new MySql(), "datas/tables.txt");
 //		tool.makeSelectSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeInsertSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeUpdateSampleSql(new MySql(), "datas/setup/tables.txt");
-//		tool.printAddColumnSql(new MySql(), "datas/setup/tables.txt");
-//		tool.makeJavaSource(new File("datas/setup/tables.txt"), "fems.bas.dbo", "tmp");
+		tool.makeJavaSource(new File("datas/tables.txt"), "fems.bas.dbo", "tmp");
 //		tool.makeJpaSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
 //		tool.makeDtoSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dto", "tmp");
 //		tool.makeDtoSource(FX_UR_UGRP.class, "tmp");
 //		tool.printXml(AlarmCfgVo.class);
 //
-//		tool.printInsertSql(new PostgreSQL(), "datas/datas.txt");
+		tool.printInsertSql(new MySql(), "datas/datas.txt");
 		// tool.printSequenceSql(new MySql(), "datas/setup/sequence.txt");
 
 		// System.out.println( new MakeQueryXml().make(FX_BR_RULE.class));
@@ -128,6 +129,8 @@ public class SqlTool {
 	}
 
 	public void makeJavaSource(File f, String packageName, String folder) throws Exception {
+		
+		
 		if (f.exists() == false) {
 			System.err.println(f.getPath() + " 파일이 존재하지 않습니다.");
 			return;

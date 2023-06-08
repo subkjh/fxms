@@ -18,85 +18,23 @@ public class AlarmCfgMem implements Serializable {
 	private AlarmCode alarmCode;
 	private String verifierJavaClass;
 	private String verifierValue = "all";
-	private int alcdNo;
-	private Double alCriCmprVal;
-	private Double alMajCmprVal;
-	private Double alMinCmprVal;
-	private Double alWarCmprVal;
-	private int repeatTimes = 1;
-	private String fpactCd;
+	private final int alcdNo;
+	private final Number alCriCmprVal;
+	private final Number alMajCmprVal;
+	private final Number alMinCmprVal;
+	private final Number alWarCmprVal;
+	private final int repeatTimes;
+	private final String fpactCd;
 
-	public AlarmCfgMem() {
-
-	}
-
-	public AlarmCfgMem(int alcdNo, Double alCriCmprVal,Double alMajCmprVal,Double alMinCmprVal,Double alWarCmprVal, int repeatTimes, String fpactCd) {
+	public AlarmCfgMem(int alcdNo, Number alCriCmprVal, Number alMajCmprVal, Number alMinCmprVal, Number alWarCmprVal,
+			int repeatTimes, String fpactCd) {
 		this.alcdNo = alcdNo;
-		this.alCriCmprVal= alCriCmprVal;
-		this.alMajCmprVal= alMajCmprVal;
-		this.alMinCmprVal= alMinCmprVal;
-		this.alWarCmprVal= alWarCmprVal;
+		this.alCriCmprVal = alCriCmprVal;
+		this.alMajCmprVal = alMajCmprVal;
+		this.alMinCmprVal = alMinCmprVal;
+		this.alWarCmprVal = alWarCmprVal;
 		this.repeatTimes = repeatTimes;
 		this.fpactCd = fpactCd;
-	}
-
-	private Number compute(Number preValue, Number value) {
-		CMPR_CD compareCode = getCompareCode();
-
-		if (compareCode == CMPR_CD.IC || compareCode == CMPR_CD.DC) {
-			if (preValue == null || preValue.doubleValue() == 0)
-				return value;
-
-			double rate = value.doubleValue() / preValue.doubleValue();
-			rate *= 100;
-
-			return (rate - 100);
-		} else {
-			return value;
-		}
-	}
-
-	/**
-	 * 
-	 * @param compVal  비교값
-	 * @param valuePre 이전수집값
-	 * @param valueCur 현재수집값
-	 * @return
-	 */
-	private boolean match(double compVal, Number valuePre, Number valueCur) {
-
-		CMPR_CD compareCode = getCompareCode();
-
-		if (compareCode == CMPR_CD.IC) {
-			if (valuePre == null || valuePre.doubleValue() == 0)
-				return false;
-			double rate = valueCur.doubleValue() / valuePre.doubleValue();
-			rate *= 100;
-			rate -= 100;
-			return rate >= compVal;
-		}
-
-		if (compareCode == CMPR_CD.DC) {
-			if (valuePre == null || valuePre.doubleValue() == 0)
-				return false;
-			double rate = 1 - (valueCur.doubleValue() / valuePre.doubleValue());
-			rate *= 100;
-			return rate >= compVal;
-		}
-
-		return ((compareCode == CMPR_CD.GT) && valueCur.doubleValue() > compVal) ||
-
-				((compareCode == CMPR_CD.GE) && valueCur.doubleValue() >= compVal) ||
-
-				((compareCode == CMPR_CD.LT) && valueCur.doubleValue() < compVal) ||
-
-				((compareCode == CMPR_CD.LE) && valueCur.doubleValue() <= compVal) ||
-
-				((compareCode == CMPR_CD.EQ) && valueCur.doubleValue() == compVal) ||
-
-				((compareCode == CMPR_CD.NE) && valueCur.doubleValue() != compVal) ||
-
-				(compareCode == CMPR_CD.OK);
 	}
 
 	public AlarmCode getAlarmCode() {
@@ -107,11 +45,25 @@ public class AlarmCfgMem implements Serializable {
 		return alcdNo;
 	}
 
+	public Number getAlCriCmprVal() {
+		return alCriCmprVal;
+	}
+
+	public Number getAlMajCmprVal() {
+		return alMajCmprVal;
+	}
+
+	public Number getAlMinCmprVal() {
+		return alMinCmprVal;
+	}
+
+	public Number getAlWarCmprVal() {
+		return alWarCmprVal;
+	}
+
 	public CMPR_CD getCompareCode() {
 		return CMPR_CD.getCompare(alarmCode.getCompareCode());
 	}
-
-
 
 	public String getFpactCd() {
 		return fpactCd;
@@ -164,19 +116,23 @@ public class AlarmCfgMem implements Serializable {
 
 		if (alCriCmprVal != null && match(alCriCmprVal, valuePre, valueCur)) {
 
-			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Critical.getAlarmLevel(), alCriCmprVal, compute(valuePre, valueCur));
+			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Critical.getAlarmLevel(), alCriCmprVal,
+					compute(valuePre, valueCur));
 
 		} else if (alMajCmprVal != null && match(alMajCmprVal, valuePre, valueCur)) {
 
-			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Major.getAlarmLevel(), alMajCmprVal, compute(valuePre, valueCur));
+			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Major.getAlarmLevel(), alMajCmprVal,
+					compute(valuePre, valueCur));
 
 		} else if (alMinCmprVal != null && match(alMinCmprVal, valuePre, valueCur)) {
 
-			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Minor.getAlarmLevel(), alMinCmprVal, compute(valuePre, valueCur));
+			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Minor.getAlarmLevel(), alMinCmprVal,
+					compute(valuePre, valueCur));
 
 		} else if (alWarCmprVal != null && match(alWarCmprVal, valuePre, valueCur)) {
 
-			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Warning.getAlarmLevel(), alWarCmprVal, compute(valuePre, valueCur));
+			return new AlarmCfgMemMatched(this, ALARM_LEVEL.Warning.getAlarmLevel(), alWarCmprVal,
+					compute(valuePre, valueCur));
 
 		}
 
@@ -195,6 +151,67 @@ public class AlarmCfgMem implements Serializable {
 		sb.append("COMPARE(CODE(" + getAlarmCode().getCompareCode() + ")");
 
 		return sb.toString();
+	}
+
+	private Number compute(Number preValue, Number value) {
+		CMPR_CD compareCode = getCompareCode();
+
+		if (compareCode == CMPR_CD.IC || compareCode == CMPR_CD.DC) {
+			if (preValue == null || preValue.doubleValue() == 0)
+				return value;
+
+			double rate = value.doubleValue() / preValue.doubleValue();
+			rate *= 100;
+
+			return (rate - 100);
+		} else {
+			return value;
+		}
+	}
+
+	/**
+	 * 
+	 * @param compVal  비교값
+	 * @param valuePre 이전수집값
+	 * @param valueCur 현재수집값
+	 * @return
+	 */
+	private boolean match(Number compVal, Number valuePre, Number valueCur) {
+
+		double curVal = valueCur.doubleValue();
+		double comVal = compVal.doubleValue();
+		CMPR_CD compareCode = getCompareCode();
+
+		if (compareCode == CMPR_CD.IC) {
+			if (valuePre == null || valuePre.doubleValue() == 0)
+				return false;
+			double rate = valueCur.doubleValue() / valuePre.doubleValue();
+			rate *= 100;
+			rate -= 100;
+			return rate >= comVal;
+		}
+
+		if (compareCode == CMPR_CD.DC) {
+			if (valuePre == null || valuePre.doubleValue() == 0)
+				return false;
+			double rate = 1 - (valueCur.doubleValue() / valuePre.doubleValue());
+			rate *= 100;
+			return rate >= comVal;
+		}
+
+		return ((compareCode == CMPR_CD.GT) && curVal > comVal) ||
+
+				((compareCode == CMPR_CD.GE) && curVal >= comVal) ||
+
+				((compareCode == CMPR_CD.LT) && curVal < comVal) ||
+
+				((compareCode == CMPR_CD.LE) && curVal <= comVal) ||
+
+				((compareCode == CMPR_CD.EQ) && curVal == comVal) ||
+
+				((compareCode == CMPR_CD.NE) && curVal != comVal) ||
+
+				(compareCode == CMPR_CD.OK);
 	}
 
 }

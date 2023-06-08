@@ -1,5 +1,7 @@
 package fxms.bas.impl.dpo.ao;
 
+import java.util.Map;
+
 import fxms.bas.api.AlarmApi;
 import fxms.bas.co.CoCode.ALARM_LEVEL;
 import fxms.bas.impl.dpo.FxDfo;
@@ -9,8 +11,8 @@ import fxms.bas.mo.Moable;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
-import fxms.bas.vo.ExtraAlarm;
 import subkjh.bas.co.lang.Lang;
+import subkjh.bas.co.utils.ObjectUtil;
 
 /**
  * 테스트 알람을 발생하는 DFO
@@ -39,7 +41,7 @@ public class MakeAlarmEventDfo implements FxDfo<Void, AlarmOccurEvent> {
 	 * @throws Exception
 	 */
 	public AlarmOccurEvent makeAlarmEvent(Moable mo, Object moInstance, AlarmCode alarmCode, ALARM_LEVEL alarmLevel,
-			String msg, ExtraAlarm ext) throws Exception {
+			String msg, Map<String, Object> etcData) throws Exception {
 
 		String strInstance = moInstance == null ? null : String.valueOf(moInstance);
 
@@ -54,8 +56,8 @@ public class MakeAlarmEventDfo implements FxDfo<Void, AlarmOccurEvent> {
 		AlarmOccurEvent event = new AlarmOccurEvent(mo.getMoNo(), strInstance, alarmCode.getAlcdNo());
 		event.setFpactCd(alarmCode.getFpactCd());
 
-		if (ext != null) {
-			ext.initAlarmEvent(event);
+		if (etcData != null) {
+			ObjectUtil.toObject(etcData, event);
 		}
 
 		// 경보등급이 정의되어 있지 않으면 경보코드 기본 메세지를 사용합니다.
@@ -67,9 +69,10 @@ public class MakeAlarmEventDfo implements FxDfo<Void, AlarmOccurEvent> {
 
 		// 현재 알람이 있는지 확인하고 있으면 해당 알람번호를 설정한다.
 		Alarm alarm = AlarmApi.getApi().getCurAlarm(mo, strInstance, alarmCode.getAlcdNo());
+		String message = makeEventMsg(msg, mo, strInstance, event.getCmprVal(), event.getPsVal(), event.getPsVal(),
+				null);
 
-		event.setAlarmMsg(
-				makeEventMsg(msg, mo, strInstance, event.getCmprVal(), event.getPsVal(), event.getPsVal(), null));
+		event.setAlarmMsg(message);
 
 		if (alarm != null) {
 			event.setAlarm(alarm);

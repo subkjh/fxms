@@ -1,5 +1,7 @@
 package fxms.bas.impl.dpo.ao;
 
+import java.util.Map;
+
 import fxms.bas.api.MoApi;
 import fxms.bas.co.CoCode.ALARM_LEVEL;
 import fxms.bas.event.FxEvent.STATUS;
@@ -11,7 +13,6 @@ import fxms.bas.mo.Mo;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
-import fxms.bas.vo.ExtraAlarm;
 import fxms.bas.vo.OccurAlarm;
 
 /**
@@ -34,8 +35,7 @@ public class AlarmFireDpo implements FxDpo<Void, Alarm> {
 			Mo mo = MoApi.getApi().getMo(1002134);
 			AlarmCode alarmCode = AlcdMap.getMap().getAlarmCode(10000);
 
-			System.out
-					.println(FxmsUtil.toJson(dpo.fireAlarm(mo, alarmCode, null, ALARM_LEVEL.Major, null, null)));
+			System.out.println(FxmsUtil.toJson(dpo.fireAlarm(mo, alarmCode, null, ALARM_LEVEL.Major, null, null)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,9 +57,10 @@ public class AlarmFireDpo implements FxDpo<Void, Alarm> {
 	}
 
 	public Alarm fireAlarm(Mo mo, AlarmCode alarmCode, Object moInstance, ALARM_LEVEL alarmLevel, String msg,
-			ExtraAlarm ext) throws Exception {
+			Map<String, Object> etcData) throws Exception {
 
-		AlarmOccurEvent alarmEvent = new MakeAlarmEventDfo().makeAlarmEvent(mo, moInstance, alarmCode, alarmLevel, msg, ext);
+		AlarmOccurEvent alarmEvent = new MakeAlarmEventDfo().makeAlarmEvent(mo, moInstance, alarmCode, alarmLevel, msg,
+				etcData);
 
 		Alarm curAlarm = alarmEvent.getAlarm();
 		Alarm newAlarm;
@@ -68,7 +69,7 @@ public class AlarmFireDpo implements FxDpo<Void, Alarm> {
 
 			// 알람 수정
 			// 이미 알람이 존재하면 수정
-			newAlarm = new AlarmUpdateDfo().updateAlarm(curAlarm, alarmEvent);
+			newAlarm = new AlarmUpdateDfo().updateAlarm(curAlarm, alarmEvent, etcData);
 			newAlarm.setStatus(STATUS.changed);
 
 		} else {
@@ -77,7 +78,7 @@ public class AlarmFireDpo implements FxDpo<Void, Alarm> {
 
 			OccurAlarm oa = new AlarmMakeDfo().makeAlarm(alarmEvent);
 
-			newAlarm = new AlarmInsertDfo().insertAlarm(oa);
+			newAlarm = new AlarmInsertDfo().insertAlarm(oa, etcData);
 		}
 
 		if (newAlarm != null) {

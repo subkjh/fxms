@@ -86,7 +86,7 @@ public class FxAttrApi {
 		for (FxAttrVo vo : getFxAttrField(obj.getClass())) {
 
 			name = vo.getName();
-			value = datas.get(name);
+			value = datas == null ? null : datas.get(name);
 			if (vo.attr.required() && value == null) {
 				if (notAttr.length() > 0)
 					notAttr.append(",");

@@ -52,4 +52,15 @@ public interface AppService extends FxService {
 	 */
 	public int generateStatistics(String psTbl, String psKindName, long psDtm) throws RemoteException, Exception;
 
+	/**
+	 * 입력된 일자와 같은 조건의 일자를 조회한다.
+	 * 
+	 * @param date  기준일자
+	 * @param count 일자건수
+	 * @return
+	 * @throws RemoteException
+	 * @throws Exception
+	 */
+	public List<String> getSameDays(String date, int count) throws RemoteException, Exception;
+
 }

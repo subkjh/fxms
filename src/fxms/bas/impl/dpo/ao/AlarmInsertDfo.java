@@ -29,10 +29,32 @@ public class AlarmInsertDfo implements FxDfo<Map<String, Object>, Alarm> {
 		return insertAlarm(data);
 	}
 
-	public Alarm insertAlarm(OccurAlarm data) throws Exception {
-		return insertAlarm(ObjectUtil.toMap(data));
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
+	public Alarm insertAlarm(OccurAlarm data, Map<String, Object> etcData) throws Exception {
+
+		if (data == null)
+			return null;
+
+		Map<String, Object> alarm = ObjectUtil.toMap(data);
+		if (etcData != null) {
+			alarm.putAll(etcData);
+		}
+
+		return insertAlarm(alarm);
+
 	}
 
+	/**
+	 * 
+	 * @param datas
+	 * @return
+	 * @throws Exception
+	 */
 	public Alarm insertAlarm(Map<String, Object> datas) throws Exception {
 
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
@@ -53,7 +75,7 @@ public class AlarmInsertDfo implements FxDfo<Map<String, Object>, Alarm> {
 			tran.insertOfClass(FX_AL_ALARM_CUR.class, datas);
 
 			tran.commit();
-			
+
 			Alarm alarm = tran.selectOne(FX_AL_ALARM_HST.class, FxApi.makePara("alarmNo", alarmNo), Alarm.class);
 			alarm.setStatus(STATUS.added);
 			return alarm;

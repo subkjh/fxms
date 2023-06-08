@@ -80,4 +80,15 @@ public abstract class AppApi extends FxApi {
 	 * @throws Exception
 	 */
 	public abstract int generateStatistics(String psTbl, String psKindName, long psDtm) throws Exception;
+
+	/**
+	 * 입력된 일자와 같은 조건의 일자를 조회한다.
+	 * 
+	 * @param date  기준일자
+	 * @param count 일자건수
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract List<String> getSameDays(String date, int count) throws Exception;
+
 }

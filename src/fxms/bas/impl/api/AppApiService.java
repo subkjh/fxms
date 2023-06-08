@@ -60,4 +60,10 @@ public class AppApiService extends AppApi implements FxApiServiceTag {
 		return svc.generateStatistics(psTbl, psKindName, psDtm);
 	}
 
+	@Override
+	public List<String> getSameDays(String date, int count) throws Exception {
+		AppService svc = getService();
+		return svc.getSameDays(date, count);
+	}
+
 }

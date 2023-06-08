@@ -74,6 +74,13 @@ public enum ALARM_CODE {
 	
 	/** 수집데이터 확인 필요 */
 	PS_VALUE_NOT_ACCEPTABLE(11004),
+	
+	/** IQR 최대값 초과 */
+	VALUE_OVER_IQR_MAX(11005),
+	
+	/** IQR 최소값 미달 */
+	VALUE_UNDER_IQR_MIN(11006),
+	
 
 	/** ICMP PING 응답없음 */
 	PING_OFF(21001),

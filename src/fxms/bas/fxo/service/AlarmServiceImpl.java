@@ -58,11 +58,11 @@ public class AlarmServiceImpl extends FxServiceImpl implements AlarmService {
 	}
 
 	@Override
-	public Alarm fireAlarm(AlarmOccurEvent event) throws RemoteException, Exception {
+	public Alarm fireAlarm(AlarmOccurEvent event, Map<String, Object> etcData) throws RemoteException, Exception {
 
 		Alarm alarm = null;
 		try {
-			alarm = AlarmApi.getApi().fireAlarm(event);
+			alarm = AlarmApi.getApi().fireAlarm(event, etcData);
 			return alarm;
 		} catch (Exception e) {
 			Logger.logger.error(e);

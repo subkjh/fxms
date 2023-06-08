@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fxms.bas.api.AlarmApi;
-import fxms.bas.api.EventApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.api.MoApi;
 import fxms.bas.co.CoCode.ALARM_RLSE_RSN_CD;
@@ -16,8 +15,8 @@ import fxms.bas.impl.dao.AlarmHandlerQid;
 import fxms.bas.impl.dbo.all.FX_AL_ALARM_CUR;
 import fxms.bas.impl.dbo.all.FX_AL_ALARM_HST;
 import fxms.bas.impl.dpo.ao.AlarmAckDfo;
-import fxms.bas.impl.dpo.ao.AlcdMap;
 import fxms.bas.impl.dpo.ao.AlarmUpdateDfo;
+import fxms.bas.impl.dpo.ao.AlcdMap;
 import fxms.bas.impl.handler.dto.AckAlarmCurPara;
 import fxms.bas.impl.handler.dto.AoSetReasonPara;
 import fxms.bas.impl.handler.dto.ClearAlarmPara;
@@ -28,7 +27,6 @@ import fxms.bas.mo.Mo;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
-import fxms.bas.vo.ExtraAlarm;
 import subkjh.bas.BasCfg;
 import subkjh.bas.co.utils.ObjectUtil;
 import subkjh.dao.ClassDaoEx;
@@ -69,13 +67,13 @@ public class AlarmHandler extends BaseHandler {
 		Mo mo = MoApi.getApi().getMo(para.getMoNo());
 		AlarmCode ac = AlcdMap.getMap().getAlarmCode(para.getAlarmName());
 
-		ExtraAlarm ea = null;
+		Map<String, Object> etcData = null;
 		if (isEmpty(para.getAlarmKey()) == false) {
-			ea = new ExtraAlarm();
-			ea.setAlarmKey(para.getAlarmKey());
+			etcData = new HashMap<>();
+			etcData.put("alarmKey", para.getAlarmKey());
 		}
 
-		AlarmApi.getApi().fireAlarm(mo, para.getMoInstance(), ac.getAlcdNo(), null, para.getAlarmMsg(), ea);
+		AlarmApi.getApi().fireAlarm(mo, para.getMoInstance(), ac.getAlcdNo(), null, para.getAlarmMsg(), etcData);
 
 		return AlarmApi.getApi().getCurAlarm(mo, para.getMoInstance(), ac.getAlcdNo());
 	}

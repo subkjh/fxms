@@ -30,7 +30,7 @@ public class AlarmUpdateDfo implements FxDfo<Void, Alarm> {
 		return null;
 	}
 
-	public Alarm updateAlarm(Alarm alarm, AlarmOccurEvent event) throws Exception {
+	public Alarm updateAlarm(Alarm alarm, AlarmOccurEvent event, Map<String, Object> etcData) throws Exception {
 
 		Map<String, Object> datas = new HashMap<>();
 		datas.put("alarmNo", alarm.getAlarmNo());
@@ -40,6 +40,10 @@ public class AlarmUpdateDfo implements FxDfo<Void, Alarm> {
 
 		if (event.getOccurCnt() > 0) {
 			datas.put("occurCnt", event.getOccurCnt());
+		}
+		
+		if ( etcData != null) {
+			datas.putAll(etcData);
 		}
 
 		return reoccurAlarm(alarm.getAlarmNo(), datas);

@@ -8,19 +8,15 @@ package fxms.bas.vo;
  */
 public class AlarmCfgMemMatched {
 
-	private int alcdNo;
+	private final int alcdNo;
+	private final Number cmprVal;
+	private final Number psVal;
+	private final int alarmLevel;
+	private final String fpactCd;
+	private final int repeatTimes;
 
-	private double cmprVal;
+	public AlarmCfgMemMatched(AlarmCfgMem mem, int alarmLevel, Number cmprVal, Number psVal) {
 
-	private Number psVal;
-
-	private int alarmLevel;
-
-	private String fpactCd;
-
-	private int repeatTimes = 1;
-
-	public AlarmCfgMemMatched(AlarmCfgMem mem, int alarmLevel, double cmprVal, Number psVal) {
 		this.alcdNo = mem.getAlcdNo();
 		this.fpactCd = mem.getFpactCd();
 		this.repeatTimes = mem.getRepeatTimes();
@@ -42,7 +38,7 @@ public class AlarmCfgMemMatched {
 	 * 
 	 * @return 비교값
 	 */
-	public double getCmprVal() {
+	public Number getCmprVal() {
 		return cmprVal;
 	}
 
@@ -61,18 +57,17 @@ public class AlarmCfgMemMatched {
 	public int getRepeatTimes() {
 		return repeatTimes;
 	}
-	
+
 	@Override
 	public String toString() {
-		
+
 		StringBuffer sb = new StringBuffer();
-		
+
 		sb.append("alcdNo(" + getAlcdNo() + ")");
 		sb.append("level(").append(alarmLevel).append(")");
 		sb.append("value(").append(cmprVal).append(":").append(psVal).append(")");
 
 		return sb.toString();
 	}
-
 
 }

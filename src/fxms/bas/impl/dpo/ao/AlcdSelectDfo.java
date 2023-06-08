@@ -42,24 +42,15 @@ public class AlcdSelectDfo implements FxDfo<Void, List<AlarmCode>> {
 
 	public List<AlarmCode> selectAlarmCodeAll() throws Exception {
 
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-
-		try {
-			tran.start();
-			List<FX_AL_CD> list = tran.select(FX_AL_CD.class, null);
-			List<AlarmCode> ret = new ArrayList<AlarmCode>();
-			for (FX_AL_CD a : list) {
-				ret.add(new AlarmCode(a.getAlcdNo(), a.getAlcdName(), ALARM_LEVEL.getLevel(a.getAlarmLevel()) //
-						, a.getPsId(), a.getCmprCd(), a.getAlarmMsg(), a.getFpactCd()//
-						, a.getMoClass(), a.getAutoRlseSec(), a.isSvcAlarmYn()));
-			}
-			return ret;
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
+		List<FX_AL_CD> list = ClassDaoEx.SelectDatas(FX_AL_CD.class, null);
+		
+		List<AlarmCode> ret = new ArrayList<AlarmCode>();
+		for (FX_AL_CD a : list) {
+			ret.add(new AlarmCode(a.getAlcdNo(), a.getAlcdName(), ALARM_LEVEL.getLevel(a.getAlarmLevel()) //
+					, a.getPsId(), a.getCmprCd(), a.getAlarmMsg(), a.getFpactCd()//
+					, a.getMoClass(), a.getAutoRlseSec(), a.isSvcAlarmYn()));
 		}
+		return ret;
 	}
 
 	public AlarmCode selectAlarmCode(int alcdNo) throws Exception {

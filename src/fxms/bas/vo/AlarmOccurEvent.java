@@ -29,6 +29,7 @@ public class AlarmOccurEvent extends AlarmEvent {
 	private final int alcdNo;
 	private final String moInstance;
 	private final long moNo;
+	
 	private int alarmCfgNo;
 	private String alarmKey;
 	private int alarmLevel;

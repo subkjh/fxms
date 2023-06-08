@@ -199,7 +199,10 @@ public class CoCode {
 		/** 무조건 */
 		OK,
 		/** rate */
-		RT;
+		RT,
+		/** IQR */
+		IQR;
+		
 
 		public static CMPR_CD getCompare(String name) {
 			for (CMPR_CD c : CMPR_CD.values()) {

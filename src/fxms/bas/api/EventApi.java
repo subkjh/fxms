@@ -59,7 +59,6 @@ public class EventApi extends FxApi {
 
 	private long checkPsCount = 0L; // 성능 임계 확인 회수
 	private Map<String, Integer> repeatMap = new HashMap<String, Integer>();
-	private final AlcdMap alcdMap = AlcdMap.getInstance();
 	private final AlCfgMap cfgMap = AlCfgMap.getInstance();
 
 	/**
@@ -100,7 +99,7 @@ public class EventApi extends FxApi {
 					if (msgAdd != null) {
 						e.setAlarmMsg(e.getAlarmMsg() + " " + msgAdd);
 					}
-					AlarmApi.getApi().fireAlarm(e);
+					AlarmApi.getApi().fireAlarm(e, null);
 				} else if (event instanceof AlarmClearEvent) {
 					AlarmApi.getApi().clearAlarm((AlarmClearEvent) event);
 				}
@@ -116,7 +115,6 @@ public class EventApi extends FxApi {
 	public String getState(LOG_LEVEL level) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getSimpleName());
-		sb.append(Logger.makeSubString("alarm.code.size", this.alcdMap.size()));
 		sb.append(Logger.makeSubString("alarm.cfg.size", this.cfgMap.size()));
 		sb.append(Logger.makeSubString("check.ps.count", checkPsCount));
 		return sb.toString();
@@ -131,7 +129,7 @@ public class EventApi extends FxApi {
 
 		if (type == ReloadType.All || type == ReloadType.AlarmCode) {
 			try {
-				this.alcdMap.load();
+				AlcdMap.getMap().load();
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}
@@ -179,7 +177,7 @@ public class EventApi extends FxApi {
 	 */
 	private AlarmCode getAlarmCode(int alcdNo) {
 		try {
-			return this.alcdMap.getAlarmCode(alcdNo);
+			return AlcdMap.getMap().getAlarmCode(alcdNo);
 		} catch (NotFoundException e) {
 			return null;
 		}
@@ -240,7 +238,7 @@ public class EventApi extends FxApi {
 			ALARM_RLSE_RSN_CD clearReason) throws Exception {
 
 		Alarm alarm;
-		List<Integer> alcdNos = this.alcdMap.getAlcdNos(psItem.getPsId());
+		List<Integer> alcdNos = AlcdMap.getMap().getAlcdNos(psItem.getPsId());
 
 		if (alcdNos == null)
 			return null;

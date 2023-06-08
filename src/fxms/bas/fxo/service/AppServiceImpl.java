@@ -162,4 +162,18 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 			Logger.logger.info("{}.{}.{} --> {}", psTbl, psKindName, psDtm, ret);
 		}
 	}
+
+	@Override
+	public List<String> getSameDays(String date, int count) throws RemoteException, Exception {
+		List<String> ret = null;
+		try {
+			ret = AppApi.getApi().getSameDays(date, count);
+			return ret;
+		} catch (Exception e) {
+			Logger.logger.error(e);
+			throw e;
+		} finally {
+			Logger.logger.info("date={}, count={} --> {}", date, count, ret);
+		}
+	}
 }

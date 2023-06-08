@@ -91,10 +91,14 @@ public class Dao {
 				else {
 
 					if (columns.size() == 1) {
+						
 						if (result.javaClass == Long.class && r.getObject(1) != null) {
 							entry = r.getLong(1);
 						} else if (result.javaClass == Integer.class && r.getObject(1) != null) {
 							entry = r.getInt(1);
+						} else if (result.javaClass == String.class && r.getObject(1) != null) {
+							entry = r.getString(1);
+							
 						} else {
 							entry = r.getObject(1);
 						}

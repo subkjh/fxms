@@ -13,10 +13,12 @@ public class AlarmCfg implements Serializable {
 	 */
 	private static final long serialVersionUID = 8393109399326673206L;
 
+	/** 알람조건이 설정되지 않았음을 의미함 */
 	public static final int UPPER_ALARM_CFG = 0;
-	public static final int NO_ALARM_CFG = 1;
+	/** 알람을 발생하지 않는 알람조건번호 */
+//	public static final int NO_ALARM_CFG = 1;
 
-	private List<AlarmCfgMem> memList;
+	private final List<AlarmCfgMem> memList;
 
 	private final int alarmCfgNo;
 
@@ -38,6 +40,7 @@ public class AlarmCfg implements Serializable {
 		this.moClass = moClass;
 		this.moType = moType;
 		this.basicCfgYn = "y".equalsIgnoreCase(basicCfgYn);
+		this.memList = new ArrayList<>();
 	}
 
 	/**
@@ -45,8 +48,6 @@ public class AlarmCfg implements Serializable {
 	 * @param entry 추가할 경보 조건
 	 */
 	public void add(AlarmCfgMem member) {
-		if (memList == null)
-			memList = new ArrayList<AlarmCfgMem>();
 		memList.add(member);
 	}
 
@@ -65,7 +66,7 @@ public class AlarmCfg implements Serializable {
 	 * @return 경보코드목록
 	 */
 	public List<Integer> getAlcdNo(String psId) {
-		if (memList == null || memList.size() == 0 || psId == null)
+		if (psId == null)
 			return null;
 
 		List<Integer> ret = new ArrayList<Integer>();
@@ -94,9 +95,6 @@ public class AlarmCfg implements Serializable {
 	 * @return
 	 */
 	public AlarmCfgMemMatched getMatchMember(String psId, int alcdNo, Number valuePre, Number valueCur, Moable mo) {
-
-		if (memList == null || memList.size() == 0)
-			return null;
 
 		AlarmCfgMemMatched ret;
 		for (AlarmCfgMem entry : memList) {
@@ -129,8 +127,6 @@ public class AlarmCfg implements Serializable {
 	 * @return 경보조건
 	 */
 	public AlarmCfgMem getMem4AlcdNo(int alcdNo) {
-		if (memList == null || memList.size() == 0)
-			return null;
 
 		for (AlarmCfgMem e : memList) {
 			if (e.getAlcdNo() == alcdNo) {
@@ -138,6 +134,24 @@ public class AlarmCfg implements Serializable {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 성능에 해당되는 알람조건을 가져온다.
+	 * 
+	 * @param psId
+	 * @return
+	 */
+	public List<AlarmCfgMem> getMemList(String psId) {
+
+		List<AlarmCfgMem> ret = new ArrayList<>();
+
+		for (AlarmCfgMem e : memList) {
+			if (psId.equals(e.getAlarmCode().getPsId())) {
+				ret.add(e);
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -152,7 +166,7 @@ public class AlarmCfg implements Serializable {
 	 * @return 비교 조건의 수
 	 */
 	public int getMemSize() {
-		return memList == null ? 0 : memList.size();
+		return memList.size();
 	}
 
 	public String getMoClass() {
@@ -161,10 +175,6 @@ public class AlarmCfg implements Serializable {
 
 	public String getMoType() {
 		return moType;
-	}
-
-	public void setMemList(List<AlarmCfgMem> memList) {
-		this.memList = memList;
 	}
 
 	@Override

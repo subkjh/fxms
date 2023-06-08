@@ -12,10 +12,12 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+import fxms.bas.api.ValueApi;
 import fxms.bas.fxo.FxAttrApi;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.fxo.service.FxServiceImpl;
+import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
 
 /**
@@ -45,8 +47,10 @@ public class ClassUtil {
 		}
 	}
 
-	public static void main(String[] args) {
-		new ClassUtil("AppService");
+	public static void main(String[] args) throws Exception {
+		ClassUtil util =	new ClassUtil("ValueService");
+		ValueApi api = util.makeObject4Use(ValueApi.class);
+		System.out.println(api.getState(LOG_LEVEL.debug));
 
 	}
 	
@@ -87,9 +91,7 @@ public class ClassUtil {
 				T t = (T) data.classOf.newInstance();
 
 				// 파라메터가 있으면 설정한다.
-				if (data.para != null) {
-					FxAttrApi.toObject(data.para, t);
-				}
+				FxAttrApi.toObject(data.para, t);
 
 				return t;
 
@@ -141,8 +143,10 @@ public class ClassUtil {
 					data.classOf = useObj.getClass();
 					data.para = node.para;
 					classMap.put(node.org, data);
+					
+					FxAttrApi.toObject(data.para, useObj);
 
-					sb.append(Logger.makeSubString(node.org, node.use));
+					sb.append(Logger.makeSubString(node.org, node.use + " " + data.para));
 				} else {
 					sb.append(Logger.makeSubString(node.org, "error"));
 				}

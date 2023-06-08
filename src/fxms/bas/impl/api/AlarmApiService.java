@@ -78,12 +78,12 @@ public class AlarmApiService extends AlarmApi implements FxApiServiceTag {
 	}
 
 	@Override
-	public Alarm fireAlarm(AlarmOccurEvent event) throws Exception {
+	public Alarm fireAlarm(AlarmOccurEvent event, Map<String, Object> etcData) throws Exception {
 
 		if (event == null)
 			return null;
 
-		Alarm madeAlarm = getAlarmService().fireAlarm((AlarmOccurEvent) event);
+		Alarm madeAlarm = getAlarmService().fireAlarm((AlarmOccurEvent) event, etcData);
 
 		setCurAlarm(madeAlarm);
 

@@ -877,7 +877,7 @@ public class CommDao extends Dao {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private List<?> select2Object(String sql, Object para[], DaoResult map) throws Exception {
+	private List<?> select2Object(String sql, Object para[], DaoResult result) throws Exception {
 
 		ResultSet r = null;
 		PreparedStatement pstmt = null;
@@ -890,7 +890,7 @@ public class CommDao extends Dao {
 
 			r = pstmt.executeQuery();
 
-			List list = makeResultList(r, map);
+			List list = makeResultList(r, result);
 
 			return list;
 

@@ -18,7 +18,6 @@ import fxms.bas.vo.AlarmCfg;
 import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
-import fxms.bas.vo.ExtraAlarm;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
 
@@ -57,7 +56,6 @@ public abstract class AlarmApi extends FxApi {
 	/** 경보필터 */
 
 	private final AlarmMap map = AlarmMap.getInstance();
-	private final AlcdMap alcdMap = AlcdMap.getInstance();
 
 	/** 처리된 이벤트 수 */
 	private long countWork;
@@ -135,7 +133,7 @@ public abstract class AlarmApi extends FxApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Alarm fireAlarm(AlarmOccurEvent event) throws Exception;
+	public abstract Alarm fireAlarm(AlarmOccurEvent event, Map<String, Object> etcData) throws Exception;
 
 	/**
 	 * 알람을 생성한다.
@@ -161,9 +159,9 @@ public abstract class AlarmApi extends FxApi {
 	 */
 
 	public void fireAlarm(Moable mo, Object moInstance, int alcdNo, ALARM_LEVEL alarmLevel, String msg,
-			ExtraAlarm ext) {
+			Map<String, Object> etcData) {
 		try {
-			fireAlarm(makeAlarmEvent(mo, moInstance, alcdNo, alarmLevel, msg, ext));
+			fireAlarm(makeAlarmEvent(mo, moInstance, alcdNo, alarmLevel, msg, etcData), etcData);
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
@@ -287,14 +285,14 @@ public abstract class AlarmApi extends FxApi {
 	}
 
 	public AlarmOccurEvent makeAlarmEvent(Moable mo, Object moInstance, int alcdNo, ALARM_LEVEL alarmLevel, String msg,
-			ExtraAlarm ext) {
+			Map<String, Object> etcData) {
 
 		try {
 
-			AlarmCode alarmCode = alcdMap.getAlarmCode(alcdNo);
+			AlarmCode alarmCode = AlcdMap.getMap().getAlarmCode(alcdNo);
 
 			AlarmOccurEvent event = new MakeAlarmEventDfo().makeAlarmEvent(mo, moInstance, alarmCode, alarmLevel, msg,
-					ext);
+					etcData);
 
 			return event;
 
