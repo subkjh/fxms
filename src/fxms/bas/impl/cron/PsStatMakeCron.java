@@ -77,7 +77,7 @@ public class PsStatMakeCron extends Crontab {
 				a.afterStat(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm());
 			} catch (Exception e) {
 				Logger.logger.error(e);
-				AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.FXMSERR_PS_STAT_AFTER_ADAPTER.getAlcdNo(),
+				AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.fxms_error_ps_stat_adapter.getAlcdNo(),
 						null, null, null);
 			}
 		}
@@ -138,7 +138,7 @@ public class PsStatMakeCron extends Crontab {
 			}
 
 		} catch (Exception e) {
-			AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.FXMSERR_PS_STAT.getAlcdNo(), null, null, null);
+			AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.fxms_error_ps_stat.getAlcdNo(), null, null, null);
 			Logger.logger.error(e);
 			throw e;
 		}

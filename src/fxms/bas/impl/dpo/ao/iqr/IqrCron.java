@@ -133,7 +133,7 @@ public class IqrCron extends Crontab {
 			}
 
 			List<FX_PS_STAT_CRE> list = dao.selectDatas(FX_PS_STAT_CRE.class, FxApi.makePara("psTbl",
-					psItem.getPsTable(), "creStCd", "C", "psDtm", psDtm, "okYn", "Y", "psDataCd", psKind.getPsKindName()));
+					psItem.getPsTable(), "creStCd", "C", "psDtm >", psDtm, "okYn", "Y", "psDataCd", psKind.getPsKindName()));
 			for (FX_PS_STAT_CRE data : list) {
 				dto = new CheckIqrDto();
 				dto.setPsDtm(data.getPsDtm());

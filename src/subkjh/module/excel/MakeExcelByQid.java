@@ -48,8 +48,7 @@ public class MakeExcelByQid implements DaoListener {
 
 	/**
 	 * 
-	 * @param sizePerFile
-	 *            화일당 페이지 수
+	 * @param sizePerFile 화일당 페이지 수
 	 */
 	public MakeExcelByQid(int sizePerFile) {
 		this.sizePerFile = sizePerFile;
@@ -58,10 +57,8 @@ public class MakeExcelByQid implements DaoListener {
 	/**
 	 * 컬럼에 대한 별칭을 설정합니다.
 	 * 
-	 * @param colName
-	 *            컬럼
-	 * @param alias
-	 *            별칭
+	 * @param colName 컬럼
+	 * @param alias   별칭
 	 */
 	public void addAlias(String colName, String alias) {
 		columnAliasMap = new HashMap<String, String>();
@@ -87,15 +84,14 @@ public class MakeExcelByQid implements DaoListener {
 	/**
 	 * Excel 컬럼을 설정합니다.
 	 * 
-	 * @param colNames
-	 *            컬럼명<br>
-	 *            &lt;K|D|S&gt;&lt;S|I|P|F&gt;&lt;C|R|L&gt;&lt;숫자3자리&gt;_컬럼명 형식을
-	 *            취합니다.<br>
-	 *            G|K|D|S = G(그룹), K(키로 사용), D(단순 데이터), S(소계가 생김)<br>
-	 *            S|I|P|F = S(문자열), I(정수), F(실수), P(백분율)<br>
-	 *            C|L|R = C(중앙정렬), R(오른쪽정렬), L(왼쪽정렬)<br>
-	 *            숫자3자리 = 컬럼 넓이<br>
-	 *            컬럼명 = 컬럼내용<br>
+	 * @param colNames 컬럼명<br>
+	 *                 &lt;K|D|S&gt;&lt;S|I|P|F&gt;&lt;C|R|L&gt;&lt;숫자3자리&gt;_컬럼명
+	 *                 형식을 취합니다.<br>
+	 *                 G|K|D|S = G(그룹), K(키로 사용), D(단순 데이터), S(소계가 생김)<br>
+	 *                 S|I|P|F = S(문자열), I(정수), F(실수), P(백분율)<br>
+	 *                 C|L|R = C(중앙정렬), R(오른쪽정렬), L(왼쪽정렬)<br>
+	 *                 숫자3자리 = 컬럼 넓이<br>
+	 *                 컬럼명 = 컬럼내용<br>
 	 * @throws Exception
 	 */
 	public void addColumns(List<String> colNames) throws Exception {
@@ -136,11 +132,9 @@ public class MakeExcelByQid implements DaoListener {
 	/**
 	 * Excel 화일을 만듭니다.
 	 * 
-	 * @param title
-	 *            타이틀
-	 * @param filename
-	 *            화일명<br>
-	 *            확장자는 제외합니다.
+	 * @param title    타이틀
+	 * @param filename 화일명<br>
+	 *                 확장자는 제외합니다.
 	 * @return 처리결과
 	 */
 	public void makeExcel(QidDao tran, String qid, Object para, String title, String filename) throws Exception {
@@ -150,9 +144,7 @@ public class MakeExcelByQid implements DaoListener {
 
 		excel = new MakeExcelList();
 
-		tran.setDaoListener(this);
-		tran.selectQid(qid, para);
-		tran.setDaoListener(null);
+		tran.selectQid(qid, para, this);
 	}
 
 	public void onExecuted(Object data, Exception ex) throws Exception {

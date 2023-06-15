@@ -42,7 +42,7 @@ public class SqlTool {
 //		tool.makeSelectSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeInsertSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeUpdateSampleSql(new MySql(), "datas/setup/tables.txt");
-		tool.makeJavaSource(new File("datas/tables.txt"), "fems.bas.dbo", "tmp");
+//		tool.makeJavaSource(new File("datas/tables.txt"), "fems.bas.dbo", "tmp");
 //		tool.makeJpaSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
 //		tool.makeDtoSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dto", "tmp");
 //		tool.makeDtoSource(FX_UR_UGRP.class, "tmp");

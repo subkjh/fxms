@@ -3,7 +3,7 @@ package fxms.bas.impl.handler.dto;
 import fxms.bas.fxo.FxAttr;
 import subkjh.bas.co.utils.DateUtil;
 
-public class GetValuesPara {
+public class GetValuesDto {
 
 	@FxAttr(description = "관리대상번호", example = "123456")
 	private Long moNo;
@@ -20,7 +20,10 @@ public class GetValuesPara {
 	@FxAttr(description = "조회종료성능데이터", required = false, example = "20230101235959")
 	private long endDate;
 
-	public GetValuesPara() {
+	@FxAttr(description = "MO인스턴스", required = false)
+	private String moInstance;
+
+	public GetValuesDto() {
 		this.startDate = DateUtil.getDtm(System.currentTimeMillis() - 86400000L);
 		this.endDate = DateUtil.getDtm();
 		this.psKindName = "RAW";
@@ -44,6 +47,10 @@ public class GetValuesPara {
 
 	public long getEndDate() {
 		return endDate;
+	}
+
+	public String getMoInstance() {
+		return moInstance;
 	}
 
 }

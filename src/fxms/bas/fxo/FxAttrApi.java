@@ -8,7 +8,7 @@ import java.util.Map;
 
 import fxms.bas.api.FxApi;
 import fxms.bas.exp.AttrNotFoundException;
-import fxms.bas.impl.handler.dto.GetValuesPara;
+import fxms.bas.impl.handler.dto.GetValuesDto;
 import fxms.bas.impl.handler.dto.SelectPsValueMinMaxPara;
 import subkjh.bas.co.utils.ObjectUtil;
 
@@ -22,13 +22,13 @@ public class FxAttrApi {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println(FxAttrApi.toHelp(GetValuesPara.class));
+			System.out.println(FxAttrApi.toHelp(GetValuesDto.class));
 			System.out.println(FxAttrApi.toHelp(SelectPsValueMinMaxPara.class));
 
 			Map<String, Object> datas = FxApi.makePara("moNo", 11234, "psKindName", "aaa", "psId", "MoStatus",
 					"startDate", 20220202111111L);
 
-			GetValuesPara dto = new GetValuesPara();
+			GetValuesDto dto = new GetValuesDto();
 			System.out.println(FxmsUtil.toJson(FxAttrApi.toObject(datas, dto)));
 			System.out.println(FxmsUtil.toJson(dto));
 

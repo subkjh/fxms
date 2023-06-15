@@ -201,7 +201,7 @@ public abstract class ValueApi extends FxApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
+	public abstract List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws Exception;
 
 	/**

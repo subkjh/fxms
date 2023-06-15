@@ -32,7 +32,7 @@ public class UpdateMoDpo implements FxDpo<Map<String, Object>, Mo> {
 
 			if (broadcast) {
 				new BroadcastDfo().broadcast(new ReloadSignal(ReloadType.Mo));
-				new FireEventDfo().fireEvent(updatedMo, ALARM_CODE.MO_UPDATED.getAlcdNo());
+				new FireEventDfo().fireEvent(updatedMo, ALARM_CODE.mo_updated.getAlcdNo());
 			}
 
 			return updatedMo;

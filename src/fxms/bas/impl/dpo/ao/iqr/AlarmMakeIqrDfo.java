@@ -81,7 +81,7 @@ public class AlarmMakeIqrDfo implements FxDfo<CheckIqrDto, Boolean> {
 
 		// 알람코드가 없다면 처리하지 않는다.
 		try {
-			AlcdMap.getMap().getAlarmCode(ALARM_CODE.VALUE_OVER_IQR_MAX.getAlcdNo());
+			AlcdMap.getMap().getAlarmCode(ALARM_CODE.value_iqr_over.getAlcdNo());
 		} catch (NotFoundException e) {
 			Logger.logger.trace("{}", e.getMessage());
 			return false;
@@ -132,7 +132,7 @@ public class AlarmMakeIqrDfo implements FxDfo<CheckIqrDto, Boolean> {
 
 			// 설정 조건이 없으면 기본값(1.5)로 비교한다.
 			if (iqr.max < data.nowValue) {
-				fireAlarm(dto, data, iqr, iqr.max, null, ALARM_CODE.VALUE_OVER_IQR_MAX.getAlcdNo());
+				fireAlarm(dto, data, iqr, iqr.max, null, ALARM_CODE.value_iqr_over.getAlcdNo());
 			}
 
 		} else {

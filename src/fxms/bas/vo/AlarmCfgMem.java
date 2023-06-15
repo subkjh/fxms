@@ -2,8 +2,8 @@ package fxms.bas.vo;
 
 import java.io.Serializable;
 
+import fxms.bas.co.CMPR_CD;
 import fxms.bas.co.CoCode.ALARM_LEVEL;
-import fxms.bas.co.CoCode.CMPR_CD;
 import fxms.bas.fxo.filter.AlarmCfgVerifier;
 import fxms.bas.mo.Moable;
 import subkjh.bas.co.log.Logger;

@@ -134,18 +134,18 @@ public class ValueServiceImpl extends FxServiceImpl implements ValueService {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws RemoteException, Exception {
 
 		List<PsValues> list = null;
 		try {
-			list = ValueApi.getApi().getValues(moNo, psId, psKindName, psKindCol, startDtm, endDtm);
+			list = ValueApi.getApi().getValues(moNo, moInstance,psId, psKindName, psKindCol, startDtm, endDtm);
 			return list;
 		} catch (Exception e) {
 			logger.error(e);
 			throw e;
 		} finally {
-			logger.info("moNo={}, psId={}, psKindName={}, psKindCol={}, startDtm={}, endDtm={} --> {}", moNo, psId,
+			logger.info("moNo={}, moInstance={}, psId={}, psKindName={}, psKindCol={}, startDtm={}, endDtm={} --> {}", moNo, moInstance, psId,
 					psKindName, psKindCol, startDtm, endDtm, list == null ? "error" : list.size());
 		}
 

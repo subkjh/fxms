@@ -137,12 +137,15 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 		super.onStarted();
 
 		try {
-			ServiceApi.getApi().setAllServiceStatus(FXSVC_ST_CD.INIT);
-
 			ServiceApi.getApi().updateServiceStatus(FxCfg.getIpAddress(), FxServiceImpl.serviceName,
 					FxCfg.getCfg().getLong(FX_PARA.fxmsStartTime.getKey(), 0), FXSVC_ST_CD.ON,
 					FxCfg.getCfg().getRmiPort(), FxCfg.getCfg().getFxServicePort());
+		} catch (Exception e) {
+			logger.error(e);
+		}
 
+		try {
+			checkStorage("Check before running.");
 		} catch (Exception e) {
 			logger.error(e);
 		}

@@ -163,7 +163,7 @@ public class ValueApiDfo extends ValueApi {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws Exception {
 
 		// 성능항목 확인
@@ -173,7 +173,7 @@ public class ValueApiDfo extends ValueApi {
 
 		PsKind psKind = PsApi.getApi().getPsKind(psKindName);
 
-		return new SelectValuesDfo().selectValues(mo, item, psKind, psKindCol, startDtm, endDtm);
+		return new SelectValuesDfo().selectValues(mo, moInstance, item, psKind, psKindCol, startDtm, endDtm);
 	}
 
 	@Override

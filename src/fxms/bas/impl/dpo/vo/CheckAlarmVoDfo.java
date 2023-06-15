@@ -40,7 +40,7 @@ public class CheckAlarmVoDfo implements FxDfo<PsVoList, Boolean> {
 			// 수집된 데이터가 성능항목에 설정된 범위인지 확인한다.
 			if (e.getPsItem().isAcceptable(e.getValue()) == false) {
 				try {
-					api.fireAlarm(e.getMo(), e.getPsItem().getPsId(), ALARM_CODE.PS_VALUE_NOT_ACCEPTABLE.getAlcdNo(),
+					api.fireAlarm(e.getMo(), e.getPsItem().getPsId(), ALARM_CODE.value_not_acceptable.getAlcdNo(),
 							null, String.valueOf(e.getValue()), null);
 				} catch (Exception ex) {
 					Logger.logger.error(ex);

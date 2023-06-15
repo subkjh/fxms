@@ -40,7 +40,7 @@ public class AddMoDpo implements FxDpo<Map<String, Object>, Mo> {
 
 			if (broadcast) {
 				new BroadcastDfo().broadcast(new ReloadSignal(ReloadType.Mo));
-				new FireEventDfo().fireEvent(mo, ALARM_CODE.MO_ADDED.getAlcdNo());
+				new FireEventDfo().fireEvent(mo, ALARM_CODE.mo_added.getAlcdNo());
 			}
 
 			return mo;

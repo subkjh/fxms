@@ -23,9 +23,6 @@ public class AlCfgMap {
 	/** 정의되지 않은 경우 : 0 */
 	public static final int NONE_ALARM_CFG_NO = 0;
 
-	/** 알람을 발생하지 않을 경우 설정한다 : 1 */
-	public static final int NOALARM_ALARM_CFG_NO = 1;
-
 	private static final Object lockObj = new Object();
 
 	private static AlCfgMap map = null;

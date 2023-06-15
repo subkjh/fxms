@@ -1,5 +1,6 @@
 package subkjh.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fxms.bas.fxo.FxCfg;
@@ -17,10 +18,12 @@ public class QidDaoEx {
 	private QidDao tran;
 	private StringBuffer msg = new StringBuffer();
 	private Exception exception = null;
+	private final List<Integer> countList = new ArrayList<>();
 	private int processedCount; // 최근 처리 건수
 
-	public void close() throws Exception {
+	public QidDaoEx close() throws Exception {
 		close(exception);
+		return this;
 	}
 
 	public QidDaoEx commit() {
@@ -33,26 +36,34 @@ public class QidDaoEx {
 		int ret;
 		try {
 			ret = tran.execute(qid, datas);
+			this.countList.add(ret);
 		} catch (Exception e) {
+			this.countList.add(-1);
 			close(e);
 			throw e;
 		}
 
 		if (msg.length() > 0)
 			msg.append(", ");
-		msg.append("qid=").append(ret);
+		msg.append(qid).append("=").append(ret);
 		return this;
 	}
 
 	public QidDaoEx executeSql(String sql, Object para) throws Exception {
 		try {
 			processedCount = tran.executeSql(sql, para);
+			this.countList.add(processedCount);
 		} catch (Exception e) {
+			this.countList.add(-1);
 			close(e);
 			throw e;
 		}
 
 		return this;
+	}
+
+	public List<Integer> getProcessedCountList() {
+		return countList;
 	}
 
 	/**
@@ -106,4 +117,5 @@ public class QidDaoEx {
 		return this;
 	}
 
+	
 }

@@ -162,7 +162,7 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 	private void clearAlarm(String instance, String message) {
 		try {
-			AlarmApi.getApi().clearAlarm(MoApi.getApi().getProjectMo(), instance, ALARM_CODE.FXMSERR_CRON.getAlcdNo(),
+			AlarmApi.getApi().clearAlarm(MoApi.getApi().getProjectMo(), instance, ALARM_CODE.fxms_error_cron.getAlcdNo(),
 					ALARM_RLSE_RSN_CD.Release, message, System.currentTimeMillis(), User.USER_NO_SYSTEM);
 		} catch (Exception e) {
 			Logger.logger.error(e);
@@ -171,7 +171,7 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 	private void fireAlarm(String instance, String message) {
 		try {
-			AlarmApi.getApi().fireAlarm(MoApi.getApi().getProjectMo(), instance, ALARM_CODE.FXMSERR_CRON.getAlcdNo(),
+			AlarmApi.getApi().fireAlarm(MoApi.getApi().getProjectMo(), instance, ALARM_CODE.fxms_error_cron.getAlcdNo(),
 					null, message, null);
 		} catch (Exception e) {
 			Logger.logger.error(e);

@@ -7,136 +7,117 @@ package fxms.bas.co;
  *
  */
 public enum ALARM_CODE {
-
 	/** 시험용 경보 */
-	TestAlarm(10000),
-
-	/** 미정의된 성능 항목 */
-	PsItemNotDefined(10001),
-
-	/** 미등록된 경보 코드 */
-	AlarmCodeNotDefined(10011),
+	test_alarm("test.alarm", 10000),
 
 	/** 관리대상 추가됨 */
-	MO_ADDED(10101),
+	mo_added("mo.added", 10101),
 
 	/** 관리대상 수정됨 */
-	MO_UPDATED(10102),
+	mo_updated("mo.updated", 10102),
 
 	/** 관리대상 삭제됨 */
-	MO_DELETED(10103),
+	mo_deleted("mo.deleted", 10103),
 
 	/** 미등록된 관리대상 */
-	MO_NOT_FOUND(10104),
+	mo_notfound("mo.notfound", 10104),
 
-	/**
-	 * 시스템내부오류<br>
-	 * XMS 서비스 내부에서 오류가 발생됨
-	 */
-	FXMSERR(10900),
-
-	/**
-	 * 통계생성오류<br>
-	 * FXMS 서비스에서 통계 데이터를 생성중 오류가 발생됨
-	 */
-	FXMSERR_PS_STAT(10901),
-
-	/**
-	 * 통계아탑터실행오류<br>
-	 * FXMS 서비스에서 통계 데이터 생성 후 통계아탑터 처리중 오류가 발생됨
-	 */
-	FXMSERR_PS_STAT_AFTER_ADAPTER(10902),
-
-	/**
-	 * CRON 작업 수행 중 오류 발생됨
-	 */
-	FXMSERR_CRON(10903),
-
-	/**
-	 * 성능항목 등록 안됨
-	 */
-	FXMSERR_PS_ITEM_NOT_FOUND(10904),
+	/** 관리대상 오프라인 */
+	mo_offline("mo.offline", 10105),
 
 	/** 서비스 시작됨 */
-	SERVICE_ON_NOTI(10200),
+	service_start("service.start", 10200),
 
 	/** 서비스 큐 자료가 너무 많음 */
-	SERVICE_QUEUE_TOO_MANY(10201),
+	service_queue_too_many("service.queue.too.many", 10201),
+
+	/** 시스템내부오류 */
+	fxms_error("fxms.error", 10900),
+
+	/** 통계생성오류 */
+	fxms_error_ps_stat("fxms.error.ps.stat", 10901),
+
+	/** 통계아탑터실행오류 */
+	fxms_error_ps_stat_adapter("fxms.error.ps.stat.adapter", 10902),
+
+	/** CRON 작업 수행 중 오류 발생됨 */
+	fxms_error_cron("fxms.error.cron", 10903),
+
+	/** 성능항목 등록 안됨 */
+	fxms_not_found_psitem("fxms.not.found.psitem", 10904),
+
+	/** 미등록된 경보 코드 */
+	fxms_not_found_alcdno("fxms.not.found.alcdno", 10905),
+
+	/** 관제시스템 생성 알람 */
+	fxms_extra_alarm_made("fxms.extra.alarm.made", 10911),
 
 	/** 수집요청 응답 없음 */
-	NOT_RESPONSE_ON_PS_COLLECT(11001),
+	value_not_response("value.not.response", 11001),
 
 	/** 수집요청 오류 응답 */
-	ERR_RESPONSE_ON_PS_COLLECT(11002),
+	value_error_response("value.error.response", 11002),
 
-	/** 수집요청 자료 없음 */
-	No_data_collected(11003),
-	
+	/** 데이터 수집 안됨 */
+	value_not_collected("value.not.collected", 11003),
+
 	/** 수집데이터 확인 필요 */
-	PS_VALUE_NOT_ACCEPTABLE(11004),
-	
+	value_not_acceptable("value.not.acceptable", 11004),
+
 	/** IQR 최대값 초과 */
-	VALUE_OVER_IQR_MAX(11005),
-	
+	value_iqr_over("value.iqr.over", 11005),
+
 	/** IQR 최소값 미달 */
-	VALUE_UNDER_IQR_MIN(11006),
-	
+	value_iqr_under("value.iqr.undef", 11006);
 
-	/** ICMP PING 응답없음 */
-	PING_OFF(21001),
+	private final int alcdNo;
+	private final String alcdName;
 
-	/** SNMP 응답없음 */
-	SNMP_OFF(21002),
-
-	/** 온도 범위 초과 */
-	TEMP_OVER(22101),
-
-	/** 온도 범위 미달 */
-	TEMP_UNDER(22102),
-
-	/** pH 범위 초과 */
-	PH_OVER(22103),
-
-	/** pH 범위 미달 */
-	PH_UNDER(22104),
-
-	/** 출입문 열림 */
-	DOOR_OPEN(22105),
-
-	/** 조도 범위 초과 */
-	ILLUMI_OVER(22106),
-
-	/** 조도 범위 미달 */
-	ILLUMI_UNDER(22107),
-
-	/** 습도 범위 초과 */
-	HUMI_OVER(22108),
-
-	/** 습도 범위 미달 */
-	HUMI_UNDER(22109),
-
-	/** 이산화탄소량 범위 초과 */
-	CO2_OVER(22110),
-
-	/** 이산화탄소량 범위 미달 */
-	CO2_UNDEF(22111),
-
-	NODE_AUTH_FAIL(23201), NODE_COLD_START(23202), NODE_WARM_START(23203), NODE_EGP_NEIGH_LOSS(23204);
-
-	//
-	//
-	// tool.BaseDataMake 클래스 사용해서 base-data-alarmCode.txt 내용으로 만들어짐.
-	//
-	//
-
-	private int alcdNo;
-
-	ALARM_CODE(int alcdNo) {
+	ALARM_CODE(String alcdName, int alcdNo) {
+		this.alcdName = alcdName;
 		this.alcdNo = alcdNo;
+	}
+
+	public String getAlcdName() {
+		return alcdName;
 	}
 
 	public int getAlcdNo() {
 		return alcdNo;
+	}
+
+	public static void main(String[] args) {
+
+		String datas = "ALCD_NO	ALCD_NAME	ALCD_DISP_NAME\r\n" + "10000	test.alarm	시험용 경보\r\n"
+				+ "10101	mo.added	관리대상 추가됨\r\n" + "10102	mo.updated	관리대상 수정됨\r\n"
+				+ "10103	mo.deleted	관리대상 삭제됨\r\n" + "10104	mo.notfound	미등록된 관리대상\r\n"
+				+ "10105	mo.offline	관리대상 오프라인\r\n" + "10200	service.start	서비스 시작됨\r\n"
+				+ "10201	service.queue.too.many	서비스 큐 자료가 너무 많음\r\n" + "10900	fxms.error	시스템내부오류\r\n"
+				+ "10901	fxms.error.ps.stat	통계생성오류\r\n" + "10902	fxms.error.ps.stat.adapter	통계아탑터실행오류\r\n"
+				+ "10903	fxms.error.cron	CRON 작업 수행 중 오류 발생됨\r\n" + "10904	fxms.not.found.psitem	성능항목 등록 안됨\r\n"
+				+ "10905	fxms.not.found.alcdno	미등록된 경보 코드\r\n" + "10911	fxms.extra.alarm.made	관제시스템 생성 알람\r\n"
+				+ "11001	value.not.response	수집요청 응답 없음\r\n" + "11002	value.error.response	수집요청 오류 응답\r\n"
+				+ "11003	value.not.collected	데이터 수집 안됨\r\n" + "11004	value.not.acceptable	수집데이터 확인 필요\r\n"
+				+ "11005	value.iqr.over	IQR 최대값 초과\r\n" + "11006	value.iqr.under	IQR 최소값 미달\r\n";
+
+		String list[] = datas.split("\n");
+
+//			int index = 0;
+		String ss[];
+		for (String line : list) {
+//				if (index++ == 0) {
+//					continue;
+//				}
+//				System.out.println(line);
+
+			ss = line.trim().split("\t");
+
+			System.out.println("/** " + ss[2] + "*/");
+			System.out.println(ss[1].replaceAll("\\.", "_") + "( \"" + ss[1] + "\", " + ss[0] + "),");
+			System.out.println();
+
+		}
+
 	}
 
 }

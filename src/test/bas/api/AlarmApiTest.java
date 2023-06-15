@@ -56,7 +56,7 @@ public class AlarmApiTest {
 
 		Map<String, Object> etcData = new HashMap<>();
 		etcData.put("alarmKey", "fems_12345");
-		api.fireAlarm(null, null, ALARM_CODE.TestAlarm.getAlcdNo(), null, null, etcData);
+		api.fireAlarm(null, null, ALARM_CODE.test_alarm.getAlcdNo(), null, null, etcData);
 
 	}
 }

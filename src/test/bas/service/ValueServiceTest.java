@@ -50,8 +50,8 @@ public class ValueServiceTest {
 		for (Long moNo : ret.keySet()) {
 			if (ret.get(moNo).floatValue() > 0) {
 				System.out.println(moNo + " " + ret.get(moNo));
-				System.out.println(
-						FxmsUtil.toJson(service.getValues(moNo, psId, psKind, item.getDefKindCol(), startDtm, endDtm)));
+				System.out.println(FxmsUtil
+						.toJson(service.getValues(moNo, null, psId, psKind, item.getDefKindCol(), startDtm, endDtm)));
 			}
 		}
 	}

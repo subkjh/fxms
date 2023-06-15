@@ -8,7 +8,7 @@ import java.util.Map;
 
 import fxms.bas.api.AlarmApi;
 import fxms.bas.api.FxApi;
-import fxms.bas.co.CoCode.CMPR_CD;
+import fxms.bas.co.CMPR_CD;
 import fxms.bas.exp.AlcdNotFoundException;
 import fxms.bas.exp.NotFoundException;
 import fxms.bas.vo.AlarmCode;
@@ -133,13 +133,14 @@ public class AlcdMap {
 	 * @return IQR적용 성능 항목
 	 */
 	public List<String> getPsIdForIQR() {
-	
+
 		synchronized (this.codeMap) {
 			List<String> list = new ArrayList<>();
 			for (AlarmCode ac : codeMap.values()) {
-				
-				if ( "none".equalsIgnoreCase(ac.getPsId())) continue;
-				
+
+				if ("none".equalsIgnoreCase(ac.getPsId()))
+					continue;
+
 				if (CMPR_CD.IQR.name().equalsIgnoreCase(ac.getCompareCode())) {
 					if (list.contains(ac.getPsId()) == false) {
 						list.add(ac.getPsId());

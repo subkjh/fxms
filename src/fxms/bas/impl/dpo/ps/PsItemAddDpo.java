@@ -57,7 +57,7 @@ public class PsItemAddDpo implements FxDpo<Void, Boolean> {
 
 		psItem = selectDfo.selectPsItem(psId); // 등록된 내용 조회
 
-		new PsCreateTableDfo().createTables(psItem); // 관련 테이블 생성
+		new PsCreateTableDfo().createTable(psItem); // 관련 테이블 생성
 
 		return true;
 	}

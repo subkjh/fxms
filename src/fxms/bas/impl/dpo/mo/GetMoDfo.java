@@ -22,9 +22,9 @@ public class GetMoDfo implements FxDfo<Long, Mo> {
 		if (list.size() == 1) {
 			return list.get(0);
 		} else if (list.size() == 0) {
-			throw new MoNotFoundException(Lang.get("Could not find management object."));
+			throw new MoNotFoundException(Lang.get("Could not find management object.", para));
 		} else {
-			throw new Exception(Lang.get("Too many management objects have been searched."));
+			throw new Exception(Lang.get("Too many management objects have been searched.", para));
 		}
 	}
 

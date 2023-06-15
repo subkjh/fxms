@@ -85,7 +85,7 @@ public class SyncMoDpo implements FxDpo<Long, SyncMo> {
 
 		if (broadcast) {
 			new BroadcastDfo().broadcast(new ReloadSignal(ReloadType.Mo, updateUpper));
-			new FireEventDfo().fireEvent(new MoImpl(syncMo.getUpper()), ALARM_CODE.MO_UPDATED.getAlcdNo());
+			new FireEventDfo().fireEvent(new MoImpl(syncMo.getUpper()), ALARM_CODE.mo_updated.getAlcdNo());
 		}
 
 	}

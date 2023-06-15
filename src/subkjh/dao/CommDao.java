@@ -163,7 +163,7 @@ public class CommDao extends Dao {
 	 * @param daoListener
 	 * @throws Exception
 	 */
-	public int selectSql(String sql, Object para[]) throws Exception {
+	public int selectSql(String sql, Object para[], DaoListener daoListener) throws Exception {
 
 		ResultSet r = null;
 		PreparedStatement pstmt = null;
@@ -849,12 +849,12 @@ public class CommDao extends Dao {
 			if (r != null) {
 				while (r.next()) {
 					entry = makeResultMap(r, columns);
-					
+
 					if (daoListener != null) {
 						daoListener.onSelected(++rowNo, entry);
 					} else {
 						list.add(entry);
-					}					
+					}
 				}
 			}
 

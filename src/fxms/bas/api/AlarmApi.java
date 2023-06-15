@@ -161,7 +161,13 @@ public abstract class AlarmApi extends FxApi {
 	public void fireAlarm(Moable mo, Object moInstance, int alcdNo, ALARM_LEVEL alarmLevel, String msg,
 			Map<String, Object> etcData) {
 		try {
+
+			if (mo == null) {
+				mo = MoApi.getApi().getProjectMo();
+			}
+			
 			fireAlarm(makeAlarmEvent(mo, moInstance, alcdNo, alarmLevel, msg, etcData), etcData);
+			
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}

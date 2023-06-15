@@ -35,7 +35,7 @@ public class BaseDataMake {
 
 	void alarmCode() {
 
-		List<String> list = FileUtil.getLines(new File("datas/setup/base-data-alarmCode.txt"));
+		List<String> list = FileUtil.getLines(new File("setup/base-data-alarmCode.txt"));
 
 //		int index = 0;
 		String ss[];

@@ -6,7 +6,6 @@ import fxms.bas.api.AlarmApi;
 import fxms.bas.co.CoCode.ALARM_LEVEL;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
-import fxms.bas.mo.Mo;
 import fxms.bas.mo.Moable;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCode;
@@ -45,8 +44,11 @@ public class MakeAlarmEventDfo implements FxDfo<Void, AlarmOccurEvent> {
 
 		String strInstance = moInstance == null ? null : String.valueOf(moInstance);
 
-		if (mo == null || alarmCode == null) {
-			throw new Exception(Lang.get("MO or AlarmCode is null"));
+		if (mo == null) {
+			throw new Exception(Lang.get("MO is null"));
+		}
+		if (alarmCode == null) {
+			throw new Exception(Lang.get("AlarmCode is null"));
 		}
 
 		// 메시지가 정의되어 있지 않으면 경보코드 기본 메세지를 사용합니다.
@@ -69,10 +71,8 @@ public class MakeAlarmEventDfo implements FxDfo<Void, AlarmOccurEvent> {
 
 		// 현재 알람이 있는지 확인하고 있으면 해당 알람번호를 설정한다.
 		Alarm alarm = AlarmApi.getApi().getCurAlarm(mo, strInstance, alarmCode.getAlcdNo());
-		String message = makeEventMsg(msg, mo, strInstance, event.getCmprVal(), event.getPsVal(), event.getPsVal(),
-				null);
 
-		event.setAlarmMsg(message);
+		event.setAlarmMsg(makeEventMsg(msg, mo, etcData));
 
 		if (alarm != null) {
 			event.setAlarm(alarm);
@@ -82,40 +82,43 @@ public class MakeAlarmEventDfo implements FxDfo<Void, AlarmOccurEvent> {
 
 	}
 
-	public AlarmOccurEvent makeEvent(Mo mo, String moInstance, AlarmCode alarmCode, String msg, Number valueBase,
-			Number psValuePrev, Number psValueCur, int alarmLevel, Number etc) {
+//	public AlarmOccurEvent makeEvent(Mo mo, String moInstance, AlarmCode alarmCode, String msg, Number valueBase,
+//			Number psValuePrev, Number psValueCur, int alarmLevel, Number etc) {
+//
+//		// 메시지가 정의되어 있지 않으면 경보코드 기본 메세지를 사용합니다.
+//		if ((msg == null || msg.length() == 0) && alarmCode != null)
+//			msg = alarmCode.getAlarmMsg();
+//
+//		// 경보등급이 정의되어 있지 않으면 경보코드 기본 메세지를 사용합니다.
+//		if (alarmLevel < 0)
+//			alarmLevel = alarmCode.getAlarmLevel().getAlarmLevel();
+//
+//		AlarmOccurEvent event = new AlarmOccurEvent(mo.getMoNo(), moInstance, alarmCode.getAlcdNo());
+//		event.setAlarmLevel(alarmLevel);
+//		event.setAlarmMsg(makeEventMsg(msg, mo, moInstance, valueBase, psValuePrev, psValueCur, etc));
+//		event.setCmprVal(valueBase);
+//		event.setPsVal(psValueCur);
+//
+//		return event;
+//	}
 
-		// 메시지가 정의되어 있지 않으면 경보코드 기본 메세지를 사용합니다.
-		if ((msg == null || msg.length() == 0) && alarmCode != null)
-			msg = alarmCode.getAlarmMsg();
-
-		// 경보등급이 정의되어 있지 않으면 경보코드 기본 메세지를 사용합니다.
-		if (alarmLevel < 0)
-			alarmLevel = alarmCode.getAlarmLevel().getAlarmLevel();
-
-		AlarmOccurEvent event = new AlarmOccurEvent(mo.getMoNo(), moInstance, alarmCode.getAlcdNo());
-		event.setAlarmLevel(alarmLevel);
-		event.setAlarmMsg(makeEventMsg(msg, mo, moInstance, valueBase, psValuePrev, psValueCur, etc));
-		event.setCmprVal(valueBase);
-		event.setPsVal(psValueCur);
-
-		return event;
-	}
-
-	private String makeEventMsg(String orgMsg, Moable mo, String moInstance, Object baseValue, Object preValue,
-			Object value, Object etc) {
+	private String makeEventMsg(String orgMsg, Moable mo, Map<String, Object> datas) {
 
 		if (orgMsg == null)
 			return mo.getMoName() + " AlarmEvent";
 
-		String ret = orgMsg.replaceAll("%value%", toString(value));
-		ret = ret.replaceAll("%valueBase%", toString(baseValue));
-		ret = ret.replaceAll("%valuePre%", toString(preValue));
-		ret = ret.replaceAll("%valueCur%", toString(value));
-		ret = ret.replaceAll("%etc%", toString(etc));
-		ret = ret.replaceAll("%moInstance%", toString(moInstance));
+		try {
+			String ret = orgMsg;
+			for (String key : datas.keySet()) {
+				ret = orgMsg.replaceAll("%" + key + "%", toString(datas.get(key)));
+			}
 
-		return ret;
+			return ret;
+
+		} catch (Exception e) {
+			return orgMsg;
+		}
+
 	}
 
 	private String toString(Object val) {

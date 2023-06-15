@@ -85,7 +85,7 @@ public class ValueApiInfluxDb extends ValueApiDfo {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws Exception {
 
 		if (useTsdb) {

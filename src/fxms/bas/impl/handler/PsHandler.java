@@ -18,7 +18,7 @@ import fxms.bas.impl.dao.PsHandlerQid;
 import fxms.bas.impl.dbo.all.FX_PS_ITEM;
 import fxms.bas.impl.dbo.all.FX_PS_STAT_KIND;
 import fxms.bas.impl.dto.ValueAddDto;
-import fxms.bas.impl.handler.dto.GetValuesPara;
+import fxms.bas.impl.handler.dto.GetValuesDto;
 import fxms.bas.impl.handler.dto.SelectPsValueMinMaxPara;
 import fxms.bas.impl.handler.dto.SelectPsValueRtListPara;
 import fxms.bas.impl.vo.PsItemVo;
@@ -85,15 +85,15 @@ public class PsHandler extends BaseHandler {
 	/**
 	 * 
 	 * @param session
-	 * @param para
+	 * @param dto
 	 * @return
 	 * @throws Exception
 	 */
 	@MethodDescr(name = "관리대상수집데이터조회", description = "관리대상이 수집한 내용을 보여준다.")
-	public Object getValues(SessionVo session, GetValuesPara para) throws Exception {
-		PsItem psItem = PsApi.getApi().getPsItem(para.getPsId());
-		return ValueApi.getApi().getValues(para.getMoNo(), para.getPsId(), para.getPsKindName(), psItem.getDefKindCol(),
-				para.getStartDate(), para.getEndDate());
+	public Object getValues(SessionVo session, GetValuesDto dto) throws Exception {
+		PsItem psItem = PsApi.getApi().getPsItem(dto.getPsId());
+		return ValueApi.getApi().getValues(dto.getMoNo(), dto.getMoInstance(),  dto.getPsId(), dto.getPsKindName(), psItem.getDefKindCol(),
+				dto.getStartDate(), dto.getEndDate());
 	}
 
 	@MethodDescr(name = "수집항목조회", description = "처리되고 있는 수집 항목을 조회한다.")
@@ -107,7 +107,7 @@ public class PsHandler extends BaseHandler {
 	}
 
 	@MethodDescr(name = "수집값조회", description = "수집값을 조회한다.")
-	public Object selectPsValueList(SessionVo session, GetValuesPara obj) throws Exception {
+	public Object selectPsValueList(SessionVo session, GetValuesDto obj) throws Exception {
 		PsKind psKind = PsApi.getApi().getPsKind(obj.getPsKindName());
 		psKind.checkDateRange(obj.getStartDate(), obj.getEndDate());
 		return ValueApi.getApi().getValues(obj.getMoNo(), obj.getPsId(), obj.getPsKindName(), obj.getStartDate(),

@@ -39,7 +39,7 @@ public class SetDelFlagMoDpo implements FxDpo<Void, Mo> {
 
 		if (broadcast) {
 			new BroadcastDfo().broadcast(new ReloadSignal(ReloadType.Mo));
-			new FireEventDfo().fireEvent(mo, ALARM_CODE.MO_DELETED.getAlcdNo());
+			new FireEventDfo().fireEvent(mo, ALARM_CODE.mo_deleted.getAlcdNo());
 		}
 
 		return mo;

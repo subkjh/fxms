@@ -94,7 +94,7 @@ public interface ValueService extends FxService {
 	 * @throws RemoteException
 	 * @throws Exception
 	 */
-	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws RemoteException, Exception;
 
 	/**

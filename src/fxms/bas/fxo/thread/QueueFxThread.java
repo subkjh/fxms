@@ -60,7 +60,7 @@ public abstract class QueueFxThread<E> extends FxThread {
 		FxServiceImpl.logger.fail(Lang.get("너무 많은 자료가 큐에 있어 모두 제거합니다."));
 
 		AlarmApi.getApi().fireAlarm(ServiceApi.getApi().getMyServiceMo(), getName(),
-				ALARM_CODE.SERVICE_QUEUE_TOO_MANY.getAlcdNo(), null, "TOO MANY DATAS IN QUEUE", null);
+				ALARM_CODE.service_queue_too_many.getAlcdNo(), null, "TOO MANY DATAS IN QUEUE", null);
 
 		FxServiceImpl.setError(getName(), "Too Many Datas : " + DateUtil.getDtm());
 

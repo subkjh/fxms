@@ -119,7 +119,7 @@ public class ValueWriteDfo implements FxDfo<PsVoList, Map<String, Integer>> {
 			Map<String, Integer> map = new HashMap<String, Integer>();
 
 			try {
-				tableList = new PsValMakeTableDfo().make(datas);
+				tableList = new PsValMakeTableDfo().getTables(datas);
 
 				for (PsValTable psTable : tableList) {
 

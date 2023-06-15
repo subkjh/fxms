@@ -70,8 +70,8 @@ public class ValueExtractValidDfo implements FxDfo<PsVoRawList, PsVoList> {
 				psItem = PsApi.getApi().getPsItem(raw.getPsId());
 			} catch (PsItemNotFoundException ex) {
 				try {
-					AlarmApi.getApi().fireAlarm(null, raw.getPsId(), ALARM_CODE.FXMSERR_PS_ITEM_NOT_FOUND.getAlcdNo(),
-							null, raw.getPsId(), null);
+					AlarmApi.getApi().fireAlarm(null, raw.getPsId(), ALARM_CODE.fxms_not_found_psitem.getAlcdNo(), null,
+							raw.getPsId(), null);
 				} catch (Exception e) {
 					Logger.logger.error(e);
 				}

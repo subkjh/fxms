@@ -11,6 +11,7 @@ import java.util.Map;
 import subkjh.bas.co.log.Logger;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.database.DataBase;
+import subkjh.dao.def.DaoListener;
 import subkjh.dao.exp.DBObjectDupException;
 import subkjh.dao.exp.QidNotFoundException;
 import subkjh.dao.model.BatchVo;
@@ -194,12 +195,14 @@ public class QidDao extends CommDao {
 	 * @return
 	 * @throws Exception
 	 */
-	public int selectQid(String qid, Object para) throws Exception {
+	public int selectQid(String qid, Object para, DaoListener daoListener) throws Exception {
+
 		try {
+
 			SqlSelectBean sql = (SqlSelectBean) getSqlBean(qid);
 			if (sql != null) {
 				QueryResult esql = sql.getOneSql(para);
-				return selectSql(esql.getSql(), esql.getParaArray());
+				return selectSql(esql.getSql(), esql.getParaArray(), daoListener);
 			} else {
 				throw new Exception("QID(" + qid + ") NOT FOUND");
 			}

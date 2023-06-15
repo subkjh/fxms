@@ -36,7 +36,7 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 		try {
 			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePowerFactor"), null);
 			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePower"), null);
-			System.out.println(FxmsUtil.toJson(dfo.make(datas)));
+			System.out.println(FxmsUtil.toJson(dfo.getTables(datas)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -44,14 +44,14 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 
 	@Override
 	public List<PsValTable> call(FxFact fact, PsVoList datas) throws Exception {
-		return make(datas);
+		return getTables(datas);
 	}
 
-	public List<PsValTable> make(PsVoList datas) throws Exception {
+	public List<PsValTable> getTables(PsVoList datas) throws Exception {
 
-		final Map<String, PsValTable> map = makeTables(datas);
-
+		final Map<String, PsValTable> map = makeTableInfo(datas);
 		final PsKind psKind = PsApi.getApi().getPsKindRaw();
+		
 		PsValTable psTable;
 		Object valueArray[];
 		int column;
@@ -106,7 +106,7 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 	 * @return
 	 * @throws Exception
 	 */
-	private Map<String, PsValTable> makeTables(PsVoList datas) throws Exception {
+	private Map<String, PsValTable> makeTableInfo(PsVoList datas) throws Exception {
 
 		final Map<String, PsValTable> map = new HashMap<>();
 		final PsKind psKind = PsApi.getApi().getPsKindRaw();
