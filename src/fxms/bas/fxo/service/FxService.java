@@ -13,15 +13,6 @@ import fxms.bas.event.NotiFilter;
  */
 public interface FxService extends Remote {
 
-	/**
-	 * 노트 받는 메소스
-	 * 
-	 * @param noti
-	 * @throws RemoteException
-	 * @throws Exception
-	 */
-	public void onNotify(FxEvent noti) throws RemoteException, Exception;
-
 	public String getFxServiceId() throws RemoteException, Exception;
 
 	/**
@@ -37,19 +28,14 @@ public interface FxService extends Remote {
 
 	public String getStatusThread(String threadName) throws RemoteException, Exception;
 
-	public void runCron(String name) throws RemoteException, Exception;
-
-	public void runClass(String runnableClassName) throws RemoteException, Exception;
-
 	/**
+	 * 노트 받는 메소스
 	 * 
-	 * @param classNameOfNoti
+	 * @param noti
 	 * @throws RemoteException
 	 * @throws Exception
 	 */
-	public void sendEvent(String classNameOfNoti) throws RemoteException, Exception;
-
-	public String setLogLevel(String threadName, String level) throws RemoteException, Exception;
+	public void onNotify(FxEvent noti) throws RemoteException, Exception;
 
 	/**
 	 * 확인용
@@ -60,6 +46,12 @@ public interface FxService extends Remote {
 	 * @throws Exception
 	 */
 	public long ping(String who) throws RemoteException, Exception;
+
+	public void runClass(String runnableClassName) throws RemoteException, Exception;
+
+	public void runCron(String name) throws RemoteException, Exception;
+
+	public String setLogLevel(String threadName, String level) throws RemoteException, Exception;
 
 	public void stop(String reason) throws RemoteException, Exception;
 }

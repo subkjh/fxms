@@ -49,6 +49,11 @@ public class ValueApiDfo extends ValueApi {
 		}
 
 	}
+	
+	public ValueApiDfo()
+	{
+		
+	}
 
 	@Override
 	public int addValue(PsVoRawList rawList, boolean checkAlarm) {

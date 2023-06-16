@@ -44,7 +44,6 @@ import fxms.bas.impl.dpo.mo.MoDpo;
 import fxms.bas.impl.dvo.MoDefDvo;
 import fxms.bas.poller.AdapterPoller;
 import fxms.bas.signal.AliveSignal;
-import fxms.bas.signal.ReloadSignal;
 import fxms.bas.signal.ReloadSignal.ReloadType;
 import fxms.bas.signal.ShutdownSignal;
 import fxms.bas.thread.NotiSender;
@@ -208,10 +207,8 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 		}
 	}
 
-	private final long DATA_CHECK_CYCLE = 60 * 1000L; // reload 데이터 확인 주기
 	private final long CHECK_POLLER_CYCLE = 60 * 1000L; // 폴러 데이터 확인 주기
 	private final long LOG_API_STATE_CYCLE = 300 * 1000L; // api 상태 로그 남기는 주기
-	private long nextDataCheckedTime = System.currentTimeMillis() + DATA_CHECK_CYCLE;
 	private long nextLogApiState = System.currentTimeMillis() + LOG_API_STATE_CYCLE;
 	private long nextCheckPollerTime = System.currentTimeMillis() + 3000L;
 
@@ -364,13 +361,8 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 			logger.debug("receive {}", event);
 		}
 
-		if (event instanceof ReloadSignal) {
-			// 다시일기 신호이면 API에게만 보낸다.
-			requestReloadApi(((ReloadSignal) event).getReloadType());
-		} else {
-			// 그외는 API를 포함하여 모두에게 보낸다.
-			notiToReceiver(event);
-		}
+		// 그외는 API를 포함하여 모두에게 보낸다.
+		notifyChildren(event);
 
 		// 종료이벤트이면 종료한다.
 		if (event instanceof ShutdownSignal) {
@@ -517,23 +509,6 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 	}
 
 	@Override
-	public void sendEvent(String classNameOfNoti) throws RemoteException, Exception {
-
-		logger.info(classNameOfNoti);
-
-		try {
-			Object obj = Class.forName(classNameOfNoti).newInstance();
-			if (obj instanceof FxEvent) {
-				sendEvent((FxEvent) obj, true, true);
-			}
-		} catch (Exception e) {
-			logger.error(e);
-			throw e;
-		}
-
-	}
-
-	@Override
 	public String setLogLevel(String threadName, String level) throws RemoteException, Exception {
 
 		logger.info(threadName, LOG_LEVEL.getLevel(level));
@@ -637,6 +612,23 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 	}
 
 	/**
+	 * 서비스에서 관리하는 리시버에게 이벤트를 전달한다.
+	 * 
+	 * @param event
+	 */
+	protected void notifyChildren(FxEvent event) {
+
+		for (NotiReceiver r : this.getFxActors(NotiReceiver.class).values()) {
+			try {
+				r.onEvent(event);
+				logger.trace("receiver={}, noti={}", r.getName(), event);
+			} catch (Exception ex) {
+				logger.error(ex);
+			}
+		}
+	}
+
+	/**
 	 * Reload신호를 받아 후속 작업을 하는 곳
 	 * 
 	 * @param type
@@ -655,8 +647,6 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 	protected void onCycle(long mstime) {
 
 		checkPollers(mstime);
-
-		checkDataUpdate(mstime);
 
 		logApiState(mstime);
 
@@ -719,50 +709,6 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 		notiSender.start();
 
 		sb.append(Logger.makeSubString(notiSender.getName(), "running"));
-	}
-
-	/**
-	 * 외부 변동 내역을 읽어 API에 통보한다.
-	 */
-	private void checkDataUpdate(long mstime) {
-
-		if (nextDataCheckedTime > mstime) {
-			return;
-		}
-
-		nextDataCheckedTime += DATA_CHECK_CYCLE;
-
-		String date = DateUtil.getDtmStr(mstime);
-
-		VarApi api = VarApi.getApi();
-		StringBuffer sb = new StringBuffer();
-		List<ReloadType> list = api.getUpdatedData();
-
-		for (ReloadType data : list) {
-
-			if (sb.length() > 0) {
-				sb.append(",");
-			}
-
-			sb.append(data.name());
-
-			try {
-				requestReloadApi(data);
-				api.appliedData(data, DateUtil.getDtm());
-			} catch (Exception e) {
-				Logger.logger.error(e);
-				sb.append(" error:").append(e.getMessage());
-			}
-
-			try {
-				this.onChanged(data);
-			} catch (Exception e) {
-				Logger.logger.error(e);
-			}
-
-		}
-
-		Logger.logger.debug("{} : {}", date, sb.toString());
 	}
 
 	/**
@@ -900,24 +846,6 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 		}
 	}
 
-	private void setHandlerInfo(HandlerVo hand, boolean isOk) throws Exception {
-
-		if (hand.getPort2db() <= 0) {
-			// 0이면 저장소에 기록하지 않는다.
-			return;
-		}
-
-		int port = isOk ? hand.getPort2db() : 0;
-		String host = isOk ? hand.getHost2db() : "null";
-
-		VarApi.getApi().setVarValue(hand.getName() + "-host", host, true);
-		VarApi.getApi().setVarValue(hand.getName() + "-port", port, true);
-		for (String name : hand.getSamePortList()) {
-			VarApi.getApi().setVarValue(name + "-host", host, true);
-			VarApi.getApi().setVarValue(name + "-port", port, true);
-		}
-	}
-
 	private void initMemberThread() throws Exception {
 		List<FxServiceMember> memList = FxActorParser.getParser().getActorList(FxServiceMember.class);
 		StringBuffer sb = new StringBuffer();
@@ -982,48 +910,22 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 		}
 	}
 
-	/**
-	 * 서비스에서 관리하는 리시버에게 이벤트를 전달한다.
-	 * 
-	 * @param event
-	 */
-	private void notiToReceiver(FxEvent event) {
+	private void setHandlerInfo(HandlerVo hand, boolean isOk) throws Exception {
 
-		for (NotiReceiver r : this.getFxActors(NotiReceiver.class).values()) {
-			try {
-				r.onEvent(event);
-				logger.trace("receiver={}, noti={}", r.getName(), event);
-			} catch (Exception ex) {
-				logger.error(ex);
-			}
-		}
-	}
-
-	/**
-	 * 데이터를 다시 읽기를 요청한다.
-	 * 
-	 * @param type
-	 */
-	private void requestReloadApi(Enum<?> type) {
-
-		if (type == ReloadType.None) {
+		if (hand.getPort2db() <= 0) {
+			// 0이면 저장소에 기록하지 않는다.
 			return;
 		}
 
-		StringBuffer sb = new StringBuffer();
+		int port = isOk ? hand.getPort2db() : 0;
+		String host = isOk ? hand.getHost2db() : "null";
 
-		for (FxApi api : this.getFxActors(FxApi.class).values()) {
-			try {
-				api.reload(type);
-				sb.append(" ").append(api.getClass().getSimpleName());
-			} catch (Exception ex) {
-				sb.append("(error)");
-				logger.error(ex);
-			}
+		VarApi.getApi().setVarValue(hand.getName() + "-host", host, true);
+		VarApi.getApi().setVarValue(hand.getName() + "-port", port, true);
+		for (String name : hand.getSamePortList()) {
+			VarApi.getApi().setVarValue(name + "-host", host, true);
+			VarApi.getApi().setVarValue(name + "-port", port, true);
 		}
-
-		logger.debug("Request to reload {} {}", type.name(), sb.toString());
-
 	}
 
 	private void start0() throws Exception {

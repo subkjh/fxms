@@ -35,7 +35,8 @@ import subkjh.dao.ClassDaoEx;
 @FxAdapterInfo(service = "AppService", descr = "수집한 데이터에 대한 통계를 생성한다.")
 public class PsStatMakeCron extends Crontab {
 
-	@FxAttr(value = "0 * * * *", description = "매시간 저장소 테이블을 확인한다.")
+	// 통계 생성 가능 시간이 있기 때문에 매분마다 처리해도 된다.
+	@FxAttr(value = "* * * * *", description = "매분마다 통계 테이블 생성한다.")
 	private String schedule;
 
 	private String yyyymmdd = "";
@@ -70,15 +71,16 @@ public class PsStatMakeCron extends Crontab {
 	 */
 	private void afterStat(StatMakeReqDbo req) {
 
+		List<String> psIds = PsApi.getApi().getPsIds(req.getPsTbl());
+		int alcdNo = ALARM_CODE.fxms_error_ps_stat_adapter.getAlcdNo();
 		List<PsStatAfterAdapter> adapters = AdapterApi.getApi().getAdapters(PsStatAfterAdapter.class);
 
 		for (PsStatAfterAdapter a : adapters) {
 			try {
-				a.afterStat(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm());
+				a.afterStat(req.getPsTbl(), psIds, req.getPsDataCd(), req.getPsDtm());
 			} catch (Exception e) {
 				Logger.logger.error(e);
-				AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.fxms_error_ps_stat_adapter.getAlcdNo(),
-						null, null, null);
+				AlarmApi.getApi().fireAlarm(null, req.getKey(), alcdNo, null, null, null);
 			}
 		}
 	}
@@ -138,7 +140,8 @@ public class PsStatMakeCron extends Crontab {
 			}
 
 		} catch (Exception e) {
-			AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.fxms_error_ps_stat.getAlcdNo(), null, null, null);
+			AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.fxms_error_ps_stat.getAlcdNo(), null, null,
+					null);
 			Logger.logger.error(e);
 			throw e;
 		}
@@ -158,8 +161,8 @@ public class PsStatMakeCron extends Crontab {
 			makeStat(req); // 통계생성
 
 			try {
-				AppApi.getApi().responseMakeStat(new PsStatReqVo(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm())); // 생성결과
-																														// 통보
+				// 생성결과 통보
+				AppApi.getApi().responseMakeStat(new PsStatReqVo(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm()));
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}

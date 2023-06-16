@@ -115,7 +115,7 @@ public abstract class FxApi implements Loggable, NotiReceiver {
 	 * 
 	 * @throws Exception
 	 */
-	public abstract void reload(Enum<?> type) throws Exception;
+	protected abstract void reload(Enum<?> type) throws Exception;
 
 	/**
 	 * 

@@ -75,9 +75,6 @@ public abstract class PsApi extends FxApi {
 	/** 성능ID 기준 항목 */
 	private final Map<String, PsItem> psItemMap;
 
-	/** 테이블 기준 성능항목 */
-	private Map<String, List<PsItem>> tableMap;
-
 	protected final List<PsKind> psKindList;
 
 	private PsKind rawPsKind = null;
@@ -86,7 +83,6 @@ public abstract class PsApi extends FxApi {
 
 	public PsApi() {
 		psItemMap = new HashMap<String, PsItem>();
-		tableMap = new HashMap<String, List<PsItem>>();
 		psKindList = new ArrayList<PsKind>();
 	}
 
@@ -124,7 +120,26 @@ public abstract class PsApi extends FxApi {
 	 * @return
 	 */
 	public List<PsItem> getPsItemList(String psTable) {
-		return tableMap.get(psTable);
+		List<PsItem> ret = new ArrayList<>();
+		if (psTable != null) {
+			synchronized (this.psItemMap) {
+				for (PsItem o : this.psItemMap.values()) {
+					if (psTable.equals(o.getPsTable())) {
+						ret.add(o);
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+	public List<String> getPsIds(String psTable) {
+		List<PsItem> items = getPsItemList(psTable);
+		List<String> psIds = new ArrayList<>();
+		for (PsItem item : items) {
+			psIds.add(item.getPsId());
+		}
+		return psIds;
 	}
 
 	/**
@@ -299,16 +314,8 @@ public abstract class PsApi extends FxApi {
 			this.enableMoStatus = false;
 
 			Map<String, PsItem> itemTmp = new HashMap<String, PsItem>();
-			Map<String, List<PsItem>> map = new HashMap<String, List<PsItem>>();
 
-			List<PsItem> colList;
 			for (PsItem item : itemList) {
-				colList = map.get(item.getPsTable());
-				if (colList == null) {
-					colList = new ArrayList<PsItem>();
-					map.put(item.getPsTable(), colList);
-				}
-				colList.add(item);
 
 				itemTmp.put(item.getPsId(), item);
 
@@ -327,7 +334,6 @@ public abstract class PsApi extends FxApi {
 				this.psItemMap.clear();
 				this.psItemMap.putAll(itemTmp);
 			}
-			this.tableMap = map;
 		}
 
 		if (kindList != null) {

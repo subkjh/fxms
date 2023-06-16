@@ -42,12 +42,36 @@ public class AdapterPoller extends FxThread {
 
 		this.cron = new Cron();
 		try {
-			cron.setSchedule("period " + this.adapter.getPollCycle());
+			this.cron.setSchedule("period " + this.adapter.getPollCycle());
 		} catch (Exception e) {
 		}
 
 		setName(this.adapter.getClass().getSimpleName() + "Poller");
 
+	}
+
+	public FxGetValueAdapter getAdapter() {
+		return adapter;
+	}
+
+	@Override
+	public void onEvent(FxEvent noti) throws Exception {
+
+		super.onEvent(noti);
+
+		if (noti instanceof ReloadSignal) {
+
+			ReloadSignal r = (ReloadSignal) noti;
+
+			if (r.getReloadType() == ReloadType.All || r.getReloadType() == ReloadType.Mo) {
+				reloadReq = System.currentTimeMillis();
+			}
+
+		} else if (noti instanceof FxMo) {
+
+			reloadReq = System.currentTimeMillis();
+
+		}
 	}
 
 	@Override
@@ -78,6 +102,7 @@ public class AdapterPoller extends FxThread {
 
 			if (reloadReq > reloadTime) {
 				try {
+					reloadReq = System.currentTimeMillis() + (5 * 60000L); // 최소 5분 후에 데이터를 다시 읽도록 한다.
 					moList = loadMos();
 					reloadTime = System.currentTimeMillis();
 				} catch (Exception e) {
@@ -86,7 +111,8 @@ public class AdapterPoller extends FxThread {
 				}
 			}
 
-			Logger.logger.info("start polling... {}, date={}, mo.size={}", this.adapter.getClass().getName(), DateUtil.toHstime(pollMstime),  moList.size());
+			Logger.logger.info("start polling... {}, date={}, mo.size={}", this.adapter.getClass().getName(),
+					DateUtil.toHstime(pollMstime), moList.size());
 
 			PsVoRawList valList = new PsVoRawList(this.adapter.getClass().getSimpleName(), pollMstime);
 
@@ -141,36 +167,10 @@ public class AdapterPoller extends FxThread {
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}
-		
+
 //		valList.add(new PsVoRaw(mo.getMoNo(), PsApi.MO_STATUS_PS_ID,
 //				online ? MO_STATUS.Online.getNo() : MO_STATUS.Offline.getNo()));
 
 	}
-
-	@Override
-	public void onEvent(FxEvent noti) throws Exception {
-
-		super.onEvent(noti);
-
-		if (noti instanceof ReloadSignal) {
-
-			ReloadSignal r = (ReloadSignal) noti;
-
-			if (r.getReloadType() == ReloadType.All || r.getReloadType() == ReloadType.Mo) {
-				reloadReq = System.currentTimeMillis();
-			}
-
-		} else if (noti instanceof FxMo) {
-
-			reloadReq = System.currentTimeMillis();
-
-		}
-	}
-
-	public FxGetValueAdapter getAdapter() {
-		return adapter;
-	}
-	
-	
 
 }

@@ -133,7 +133,7 @@ public class UpdateDiffValueDfo implements FxDfo<PsVoList, Boolean> {
 
 					Mo mo = MoApi.getApi().getMo(vo.getMoNo());
 
-					int value = Integer.parseInt(vo.getValue().toString());
+					int value = Float.valueOf(vo.getValue().toString()).intValue();
 
 					MO_STATUS status = MO_STATUS.get(value);
 					MoStateEvt event = new MoStateEvt(mo, status);

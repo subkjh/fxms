@@ -6,6 +6,7 @@ import java.util.List;
 import fxms.bas.api.AppApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.api.ServiceApi;
+import fxms.bas.api.VarApi;
 import fxms.bas.co.CoCode.FXSVC_ST_CD;
 import fxms.bas.event.FxEvent;
 import fxms.bas.event.NotiFilter;
@@ -13,10 +14,12 @@ import fxms.bas.fxo.FX_PARA;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.mo.Mo;
 import fxms.bas.signal.AliveSignal;
+import fxms.bas.signal.ReloadSignal;
 import fxms.bas.signal.ReloadSignal.ReloadType;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.PsStatReqVo;
 import subkjh.bas.co.log.Logger;
+import subkjh.bas.co.utils.DateUtil;
 
 /**
  * 
@@ -37,6 +40,10 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 	public static void main(String[] args) {
 		FxServiceImpl.start(AppService.class.getSimpleName(), AppServiceImpl.class, args);
 	}
+
+	private final long DATA_CHECK_CYCLE = 60 * 1000L; // reload 데이터 확인 주기
+
+	private long nextDataCheckedTime = System.currentTimeMillis() + DATA_CHECK_CYCLE;
 
 	public AppServiceImpl(String name, int port) throws RemoteException, Exception {
 		super(name, port);
@@ -60,11 +67,39 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 	}
 
 	@Override
+	public int generateStatistics(String psTbl, String psKindName, long psDtm) throws RemoteException, Exception {
+		int ret = 0;
+		try {
+			ret = AppApi.getApi().generateStatistics(psTbl, psKindName, psDtm);
+			return ret;
+		} catch (Exception e) {
+			Logger.logger.error(e);
+			throw e;
+		} finally {
+			Logger.logger.info("{}.{}.{} --> {}", psTbl, psKindName, psDtm, ret);
+		}
+	}
+
+	@Override
 	public NotiFilter getNotiFilter() throws RemoteException, Exception {
 		NotiFilter notiFilter = new NotiFilter();
 		notiFilter.add(Mo.class);
 		notiFilter.add(Alarm.class);
 		return notiFilter;
+	}
+
+	@Override
+	public List<String> getSameDays(String date, int count) throws RemoteException, Exception {
+		List<String> ret = null;
+		try {
+			ret = AppApi.getApi().getSameDays(date, count);
+			return ret;
+		} catch (Exception e) {
+			Logger.logger.error(e);
+			throw e;
+		} finally {
+			Logger.logger.info("date={}, count={} --> {}", date, count, ret);
+		}
 	}
 
 	@Override
@@ -125,6 +160,15 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 	}
 
 	@Override
+	protected void onCycle(long mstime) {
+
+		super.onCycle(mstime);
+
+		checkDataUpdate(mstime);
+
+	}
+
+	@Override
 	protected void onInit(StringBuffer sb) throws Exception {
 		super.onInit(sb);
 
@@ -152,31 +196,53 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 
 	}
 
-	@Override
-	public int generateStatistics(String psTbl, String psKindName, long psDtm) throws RemoteException, Exception {
-		int ret = 0;
-		try {
-			ret = AppApi.getApi().generateStatistics(psTbl, psKindName, psDtm);
-			return ret;
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			Logger.logger.info("{}.{}.{} --> {}", psTbl, psKindName, psDtm, ret);
-		}
-	}
+	/**
+	 * 외부 변동 내역을 읽어 API에 통보한다.<br>
+	 * AppService가 담당해야 한다.
+	 */
+	private void checkDataUpdate(long mstime) {
 
-	@Override
-	public List<String> getSameDays(String date, int count) throws RemoteException, Exception {
-		List<String> ret = null;
-		try {
-			ret = AppApi.getApi().getSameDays(date, count);
-			return ret;
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			Logger.logger.info("date={}, count={} --> {}", date, count, ret);
+		if (nextDataCheckedTime > mstime) {
+			return;
 		}
+
+		nextDataCheckedTime += DATA_CHECK_CYCLE;
+
+		String date = DateUtil.getDtmStr(mstime);
+
+		VarApi api = VarApi.getApi();
+		StringBuffer sb = new StringBuffer();
+		List<ReloadType> list = api.getUpdatedData();
+
+		for (ReloadType data : list) {
+
+			if (sb.length() > 0) {
+				sb.append(",");
+			}
+
+			sb.append(data.name());
+
+			try {
+
+				// NotiReceiver에게 이벤트 전달
+				this.sendEvent(new ReloadSignal(data), true, true);
+
+				api.appliedData(data, DateUtil.getDtm());
+
+			} catch (Exception e) {
+
+				Logger.logger.error(e);
+				sb.append(" error:").append(e.getMessage());
+			}
+
+			try {
+				this.onChanged(data);
+			} catch (Exception e) {
+				Logger.logger.error(e);
+			}
+
+		}
+
+		Logger.logger.debug("{} : {}", date, sb.toString());
 	}
 }
