@@ -9,7 +9,7 @@ import java.util.Map;
 import fxms.bas.api.FxApi;
 import fxms.bas.exp.AttrNotFoundException;
 import fxms.bas.impl.handler.dto.GetValuesDto;
-import fxms.bas.impl.handler.dto.SelectPsValueMinMaxPara;
+import fxms.bas.impl.handler.dto.SelectPsValueMinMaxDto;
 import subkjh.bas.co.utils.ObjectUtil;
 
 /**
@@ -23,7 +23,7 @@ public class FxAttrApi {
 	public static void main(String[] args) {
 		try {
 			System.out.println(FxAttrApi.toHelp(GetValuesDto.class));
-			System.out.println(FxAttrApi.toHelp(SelectPsValueMinMaxPara.class));
+			System.out.println(FxAttrApi.toHelp(SelectPsValueMinMaxDto.class));
 
 			Map<String, Object> datas = FxApi.makePara("moNo", 11234, "psKindName", "aaa", "psId", "MoStatus",
 					"startDate", 20220202111111L);
@@ -141,14 +141,16 @@ public class FxAttrApi {
 				if (attr != null) {
 					name = attr.name().length() == 0 ? f.getName() : attr.name();
 
-					sb.append(name).append(" (").append(f.getType().getSimpleName()).append(")");
-					sb.append(attr.required() ? " (mandantory)" : "");
-					sb.append(" : ").append(attr.description());
-
+					sb.append("<dl>") //
+							.append("<dt>").append(name).append(" (").append(f.getType().getSimpleName()).append(")")
+							.append(attr.required() ? " (mandantory) " : " ") //
+							.append(attr.text()) //
+							.append("</dt>") //
+							.append("<dd>").append(attr.description()).append("</dd>");
+					
 					if (attr.example().length() > 0)
-						sb.append(",  ex) ").append(attr.example());
-
-					sb.append(" <br>\n");
+						sb.append("<dd> ex) ").append(attr.example()).append("</dd>");
+					sb.append("</dl>");
 
 				}
 			}

@@ -30,7 +30,7 @@ public class ReqMakeStatValueDfo implements FxDfo<List<PsStatReqVo>, Boolean> {
 		list.add("AAA2");
 		list.add("AAA3");
 		System.out
-				.println(FxmsUtil.toJson(dpo.make(System.currentTimeMillis(), list, PsApi.getApi().getPsKind("MIN5"))));
+				.println(FxmsUtil.toJson(dpo.make(System.currentTimeMillis(), list, PsApi.getApi().getPsKind(PsKind.PSKIND_5M))));
 	}
 
 	private List<PsStatReqVo> make(long mstime, Collection<String> psTables, PsKind psKindSrc) {

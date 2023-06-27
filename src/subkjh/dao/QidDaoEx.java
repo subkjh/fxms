@@ -16,7 +16,6 @@ public class QidDaoEx {
 	}
 
 	private QidDao tran;
-	private StringBuffer msg = new StringBuffer();
 	private Exception exception = null;
 	private final List<Integer> countList = new ArrayList<>();
 	private int processedCount; // 최근 처리 건수
@@ -43,9 +42,6 @@ public class QidDaoEx {
 			throw e;
 		}
 
-		if (msg.length() > 0)
-			msg.append(", ");
-		msg.append(qid).append("=").append(ret);
 		return this;
 	}
 
@@ -95,10 +91,6 @@ public class QidDaoEx {
 
 				tran.commit();
 
-				if (msg.length() > 0) {
-					Logger.logger.info("{}", msg);
-				}
-
 			} else {
 				Logger.logger.error(ex);
 				tran.rollback();
@@ -117,5 +109,4 @@ public class QidDaoEx {
 		return this;
 	}
 
-	
 }

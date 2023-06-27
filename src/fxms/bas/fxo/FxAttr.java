@@ -31,7 +31,7 @@ public @interface FxAttr {
 	 * 
 	 * @return
 	 */
-	String description() default "설명이 없습니다.";
+	String description() default "";
 
 	/**
 	 * 화면에 보일 명칭

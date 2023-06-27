@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.api.AlarmApi;
-import fxms.bas.api.EventApi;
 import fxms.bas.api.FxApi;
 import fxms.bas.api.MoApi;
 import fxms.bas.api.PsApi;

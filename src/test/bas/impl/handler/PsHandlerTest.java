@@ -3,6 +3,7 @@ package test.bas.impl.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import fxms.bas.vo.PsKind;
 import fxms.bas.ws.handler.client.FxHttpClient;
 import subkjh.bas.co.utils.DateUtil;
 
@@ -20,7 +21,7 @@ public class PsHandlerTest {
 			para.put("moNo", 100003);
 			para.put("psId", "TEMP");
 			para.put("psStatFuncList", "SUM");
-			para.put("psDataCd", "MIN5");
+			para.put("psDataCd", PsKind.PSKIND_5M);
 			para.put("startPsDate", DateUtil.getDtm(System.currentTimeMillis() - (86400000L + 3600000L)));
 			para.put("endPsDate", DateUtil.getDtm(System.currentTimeMillis() - 3600000L));
 

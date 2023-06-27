@@ -13,6 +13,7 @@ import subkjh.bas.co.user.User;
 import subkjh.bas.co.utils.DateUtil;
 import subkjh.dao.QidDao;
 import subkjh.dao.database.DBManager;
+import subkjh.dao.util.FxTableMaker;
 
 /**
  * 알람발생 통계 데이터 생성 크론
@@ -51,10 +52,7 @@ public class AlarmStatHourlyCron extends Crontab {
 			tran.start();
 
 			Map<String, Object> para = new HashMap<String, Object>();
-			para.put("regDtm", DateUtil.getDtm());
-			para.put("regUserNo", User.USER_NO_SYSTEM);
-			para.put("chgDtm", DateUtil.getDtm());
-			para.put("chgUserNo", User.USER_NO_SYSTEM);
+			FxTableMaker.initRegChgMap(User.USER_NO_SYSTEM, para);
 
 			long mstime = System.currentTimeMillis() - 86400000L;
 

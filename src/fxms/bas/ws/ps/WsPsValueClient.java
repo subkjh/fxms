@@ -38,9 +38,9 @@ public class WsPsValueClient {
 		int port = 63819;
 
 		for (Map<String, Object> o : list) {
-			if ("ps-server".equals(String.valueOf(o.get("varName")))) {
+			if ("fxms-value-peeker-host".equals(String.valueOf(o.get("varName")))) {
 				host = String.valueOf(o.get("varVal"));
-			} else if ("ps-server-port".equals(String.valueOf(o.get("varName")))) {
+			} else if ("fxms-value-peeker-port".equals(String.valueOf(o.get("varName")))) {
 				port = Integer.parseInt(o.get("varVal") + "");
 			}
 		}

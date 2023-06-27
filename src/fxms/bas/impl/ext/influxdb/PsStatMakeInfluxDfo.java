@@ -47,7 +47,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 
 	public static void main(String[] args) throws Exception {
 		PsStatMakeInfluxDfo dfo = new PsStatMakeInfluxDfo();
-		dfo.generateStatistics("FX_V_MOST", "MIN5", 20230530121000L);
+		dfo.generateStatistics("FX_V_MOST", PsKind.PSKIND_5M, 20230530121000L);
 	}
 
 	private final int IDX_MO = 0;
@@ -66,6 +66,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 	public int generateStatistics(StatMakeReqDbo req) throws Exception {
 		return generateStatistics(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm());
 	}
+
 	public int generateStatistics(String psTbl, String psKindName, long psDtm) throws Exception {
 
 		String selectSql;
@@ -93,6 +94,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 
 //		return -1;
 	}
+
 	private List<Object[]> getDatas(String sql, int size, long insDate) throws Exception {
 
 		final List<Object[]> ret = new ArrayList<>();
@@ -145,6 +147,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 		}
 
 	}
+
 	private String getSqlDelete(String psTable, PsKind psKind, long psDate) {
 
 		StringBuffer sql = new StringBuffer();

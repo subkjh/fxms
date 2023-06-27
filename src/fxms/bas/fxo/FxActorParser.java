@@ -168,7 +168,7 @@ public class FxActorParser {
 		// XML 파일만 가져온다.
 		List<File> xmlFileList = new ArrayList<File>();
 		for (File f : folder.listFiles()) {
-			if (this.isXmlFile(f)) {
+			if (isXmlFile(f)) {
 				xmlFileList.add(f);
 			}
 		}

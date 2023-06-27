@@ -23,6 +23,13 @@ public abstract class VarApi extends FxApi {
 
 	public static final String UPDATED_TIME_VAR = "fxms.data.updated.time.";
 
+	public static final String fxms_alarm_broadcaster_host = "fxms-alarm-broadcaster-host";
+	public static final String fxms_alarm_broadcaster_port = "fxms-alarm-broadcaster-port";
+	public static final String fxms_handler_host = "fxms-handler-host";
+	public static final String fxms_handler_port = "fxms-handler-port";
+	public static final String fxms_value_peeker_host = "fxms-value-peeker-host";
+	public static final String fxms_value_peeker_port = "fxms-value-peeker-port";
+
 	/**
 	 * 사용할 DBM를 제공합니다.
 	 * 
@@ -258,7 +265,7 @@ public abstract class VarApi extends FxApi {
 	 * @throws Exception
 	 */
 	public abstract boolean setVarValue(String varName, Object varValue, boolean broadcast) throws Exception;
-	
+
 	/**
 	 * 
 	 * @param varName
@@ -267,7 +274,7 @@ public abstract class VarApi extends FxApi {
 	 * @throws Exception
 	 */
 	public abstract boolean enable(String varName, boolean enable) throws Exception;
-	
+
 	/**
 	 * 변수의 속성을 수정한다.
 	 * 

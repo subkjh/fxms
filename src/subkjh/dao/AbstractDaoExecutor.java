@@ -37,7 +37,7 @@ public class AbstractDaoExecutor {
 		Null, Collection, Array;
 	}
 
-	private final String RET_LOG = "\n--- query ---\n {} \n--- parameters --- \n {} \n--- result ---\nret({}) ms({})";
+	private final String RET_LOG = "\n--- query ---\n{} \n--- parameters --- \n{} \n--- result ---\nret({}) ms({})";
 	// private final String ERR_LOG = "\n--- query ---\n {} \n--- parameters --- \n
 	// {} \n--- result ---\n{}";
 

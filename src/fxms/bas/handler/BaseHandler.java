@@ -344,14 +344,17 @@ public abstract class BaseHandler extends FxHttpHandler {
 		for (MethodData data : methodList) {
 
 			MethodDescr descr = data.method.getAnnotation(MethodDescr.class);
-			ret.append("<h3>");
+			ret.append("<article>");
+			ret.append("<h4>");
 			if (descr != null) {
+			
 				ret.append("API Name : ").append(descr.name()).append("<br>");
 				ret.append("API Description : ").append(descr.description()).append("<br>");
 			}
 			ret.append("API URL : ").append(data.name).append("<br>");
-			ret.append("</h3>");
-			ret.append("<p>");
+			ret.append("</h4>");
+			
+			ret.append("<h5>Input Parameters</h5>");
 
 			List<Column> list = new ArrayList<Column>();
 			for (Class<?> cls : data.paraClassOf) {
@@ -378,6 +381,8 @@ public abstract class BaseHandler extends FxHttpHandler {
 					ret.append("Map 기타 데이터<br>");
 				}
 			}
+			ret.append("</article>");
+
 
 			ret.append("</p>\n");
 

@@ -30,7 +30,8 @@ public class DBManager {
 
 	private static DBManager manager = null;
 
-	public static DBManager getMgr() {
+	public synchronized static DBManager getMgr() {
+		
 		if (manager == null) {
 			manager = new DBManager();
 			try {

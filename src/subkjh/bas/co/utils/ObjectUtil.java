@@ -173,7 +173,8 @@ public class ObjectUtil {
 			for (Field field : fields) {
 
 				if ((field.getModifiers() & Modifier.STATIC) != Modifier.STATIC //
-						&& (field.getModifiers() & Modifier.TRANSIENT) != Modifier.TRANSIENT) {
+						&& (field.getModifiers() & Modifier.TRANSIENT) != Modifier.TRANSIENT //
+						&& field.isSynthetic() == false) {
 
 					field.setAccessible(true);
 

@@ -22,14 +22,16 @@ public class HandlerVo extends FxActorImpl implements Loggable {
 
 	private Map<String, FxHttpHandler> mapHandler;
 
-	@FxAttr(name="port", required = true)
+	@FxAttr(name = "port", required = true)
 	private int port;
-	@FxAttr(name="port2db", required = false)
+	@FxAttr(name = "port2db", required = false)
 	private int port2db;
-	@FxAttr(name="host2db", required = false)
+	@FxAttr(name = "host2db", required = false)
 	private String host2db;
-	@FxAttr(name="context", required = false)
+	@FxAttr(name = "context", required = false)
 	private Object context;
+	@FxAttr(name = "var.name", required = false)
+	private String varName;
 
 	private List<String> samePortList = new ArrayList<String>();
 
@@ -57,6 +59,10 @@ public class HandlerVo extends FxActorImpl implements Loggable {
 		return samePortList;
 	}
 
+	public String getVarName() {
+		return varName;
+	}
+
 	@Override
 	public String getState(LOG_LEVEL level) {
 
@@ -82,6 +88,7 @@ public class HandlerVo extends FxActorImpl implements Loggable {
 		samePortList.add(hand.getName());
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void onCreated() throws Exception {
 

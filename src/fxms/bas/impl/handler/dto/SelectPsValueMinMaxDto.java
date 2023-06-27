@@ -3,7 +3,7 @@ package fxms.bas.impl.handler.dto;
 import fxms.bas.fxo.FxAttr;
 import subkjh.bas.co.utils.DateUtil;
 
-public class SelectPsValueMinMaxPara {
+public class SelectPsValueMinMaxDto {
 
 	@FxAttr(description = "관리대상번호", example = "123456")
 	private long moNo;
@@ -20,7 +20,7 @@ public class SelectPsValueMinMaxPara {
 	@FxAttr(description = "성능종류명. psKindName으로 대신함", required = false, example = "RAW")
 	private String psDataName = "RAW";
 
-	public SelectPsValueMinMaxPara() {
+	public SelectPsValueMinMaxDto() {
 		this.psDate = String.valueOf(DateUtil.getYmd());
 	}
 

@@ -66,7 +66,7 @@ public class Logger {
 
 	public static String fill(String s, int size, char fillChar) {
 		String s1 = String.valueOf(s);
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append(s1);
 		for (int i = s1.length(); i < size; i++) {
@@ -81,11 +81,11 @@ public class Logger {
 	 * 
 	 * @return yyyyMMddHHmmss의 값
 	 */
-	public static synchronized long getDate(long mstime) {
+	public static synchronized String getDate(long mstime) {
 		if (mstime <= 0) {
-			return Long.parseLong(YYYYMMDDHHMMSS.format(new Date(System.currentTimeMillis())));
+			return YYYYMMDDHHMMSS.format(new Date(System.currentTimeMillis()));
 		} else {
-			return Long.parseLong(YYYYMMDDHHMMSS.format(new Date(mstime)));
+			return YYYYMMDDHHMMSS.format(new Date(mstime));
 		}
 	}
 
@@ -219,8 +219,9 @@ public class Logger {
 
 	private static String getTime() {
 		Calendar cal = Calendar.getInstance();
-		String s = String.format("%02d,%02d:%02d:%02d.%03d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY),
-				cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND), cal.get(Calendar.MILLISECOND));
+		String s = String.format("%02d,%02d:%02d:%02d.%03d", cal.get(Calendar.DAY_OF_MONTH),
+				cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND),
+				cal.get(Calendar.MILLISECOND));
 
 		return s;
 	}
@@ -265,10 +266,8 @@ public class Logger {
 	 * 있습니다.<br>
 	 * 기본 보관 화일 개수는 21건 입니다.
 	 * 
-	 * @param folder
-	 *            로그 보관 폴더
-	 * @param name
-	 *            확장자를 제외한 로그 화일명
+	 * @param folder 로그 보관 폴더
+	 * @param name   확장자를 제외한 로그 화일명
 	 */
 	public Logger(String folder, String name) {
 
@@ -295,10 +294,8 @@ public class Logger {
 	/**
 	 * debug 로그를 출력합니다. 태그 정보는 D입니다.
 	 * 
-	 * @param obj
-	 *            출력한 내용
-	 * @param classes
-	 *            Caller를 찾을 때 제외할 클래스들
+	 * @param obj     출력한 내용
+	 * @param classes Caller를 찾을 때 제외할 클래스들
 	 */
 	public void debugc(Class<?> cls, String format, Object... objArray) {
 		if (LOG_LEVEL.debug.contains(getLevel4Th()))
@@ -389,8 +386,7 @@ public class Logger {
 	}
 
 	/**
-	 * @param level
-	 *            로그 레벨을 설정합니다.
+	 * @param level 로그 레벨을 설정합니다.
 	 */
 	public void setLevel(LOG_LEVEL level) {
 		thLevelMap = null;
@@ -413,8 +409,7 @@ public class Logger {
 	}
 
 	/**
-	 * @param maxBackupFileCount
-	 *            로그 화일 보관 개수를 설정합니다.
+	 * @param maxBackupFileCount 로그 화일 보관 개수를 설정합니다.
 	 */
 	public void setMaxBackupFileCount(int maxBackupFileCount) {
 		this.maxBackupFileCount = maxBackupFileCount <= 0 ? 1 : maxBackupFileCount;
@@ -430,8 +425,7 @@ public class Logger {
 	}
 
 	/**
-	 * @param isPrintOutConsole
-	 *            콘솔로 로그를 출력할지 결정합니다.
+	 * @param isPrintOutConsole 콘솔로 로그를 출력할지 결정합니다.
 	 */
 	public void setPrintOutConsole(boolean isPrintOutConsole) {
 		this.isPrintOutConsole = isPrintOutConsole;
@@ -509,13 +503,10 @@ public class Logger {
 	/**
 	 * 출력할 메시지를 제공합니다.
 	 * 
-	 * @param msg
-	 *            출력할 메시지
-	 * @param tag
-	 *            메시지 종류<br>
-	 *            보통 한 문자로 T, D, I, F, E를 사용합니다. 기타 다른 문자열을 사용해도 상관없습니다.
-	 * @param classes
-	 *            이 클래스 내의 Stack Trace는 제외합니다.
+	 * @param msg     출력할 메시지
+	 * @param tag     메시지 종류<br>
+	 *                보통 한 문자로 T, D, I, F, E를 사용합니다. 기타 다른 문자열을 사용해도 상관없습니다.
+	 * @param classes 이 클래스 내의 Stack Trace는 제외합니다.
 	 * @return 출력할 메시지
 	 */
 	private String getLine(String msg, String tag, Class<?> cls) throws Exception {
@@ -582,8 +573,8 @@ public class Logger {
 
 		// 어제 마지막 변경되었으면 오늘 처음 쓰기 시작되면 어제 날자로 백업합니다.
 		if (file.exists() && file.lastModified() < getTodayFirstTime()) {
-			File dest = new File(folder + File.separator + nameLogFile + "." + YYYYMMDD.format(new Date(file.lastModified()))
-					+ ".log");
+			File dest = new File(folder + File.separator + nameLogFile + "."
+					+ YYYYMMDD.format(new Date(file.lastModified())) + ".log");
 			file.renameTo(dest);
 
 			file = new File(folder + File.separator + nameLogFile + ".log");
@@ -674,7 +665,7 @@ public class Logger {
 
 	}
 
-	private void print(String str) {
+	private synchronized void print(String str) {
 
 		PrintStream ps = this.ps;
 

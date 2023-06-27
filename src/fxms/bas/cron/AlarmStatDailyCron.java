@@ -10,6 +10,7 @@ import subkjh.bas.BasCfg;
 import subkjh.bas.co.user.User;
 import subkjh.bas.co.utils.DateUtil;
 import subkjh.dao.QidDaoEx;
+import subkjh.dao.util.FxTableMaker;
 
 /**
  * 통계 생성자<br>
@@ -39,10 +40,7 @@ public class AlarmStatDailyCron extends Crontab {
 	public void start() throws Exception {
 
 		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("regDtm", DateUtil.getDtm());
-		para.put("regUserNo", User.USER_NO_SYSTEM);
-		para.put("chgDtm", DateUtil.getDtm());
-		para.put("chgUserNo", User.USER_NO_SYSTEM);
+		FxTableMaker.initRegChgMap(User.USER_NO_SYSTEM, para);
 		para.put("stDate", DateUtil.getYmd(System.currentTimeMillis() - 86400000L));
 
 		StatMakeDailyCronQid qid = new StatMakeDailyCronQid();

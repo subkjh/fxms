@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import fxms.bas.exp.DateRangeOverException;
+import fxms.bas.fxo.FxmsUtil;
 import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.utils.DateUtil;
 
@@ -16,10 +17,17 @@ import subkjh.bas.co.utils.DateUtil;
  *
  */
 public class PsKind {
+	
+	public static final String PSKIND_RAW = "RAW";
+	public static final String PSKIND_5M = "5M";
+	public static final String PSKIND_15M = "15M";
+	public static final String PSKIND_1H = "1H";
+	public static final String PSKIND_1D = "1D";
+
 
 	public enum TBL_PART_UNIT_CD {
-		Yearly("Y", Calendar.YEAR), Monthly("M", Calendar.MONTH), Weekly("W", Calendar.WEEK_OF_YEAR),
-		Daily("D", Calendar.DAY_OF_YEAR), None("N", Calendar.DAY_OF_YEAR);
+		Daily("D", Calendar.DAY_OF_YEAR), Monthly("M", Calendar.MONTH), None("N", Calendar.DAY_OF_YEAR),
+		Weekly("W", Calendar.WEEK_OF_YEAR), Yearly("Y", Calendar.YEAR);
 
 		public static TBL_PART_UNIT_CD get(String cd) {
 			for (TBL_PART_UNIT_CD e : TBL_PART_UNIT_CD.values()) {
@@ -36,9 +44,9 @@ public class PsKind {
 			return None;
 		}
 
-		private String cd;
-
 		private int calendarType;
+
+		private String cd;
 
 		private TBL_PART_UNIT_CD(String cd, int calendarType) {
 			this.cd = cd;
@@ -51,67 +59,102 @@ public class PsKind {
 
 	}
 
-	private final static SimpleDateFormat YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
+	class Range {
+		String unit;
+		int value = -1;
+
+		Range(String s) {
+			try {
+				char ch;
+				StringBuffer num = new StringBuffer();
+				for (int i = 0; i < s.length(); i++) {
+					ch = s.charAt(i);
+					if (ch >= '0' && ch <= '9') {
+						num.append(ch);
+					} else {
+						this.unit = s.substring(i).trim().toLowerCase();
+						this.value = Integer.parseInt(num.toString());
+						return;
+					}
+				}
+
+			} catch (Exception e) {
+
+			}
+		}
+	}
+
 	private final static SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
+	private final static SimpleDateFormat YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
+
+	public static void main(String[] args) {
+		PsKind psKind = new PsKind("1", "2", 3, "15 Minutes");
+		System.out.println(FxmsUtil.toJson(psKind));
+	}
 
 	private final long DAY = 24 * 60 * 60 * 1000L;
 	private final long HOUR = 1 * 60 * 60 * 1000L;
-
-	/** 성능종류명 */
-	private final String psKindName;
-
-	/** 성능데이터구분자 */
-	private final String psDataTag;
-
-	private String psDataSrc;
-
-	/** 데이터범위 */
-	private final String dataRange;
-	private final String interval;
-
-	/** 테이블분리단위코드 */
-	private TBL_PART_UNIT_CD tblPartUnitCd;
-
-	/** 테이블분리보관건수 */
-	private Integer tblPartStoreCnt = 5;
-
-	private final int dataStoreDays;
+	
 	private final int calendarField;
 	private final int calendarFieldValue;
+	private final String dataRange; // 데이터범위
+	private final int dataStoreDays;
+	private final String interval; // 주기
+	private final long intervalSeconds; // 주기(초)
+	private String psDataSrc; // 입력데이터종류
+	private final String psDataTag; // 성능데이터구분자
+	private final String psKindName; // 성능종류명
+	private Integer tblPartStoreCnt = 5; // 테이블분리보관건수
+	private TBL_PART_UNIT_CD tblPartUnitCd; // 테이블분리단위코드
 
+	/**
+	 * 
+	 * @param psKindName    숫자+(S|M|D|W|M|Y)로 구성된 명칭으로 입력한다.
+	 * @param psDataTag
+	 * @param dataStoreDays
+	 * @param dataRange
+	 */
 	public PsKind(String psKindName, String psDataTag, int dataStoreDays, String dataRange) {
 		this.psKindName = psKindName;
 		this.psDataTag = psDataTag;
 		this.dataStoreDays = dataStoreDays;
 		this.dataRange = dataRange;
 
-		String ss[] = dataRange.split(" ");
-		if (ss.length == 2) {
+		Range data = new Range(this.dataRange);
 
-			this.calendarFieldValue = Integer.parseInt(ss[0]);
+		if (data.value > 0) {
 
-			String tag = ss[1].toLowerCase().trim();
-			if (tag.startsWith("second")) {
+			this.calendarFieldValue = data.value;
+
+			if (data.unit.startsWith("second")) {
 				this.calendarField = Calendar.SECOND;
-			} else if (tag.startsWith("minute")) {
+				this.intervalSeconds = this.calendarFieldValue * 1;
+			} else if (data.unit.startsWith("minute")) {
 				this.calendarField = Calendar.MINUTE;
-			} else if (tag.startsWith("hour")) {
+				this.intervalSeconds = this.calendarFieldValue * 60;
+			} else if (data.unit.startsWith("hour")) {
 				this.calendarField = Calendar.HOUR_OF_DAY;
-			} else if (tag.startsWith("day")) {
+				this.intervalSeconds = this.calendarFieldValue * 3600;
+			} else if (data.unit.startsWith("day")) {
 				this.calendarField = Calendar.DAY_OF_MONTH;
-			} else if (tag.startsWith("month")) {
+				this.intervalSeconds = this.calendarFieldValue * 86400;
+			} else if (data.unit.startsWith("month")) {
 				this.calendarField = Calendar.MONTH;
-			} else if (tag.startsWith("year")) {
+				this.intervalSeconds = -1;
+			} else if (data.unit.startsWith("year")) {
 				this.calendarField = Calendar.YEAR;
+				this.intervalSeconds = -1;
 			} else {
 				this.calendarField = -1;
+				this.intervalSeconds = -1;
 			}
 
-			this.interval = new StringBuffer().append(this.calendarFieldValue).append(tag.charAt(0)).toString();
+			this.interval = new StringBuffer().append(this.calendarFieldValue).append(data.unit.charAt(0)).toString();
 
 		} else {
 			this.calendarField = -1;
 			this.calendarFieldValue = -1;
+			this.intervalSeconds = -1;
 			this.interval = "";
 		}
 	}
@@ -226,6 +269,10 @@ public class PsKind {
 
 	public String getInterval() {
 		return interval;
+	}
+
+	public long getIntervalSeconds() {
+		return intervalSeconds;
 	}
 
 	/**
@@ -503,5 +550,4 @@ public class PsKind {
 		return "_" + getPsDataTag() + "_" + getNameGroupByHstime(hstime);
 	}
 
-	
 }

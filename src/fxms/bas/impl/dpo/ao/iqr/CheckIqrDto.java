@@ -1,6 +1,7 @@
 package fxms.bas.impl.dpo.ao.iqr;
 
 import fxms.bas.fxo.FxAttr;
+import fxms.bas.vo.PsKind;
 
 public class CheckIqrDto {
 
@@ -10,8 +11,8 @@ public class CheckIqrDto {
 	@FxAttr(description = "수집항목", example = "MoStatus")
 	private String psId;
 
-	@FxAttr(description = "데이터종류", example = "MIN15")
-	private String psKindName = "MIN15";
+	@FxAttr(description = "데이터종류", example = "15M")
+	private String psKindName = PsKind.PSKIND_15M;
 
 	public String getDate() {
 		return String.valueOf(psDtm).substring(0, 8);

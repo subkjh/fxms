@@ -10,6 +10,7 @@ import fxms.bas.api.ValueApi.StatFunction;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.api.MoApiDfo;
 import fxms.bas.impl.api.ValueApiDfo;
+import fxms.bas.vo.PsKind;
 import fxms.bas.vo.PsValueComp;
 import fxms.bas.vo.PsValueSeries;
 import fxms.bas.vo.PsValues;
@@ -41,7 +42,7 @@ public class ValueApiTest {
 		long endDtm = DateUtil.getDtm();
 		long moNo = 1000;
 		String psId = "MoStatus";
-		String psKindName = "MIN15";
+		String psKindName = PsKind.PSKIND_15M;
 		String psKindCol = "AVG";
 
 		PsVoRawList list = new PsVoRawList("test", System.currentTimeMillis());

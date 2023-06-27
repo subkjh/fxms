@@ -153,6 +153,7 @@ public class FxBroadServer extends FxActorImpl implements NotiReceiver, FxServic
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onCreated() throws Exception {
 

@@ -119,7 +119,7 @@ public class IqrCron extends Crontab {
 		CheckIqrDto dto;
 		PsItem psItem;
 
-		PsKind psKind = PsApi.getApi().getPsKind("MIN15");
+		PsKind psKind = PsApi.getApi().getPsKind(PsKind.PSKIND_15M);
 		long psDtm = psKind.getHstimeStart(hstime);
 		
 

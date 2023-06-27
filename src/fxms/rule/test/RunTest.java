@@ -6,6 +6,7 @@ import java.util.Map;
 import fxms.bas.api.ValueApi;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.api.ValueApiDfo;
+import fxms.bas.vo.PsKind;
 import fxms.rule.FxBusinessRuleEngine;
 import fxms.rule.FxRuleDefault;
 import fxms.rule.FxRuleFact;
@@ -23,7 +24,7 @@ public class RunTest {
 		map.put("moNo", 100003);
 		map.put("psId", "TEMP");
 		map.put("var", "psvalue");
-		map.put("psDataName", "MIN5");
+		map.put("psDataName", PsKind.PSKIND_15M);
 		map.put("funcs", "AVG");
 
 		FxBusinessRuleEngine re = new FxBusinessRuleEngine(new FxRuleFact());

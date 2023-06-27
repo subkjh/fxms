@@ -47,8 +47,6 @@ public class PsItem implements Serializable {
 	private int dataScale = -1;
 	private int dataLength = -1;
 
-	/** 반올림에 사용되는 변수 */
-	private double rounding = 0.5d;
 	private String moTable;
 	private String moColumn;
 	private String moDateColumn;
@@ -252,53 +250,9 @@ public class PsItem implements Serializable {
 		return this.psKindCols.length > 0 ? this.psKindCols[0] : null;
 	}
 
-//	/**
-//	 * 해당 컬럼 생성
-//	 * 
-//	 * @param pstype
-//	 * @return
-//	 */
-//	public Column makeColumn(PS_DATA_CD pstype, PsStatFunc func) {
-//
-//		Column column = new Column();
-//		if (pstype == null || pstype == PS_DATA_CD.RAW) {
-//			column.setName(getPsColumn());
-//		} else {
-//			column.setName(getPsColumn() + "_" + func.getStatColumnName());
-//		}
-//
-//		column.setDataLength(getDataLength());
-//		column.setDataScale(getDataScale());
-//		column.setDataType("Number");
-//		column.setNullable(true);
-//
-//		return column;
-//	}
-
 	public String[] getKindCols() {
 		return psKindCols;
 	}
-
-//	/**
-//	 * 성능이 가지고 있는 통계 컬럼을 조회한다.
-//	 * 
-//	 * @param pstype
-//	 * @return
-//	 */
-//	public List<Column> makeColumns(PS_DATA_CD pstype) {
-//		List<Column> colList = new ArrayList<Column>();
-//
-//		if (pstype == PS_DATA_CD.RAW) {
-//			colList.add(makeColumn(pstype, null));
-//
-//		} else {
-//			for (PsStatFunc func : getPsStatFuncList()) {
-//				colList.add(makeColumn(pstype, func));
-//			}
-//		}
-//
-//		return colList;
-//	}
 
 	public String getUpdateFilter() {
 		return updateFilter;

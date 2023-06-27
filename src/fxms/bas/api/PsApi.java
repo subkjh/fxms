@@ -222,7 +222,7 @@ public abstract class PsApi extends FxApi {
 	public PsKind getPsKind(String psKindName) throws NotFoundException {
 
 		for (PsKind e : this.psKindList) {
-			if (e.getPsKindName().equals(psKindName)) {
+			if (e.getPsKindName().equalsIgnoreCase(psKindName)) {
 				return e;
 			}
 		}
@@ -239,7 +239,7 @@ public abstract class PsApi extends FxApi {
 	public List<PsKind> getPsKind2Dst(PsKind psKindSrc) {
 		List<PsKind> list = new ArrayList<PsKind>();
 		for (PsKind e : this.psKindList) {
-			if (psKindSrc.getPsKindName().equals(e.getPsDataSrc())) {
+			if (psKindSrc.getPsKindName().equalsIgnoreCase(e.getPsDataSrc())) {
 				list.add(e);
 			}
 		}

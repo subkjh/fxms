@@ -1,17 +1,24 @@
 package subkjh.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import fxms.bas.fxo.FxCfg;
+import fxms.bas.impl.dbo.all.FX_MO;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.ObjectUtil;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.exp.TooManyDatasException;
 import subkjh.dao.util.FxTableMaker;
 
+/**
+ * 
+ * @author subkjh
+ *
+ */
 public class ClassDaoEx {
 
 	public static <T> T getNextVal(String sequence, Class<T> classOfT) throws Exception {
@@ -26,13 +33,55 @@ public class ClassDaoEx {
 		}
 	}
 
+	public static int InsertOfClass(Class<?> classOfDbo, Object datas) throws Exception {
+		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
+		try {
+			tran.start();
+			int ret = tran.insertOfClass(classOfDbo, datas);
+			tran.commit();
+			return ret;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			tran.stop();
+		}
+	}
+
 	public static void main(String[] args) {
 
-		try {
-			ClassDaoEx.open().insertOfClass(null, args).updateOfClass(null, args).close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Thread> list = new ArrayList<>();
+
+		for (int i = 0; i < 10000; i++) {
+
+			list.clear();
+
+			for (int n = 0; n < 3; n++) {
+
+				Thread th = new Thread() {
+					public void run() {
+						try {
+							ClassDaoEx dao = ClassDaoEx.open();
+							System.out.println("count = " + dao.selectCount(FX_MO.class, null));
+							dao.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				th.setName("TEST" + n);
+				th.start();
+
+				list.add(th);
+
+			}
+
+			for (Thread th : list) {
+				try {
+					th.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}
@@ -144,22 +193,8 @@ public class ClassDaoEx {
 		}
 	}
 
-	public static int InsertOfClass(Class<?> classOfDbo, Object datas) throws Exception {
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-		try {
-			tran.start();
-			int ret = tran.insertOfClass(classOfDbo, datas);
-			tran.commit();
-			return ret;
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			tran.stop();
-		}
-	}
-
 	private ClassDao tran;
-	private StringBuffer msg = new StringBuffer();
+//	private StringBuffer msg = new StringBuffer();
 	private Exception exception = null;
 	private int processedCount; // 최근 처리 건수
 
@@ -170,17 +205,17 @@ public class ClassDaoEx {
 
 	public ClassDaoEx deleteOfClass(Class<?> classOfDbo, Map<String, Object> para) throws Exception {
 
-		int ret;
 		try {
-			ret = tran.deleteOfClass(classOfDbo, para);
+			processedCount = tran.deleteOfClass(classOfDbo, para);
 		} catch (Exception e) {
 			close(e);
 			throw e;
 		}
 
-		if (msg.length() > 0)
-			msg.append(", ");
-		msg.append("deleted ").append(classOfDbo.getSimpleName()).append(" = ").append(ret);
+//		if (msg.length() > 0)
+//			msg.append(", ");
+//		msg.append("deleted ").append(classOfDbo.getSimpleName()).append(" = ").append(ret);
+
 		return this;
 	}
 
@@ -223,9 +258,10 @@ public class ClassDaoEx {
 			throw e;
 		}
 
-		if (msg.length() > 0)
-			msg.append(", ");
-		msg.append("inserted ").append(classOfDbo.getSimpleName()).append(" = ").append(processedCount);
+//		if (msg.length() > 0)
+//			msg.append(", ");
+//		msg.append("inserted ").append(classOfDbo.getSimpleName()).append(" = ").append(processedCount);
+
 		return this;
 	}
 
@@ -331,9 +367,10 @@ public class ClassDaoEx {
 			throw e;
 		}
 
-		if (msg.length() > 0)
-			msg.append(", ");
-		msg.append("updated ").append(classOfDbo.getSimpleName()).append(" = ").append(processedCount);
+//		if (msg.length() > 0)
+//			msg.append(", ");
+//		msg.append("updated ").append(classOfDbo.getSimpleName()).append(" = ").append(processedCount);
+
 		return this;
 	}
 
@@ -348,9 +385,9 @@ public class ClassDaoEx {
 
 				tran.commit();
 
-				if (msg.length() > 0) {
-					Logger.logger.info("{}", msg);
-				}
+//				if (msg.length() > 0) {
+//					Logger.logger.info("{}", msg);
+//				}
 
 			} else {
 				Logger.logger.error(ex);

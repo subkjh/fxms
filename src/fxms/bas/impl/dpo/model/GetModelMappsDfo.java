@@ -7,14 +7,13 @@ import java.util.Map;
 
 import fxms.bas.api.FxApi;
 import fxms.bas.exp.ModelNotFoundException;
-import fxms.bas.fxo.FxCfg;
+import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.dbo.all.FX_MAPP_ETC;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.log.Logger;
-import subkjh.dao.ClassDao;
-import subkjh.dao.database.DBManager;
+import subkjh.dao.ClassDaoEx;
 
 public class GetModelMappsDfo implements FxDfo<Map<String, Object>, Map<String, Integer>> {
 
@@ -32,9 +31,8 @@ public class GetModelMappsDfo implements FxDfo<Map<String, Object>, Map<String, 
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("moClass", "NODE");
 		GetModelMappsDfo dpo = new GetModelMappsDfo();
-		FxFact fact = new FxFact("para", para);
 		try {
-//			System.out.println(FxmsUtil.toJson(dpo.call(fact, "para")));
+			System.out.println(FxmsUtil.toJson(dpo.selectMappModel(para)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,29 +78,16 @@ public class GetModelMappsDfo implements FxDfo<Map<String, Object>, Map<String, 
 	}
 
 	private List<Data> select(Map<String, Object> para) throws Exception {
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-
-		try {
-			tran.start();
-
-			List<Data> ret = new ArrayList<>();
-			List<FX_MAPP_ETC> list = tran.select(FX_MAPP_ETC.class, para);
-			for (FX_MAPP_ETC obj : list) {
-				try {
-					ret.add(new Data(obj.getMappId(), Integer.parseInt(obj.getObjData())));
-				} catch (Exception e) {
-					Logger.logger.error(e);
-				}
+		List<FX_MAPP_ETC> list = ClassDaoEx.SelectDatas(FX_MAPP_ETC.class, para);
+		List<Data> ret = new ArrayList<>();
+		for (FX_MAPP_ETC obj : list) {
+			try {
+				ret.add(new Data(obj.getMappId(), Integer.parseInt(obj.getObjData())));
+			} catch (Exception e) {
+				Logger.logger.error(e);
 			}
-
-			return ret;
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
 		}
+		return ret;
 	}
 
 }

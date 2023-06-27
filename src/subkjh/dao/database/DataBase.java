@@ -39,74 +39,96 @@ public abstract class DataBase implements Serializable {
 
 	class TranBean {
 
-		private Connection connection;
+		private Connection connection; // 실제연결자
+		private final String tag; // 인덱스
+		private long lastUseTime; // 마지막 사용 시간
+		private String threadName; // 사용중인 스레드명
+		private boolean use; // 사용중 여부
+		private long useCount = 0;
 
-		/** 인덱스 */
-		private int index;
-
-		private long mstime;
-
-		/** 사용중인 스레드명 */
-		private String threadName;
-
-		/** 사용중 여부 */
-		private boolean use;
-
-		public TranBean(int index, boolean use) {
-			this.index = index;
-			this.use = use;
+		public TranBean(int index) {
+			this.tag = "POOL-" + index;
+			this.use = false;
 		}
 
-		/**
-		 * 
-		 * @param c
-		 * @return Connection이 같은지 여부
-		 */
-		public boolean equals(Connection c) {
+		@Override
+		public String toString() {
+			StringBuffer sb = new StringBuffer();
+			sb.append(tag);
+			sb.append("|").append(use);
+			sb.append("|").append(useCount);
+			sb.append("|").append(threadName);
+			if (connection != null) {
+				try {
+					sb.append("|").append(connection.getCatalog());
+				} catch (Exception e) {
+				}
+			}
+			sb.append("|").append(Logger.getDate(lastUseTime));
+
+			return sb.toString();
+		}
+
+		void close() {
+
+			if (this.connection != null) {
+				try {
+					this.connection.close();
+					Logger.logger.debug("closed {}", toString());
+				} catch (SQLException e) {
+					Logger.logger.error(e);
+				}
+			}
+
+			this.useCount = 0;
+			this.connection = null;
+			this.use = false;
+
+		}
+
+		boolean equals(Connection c) {
 			if (c == null || connection == null)
 				return false;
 			return c.equals(connection);
 		}
 
-		public Connection getConnection() {
+		Connection getConnection() {
 			return connection;
 		}
 
-		public int getIndex() {
-			return index;
+		String getTag() {
+			return tag;
 		}
 
-		public String getThreadName() {
+		String getThreadName() {
 			return threadName;
 		}
 
-		public boolean isUse() {
-			return use;
+		boolean isUse() {
+			return this.use;
 		}
 
-		public void setConnection(Connection connection) {
-			mstime = System.currentTimeMillis();
+		void setConnection(Connection connection) {
+
+			lastUseTime = System.currentTimeMillis();
+
+			if (this.connection != null) {
+				this.close();
+			}
+
 			this.connection = connection;
+			this.use = false;
 		}
 
-		public void setIndex(int index) {
-			this.index = index;
-		}
+		void setUse(boolean use) {
 
-		public void setThreadName(String threadName) {
-			this.threadName = threadName;
-		}
+			if (use) {
+				threadName = Thread.currentThread().getName();
+				lastUseTime = System.currentTimeMillis();
+				useCount++;
+			}
 
-		public void setUse(boolean use) {
 			this.use = use;
-		}
-
-		@Override
-		public String toString() {
-			return index + "|" + (use ? "Y" : "N") //
-					+ (threadName == null ? "" : "|" + threadName) //
-					+ (mstime > 0 ? "|" + Logger.getDate(mstime) : "");
-
 		}
 	}
 
@@ -133,15 +155,14 @@ public abstract class DataBase implements Serializable {
 	protected final String PATTERN = "(:|/)+";
 
 	protected transient QueriesQid QID = new QueriesQid();
+
 	/** 자동 커밋 여부. 기본값을 true이다. */
 	private boolean autoCommit = false;
 	private Map<String, SqlConst> constMap;
 	/** 최대 연결 수. 0이거나 작으면 무제한 */
 	private int countConnectionMax = 5;
-	/** DB명 */
-	private String dbName;
-	/** 드라이버 */
-	private String driver;
+	private String dbName; // DB명
+	private String driver; // 드라이버
 	private String ipAddress;
 	private Map<String, Object> map;
 	/** 사용명 */
@@ -155,20 +176,15 @@ public abstract class DataBase implements Serializable {
 	private boolean readOnly = false;
 	/** 재연결 시도 회수 */
 	private int reconnectRetry = 3;
-	/** 재연결이 필요할 때 대기 시간(초) */
-	private int reconnectWaitTimeSec = 5;
-	/** POLL에서 사용가능한 자원이 생길때까지 대기 시간(초) */
-	private int secondsWaitPool = 10;
-	/** 컨넥션을 제공할 때 ONLINE 여부 확인할 쿼리 */
-	private String sqlSelectKeepAlive = null;
-	/** 타임아웃 로그인 */
-	private int timeoutLogin = 10;
-	/** Connection 목록 */
-	private TranBean tranArray[];
-	/** URL */
-	private String url;
-	/** USER */
-	private String user;
+	private int reconnectWaitTimeSec = 5; // 재연결이 필요할 때 대기 시간(초)
+	private int secondsWaitPool = 10; // POLL에서 사용가능한 자원이 생길때까지 대기 시간(초)
+	private String sqlSelectKeepAlive = null; // 컨넥션을 제공할 때 ONLINE 여부 확인할 쿼리
+	private int timeoutLogin = 10; // 타임아웃 로그인
+	private TranBean tranArray[]; // Connection 목록
+	private String url; // URL
+	private String user; // USER
+	private final Map<Connection, String> connMap = new HashMap<>();
+	private long seqno = 0;
 
 	public DataBase() {
 		tranArray = new TranBean[0];
@@ -208,7 +224,7 @@ public abstract class DataBase implements Serializable {
 		if (countConnectionMax > 0) {
 			tranArray = new TranBean[countConnectionMax];
 			for (int i = 0; i < tranArray.length; i++) {
-				tranArray[i] = new TranBean(i, false);
+				tranArray[i] = new TranBean(i);
 			}
 		}
 
@@ -237,8 +253,6 @@ public abstract class DataBase implements Serializable {
 		if (connection == null)
 			return;
 
-		boolean isConnectionInPool = false;
-
 		for (TranBean tran : tranArray) {
 
 			if (tran.equals(connection)) {
@@ -254,22 +268,17 @@ public abstract class DataBase implements Serializable {
 
 				tran.setUse(false);
 
-				isConnectionInPool = true;
-				break;
+				if (closeRealConnection) {
+					closeConnection(connection);
+				}
+				return;
 			}
 		}
 
-		if (isConnectionInPool && closeRealConnection) {
-			closeConnection(connection);
-		}
+		connection.close();
+		String msg = connMap.remove(connection);
+		Logger.logger.debug("Disconnected {}", msg);
 
-		if (isConnectionInPool == false) {
-			Logger.logger.trace("connection.close()");
-			if (connection != null) {
-				Logger.logger.debug("Disconnected [" + connection + "]");
-				connection.close();
-			}
-		}
 	}
 
 	public void closePool() {
@@ -285,19 +294,12 @@ public abstract class DataBase implements Serializable {
 					e.printStackTrace();
 				}
 				if (ptime + 5000 < System.currentTimeMillis()) {
-					Logger.logger.debug("Using : " + tran.getThreadName());
+					Logger.logger.debug("Using {}", tran.getThreadName());
 					ptime = System.currentTimeMillis();
 				}
 			}
-			try {
-				if (tran.getConnection() != null)
-					tran.getConnection().close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 
-			tran.setConnection(null);
-			tran.setUse(false);
+			tran.close();
 		}
 
 	}
@@ -449,59 +451,50 @@ public abstract class DataBase implements Serializable {
 
 		Connection c = null;
 
-		if (countConnectionMax <= 0)
-			return createConnection();
+		if (countConnectionMax > 0) {
 
-		long ptime = System.currentTimeMillis();
-
-		while (true) {
-
-			for (int i = 0; i < tranArray.length; i++) {
-
-				if (tranArray[i].isUse() == false) {
-
-					c = tranArray[i].getConnection();
-					try {
-						if (isOkConection(c) == false) {
-							tranArray[i].setConnection(null);
-							c = createConnection();
-							tranArray[i].setConnection(c);
-						}
-					} catch (Exception e) {
-						Logger.logger.error(e);
-						throw e;
-					}
-
-					tranArray[i].setUse(true);
-					tranArray[i].setThreadName(Thread.currentThread().getName());
-
-					return c;
-
+			// 최근에 사용되지 않은 연결자를 우선 사용한다.
+			TranBean tran = tranArray[0];
+			for (TranBean e : tranArray) {
+				if (e.isUse() == false && e.lastUseTime < tran.lastUseTime) {
+					tran = e;
 				}
 			}
 
-			if (permitConnectionPoolOver) {
-				return createConnection();
-			}
+			// 사용중인 아니면
+			if (tran.isUse() == false) {
 
-			if (secondsWaitPool <= 0 || System.currentTimeMillis() > ptime + secondsWaitPool * 1000L) {
-				break;
-			} else {
+				c = tran.getConnection();
+
+				// 연결자에 이상이 있으면 다시 연결한다.
 				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					if (isOkConection(c) == false) {
+						tran.close();
+						c = createConnection(tran.getTag());
+						tran.setConnection(c);
+					}
+				} catch (Exception e) {
+					Logger.logger.error(e);
+					throw e;
 				}
+
+				tran.setUse(true);
+
+				Logger.logger.trace("{}", tran);
+				return c;
 			}
 
 		}
 
-		String msg = "";
-		for (int i = 0; i < tranArray.length; i++) {
-			msg += " " + tranArray[i] + "";
-		}
+		// 풀을 모두 사용하고 있으면 임의로 생성해서 사용한다.
 
-		throw new IOException("Connection fail. ERRMSG:" + msg.trim());
+		String key = "RT-" + seqno;
+		c = createConnection(key);
+		connMap.put(c, key);
+		seqno++;
+
+		return c;
+
 	}
 
 	public Map<String, SqlConst> getConstMap() {
@@ -1502,14 +1495,8 @@ public abstract class DataBase implements Serializable {
 
 		for (TranBean tran : tranArray) {
 			if (tran.equals(connection)) {
-				try {
-					tran.setUse(false);
-					Logger.logger.debug("Disconnected [" + connection + "]");
-					connection.close();
-				} catch (SQLException e) {
-				}
-				tran.setConnection(null);
-				return true;
+				tran.close();
+				break;
 			}
 		}
 
@@ -1522,13 +1509,13 @@ public abstract class DataBase implements Serializable {
 	 * @return 콘넥션
 	 * @throws Exception
 	 */
-	private Connection createConnection() throws Exception {
+	private Connection createConnection(String msg) throws Exception {
 
 		long ptime = System.currentTimeMillis();
 
 		try {
 
-			Logger.logger.trace("1/5) new create");
+//			Logger.logger.trace("1/5) new create");
 
 			Class.forName(getDriver()).newInstance();
 
@@ -1537,14 +1524,14 @@ public abstract class DataBase implements Serializable {
 			DriverManager.setLoginTimeout(timeoutLogin);
 
 			if (isUseUserPass()) {
-				Logger.logger.trace("2/5-1) {} {}/{}", getUrl(), getUser(), getPassword());
+//				Logger.logger.trace("2/5-1) {} {}/{}", getUrl(), getUser(), getPassword());
 				c = DriverManager.getConnection(getUrl(), getUser(), getPassword());
 			} else {
-				Logger.logger.trace("2/5-2) {}", getUrl());
+//				Logger.logger.trace("2/5-2) {}", getUrl());
 				c = DriverManager.getConnection(getUrl());
 			}
 
-			Logger.logger.trace("3/5) auto commit = {}", isAutoCommit());
+//			Logger.logger.trace("3/5) auto commit = {}", isAutoCommit());
 
 			try {
 				c.setAutoCommit(isAutoCommit());
@@ -1552,7 +1539,7 @@ public abstract class DataBase implements Serializable {
 				Logger.logger.fail("Auto Commit : " + e.getMessage());
 			}
 
-			Logger.logger.trace("4/5) read only = {}", isReadOnly());
+//			Logger.logger.trace("4/5) read only = {}", isReadOnly());
 
 			try {
 				c.setReadOnly(isReadOnly());
@@ -1560,9 +1547,10 @@ public abstract class DataBase implements Serializable {
 				Logger.logger.fail("Read Only : " + e.getMessage());
 			}
 
-			Logger.logger.trace("5/5) connect");
+//			Logger.logger.trace("5/5) connect");
 
-			Logger.logger.debug("Connected [" + c + "] =" + (System.currentTimeMillis() - ptime) + "(ms)");
+			Logger.logger.debug("Created Connection {}, {} : {}(ms)", msg, c.getCatalog(),
+					(System.currentTimeMillis() - ptime));
 
 			return c;
 
@@ -1597,8 +1585,6 @@ public abstract class DataBase implements Serializable {
 		Statement statement = null;
 		try {
 			statement = c.createStatement();
-			if (Logger.debug)
-				System.out.println("### Check Connection : " + sqlSelectKeepAlive);
 			boolean bret = statement.execute(sqlSelectKeepAlive);
 			try {
 				statement.close();

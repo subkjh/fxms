@@ -17,9 +17,11 @@ import fxms.bas.impl.dao.AlarmHandlerQid;
 import fxms.bas.impl.dao.PsHandlerQid;
 import fxms.bas.impl.dbo.all.FX_PS_ITEM;
 import fxms.bas.impl.dbo.all.FX_PS_STAT_KIND;
+import fxms.bas.impl.dpo.vo.GetOperatingRateDfo;
 import fxms.bas.impl.dto.ValueAddDto;
+import fxms.bas.impl.handler.dto.GetOperatingRateDto;
 import fxms.bas.impl.handler.dto.GetValuesDto;
-import fxms.bas.impl.handler.dto.SelectPsValueMinMaxPara;
+import fxms.bas.impl.handler.dto.SelectPsValueMinMaxDto;
 import fxms.bas.impl.handler.dto.SelectPsValueRtListPara;
 import fxms.bas.impl.vo.PsItemVo;
 import fxms.bas.vo.PsItem;
@@ -46,7 +48,7 @@ public class PsHandler extends BaseHandler {
 		parameters.put("moNo", 100001);
 		parameters.put("psId", "INLPG");
 		SessionVo session = new SessionVo("AAA", 1, "test", "test", USER_TYPE_CD.Operator, 0, 0);
-		SelectPsValueMinMaxPara item = handler.convert(session, parameters, SelectPsValueMinMaxPara.class, true);
+		SelectPsValueMinMaxDto item = handler.convert(session, parameters, SelectPsValueMinMaxDto.class, true);
 		System.out.println(handler.selectPsValueMinMaxHourlyList(session, item));
 	}
 
@@ -54,13 +56,13 @@ public class PsHandler extends BaseHandler {
 
 	@MethodDescr(name = "수집값 등록", description = "외부에서 수집 데이터를 등록한다.")
 	public Object addValue(SessionVo session, ValueAddDto data) throws Exception {
-		
+
 		PsVoRawList voList = new PsVoRawList("ui", System.currentTimeMillis());
-		
+
 		if (voList.add(data.getMoNo(), data.getPsId(), data.getValue()) == null) {
 			throw new Exception("parameters is not enough : " + FxmsUtil.toJson(data));
 		}
-		
+
 		ValueApi.getApi().addValue(voList, true);
 
 		return data;
@@ -92,8 +94,8 @@ public class PsHandler extends BaseHandler {
 	@MethodDescr(name = "관리대상수집데이터조회", description = "관리대상이 수집한 내용을 보여준다.")
 	public Object getValues(SessionVo session, GetValuesDto dto) throws Exception {
 		PsItem psItem = PsApi.getApi().getPsItem(dto.getPsId());
-		return ValueApi.getApi().getValues(dto.getMoNo(), dto.getMoInstance(),  dto.getPsId(), dto.getPsKindName(), psItem.getDefKindCol(),
-				dto.getStartDate(), dto.getEndDate());
+		return ValueApi.getApi().getValues(dto.getMoNo(), dto.getMoInstance(), dto.getPsId(), dto.getPsKindName(),
+				psItem.getDefKindCol(), dto.getStartDate(), dto.getEndDate());
 	}
 
 	@MethodDescr(name = "수집항목조회", description = "처리되고 있는 수집 항목을 조회한다.")
@@ -115,7 +117,7 @@ public class PsHandler extends BaseHandler {
 	}
 
 	@MethodDescr(name = "1분단위 최소,최대,평균조회", description = "분단위 최소, 최대, 평균 조회")
-	public Object selectPsValueMinMaxAvgList(SessionVo session, SelectPsValueMinMaxPara data) throws Exception {
+	public Object selectPsValueMinMaxAvgList(SessionVo session, SelectPsValueMinMaxDto data) throws Exception {
 
 		PsItem psItem = PsApi.getApi().getPsItem(data.getPsId());
 		PsKind psKind = PsApi.getApi().getPsKind(data.getPsKindName());
@@ -130,7 +132,7 @@ public class PsHandler extends BaseHandler {
 	}
 
 	@MethodDescr(name = "시간별 최소,최대,평균조회", description = "시간단위 최소, 최대, 평균 조회")
-	public Object selectPsValueMinMaxHourlyList(SessionVo session, SelectPsValueMinMaxPara data) throws Exception {
+	public Object selectPsValueMinMaxHourlyList(SessionVo session, SelectPsValueMinMaxDto data) throws Exception {
 
 		PsItem psItem = PsApi.getApi().getPsItem(data.getPsId());
 		PsKind psKind = PsApi.getApi().getPsKind(data.getPsKindName());
@@ -142,6 +144,11 @@ public class PsHandler extends BaseHandler {
 
 		return selectListQid(QID.select_ps_value_min_max_hourly_list, para);
 
+	}
+
+	@MethodDescr(name = "관리대상 가동율 조회", description = "관리대상의 가동시간, 가동율을 조회한다.")
+	public Object getOperatingRate(SessionVo session, GetOperatingRateDto dto) throws Exception {
+		return new GetOperatingRateDfo().getOperatingRate(dto);
 	}
 
 	@Override

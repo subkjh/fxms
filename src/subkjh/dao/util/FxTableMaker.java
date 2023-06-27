@@ -234,6 +234,17 @@ public class FxTableMaker {
 		}
 	}
 
+	public static void initRegChgMap(int userNo, Map<String, Object> datas) {
+
+		long dtm = DateUtil.getDtm();
+
+		datas.put("regDtm", dtm);
+		datas.put("chgDtm", dtm);
+		datas.put("regUserNo", userNo);
+		datas.put("chgUserNo", userNo);
+
+	}
+
 	/**
 	 * FxTable르 선언된 클래스인지 여부를 확인한다.
 	 * 
@@ -311,31 +322,31 @@ public class FxTableMaker {
 	//
 	// }
 
-	public static void main(String[] args) {
-		FxTableMaker maker = new FxTableMaker();
-
-		try {
-//			List<Table> tblList = maker.makeTableList(FX_AL_ALARM_HST.class);
-//			for ( Table tbl : tblList) {
-//				
-//				System.out.println(tbl.getColumn("RLSE_YN"));
-//			}
-
-//			System.out.println(maker.getColumnNameNotNullList(FnMoEquipDbo.class));
-//			System.out.println(maker.getColumnNameNullableList(FnMoEquipDbo.class));
-			// System.out.println(maker.getTableAll(DeleteDiagramNodeDbo.class));
-//			List<Column> list = maker.getColumnAll(FX_MO_SENSOR.class);
-//			for (Column col : list) {
-//				System.out.println(col.getFieldName() + "(" + col.getFieldType().getSimpleName() + ") : "
-//						+ col.getComments() + ", nullable=" + col.isNullable());
-//			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+//	public static void main(String[] args) {
+//		FxTableMaker maker = new FxTableMaker();
+//
+//		try {
+////			List<Table> tblList = maker.makeTableList(FX_AL_ALARM_HST.class);
+////			for ( Table tbl : tblList) {
+////				
+////				System.out.println(tbl.getColumn("RLSE_YN"));
+////			}
+//
+////			System.out.println(maker.getColumnNameNotNullList(FnMoEquipDbo.class));
+////			System.out.println(maker.getColumnNameNullableList(FnMoEquipDbo.class));
+//			// System.out.println(maker.getTableAll(DeleteDiagramNodeDbo.class));
+////			List<Column> list = maker.getColumnAll(FX_MO_SENSOR.class);
+////			for (Column col : list) {
+////				System.out.println(col.getFieldName() + "(" + col.getFieldType().getSimpleName() + ") : "
+////						+ col.getComments() + ", nullable=" + col.isNullable());
+////			}
+//
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 	/**
 	 * 

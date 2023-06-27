@@ -6,7 +6,7 @@ import subkjh.bas.co.utils.DateUtil;
 public class GetValuesDto {
 
 	@FxAttr(description = "관리대상번호", example = "123456")
-	private Long moNo;
+	private long moNo;
 
 	@FxAttr(description = "성능ID", example = "MoStatus")
 	private String psId;

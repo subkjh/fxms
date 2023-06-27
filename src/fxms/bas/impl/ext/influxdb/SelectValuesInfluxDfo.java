@@ -67,7 +67,7 @@ public class SelectValuesInfluxDfo implements FxDfo<Void, List<PsValues>> {
 		long endDtm = DateUtil.getDtm();
 		long moNo = 1000;
 		String psId = "E02V4";
-		String psKindName = "MIN15";
+		String psKindName = PsKind.PSKIND_15M;
 		String psKindCol = "AVG";
 		String psKindCols[] = new String[] { "MIN", "AVG" };
 

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import subkjh.bas.BasCfg;
 import subkjh.bas.co.log.Logger;
 import subkjh.dao.database.DataBase;
 import subkjh.dao.queries.SqlPointer;
