@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fxms.bas.exp.NotFoundException;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.dbo.all.FX_MO;
 import subkjh.bas.co.log.Logger;
@@ -21,6 +22,15 @@ import subkjh.dao.util.FxTableMaker;
  */
 public class ClassDaoEx {
 
+	/**
+	 * 다음 시퀀스를 가져온다.
+	 * 
+	 * @param <T>
+	 * @param sequence
+	 * @param classOfT
+	 * @return
+	 * @throws Exception
+	 */
 	public static <T> T getNextVal(String sequence, Class<T> classOfT) throws Exception {
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 		try {
@@ -33,6 +43,14 @@ public class ClassDaoEx {
 		}
 	}
 
+	/**
+	 * 데이터를 테이블이 추가한다.
+	 * 
+	 * @param classOfDbo 테이블 정보
+	 * @param datas      추가할 데이터
+	 * @return
+	 * @throws Exception
+	 */
 	public static int InsertOfClass(Class<?> classOfDbo, Object datas) throws Exception {
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 		try {
@@ -179,6 +197,14 @@ public class ClassDaoEx {
 
 	}
 
+	/**
+	 * 데이터를 테이블에 업데이트한다.
+	 * 
+	 * @param classOfDbo 테이블 저보
+	 * @param datas      데이터
+	 * @return
+	 * @throws Exception
+	 */
 	public static int UpdateOfClass(Class<?> classOfDbo, Object datas) throws Exception {
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 		try {
@@ -335,24 +361,34 @@ public class ClassDaoEx {
 	 * @return
 	 * @throws Exception
 	 */
-	public ClassDaoEx setOfClass(Class<?> classOfDbo, Object para, Map<String, Object> data) throws Exception {
+	public ClassDaoEx setOfClass(Class<?> classOfDbo, Object para, Map<String, Object> data)
+			throws NotFoundException, Exception {
 
 		try {
 			Object obj = selectData(classOfDbo, para);
 
 			if (obj != null) {
+
 				ObjectUtil.toObject(data, obj);
 				FxTableMaker.initRegChg(0, obj);
 				updateOfClass(classOfDbo, obj);
 
 			} else {
-				obj = classOfDbo.newInstance();
-				ObjectUtil.toObject(data, obj);
+
+				try {
+					obj = FxTableMaker.toObject(data, classOfDbo, true);
+				} catch (Exception e) {
+					close(e);
+					throw e;
+				}
+
 				FxTableMaker.initRegChg(0, obj);
 				insertOfClass(classOfDbo, obj);
+
 			}
 
 		} catch (Exception e) {
+			this.exception = e;
 			throw e;
 		}
 

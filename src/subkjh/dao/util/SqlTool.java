@@ -38,11 +38,11 @@ public class SqlTool {
 //		tool.makeInsertSql(new MySql());
 //		tool.printDropSql(new MySql(), "datas/setup/tables.txt");
 //		tool.printCreateSql(new MySql(), "datas/tables.txt");
-//		tool.printAddColumnSql(new MySql(), "datas/tables.txt");
+		tool.printAddColumnSql(new MySql(), "datas/tables.txt");
 //		tool.makeSelectSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeInsertSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeUpdateSampleSql(new MySql(), "datas/setup/tables.txt");
-		tool.makeJavaSource(new File("datas/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
+//		tool.makeJavaSource(new File("datas/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
 //		tool.makeJpaSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
 //		tool.makeDtoSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dto", "tmp");
 //		tool.makeDtoSource(FX_UR_UGRP.class, "tmp");

@@ -4,7 +4,7 @@ import java.util.List;
 
 import fxms.bas.api.PsApi;
 import fxms.bas.fxo.FxCfg;
-import fxms.bas.impl.dbo.StatMakeReqDbo;
+import fxms.bas.impl.dbo.all.FX_PS_STAT_CRE;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.PsItem;
@@ -18,14 +18,14 @@ import subkjh.dao.ClassDaoEx;
  * @author subkjh
  *
  */
-public class PsStatMakeDfo extends PsDpo implements FxDfo<StatMakeReqDbo, Integer> {
+public class PsStatMakeDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, Integer> {
 
 	@Override
-	public Integer call(FxFact fact, StatMakeReqDbo data) throws Exception {
+	public Integer call(FxFact fact, FX_PS_STAT_CRE data) throws Exception {
 		return generateStatistics(data);
 	}
 
-	public int generateStatistics(StatMakeReqDbo req) throws Exception {
+	public int generateStatistics(FX_PS_STAT_CRE req) throws Exception {
 		return generateStatistics(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm());
 	}
 

@@ -139,7 +139,6 @@ public abstract class DataBase implements Serializable {
 	protected static final String IS_AUTO_COMMIT = "isAutoCommit";
 	protected static final String IS_READONLY = "isReadOnly";
 	protected static final String PASSWORD = "password";
-	protected static final String PERMIT_CONNECTION_POOL_OVER = "permitConnectionPoolOver";
 	protected static final String RECONNEC_TTIMEOUT = "reconnectTimeout";
 	protected static final String RECONNECT_TRY_COUNT = "reconnectTryCount";
 	protected static final String SECONDS_WAIT_POOL = "secondsWaitPool";
@@ -169,8 +168,6 @@ public abstract class DataBase implements Serializable {
 	private String name;
 	/** 암호 */
 	private String password;
-	/** 연결 수가 pool을 넘을 경우도 새롭게 생성할 지 여부 */
-	private boolean permitConnectionPoolOver = true;
 	private int port;
 	/** 읽기 전용 여부 */
 	private boolean readOnly = false;
@@ -227,18 +224,6 @@ public abstract class DataBase implements Serializable {
 				tranArray[i] = new TranBean(i);
 			}
 		}
-
-		// String msg = name + "|" + url + "|" + "PCPO=" +
-		// permitConnectionPoolOver //
-		// + ",RO=" + readOnly //
-		// + ",AC=" + autoCommit //
-		// + ",CCM=" + countConnectionMax //
-		// + ",RR=" + reconnectRetry //
-		// + ",RWTS=" + reconnectWaitTimeSec //
-		// + ",SWP=" + secondsWaitPool //
-		// + "," + constMap;
-
-//		Logger.logger.info(Logger.makeString("DATABASE " + name, "CHECKED"));
 	}
 
 	/**
@@ -270,14 +255,18 @@ public abstract class DataBase implements Serializable {
 
 				if (closeRealConnection) {
 					closeConnection(connection);
+					Logger.logger.debug("closed : {}", tran);
+				} else {
+					Logger.logger.trace("{}", tran);
 				}
+
 				return;
 			}
 		}
 
 		connection.close();
 		String msg = connMap.remove(connection);
-		Logger.logger.debug("Disconnected {}", msg);
+		Logger.logger.debug("closed : {}", msg);
 
 	}
 
@@ -1109,14 +1098,6 @@ public abstract class DataBase implements Serializable {
 	}
 
 	/**
-	 * 
-	 * @return 풀 오버인 경우 새로운 컨넥션 생성 여부
-	 */
-	public boolean isPermitConnectionPoolOver() {
-		return permitConnectionPoolOver;
-	}
-
-	/**
 	 * @return 읽기 전용 여부
 	 */
 	public boolean isReadOnly() {
@@ -1175,9 +1156,7 @@ public abstract class DataBase implements Serializable {
 		sb.append("<isReadOnly>" + isReadOnly() + "</isReadOnly>\n");
 		sb.append("<countConnectionMax>" + countConnectionMax + "</countConnectionMax>\n");
 		sb.append("<isAutoCommit>" + isAutoCommit() + "</isAutoCommit>\n");
-		sb.append("<permitConnectionPoolOver>" + permitConnectionPoolOver + "</permitConnectionPoolOver>\n");
 		sb.append("<reconnectTimeout>" + reconnectWaitTimeSec + "</reconnectTimeout>\n");
-		sb.append("<isAutoReconnect>" + isPermitConnectionPoolOver() + "</isAutoReconnect>\n");
 		sb.append("<reconnectTryCount>" + reconnectRetry + "</reconnectTryCount>\n");
 
 		if (constMap != null) {
@@ -1237,14 +1216,6 @@ public abstract class DataBase implements Serializable {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	/**
-	 * 
-	 * @param permitConnectionPoolOver 컨넥션 풀 초과인 경우 새로운 컨넥션 생성 여부
-	 */
-	public void setPermitConnectionPoolOver(boolean permitConnectionPoolOver) {
-		this.permitConnectionPoolOver = permitConnectionPoolOver;
 	}
 
 	public void setPort(int port) {

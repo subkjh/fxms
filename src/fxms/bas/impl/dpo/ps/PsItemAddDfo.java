@@ -26,7 +26,7 @@ public class PsItemAddDfo implements FxDfo<Void, Boolean> {
 
 	public Boolean addPsItem(int userNo, String psId, String psName, Map<String, Object> para) throws Exception {
 
-		FX_PS_ITEM item = FxTableMaker.convert(para, FX_PS_ITEM.class, false);
+		FX_PS_ITEM item = FxTableMaker.toObject(para, FX_PS_ITEM.class, false);
 		FxTableMaker.initRegChg(userNo, item);
 
 		item.setPsId(psId);

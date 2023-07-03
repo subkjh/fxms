@@ -6,7 +6,7 @@ import subkjh.bas.co.utils.DateUtil;
 public class GetOperatingRateDto {
 
 	@FxAttr(text = "관리대상번호", example = "123456", required = false)
-	private Long moNo;
+	private long moNo;
 
 	@FxAttr(text="주기명", description = "FX_PS_STAT_KIND 값 중에 하나이다.", example = "1D")
 	private String psKindName;

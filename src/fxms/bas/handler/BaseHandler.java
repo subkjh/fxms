@@ -121,7 +121,7 @@ public abstract class BaseHandler extends FxHttpHandler {
 			boolean checkMandatory) throws AttrNotFoundException, Exception {
 
 		if (classOfItem.getAnnotation(FxTable.class) != null) {
-			T item = FxTableMaker.convert(parameters, classOfItem, checkMandatory);
+			T item = FxTableMaker.toObject(parameters, classOfItem, checkMandatory);
 			// 추가, 수정 일자를 넣는다.
 			int userNo = session == null ? User.USER_NO_SYSTEM : session.getUserNo();
 			FxTableMaker.initRegChg(userNo, item);

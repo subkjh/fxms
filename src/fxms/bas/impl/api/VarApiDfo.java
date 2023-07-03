@@ -23,16 +23,16 @@ import subkjh.bas.co.log.Logger;
 public class VarApiDfo extends VarApi {
 
 	@Override
-	public List<FxVarVo> getVars(Map<String, Object> para) throws Exception {
-		return new SelectVarDfo().selectVar(para);
+	public boolean enable(String varName, boolean enable) throws Exception {
+		this.updateVarInfo(varName, FxApi.makePara("useYn", enable ? "Y" : "N"));
+		return true;
 	}
 
 	@Override
-	public void updateVarInfo(String varName, Map<String, Object> para) throws Exception {
+	public boolean setTimeUpdated(Enum<?> type, long hstime) throws Exception {
+
 		try {
-
-			new SetVarDfo().setVar(varName, para);
-
+			return new UpdateReloadTimeDfo().updateReloadTime(type.name(), hstime);
 		} catch (Exception e) {
 			Logger.logger.error(e);
 			throw e;
@@ -55,10 +55,11 @@ public class VarApiDfo extends VarApi {
 	}
 
 	@Override
-	public boolean setTimeUpdated(Enum<?> type, long hstime) throws Exception {
-
+	public void updateVarInfo(String varName, Map<String, Object> para) throws Exception {
 		try {
-			return new UpdateReloadTimeDfo().updateReloadTime(type.name(), hstime);
+
+			new SetVarDfo().setVar(varName, para);
+
 		} catch (Exception e) {
 			Logger.logger.error(e);
 			throw e;
@@ -66,8 +67,7 @@ public class VarApiDfo extends VarApi {
 	}
 
 	@Override
-	public boolean enable(String varName, boolean enable) throws Exception {
-		this.updateVarInfo(varName, FxApi.makePara("useYn", enable ? "Y" : "N"));
-		return true;
+	protected List<FxVarVo> getVars(Map<String, Object> para) throws Exception {
+		return new SelectVarDfo().selectVar(para);
 	}
 }

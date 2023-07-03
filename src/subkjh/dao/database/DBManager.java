@@ -31,7 +31,7 @@ public class DBManager {
 	private static DBManager manager = null;
 
 	public synchronized static DBManager getMgr() {
-		
+
 		if (manager == null) {
 			manager = new DBManager();
 			try {
@@ -159,8 +159,6 @@ public class DBManager {
 						database.setTimeoutLogin(Integer.parseInt(child.getTextTrim()));
 					} else if (child.getName().equalsIgnoreCase("countConnectionMax")) {
 						database.setCountConnectionMax(Integer.parseInt(child.getTextTrim()));
-					} else if (child.getName().equalsIgnoreCase("permitConnectionPoolOver")) {
-						database.setPermitConnectionPoolOver("true".equalsIgnoreCase(child.getTextTrim()));
 					} else if (child.getName().equalsIgnoreCase("secondsWaitPool")) {
 						database.setSecondsWaitPool(Integer.parseInt(child.getTextTrim()));
 					} else if (child.getName().equalsIgnoreCase("sqlSelectKeepAlive")) {

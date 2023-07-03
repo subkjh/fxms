@@ -48,12 +48,12 @@ public class FxTableMaker {
 	 * 
 	 * @param <T>
 	 * @param session
-	 * @param parameters
+	 * @param datas
 	 * @param classOfItem
 	 * @return
 	 * @throws Exception
 	 */
-	public static <T> T convert(Map<String, Object> parameters, Class<T> classOfItem, boolean checkMandatory)
+	public static <T> T toObject(Map<String, Object> datas, Class<T> classOfItem, boolean checkMandatory)
 			throws AttrNotFoundException, Exception {
 
 		// 필수 항목 체크
@@ -65,7 +65,7 @@ public class FxTableMaker {
 			// 없으면 AttrNotFoundException를 보낸다.
 			StringBuffer sb = new StringBuffer();
 			for (String attr : mandatoryColumnList) {
-				if (parameters.get(attr) == null) {
+				if (datas.get(attr) == null) {
 					if (sb.length() > 0) {
 						sb.append(",");
 					}
@@ -79,8 +79,8 @@ public class FxTableMaker {
 
 		// 사용할 객체를 생성하고 거기에 값을 넣는다.
 		T item = classOfItem.newInstance();
-		if (parameters != null) {
-			ObjectUtil.toObject(parameters, item);
+		if (datas != null) {
+			ObjectUtil.toObject(datas, item);
 		}
 
 		return item;

@@ -20,7 +20,7 @@ public class FX_CO_WEATHER {
 	}
 
 	@FxColumn(name = "AREA_NUM", size = 10, comment = "지역번호")
-	private Long areaNum;
+	private String areaNum;
 
 	@FxColumn(name = "YMD_HH", size = 10, comment = "년월일시간")
 	private Long ymdHh;
@@ -64,14 +64,14 @@ public class FX_CO_WEATHER {
 	/**
 	 * @return 지역번호
 	 */
-	public Long getAreaNum() {
+	public String getAreaNum() {
 		return areaNum;
 	}
 
 	/**
 	 * @param areaNum 지역번호
 	 */
-	public void setAreaNum(Long areaNum) {
+	public void setAreaNum(String areaNum) {
 		this.areaNum = areaNum;
 	}
 

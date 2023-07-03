@@ -30,9 +30,13 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 	}
 
 	/**
+	 * 테스트용 성능값을 생성한다.<br>
+	 * 성능항목이 누적값이면 이전값을 가져와 그 값이 추가한다.<br>
+	 * 성능항목이 현재값이면 이전값에 일정 부분을 더하거 뺀다. 현재값이 없다면 범위 안의 값으로 랜덤 생성한다.<br>
 	 * 
-	 * @param mo
-	 * @param psItem
+	 * @param mo         관리대상
+	 * @param moInstance 인스턴스(없으면 null)
+	 * @param psItem     성능항목
 	 * @return
 	 */
 	public PsVoRaw makeTestValue(Mo mo, String moInstance, PsItem psItem) {
@@ -90,5 +94,22 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 
 		return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), value, moInstance);
 
+	}
+
+	/**
+	 * 0 또는 1 값을 생성한다.
+	 * 
+	 * @param mo
+	 * @param psItem
+	 * @param offValue 랜덤값이 이 값보다 작으면 0 크면 1을 값으로 제공한다.
+	 * @return
+	 */
+	public PsVoRaw testOnOffValue(Mo mo, PsItem psItem, double offValue) {
+		// offline으로 테스트한다.
+		if (Math.random() <= offValue) {
+			return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), 0);
+		} else {
+			return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), 1);
+		}
 	}
 }

@@ -345,9 +345,9 @@ public class QueryMaker {
 		tmp = new StringBuffer();
 		for (Table table : tabMap.values()) {
 			if (tmp.length() > 0) {
-				tmp.append("\n, ");
+				tmp.append("\n      , ");
 			} else {
-				tmp.append("\nfrom ");
+				tmp.append("\n from ");
 			}
 			tmp.append(table.getName() + " " + table.getAlias());
 		}
@@ -491,9 +491,9 @@ public class QueryMaker {
 		tmp = new StringBuffer();
 		for (Table table : tabMap.values()) {
 			if (tmp.length() > 0) {
-				tmp.append("\n, ");
+				tmp.append("\n      , ");
 			} else {
-				tmp.append("\nfrom ");
+				tmp.append("\n from ");
 			}
 			tmp.append(table.getName() + " " + table.getAlias());
 		}

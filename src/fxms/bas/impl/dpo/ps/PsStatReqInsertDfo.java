@@ -8,7 +8,6 @@ import fxms.bas.api.PsApi;
 import fxms.bas.co.CoCode.CRE_ST_CD;
 import fxms.bas.exp.NotFoundException;
 import fxms.bas.fxo.FxCfg;
-import fxms.bas.impl.dbo.StatMakeReqDbo;
 import fxms.bas.impl.dbo.all.FX_PS_STAT_CRE;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
@@ -72,7 +71,7 @@ public class PsStatReqInsertDfo implements FxDfo<List<PsStatReqVo>, Integer> {
 
 					// 없으면 추가
 					req = new FX_PS_STAT_CRE();
-					req.setPsCreReqNo(tran.getNextVal(StatMakeReqDbo.FX_SEQ_PSCREREQNO, Long.class));
+					req.setPsCreReqNo(tran.getNextVal(FX_PS_STAT_CRE.FX_SEQ_PSCREREQNO, Long.class));
 					req.setCreStCd(CRE_ST_CD.Ready.getCode());
 					req.setPsDtm(vo.getPsDtm());
 					req.setPsTbl(vo.getPsTbl());

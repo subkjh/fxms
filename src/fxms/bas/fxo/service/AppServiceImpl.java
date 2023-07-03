@@ -42,8 +42,9 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 	}
 
 	private final long DATA_CHECK_CYCLE = 60 * 1000L; // reload 데이터 확인 주기
-
+	private final long STORAGE_CHECK_CYCLE = 3600 * 1000L; // 저장소 확인 주소
 	private long nextDataCheckedTime = System.currentTimeMillis() + DATA_CHECK_CYCLE;
+	private long nextStorageToCheckTime = System.currentTimeMillis() + STORAGE_CHECK_CYCLE; // 스토레지 다음 확인 시간
 
 	public AppServiceImpl(String name, int port) throws RemoteException, Exception {
 		super(name, port);
@@ -61,7 +62,7 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 			Logger.logger.error(e);
 			return null;
 		} finally {
-			logger.fail("{} --> {}", memo, ret);
+			logger.info("{} --> {}", memo, ret);
 		}
 
 	}
@@ -165,6 +166,17 @@ public class AppServiceImpl extends FxServiceImpl implements AppService {
 		super.onCycle(mstime);
 
 		checkDataUpdate(mstime);
+
+		if (nextStorageToCheckTime < mstime) {
+
+			try {
+				checkStorage("Time to check storage.");
+			} catch (Exception e) {
+				logger.error(e);
+			}
+
+			nextStorageToCheckTime = (mstime + STORAGE_CHECK_CYCLE);
+		}
 
 	}
 

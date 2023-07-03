@@ -17,7 +17,7 @@ public class NotFoundException extends Exception {
 	}
 
 	public NotFoundException(String type, Object value, String message) {
-		super(message == null ? Lang.get("No data found.", type, value) : message);
+		super(message == null ? Lang.get("No data found.") + " " + type + "(" +  value + ")" : message);
 		this.type = type;
 		this.value = value;
 	}

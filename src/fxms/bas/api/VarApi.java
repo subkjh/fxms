@@ -51,31 +51,6 @@ public abstract class VarApi extends FxApi {
 		this.appliedTimeMap = new HashMap<String, Long>();
 	}
 
-	private void backupVar() throws Exception {
-
-		List<FxVarVo> varList = getVars(null);
-
-		StringBuffer sb = new StringBuffer();
-		for (FxVarVo var : varList) {
-			sb.append(Logger.makeSubString(var.getName(), var.getValue()));
-		}
-
-		Logger.logger.info(Logger.makeString("variables", null, sb.toString()));
-
-		save2file("var.list", varList);
-	}
-
-	/**
-	 * 
-	 * @param varName
-	 * @return
-	 * @throws Exception
-	 */
-	private String getVarValue(String varName) throws Exception {
-		List<FxVarVo> list = getVars(makePara("varName", varName));
-		return list.size() == 1 ? list.get(0).getValue() : null;
-	}
-
 	/**
 	 * 서비스가 해당 데이터를 적용한 시간을 기록한다.
 	 * 
@@ -87,6 +62,15 @@ public abstract class VarApi extends FxApi {
 			this.appliedTimeMap.put(type.name(), hstime);
 		}
 	}
+
+	/**
+	 * 
+	 * @param varName
+	 * @param enable
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract boolean enable(String varName, boolean enable) throws Exception;
 
 	@Override
 	public String getState(LOG_LEVEL level) {
@@ -100,6 +84,42 @@ public abstract class VarApi extends FxApi {
 	}
 
 	/**
+	 * 데이터가 변경된 시간을 확인하여 업데이트 된 내역을 조회한다.
+	 * 
+	 * @return
+	 */
+	public List<ReloadType> getUpdatedData() {
+
+		List<ReloadType> ret = new ArrayList<>();
+
+		try {
+			List<FxVarVo> list = this.getVars(makePara("varName like", UPDATED_TIME_VAR + "%"));
+			Map<String, Long> timeMap = new HashMap<>();
+			for (FxVarVo vo : list) {
+				try {
+					timeMap.put(vo.getName(), Long.parseLong(vo.getValue()));
+				} catch (Exception e) {
+					Logger.logger.error(e);
+				}
+			}
+
+			Long time;
+			for (ReloadType data : ReloadType.values()) {
+				time = timeMap.get(UPDATED_TIME_VAR + data.name());
+				if (time != null && isDataUpdated(data, time)) {
+					ret.add(data);
+				}
+			}
+
+		} catch (Exception e) {
+			Logger.logger.error(e);
+		}
+
+		return ret;
+
+	}
+
+	/**
 	 * 
 	 * @param varGrpName
 	 * @return
@@ -108,14 +128,6 @@ public abstract class VarApi extends FxApi {
 	public List<FxVarVo> getVarList(String varGrpName) throws Exception {
 		return getVars(makePara("varGrpName", varGrpName));
 	}
-
-	/**
-	 * 환경변수를 저장소에서 조회합니다.
-	 * 
-	 * @return 환경변수 목록
-	 * @throws Exception
-	 */
-	public abstract List<FxVarVo> getVars(Map<String, Object> para) throws Exception;
 
 	/**
 	 * 
@@ -179,59 +191,6 @@ public abstract class VarApi extends FxApi {
 		}
 	}
 
-	/**
-	 * 데이터가 외부에서 업데이트 되었는지 확인한다.
-	 * 
-	 * @param type
-	 * @return
-	 */
-	private boolean isDataUpdated(ReloadType type, long updateTime) {
-		Long time = null;
-		synchronized (this.appliedTimeMap) {
-			time = this.appliedTimeMap.get(type.name());
-		}
-		if (time == null)
-			return true;
-
-		return updateTime >= time.longValue();
-	}
-
-	/**
-	 * 데이터가 변경된 시간을 확인하여 업데이트 된 내역을 조회한다.
-	 * 
-	 * @return
-	 */
-	public List<ReloadType> getUpdatedData() {
-
-		List<ReloadType> ret = new ArrayList<>();
-
-		try {
-			List<FxVarVo> list = this.getVars(makePara("varName like", UPDATED_TIME_VAR + "%"));
-			Map<String, Long> timeMap = new HashMap<>();
-			for (FxVarVo vo : list) {
-				try {
-					timeMap.put(vo.getName(), Long.parseLong(vo.getValue()));
-				} catch (Exception e) {
-					Logger.logger.error(e);
-				}
-			}
-
-			Long time;
-			for (ReloadType data : ReloadType.values()) {
-				time = timeMap.get(UPDATED_TIME_VAR + data.name());
-				if (time != null && isDataUpdated(data, time)) {
-					ret.add(data);
-				}
-			}
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-		}
-
-		return ret;
-
-	}
-
 	@Override
 	public void onCreated() throws Exception {
 
@@ -267,15 +226,6 @@ public abstract class VarApi extends FxApi {
 	public abstract boolean setVarValue(String varName, Object varValue, boolean broadcast) throws Exception;
 
 	/**
-	 * 
-	 * @param varName
-	 * @param enable
-	 * @return
-	 * @throws Exception
-	 */
-	public abstract boolean enable(String varName, boolean enable) throws Exception;
-
-	/**
 	 * 변수의 속성을 수정한다.
 	 * 
 	 * @param varName
@@ -283,4 +233,54 @@ public abstract class VarApi extends FxApi {
 	 * @throws Exception
 	 */
 	public abstract void updateVarInfo(String varName, Map<String, Object> para) throws Exception;
+
+	/**
+	 * 환경변수를 저장소에서 조회합니다.
+	 * 
+	 * @return 환경변수 목록
+	 * @throws Exception
+	 */
+	protected abstract List<FxVarVo> getVars(Map<String, Object> para) throws Exception;
+
+	private void backupVar() throws Exception {
+
+		List<FxVarVo> varList = getVars(null);
+
+		StringBuffer sb = new StringBuffer();
+		for (FxVarVo var : varList) {
+			sb.append(Logger.makeSubString(var.getName(), var.getValue()));
+		}
+
+		Logger.logger.info(Logger.makeString("variables", null, sb.toString()));
+
+		save2file("var.list", varList);
+	}
+
+	/**
+	 * 
+	 * @param varName
+	 * @return
+	 * @throws Exception
+	 */
+	private String getVarValue(String varName) throws Exception {
+		List<FxVarVo> list = getVars(makePara("varName", varName));
+		return list.size() == 1 ? list.get(0).getValue() : null;
+	}
+
+	/**
+	 * 데이터가 외부에서 업데이트 되었는지 확인한다.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	private boolean isDataUpdated(ReloadType type, long updateTime) {
+		Long time = null;
+		synchronized (this.appliedTimeMap) {
+			time = this.appliedTimeMap.get(type.name());
+		}
+		if (time == null)
+			return true;
+
+		return updateTime >= time.longValue();
+	}
 }

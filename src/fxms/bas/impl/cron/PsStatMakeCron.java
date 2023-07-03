@@ -1,8 +1,6 @@
 package fxms.bas.impl.cron;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +16,8 @@ import fxms.bas.cron.Crontab;
 import fxms.bas.fxo.FxAttr;
 import fxms.bas.fxo.adapter.FxAdapterInfo;
 import fxms.bas.fxo.adapter.PsStatAfterAdapter;
-import fxms.bas.impl.dbo.StatMakeReqDbo;
 import fxms.bas.impl.dbo.StatMakeUpdateDbo;
+import fxms.bas.impl.dbo.all.FX_PS_STAT_CRE;
 import fxms.bas.vo.PsKind;
 import fxms.bas.vo.PsStatReqVo;
 import subkjh.bas.co.log.Logger;
@@ -39,18 +37,12 @@ public class PsStatMakeCron extends Crontab {
 	@FxAttr(value = "* * * * *", description = "매분마다 통계 테이블 생성한다.")
 	private String schedule;
 
-	private String yyyymmdd = "";
-
-	private final SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyyMMdd");
-
 	public PsStatMakeCron() {
 
 	}
 
 	@Override
 	public void start() throws Exception {
-
-		makeTables();
 
 		try {
 			makeStatAll();
@@ -69,7 +61,7 @@ public class PsStatMakeCron extends Crontab {
 	 * 
 	 * @param req
 	 */
-	private void afterStat(StatMakeReqDbo req) {
+	private void afterStat(FX_PS_STAT_CRE req) {
 
 		List<String> psIds = PsApi.getApi().getPsIds(req.getPsTbl());
 		int alcdNo = ALARM_CODE.fxms_error_ps_stat_adapter.getAlcdNo();
@@ -80,7 +72,7 @@ public class PsStatMakeCron extends Crontab {
 				a.afterStat(req.getPsTbl(), psIds, req.getPsDataCd(), req.getPsDtm());
 			} catch (Exception e) {
 				Logger.logger.error(e);
-				AlarmApi.getApi().fireAlarm(null, req.getKey(), alcdNo, null, null, null);
+				AlarmApi.getApi().fireAlarm(null, getAlarmKey(req), alcdNo, null, null, null);
 			}
 		}
 	}
@@ -91,7 +83,7 @@ public class PsStatMakeCron extends Crontab {
 	 * @param req
 	 * @throws Exception
 	 */
-	private void makeStat(StatMakeReqDbo req) throws Exception {
+	private void makeStat(FX_PS_STAT_CRE req) throws Exception {
 
 		String errmsg = null;
 		StatMakeUpdateDbo dbo = new StatMakeUpdateDbo();
@@ -140,7 +132,7 @@ public class PsStatMakeCron extends Crontab {
 			}
 
 		} catch (Exception e) {
-			AlarmApi.getApi().fireAlarm(null, req.getKey(), ALARM_CODE.fxms_error_ps_stat.getAlcdNo(), null, null,
+			AlarmApi.getApi().fireAlarm(null, getAlarmKey(req), ALARM_CODE.fxms_error_ps_stat.getAlcdNo(), null, null,
 					null);
 			Logger.logger.error(e);
 			throw e;
@@ -152,38 +144,17 @@ public class PsStatMakeCron extends Crontab {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("creblDtm <= ", DateUtil.getDtm()); // 생성 가능시간이 지난 경우만 조회
 		para.put("creStCd", CRE_ST_CD.Ready.getCode()); // 대기중인 성능만
-		List<StatMakeReqDbo> reqList = ClassDaoEx.SelectDatas(StatMakeReqDbo.class, para);
+		List<FX_PS_STAT_CRE> reqList = ClassDaoEx.SelectDatas(FX_PS_STAT_CRE.class, para);
 
 		Logger.logger.info("size={}", reqList.size());
 
-		for (StatMakeReqDbo req : reqList) {
+		for (FX_PS_STAT_CRE req : reqList) {
 
 			makeStat(req); // 통계생성
 
 			try {
 				// 생성결과 통보
 				AppApi.getApi().responseMakeStat(new PsStatReqVo(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm()));
-			} catch (Exception e) {
-				Logger.logger.error(e);
-			}
-
-		}
-	}
-
-	/**
-	 * 보관 기간이 지난 테이블은 삭제하고 필요한 테이블은 생성한다.
-	 */
-	private void makeTables() {
-		String today = YYYYMMDD.format(new Date(System.currentTimeMillis()));
-
-		if (yyyymmdd.equals(today) == false) {
-
-			try {
-
-				AppApi.getApi().checkStorage(today);
-
-				yyyymmdd = today;
-
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}
@@ -210,5 +181,9 @@ public class PsStatMakeCron extends Crontab {
 		}
 
 		AppApi.getApi().requestMakeStat(reqList);
+	}
+
+	private String getAlarmKey(FX_PS_STAT_CRE req) {
+		return req.getPsTbl() + "_" + req.getPsDataCd() + "_" + req.getPsDtm();
 	}
 }

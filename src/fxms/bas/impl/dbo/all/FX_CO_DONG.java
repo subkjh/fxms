@@ -17,9 +17,6 @@ import subkjh.dao.def.Index.INDEX_TYPE;
 @FxIndex(name = "FX_CO_DONG__KEY_UPPER", type = INDEX_TYPE.KEY, columns = { "UPPER_AREA_NUM" })
 public class FX_CO_DONG {
 
-	public FX_CO_DONG() {
-	}
-
 	@FxColumn(name = "AREA_NUM", size = 10, comment = "지역번호")
 	private String areaNum;
 
@@ -44,6 +41,9 @@ public class FX_CO_DONG {
 	@FxColumn(name = "LNG", size = 15, nullable = true, comment = "경도", defValue = "-1")
 	private double lng = -1D;
 
+	@FxColumn(name = "GEO_FENCE", size = 10, comment = "지오펜스")
+	private String geoFence;
+
 	@FxColumn(name = "REG_USER_NO", size = 9, operator = COLUMN_OP.insert, nullable = true, comment = "등록사용자번호", defValue = "0")
 	private int regUserNo = 0;
 
@@ -56,22 +56,25 @@ public class FX_CO_DONG {
 	@FxColumn(name = "CHG_DTM", size = 14, nullable = true, comment = "수정일시")
 	private long chgDtm;
 
-	/**
-	 * 지역번호
-	 * 
-	 * @return 지역번호
-	 */
-	public String getAreaNum() {
-		return areaNum;
+	public FX_CO_DONG() {
 	}
 
 	/**
-	 * 지역번호
+	 * 지역전체명
 	 * 
-	 * @param areaNum 지역번호
+	 * @return 지역전체명
 	 */
-	public void setAreaNum(String areaNum) {
-		this.areaNum = areaNum;
+	public String getAreaAllName() {
+		return areaAllName;
+	}
+
+	/**
+	 * 지역구분코드
+	 * 
+	 * @return 지역구분코드
+	 */
+	public String getAreaClCd() {
+		return areaClCd;
 	}
 
 	/**
@@ -84,21 +87,88 @@ public class FX_CO_DONG {
 	}
 
 	/**
-	 * 지역명
+	 * 지역번호
 	 * 
-	 * @param areaName 지역명
+	 * @return 지역번호
 	 */
-	public void setAreaName(String areaName) {
-		this.areaName = areaName;
+	public String getAreaNum() {
+		return areaNum;
 	}
 
 	/**
-	 * 지역전체명
+	 * 수정일시
 	 * 
-	 * @return 지역전체명
+	 * @return 수정일시
 	 */
-	public String getAreaAllName() {
-		return areaAllName;
+	public long getChgDtm() {
+		return chgDtm;
+	}
+
+	/**
+	 * 수정사용자번호
+	 * 
+	 * @return 수정사용자번호
+	 */
+	public int getChgUserNo() {
+		return chgUserNo;
+	}
+
+	public String getGeoFence() {
+		return geoFence;
+	}
+
+	/**
+	 * 위도
+	 * 
+	 * @return 위도
+	 */
+	public double getLat() {
+		return lat;
+	}
+
+	/**
+	 * 경도
+	 * 
+	 * @return 경도
+	 */
+	public double getLng() {
+		return lng;
+	}
+
+	/**
+	 * 등록일시
+	 * 
+	 * @return 등록일시
+	 */
+	public long getRegDtm() {
+		return regDtm;
+	}
+
+	/**
+	 * 등록사용자번호
+	 * 
+	 * @return 등록사용자번호
+	 */
+	public int getRegUserNo() {
+		return regUserNo;
+	}
+
+	/**
+	 * 상위지역번호
+	 * 
+	 * @return 상위지역번호
+	 */
+	public String getUpperAreaNum() {
+		return upperAreaNum;
+	}
+
+	/**
+	 * 사용여부
+	 * 
+	 * @return 사용여부
+	 */
+	public boolean isUseYn() {
+		return useYn;
 	}
 
 	/**
@@ -113,15 +183,6 @@ public class FX_CO_DONG {
 	/**
 	 * 지역구분코드
 	 * 
-	 * @return 지역구분코드
-	 */
-	public String getAreaClCd() {
-		return areaClCd;
-	}
-
-	/**
-	 * 지역구분코드
-	 * 
 	 * @param areaClCd 지역구분코드
 	 */
 	public void setAreaClCd(String areaClCd) {
@@ -129,48 +190,43 @@ public class FX_CO_DONG {
 	}
 
 	/**
-	 * 상위지역번호
+	 * 지역명
 	 * 
-	 * @return 상위지역번호
+	 * @param areaName 지역명
 	 */
-	public String getUpperAreaNum() {
-		return upperAreaNum;
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 
 	/**
-	 * 상위지역번호
+	 * 지역번호
 	 * 
-	 * @param upperAreaNum 상위지역번호
+	 * @param areaNum 지역번호
 	 */
-	public void setUpperAreaNum(String upperAreaNum) {
-		this.upperAreaNum = upperAreaNum;
+	public void setAreaNum(String areaNum) {
+		this.areaNum = areaNum;
 	}
 
 	/**
-	 * 사용여부
+	 * 수정일시
 	 * 
-	 * @return 사용여부
+	 * @param chgDtm 수정일시
 	 */
-	public boolean isUseYn() {
-		return useYn;
+	public void setChgDtm(long chgDtm) {
+		this.chgDtm = chgDtm;
 	}
 
 	/**
-	 * 사용여부
+	 * 수정사용자번호
 	 * 
-	 * @param useYn 사용여부
+	 * @param chgUserNo 수정사용자번호
 	 */
-	public void setUseYn(boolean useYn) {
-		this.useYn = useYn;
+	public void setChgUserNo(int chgUserNo) {
+		this.chgUserNo = chgUserNo;
 	}
 
-	/**
-	 * 위도
-	 * 
-	 * @return 위도
-	 */
-	public double getLat() {
-		return lat;
+	public void setGeoFence(String geoFence) {
+		this.geoFence = geoFence;
 	}
 
 	/**
@@ -185,46 +241,10 @@ public class FX_CO_DONG {
 	/**
 	 * 경도
 	 * 
-	 * @return 경도
-	 */
-	public double getLng() {
-		return lng;
-	}
-
-	/**
-	 * 경도
-	 * 
 	 * @param lng 경도
 	 */
 	public void setLng(double lng) {
 		this.lng = lng;
-	}
-
-	/**
-	 * 등록사용자번호
-	 * 
-	 * @return 등록사용자번호
-	 */
-	public int getRegUserNo() {
-		return regUserNo;
-	}
-
-	/**
-	 * 등록사용자번호
-	 * 
-	 * @param regUserNo 등록사용자번호
-	 */
-	public void setRegUserNo(int regUserNo) {
-		this.regUserNo = regUserNo;
-	}
-
-	/**
-	 * 등록일시
-	 * 
-	 * @return 등록일시
-	 */
-	public long getRegDtm() {
-		return regDtm;
 	}
 
 	/**
@@ -237,38 +257,30 @@ public class FX_CO_DONG {
 	}
 
 	/**
-	 * 수정사용자번호
+	 * 등록사용자번호
 	 * 
-	 * @return 수정사용자번호
+	 * @param regUserNo 등록사용자번호
 	 */
-	public int getChgUserNo() {
-		return chgUserNo;
+	public void setRegUserNo(int regUserNo) {
+		this.regUserNo = regUserNo;
 	}
 
 	/**
-	 * 수정사용자번호
+	 * 상위지역번호
 	 * 
-	 * @param chgUserNo 수정사용자번호
+	 * @param upperAreaNum 상위지역번호
 	 */
-	public void setChgUserNo(int chgUserNo) {
-		this.chgUserNo = chgUserNo;
+	public void setUpperAreaNum(String upperAreaNum) {
+		this.upperAreaNum = upperAreaNum;
 	}
 
 	/**
-	 * 수정일시
+	 * 사용여부
 	 * 
-	 * @return 수정일시
+	 * @param useYn 사용여부
 	 */
-	public long getChgDtm() {
-		return chgDtm;
+	public void setUseYn(boolean useYn) {
+		this.useYn = useYn;
 	}
 
-	/**
-	 * 수정일시
-	 * 
-	 * @param chgDtm 수정일시
-	 */
-	public void setChgDtm(long chgDtm) {
-		this.chgDtm = chgDtm;
-	}
 }

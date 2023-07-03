@@ -23,7 +23,7 @@ public class PsKind {
 	public static final String PSKIND_15M = "15M";
 	public static final String PSKIND_1H = "1H";
 	public static final String PSKIND_1D = "1D";
-
+	
 
 	public enum TBL_PART_UNIT_CD {
 		Daily("D", Calendar.DAY_OF_YEAR), Monthly("M", Calendar.MONTH), None("N", Calendar.DAY_OF_YEAR),

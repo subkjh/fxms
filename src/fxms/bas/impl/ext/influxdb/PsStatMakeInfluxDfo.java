@@ -15,7 +15,7 @@ import org.influxdb.dto.QueryResult.Series;
 
 import fxms.bas.api.PsApi;
 import fxms.bas.fxo.FxCfg;
-import fxms.bas.impl.dbo.StatMakeReqDbo;
+import fxms.bas.impl.dbo.all.FX_PS_STAT_CRE;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.impl.dpo.ps.PsDpo;
@@ -33,7 +33,7 @@ import subkjh.dao.database.DataBase;
  * @author subkjh
  *
  */
-public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, Integer> {
+public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, Integer> {
 
 	class Data {
 		String sql;
@@ -59,11 +59,11 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<StatMakeReqDbo, 
 	private final int IDX_INSDATE = 3;
 
 	@Override
-	public Integer call(FxFact fact, StatMakeReqDbo data) throws Exception {
+	public Integer call(FxFact fact, FX_PS_STAT_CRE data) throws Exception {
 		return generateStatistics(data);
 	}
 
-	public int generateStatistics(StatMakeReqDbo req) throws Exception {
+	public int generateStatistics(FX_PS_STAT_CRE req) throws Exception {
 		return generateStatistics(req.getPsTbl(), req.getPsDataCd(), req.getPsDtm());
 	}
 
