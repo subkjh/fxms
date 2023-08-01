@@ -27,6 +27,7 @@ public class DateSelectSameDfo implements FxDfo<String, List<String>> {
 		return selectSameDates(date, 12);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> selectSameDates(String date, int count) {
 
 		try {

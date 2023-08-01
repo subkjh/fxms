@@ -15,7 +15,6 @@ import fxms.bas.mo.Moable;
 import fxms.bas.signal.ReloadSignal.ReloadType;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCfg;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
 import subkjh.bas.co.log.LOG_LEVEL;
@@ -65,33 +64,18 @@ public abstract class AlarmApi extends FxApi {
 	}
 
 	/**
-	 * 알람를 확인하여 해제한다.
-	 * 
-	 * @param alarm          알람
-	 * @param alarmRlseRsnCd 해제사유코드
-	 * @param releaseMemo    해제메모
-	 * @param eventTime      이벤트일시
-	 * @param userNo         운용자번호
-	 * @return
-	 */
-	public Alarm clearAlarm(Alarm alarm, ALARM_RLSE_RSN_CD alarmRlseRsnCd, String releaseMemo, long eventTime,
-			int userNo) throws Exception {
-		AlarmClearEvent event = new AlarmClearEvent(alarm.getAlarmNo(), eventTime, alarmRlseRsnCd, releaseMemo, userNo);
-		return clearAlarm(event);
-	}
-
-	/**
 	 * 현재 경보를 해제합니다.
 	 * 
-	 * @param alarm       알람
-	 * @param clearRsnNo  해제사유번호
-	 * @param releaseMemo 해제메모
-	 * @param eventTime   이벤트시간(millseconds)
-	 * @param userNo      사용자번호
+	 * @param alarmNo  알람번호
+	 * @param mstime   이벤트시간
+	 * @param cd       해제이유코드
+	 * @param rlseMemo 메모
+	 * @param userNo   사용자번호
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Alarm clearAlarm(AlarmClearEvent event) throws Exception;
+	public abstract Alarm clearAlarm(long alarmNo, long mstime, ALARM_RLSE_RSN_CD cd, String rlseMemo, int userNo)
+			throws Exception;
 
 	/**
 	 * 
@@ -119,7 +103,7 @@ public abstract class AlarmApi extends FxApi {
 			}
 
 			try {
-				clearAlarm(nowAlarm, alarmRlseRsnCd, releaseMemo, eventTime, userNo);
+				clearAlarm(nowAlarm.getAlarmNo(), eventTime, alarmRlseRsnCd, releaseMemo, userNo);
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}
@@ -165,9 +149,9 @@ public abstract class AlarmApi extends FxApi {
 			if (mo == null) {
 				mo = MoApi.getApi().getProjectMo();
 			}
-			
+
 			fireAlarm(makeAlarmEvent(mo, moInstance, alcdNo, alarmLevel, msg, etcData), etcData);
-			
+
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}

@@ -32,15 +32,14 @@ import subkjh.bas.co.user.User.USER_TYPE_CD;
 public class MakeAccessTokenDfo implements FxDfo<SessionVo, String> {
 
 	public static void main(String[] args) {
-		SessionVo session = new SessionVo("AAA", 1, "test", "test", USER_TYPE_CD.Operator, 0, 0);
-		FxFact fact = new FxFact();
+		SessionVo session = new SessionVo("AAA", 1, "홍길동", "test", USER_TYPE_CD.Operator, 0, 0);
+
 		MakeAccessTokenDfo dpo = new MakeAccessTokenDfo();
 		ReadAccessTokenDfo dpo2 = new ReadAccessTokenDfo();
 		try {
-			String token = dpo.call(fact, session);
-			session.setAccessToken(token);
-			fact.put("token", token);
-			Map<String, Object> payload = dpo2.call(fact, "token");
+			String token = dpo.makeAccessToken(session);
+			System.out.println(token);
+			Map<String, Object> payload = dpo2.read(token);
 			System.out.println(FxmsUtil.toJson(payload));
 
 		} catch (Exception e) {
@@ -49,7 +48,8 @@ public class MakeAccessTokenDfo implements FxDfo<SessionVo, String> {
 		}
 	}
 
-	public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 60분
+//	public static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
+	private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 1주일
 	public static final String ACCESS_TOKEN_SECRET_KEY = "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK";
 
 	@Override
@@ -62,11 +62,12 @@ public class MakeAccessTokenDfo implements FxDfo<SessionVo, String> {
 
 	public String makeAccessToken(SessionVo user) {
 
+//		byte[] keyBytes = Decoders.BASE64URL.decode(ACCESS_TOKEN_SECRET_KEY);
 		byte[] keyBytes = Decoders.BASE64.decode(ACCESS_TOKEN_SECRET_KEY);
 		Key key = Keys.hmacShaKeyFor(keyBytes);
 
 		user.setAccessTokenExpiresIn(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME);
-		
+
 		Date accessTokenExpiresIn = new Date(user.getAccessTokenExpiresIn());
 
 		// Access Token 생성

@@ -9,7 +9,10 @@ import java.util.Map;
 import fxms.bas.api.MoApi;
 import fxms.bas.api.PsApi;
 import fxms.bas.api.ValueApi.StatFunction;
+import fxms.bas.exp.MoNotFoundException;
 import fxms.bas.fxo.FxCfg;
+import fxms.bas.fxo.FxmsUtil;
+import fxms.bas.impl.api.MoApiDfo;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.impl.dpo.ps.PsDpo;
@@ -37,6 +40,21 @@ import subkjh.dao.util.QueryMaker;
  *
  */
 public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
+
+	public static void main(String[] args) throws MoNotFoundException, Exception {
+
+		MoApi.api = new MoApiDfo();
+
+		SelectValuesDfo dfo = new SelectValuesDfo();
+
+		Mo mo = MoApi.getApi().getMo(20003);
+		PsKind psKind = PsApi.getApi().getPsKind("15M");
+		PsItem psItem = PsApi.getApi().getPsItem("UNDEF");
+
+		System.out.println(FxmsUtil
+				.toJson(dfo.selectValues(mo, "P0102020045", psItem, psKind, "AVG", 20230707000000L, 20230707235959L)));
+
+	}
 
 	/**
 	 * 성능항목 조회 조건
@@ -74,6 +92,8 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 	private void selectValues(ClassDao tran, Mo mo, String moInstance, PsKind psKind, long startDtm, long endDtm,
 			CondGetData conds[], Listener listener) throws Exception {
 
+		Logger.logger.trace("mo={}, moInstance={}, psKind={}, date={}~{}", mo, moInstance, psKind, startDtm, endDtm);
+
 		Table table = new Table();
 		String tableName;
 		QueryResult queryInfo;
@@ -82,6 +102,9 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 		table.addColumn(PsDpo.MO_NO);
 		table.addColumn(PsDpo.PS_DATE);
+		if (moInstance != null) {
+			table.addColumn(PsDpo.MO_INSTANCE);
+		}
 
 		// 조회할 컬럼 추가
 		List<String> valIdList = new ArrayList<>();
@@ -100,12 +123,15 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		}
 
 		Map<String, Object> para = new HashMap<>();
+
 		if (mo != null) {
 			para.put(PsDpo.MO_NO.getName(), mo.getMoNo());
 		}
+
 		if (moInstance != null) {
 			para.put(PsDpo.MO_INSTANCE.getName(), moInstance);
 		}
+
 		para.put(PsDpo.PS_DATE.getName() + " >= ", startDtm);
 		para.put(PsDpo.PS_DATE.getName() + "<= ", endDtm);
 
@@ -137,9 +163,12 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 						psMoNo = ((Number) datas[0]).longValue();
 						psDate = ((Number) datas[1]).longValue();
-						for (int i = 2; i < datas.length; i++) {
-							colNames[i - 2] = valIdList.get(i - 2);
-							values[i - 2] = (Number) datas[i];
+
+						int valIndex = moInstance == null ? 2 : 3;
+
+						for (int i = valIndex; i < datas.length; i++) {
+							colNames[i - valIndex] = valIdList.get(i - valIndex);
+							values[i - valIndex] = (Number) datas[i];
 						}
 						listener.onValue(psMoNo, psDate, colNames, values);
 					}
@@ -436,8 +465,8 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PsValues> selectValues(Mo mo, String moInstance, PsItem item, PsKind psKind, String psKindCol, long startDate,
-			long endDate) throws Exception {
+	public List<PsValues> selectValues(Mo mo, String moInstance, PsItem item, PsKind psKind, String psKindCol,
+			long startDate, long endDate) throws Exception {
 
 		CondGetData conds[] = new CondGetData[1];
 		conds[0] = new CondGetData(item, new String[] { psKindCol });

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.fxo.FxCfg;
+import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.dbo.all.FX_CF_MODEL;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
@@ -20,9 +21,8 @@ public class GetModelsDfo implements FxDfo<Map<String, Object>, List<MoModel>> {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("moClass", "NODE");
 		GetModelsDfo dpo = new GetModelsDfo();
-		FxFact fact = new FxFact("para", para);
 		try {
-//			System.out.println(FxmsUtil.toJson(dpo.call(fact, "para")));
+			System.out.println(FxmsUtil.toJson(dpo.selectModelList(para)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -39,7 +39,7 @@ public class GetModelsDfo implements FxDfo<Map<String, Object>, List<MoModel>> {
 
 		try {
 			tran.start();
-			List<FX_CF_MODEL> list = tran.select(FX_CF_MODEL.class, para);
+			List<FX_CF_MODEL> list = tran.selectDatas(FX_CF_MODEL.class, para);
 			List<MoModel> ret = new ArrayList<>();
 			for (FX_CF_MODEL a : list) {
 				ret.add(new MoModel(a.getModelNo(), a.getMoClass(), a.getModelName(), a.getVendrName()));

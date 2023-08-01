@@ -102,6 +102,19 @@ public abstract class FxApi implements Loggable, NotiReceiver {
 		return para;
 	}
 
+	public static Map<String, Object> makePara(Map<String, Object> para, Object... parameters) {
+
+		if (para == null) {
+			para = new HashMap<String, Object>();
+		}
+
+		for (int i = 0; i < parameters.length; i += 2) {
+			para.put(String.valueOf(parameters[i]), parameters[i + 1]);
+		}
+
+		return para;
+	}
+
 	private Map<String, Object> para;
 
 	private String name;

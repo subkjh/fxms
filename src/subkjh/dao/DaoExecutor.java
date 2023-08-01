@@ -8,11 +8,11 @@ import subkjh.bas.co.log.Logger;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.database.DataBase;
 import subkjh.dao.exp.QidNotFoundException;
-import subkjh.dao.model.SqlBean;
-import subkjh.dao.model.SqlSelectBean;
 import subkjh.dao.model.BatchVo;
 import subkjh.dao.model.QidPool;
 import subkjh.dao.model.QueryResult;
+import subkjh.dao.model.SqlBean;
+import subkjh.dao.model.SqlSelectBean;
 
 public class DaoExecutor extends AbstractDaoExecutor {
 

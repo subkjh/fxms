@@ -104,6 +104,9 @@ public class FX_CF_INLO {
 
 	@FxColumn(name = "DEL_YN", size = 1, nullable = true, comment = "삭제여부", defValue = "N")
 	private String delYn = "N";
+	
+	@FxColumn(name = "GEO_FENCE", size = 10, comment = "지오펜스")
+	private String geoFence;
 
 	@FxColumn(name = "REG_USER_NO", size = 9, nullable = true, comment = "등록사용자번호", defValue = "0")
 	private Integer regUserNo = 0;
@@ -564,4 +567,14 @@ public class FX_CF_INLO {
 	public void setChgDtm(Long chgDtm) {
 		this.chgDtm = chgDtm;
 	}
+
+	public String getGeoFence() {
+		return geoFence;
+	}
+
+	public void setGeoFence(String geoFence) {
+		this.geoFence = geoFence;
+	}
+	
+	
 }

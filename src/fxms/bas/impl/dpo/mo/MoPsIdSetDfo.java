@@ -1,16 +1,15 @@
 package fxms.bas.impl.dpo.mo;
 
+import java.util.Map;
+
 import fxms.bas.api.FxApi;
 import fxms.bas.co.DATA_STATUS;
-import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.dbo.all.FX_MAPP_PS;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.mapp.MappData;
-import subkjh.bas.co.log.Logger;
-import subkjh.dao.ClassDao;
-import subkjh.dao.database.DBManager;
-import subkjh.dao.util.FxTableMaker;
+import subkjh.bas.co.utils.ObjectUtil;
+import subkjh.dao.ClassDaoEx;
 
 /**
  * 관리대상 + 수집ID = 맵핑ID 데이터를 조회한다.
@@ -22,57 +21,30 @@ public class MoPsIdSetDfo implements FxDfo<FX_MAPP_PS, DATA_STATUS> {
 
 	@Override
 	public DATA_STATUS call(FxFact fact, FX_MAPP_PS data) throws Exception {
-		return set(data);
+		return set(data.getMngDiv(), data.getMappData(), ObjectUtil.toMap(data));
 	}
 
 	public DATA_STATUS set(int userNo, MappData mappData, long moNo, String moName, String psId, String psName)
 			throws Exception {
 
-		FX_MAPP_PS mapp = new FX_MAPP_PS();
-		mapp.setMngDiv(mappData.getMngDiv());
-		mapp.setMappData(mappData.getMappData());
-		mapp.setMoNo(moNo);
-		mapp.setMoName(moName);
-		mapp.setPsId(psId);
-		mapp.setPsName(psName);
-		mapp.setMappDescr(mappData.getMappDescr());
-		mapp.setMappId(mappData.getMappId().toString());
+		Map<String, Object> datas = FxApi.makePara("moNo", moNo, "moName", moName, "psId", psId, "psName", psName);
+		datas.put("mappDescr", mappData.getMappDescr());
+		datas.put("mappId", mappData.getMappId().toString());
 
-		return set(mapp);
+		return set(mappData.getMngDiv(), mappData.getMappData(), datas);
 
 	}
 
-	public DATA_STATUS set(FX_MAPP_PS mapp) throws Exception {
+	public DATA_STATUS set(String mngDiv, String mappData, Map<String, Object> datas) throws Exception {
 
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
+		datas.put("mngDiv", mngDiv);
+		datas.put("mappData", mappData);
 
-		try {
-			tran.start();
+		ClassDaoEx dao = ClassDaoEx.open().setOfClass(FX_MAPP_PS.class //
+				, FxApi.makePara("mngDiv", mngDiv, "mappData", mappData) //
+				, datas).close();
 
-			FX_MAPP_PS old = tran.selectOne(FX_MAPP_PS.class,
-					FxApi.makePara("mngDiv", mapp.getMngDiv(), "mappData", mapp.getMappData()));
-			if (old != null) {
-				mapp = old;
-			}
-
-			FxTableMaker.initRegChg(0, mapp);
-
-			if (old != null) {
-				tran.updateOfClass(FX_MAPP_PS.class, mapp);
-			} else {
-				tran.insertOfClass(FX_MAPP_PS.class, mapp);
-			}
-
-			tran.commit();
-
-			return old == null ? DATA_STATUS.added : DATA_STATUS.updated;
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
-		}
+		return dao.getDataStatus();
 
 	}
 }

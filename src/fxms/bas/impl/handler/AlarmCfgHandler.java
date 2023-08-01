@@ -87,7 +87,7 @@ public class AlarmCfgHandler extends BaseHandler {
 			cfg.setInloNo(session.getInloNo());
 		}
 
-		int alarmCfgNo = ClassDaoEx.getNextVal(FX_AL_CFG.FX_SEQ_ALARMCFGNO, Integer.class);
+		int alarmCfgNo = ClassDaoEx.GetNextVal(FX_AL_CFG.FX_SEQ_ALARMCFGNO, Integer.class);
 		cfg.setAlarmCfgNo(alarmCfgNo);
 		ClassDaoEx.InsertOfClass(FX_AL_CFG.class, cfg);
 

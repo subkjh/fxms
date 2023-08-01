@@ -94,14 +94,25 @@ public class EventApi extends FxApi {
 			}
 
 			for (AlarmEvent event : events) {
+				
 				if (event instanceof AlarmOccurEvent) {
+					
+					// 발생
 					AlarmOccurEvent e = (AlarmOccurEvent) event;
 					if (msgAdd != null) {
 						e.setAlarmMsg(e.getAlarmMsg() + " " + msgAdd);
 					}
+					
 					AlarmApi.getApi().fireAlarm(e, null);
+					
 				} else if (event instanceof AlarmClearEvent) {
-					AlarmApi.getApi().clearAlarm((AlarmClearEvent) event);
+					
+					// 해제
+					AlarmClearEvent e = (AlarmClearEvent) event;
+					
+					AlarmApi.getApi().clearAlarm(e.getAlarmNo(), e.getEventMstime(), e.getAlarmRlseRsnCd(),
+							e.getReleaseMemo(), e.getUserNo());
+					
 				}
 
 			}

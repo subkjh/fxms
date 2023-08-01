@@ -15,6 +15,7 @@ import fxms.bas.vo.mapp.MappMoPs;
  */
 public class MoPsIdMakeTreeDfo implements FxDfo<Void, Tree<TreeData>> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Tree<TreeData> call(FxFact fact, Void data) throws Exception {
 

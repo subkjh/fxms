@@ -44,7 +44,6 @@ public class MakeInloTreeDfo implements FxDfo<List<Inlo>, Tree<TreeData>> {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Tree<TreeData> call(FxFact fact, List<Inlo> data) throws Exception {
 		return makeTree(data);

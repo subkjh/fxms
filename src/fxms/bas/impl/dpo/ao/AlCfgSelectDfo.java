@@ -48,8 +48,8 @@ public class AlCfgSelectDfo implements FxDfo<Map<String, Object>, List<AlarmCfg>
 		try {
 			tran.start();
 
-			List<FX_AL_CFG> cfgList = tran.select(FX_AL_CFG.class, para);
-			List<FX_AL_CFG_MEM> memList = tran.select(FX_AL_CFG_MEM.class, para);
+			List<FX_AL_CFG> cfgList = tran.selectDatas(FX_AL_CFG.class, para);
+			List<FX_AL_CFG_MEM> memList = tran.selectDatas(FX_AL_CFG_MEM.class, para);
 
 			List<AlarmCfg> list = new ArrayList<AlarmCfg>();
 			for (FX_AL_CFG e : cfgList) {

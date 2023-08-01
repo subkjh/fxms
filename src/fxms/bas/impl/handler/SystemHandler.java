@@ -5,12 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.event.TargetFxEvent;
-import fxms.bas.exp.NotFoundException;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.handler.BaseHandler;
 import fxms.bas.handler.vo.SessionVo;
-import fxms.bas.impl.dao.InloHandlerQid;
 import fxms.bas.impl.dbo.all.FX_CF_VAR;
 import fxms.bas.impl.dbo.all.FX_CO_OP;
 import fxms.bas.impl.dbo.all.FX_CO_OP_ATTR;
@@ -21,12 +19,11 @@ import fxms.bas.impl.handler.dto.SendReloadSignalPara;
 import fxms.bas.signal.ReloadSignal;
 import fxms.bas.signal.ReloadSignal.ReloadType;
 import subkjh.bas.BasCfg;
-import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.user.User.USER_TYPE_CD;
 import subkjh.bas.co.utils.DateUtil;
-import subkjh.dao.ClassDao;
 import subkjh.dao.ClassDaoEx;
 import subkjh.dao.QidDao;
+import subkjh.dao.QidDaoEx;
 import subkjh.dao.database.DBManager;
 
 /**
@@ -72,25 +69,15 @@ public class SystemHandler extends BaseHandler {
 	 */
 	public Object selectOpList(SessionVo session, Map<String, Object> parameters) throws Exception {
 
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-		try {
-			tran.start();
+		ClassDaoEx dao = ClassDaoEx.open();
+		List<FX_CO_OP> opList = dao.selectDatas(FX_CO_OP.class, parameters);
+		List<FX_CO_OP_ATTR> attrList = dao.selectDatas(FX_CO_OP_ATTR.class, parameters);
+		dao.close();
 
-			List<FX_CO_OP> opList = tran.select(FX_CO_OP.class, parameters);
-			List<FX_CO_OP_ATTR> attrList = tran.select(FX_CO_OP_ATTR.class, parameters);
-
-			Map<String, Object> ret = new HashMap<String, Object>();
-			ret.put("op-list", opList);
-			ret.put("op-attr-list", attrList);
-
-			return ret;
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
-		}
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("op-list", opList);
+		ret.put("op-attr-list", attrList);
+		return ret;
 
 	}
 
@@ -102,28 +89,17 @@ public class SystemHandler extends BaseHandler {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object selectQid(SessionVo session, CdSelectQidPara para, Map<String, Object> parameters) throws Exception {
 
-		QidDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG)
-				.createQidDao(BasCfg.getHomeDeployConfSql(para.getQidFileName()));
+		Map<String, Object> wherePara = new HashMap<String, Object>(parameters);
+		parameters.put("userNo", session.getUserNo());
 
-		try {
-			tran.start();
+		QidDaoEx dao = QidDaoEx.open(BasCfg.getHomeDeployConfSql(para.getQidFileName()));
+		List ret = dao.selectQid2Res(para.getQid(), wherePara);
+		dao.close();
 
-			Map<String, Object> wherePara = new HashMap<String, Object>(parameters);
-			parameters.put("userNo", session.getUserNo());
-
-			if (tran.getSqlBean(para.getQid()) == null) {
-				throw new NotFoundException("qid", para.getQid());
-			}
-
-			return tran.selectQid2Res(para.getQid(), wherePara);
-
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			tran.stop();
-		}
+		return ret;
 	}
 
 	/**

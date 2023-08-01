@@ -22,7 +22,7 @@ public class UserInitNewDfo implements FxDfo<FX_UR_USER, FX_UR_USER> {
 
 	public FX_UR_USER initUser(FX_UR_USER user) throws Exception {
 
-		int userNo = ClassDaoEx.getNextVal(FX_UR_USER.FX_SEQ_USERNO, Integer.class);
+		int userNo = ClassDaoEx.GetNextVal(FX_UR_USER.FX_SEQ_USERNO, Integer.class);
 		FxTableMaker.initRegChg(userNo, user);
 		user.setUserNo(userNo);
 		user.setUserPwd(User.encodingPassword(user.getUserPwd()));

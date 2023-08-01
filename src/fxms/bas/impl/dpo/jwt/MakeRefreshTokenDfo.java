@@ -28,21 +28,6 @@ import io.jsonwebtoken.security.Keys;
  */
 public class MakeRefreshTokenDfo implements FxDfo<SessionVo, String> {
 
-	public static void main(String[] args) {
-
-		FxFact fact = new FxFact("userNo", 123);
-		MakeRefreshTokenDfo dpo = new MakeRefreshTokenDfo();
-		ValidateRefreshTokenDfo dpo2 = new ValidateRefreshTokenDfo();
-		try {
-//			fact.put("token", dpo.call(fact, "userNo"));
-//			dpo2.call(fact, "token");
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	private final long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; // 1주일
 	public static final String REFRESH_TOKEN_SECRET_KEY = "UVcGqWDFKL0g3YXJFdTmeZSnCSDNymmiw8tsCSc0o1zwmXGmZWHMxEU34KF/mZb10oqhTTsvpBHJEI+1lvd3Dw==";
 
@@ -56,6 +41,7 @@ public class MakeRefreshTokenDfo implements FxDfo<SessionVo, String> {
 
 	private Key getRefreshTokenSecretKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(REFRESH_TOKEN_SECRET_KEY);
+//		byte[] keyBytes = Decoders.BASE64URL.decode(REFRESH_TOKEN_SECRET_KEY);
 		Key key = Keys.hmacShaKeyFor(keyBytes);
 		return key;
 	}

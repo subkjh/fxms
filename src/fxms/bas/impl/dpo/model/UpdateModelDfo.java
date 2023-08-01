@@ -35,6 +35,7 @@ public class UpdateModelDfo implements FxDfo<Map<String, Object>, Boolean> {
 
 			FX_CF_MODEL old = tran.selectOne(FX_CF_MODEL.class, FxApi.makePara("modelNo", modelNo));
 			if (old != null) {
+				datas.put("modelNo", modelNo);
 				FxDpo.initRegChg(userNo, datas);
 				tran.updateOfClass(FX_CF_MODEL.class, datas);
 				tran.commit();

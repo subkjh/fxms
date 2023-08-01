@@ -68,8 +68,8 @@ public class DiagramHandler extends BaseHandler {
 			tran.start();
 
 			Map<String, Object> retMap = new HashMap<String, Object>();
-			retMap.put("nodeList", tran.select(FX_UI_DIAG_NODE.class, obj));
-			retMap.put("lineList", tran.select(FX_UI_DIAG_LINE.class, obj));
+			retMap.put("nodeList", tran.selectDatas(FX_UI_DIAG_NODE.class, obj));
+			retMap.put("lineList", tran.selectDatas(FX_UI_DIAG_LINE.class, obj));
 
 			return retMap;
 

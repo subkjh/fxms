@@ -16,7 +16,6 @@ import fxms.bas.fxo.thread.FxThreadPool;
 import fxms.bas.fxo.thread.SubFxThread;
 import fxms.bas.impl.dbo.all.FX_MX_WORK_HST;
 import fxms.bas.mo.Mo;
-import fxms.bas.vo.SyncMo;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.DateUtil;
 import subkjh.dao.ClassDao;
@@ -60,7 +59,7 @@ public class MoSyncCron extends Crontab {
 			para.put("rstNo", 0);
 			para.put("moWorkTypeCd", MO_WORK_TYPE_CD.Sync.getCode());
 
-			return tran.select(FX_MX_WORK_HST.class, para, FX_MX_WORK_HST.class);
+			return tran.selectDatas(FX_MX_WORK_HST.class, para, FX_MX_WORK_HST.class);
 
 		} catch (Exception e) {
 			Logger.logger.error(e);
@@ -143,7 +142,7 @@ public class MoSyncCron extends Crontab {
 								// 동기화 처리
 								MoService service = ServiceApi.getApi().getService(MoService.class, mo);
 								if (service != null) {
-									SyncMo syncMo = service.sync(node.getMoNo(), true, true);
+									service.sync(node.getMoNo(), true, true);
 									node.setRstNo(1);
 									node.setEndDtm(DateUtil.getDtm());
 									return;

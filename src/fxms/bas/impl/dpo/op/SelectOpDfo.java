@@ -44,7 +44,7 @@ public class SelectOpDfo implements FxDfo<Map<String, Object>, List<OpCode>> {
 		try {
 			tran.start();
 
-			List<FX_CO_OP> opList = tran.select(FX_CO_OP.class, para);
+			List<FX_CO_OP> opList = tran.selectDatas(FX_CO_OP.class, para);
 
 			for (FX_CO_OP op : opList) {
 				opcode = new OpCode(op.getOpId(), op.getOpName(), op.getDataType());
@@ -53,7 +53,7 @@ public class SelectOpDfo implements FxDfo<Map<String, Object>, List<OpCode>> {
 			}
 
 			// 사용자그룹에 지정된 기능항목을 추가한다.
-			List<FX_UR_UGRP_OP> uopList = tran.select(FX_UR_UGRP_OP.class, para);
+			List<FX_UR_UGRP_OP> uopList = tran.selectDatas(FX_UR_UGRP_OP.class, para);
 			for (FX_UR_UGRP_OP uop : uopList) {
 				opcode = opMap.get(uop.getOpId());
 				if (opcode != null) {

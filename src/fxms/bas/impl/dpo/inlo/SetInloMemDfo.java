@@ -8,8 +8,8 @@ import fxms.bas.impl.dbo.all.FX_CF_INLO_MEM;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.Inlo;
-import fxms.bas.vo.InloMem;
 import fxms.bas.vo.InloExt;
+import fxms.bas.vo.InloMem;
 import subkjh.dao.ClassDaoEx;
 import subkjh.dao.util.FxTableMaker;
 

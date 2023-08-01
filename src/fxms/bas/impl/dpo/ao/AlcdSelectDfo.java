@@ -6,15 +6,11 @@ import java.util.List;
 import fxms.bas.api.FxApi;
 import fxms.bas.co.CoCode.ALARM_LEVEL;
 import fxms.bas.exp.AlcdNotFoundException;
-import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.dbo.all.FX_AL_CD;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.AlarmCode;
-import subkjh.bas.co.log.Logger;
-import subkjh.dao.ClassDao;
 import subkjh.dao.ClassDaoEx;
-import subkjh.dao.database.DBManager;
 
 /**
  * 테스트 알람을 발생하는 DFO

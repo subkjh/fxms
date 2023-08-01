@@ -2,10 +2,10 @@ package fxms.bas.impl.dbo.all;
 
 import java.io.Serializable;
 
+import subkjh.dao.def.Column.COLUMN_OP;
 import subkjh.dao.def.FxColumn;
 import subkjh.dao.def.FxIndex;
 import subkjh.dao.def.FxTable;
-import subkjh.dao.def.Column.COLUMN_OP;
 import subkjh.dao.def.Index.INDEX_TYPE;
 
 /**

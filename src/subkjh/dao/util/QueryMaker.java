@@ -14,6 +14,7 @@ import subkjh.dao.def.Table;
 import subkjh.dao.exp.NoWhereException;
 import subkjh.dao.exp.PkValueNullException;
 import subkjh.dao.model.QueryColumn;
+import subkjh.dao.model.QueryPara;
 import subkjh.dao.model.QueryResult;
 
 /**
@@ -24,6 +25,10 @@ import subkjh.dao.model.QueryResult;
  */
 public class QueryMaker {
 
+	public enum VAR_TYPE {
+		Hash, Dollar
+	}
+
 	class Conditions {
 		String colName;
 		String condition = null;
@@ -31,10 +36,6 @@ public class QueryMaker {
 		public String toString() {
 			return colName + "|" + condition;
 		}
-	}
-
-	public enum VAR_TYPE {
-		Hash, Dollar
 	}
 
 	private final StringAdapter stringAdapter;
@@ -55,20 +56,6 @@ public class QueryMaker {
 	}
 
 	/**
-	 * 삭제용 QueryResult를 가져온다.
-	 * 
-	 * @param table  테이블 정보
-	 * @param delObj 삭제할 데이터
-	 * @return
-	 */
-	public QueryResult getDeleteQueryResult(Table table, Object delObj) throws Exception {
-
-		QueryColumn col = getDeleteQueryColumn(table, delObj);
-
-		return makeQueryResult(col, delObj);
-	}
-
-	/**
 	 * 입력된 조건으로만 테이블 데이터 삭제 쿼리를 만든다.
 	 * 
 	 * @param table 테이블
@@ -76,32 +63,96 @@ public class QueryMaker {
 	 * @return
 	 * @throws Exception
 	 */
-	public QueryResult getDeleteQueryResultPara(Table table, Map<String, Object> para) throws Exception {
+	public QueryPara getDeleteQuery(Table table, Map<String, Object> para) throws Exception {
 
 		Column column;
-		QueryColumn queryColumn = new QueryColumn(SQL_TYPE.DELETE);
+		List<Object> paras = new ArrayList<>();
 		StringBuffer sb = new StringBuffer();
-		StringBuffer whereSb = new StringBuffer();
-
+		boolean first = true;
 		sb.append("delete ");
 		sb.append("\n from " + table.getName());
 
 		for (String key : para.keySet()) {
+
 			column = table.getColumn(key);
+
 			if (column != null) {
+				if (first) {
+					sb.append("\n where ");
+					first = false;
+				} else {
+					sb.append("\n and ");
+				}
+
+				sb.append(column.getName() + " = ? ");
+				paras.add(para.get(key));
+			}
+		}
+
+		return new QueryPara(SQL_TYPE.DELETE, sb.toString(), paras);
+	}
+
+	/**
+	 * 삭제 쿼리를 만는다.
+	 * 
+	 * @param table     테이블 정보
+	 * @param incPk     테이블의 PK 정보를 포함 여부
+	 * @param wherePara 조건
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public QueryPara getDeleteQueryPk(Table table, Object delObj) throws PkValueNullException, NoWhereException {
+
+		Object colVal;
+		QueryPara queryColumn = new QueryPara(SQL_TYPE.DELETE);
+		StringBuffer sb = new StringBuffer();
+		StringBuffer whereSb = new StringBuffer();
+
+		sb.append("delete \n from ");
+		sb.append(table.getName());
+
+		// PK를 포함할 경우
+		for (Column column : table.getColumns()) {
+
+			if (column.isPk()) {
+
+				colVal = getColumnValue(delObj, column);
+				if (colVal == null) {
+					throw new PkValueNullException(table.getName(), column.getName());
+				}
+
 				if (whereSb.length() == 0)
 					whereSb.append("\n where ");
 				else
 					whereSb.append("\n and ");
 
+				// PK 조건 추가
 				whereSb.append(column.getName() + " = ? ");
-				queryColumn.addValue(para.get(key));
+				// PK 컬럼 값 추가
+				queryColumn.addPara(colVal);
+			}
+
+		}
+
+		// where 조건절이 없으면 오류를 발생한다.
+		if (whereSb.length() == 0) {
+
+			// 조건이 없으나 MAP인 경우 다른 조건이 있는지 확인한다.
+			if (delObj instanceof Map) {
+				List<Object> valList = fillSqlWhere(whereSb, table, ((Map) delObj));
+				for (Object val : valList) {
+					queryColumn.addPara(val);
+				}
+			}
+
+			if (whereSb.length() == 0) {
+				throw new NoWhereException(table.getName(), "");
 			}
 		}
 
 		queryColumn.setSql(sb.toString() + whereSb.toString());
 
-		return new QueryResult(queryColumn.getSql(), queryColumn.getParaList());
+		return queryColumn;
 	}
 
 	/**
@@ -114,36 +165,12 @@ public class QueryMaker {
 	}
 
 	/**
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public Object[] getInsertPara(Table table, Object value[]) {
-		if (value.length == table.sizeCol())
-			return value;
-
-		Object ret[] = new Object[table.sizeCol()];
-		int no;
-		for (int i = 0; i < ret.length; i++) {
-			no = table.getColumns().get(i).getColumnNo();
-
-			if (value.length > no) {
-				ret[i] = value[no];
-			} else {
-				ret[i] = null;
-			}
-		}
-
-		return ret;
-	}
-
-	/**
 	 * INSERT 쿼리문 생성
 	 * 
 	 * @param table
 	 * @return
 	 */
-	public QueryColumn getInsertQueryColumn(Table table) {
+	public QueryColumn getInsertQuery(Table table) {
 
 		QueryColumn queryColumn = new QueryColumn(SQL_TYPE.INSERT);
 		StringBuffer dataSb = new StringBuffer();
@@ -170,8 +197,8 @@ public class QueryMaker {
 
 	}
 
-	public QueryResult getInsertQueryResult(Table table, Object obj) {
-		return makeQueryResult(getInsertQueryColumn(table), obj);
+	public QueryResult getInsertQuery(Table table, Object obj) {
+		return makeQueryResult(getInsertQuery(table), obj);
 	}
 
 	public String getInsertSampleSql(Table table) {
@@ -202,16 +229,6 @@ public class QueryMaker {
 		sb.append(")");
 
 		return sb.toString();
-	}
-
-	private String getColumnVar(Column col) {
-		if (this.varType == VAR_TYPE.Dollar) {
-			return minLen("$" + col.getFieldName());
-		} else if (this.varType == VAR_TYPE.Hash) {
-			return minLen("#{" + col.getFieldName() + "}");
-		} else {
-			return minLen(col.getFieldName());
-		}
 	}
 
 	/**
@@ -604,26 +621,168 @@ public class QueryMaker {
 
 	}
 
-	/**
-	 * 테이블의 PK를 이용하여 UPDATE를 만는다.
-	 * 
-	 * @param table 테이블정보
-	 * @param Mao   업데이트 데이터
-	 * @return
-	 * @throws NoWhereException
-	 */
-	public QueryResult getUpdateQueryResult(Table table, Map<String, Object> updateMap) throws Exception {
+	public String getSelectSampleSql(Table table) {
 
-		QueryColumn queryColumn = getUpdateQueryColumn(table, updateMap);
+		StringBuffer sb = new StringBuffer();
+		StringBuffer cols = new StringBuffer();
 
-		return makeQueryResult(queryColumn, updateMap);
+		for (Column column : table.getColumns()) {
+			if (cols.length() > 0) {
+				cols.append("        , ");
+			}
+			cols.append("a.").append(minLen(column.getName())).append("as  ").append(minLen(column.getName()))
+					.append("/* ").append(column.getComments()).append(" */\n");
+		}
+		sb.append("select    ").append(cols).append("from \t").append(table.getName()).append(" a ").append(" /* ")
+				.append(table.getComment()).append(" */\n");
+		return sb.toString();
 	}
 
-	public QueryResult getUpdateQueryResult(Table table, Object updateObj) throws Exception {
+	/**
+	 * 
+	 * @param table 테이블
+	 * @param para  조건절
+	 * @param datas 업데이트 내용
+	 * @return
+	 * @throws PkValueNullException
+	 * @throws NoWhereException
+	 */
+	public QueryPara getUpdateQuery(Table table, Map<String, Object> para, Map<String, Object> datas)
+			throws PkValueNullException, NoWhereException {
 
-		QueryColumn queryColumn = getUpdateQueryColumn(table, updateObj);
+		StringBuffer sb = new StringBuffer();
+		StringBuffer data = new StringBuffer();
+		StringBuffer whereSb = new StringBuffer();
+		Column column;
+		boolean firstCol = true;
+		List<Object> paras = new ArrayList<>();
 
-		return makeQueryResult(queryColumn, updateObj);
+		sb.append("update " + table.getName() + " set ");
+
+		// set
+
+		for (String key : datas.keySet()) {
+
+			column = table.getColumn(key);
+
+			if (column != null) {
+
+				if (firstCol) {
+					sb.append("\n ");
+					firstCol = false;
+				} else
+					sb.append("\n , ");
+
+				// 인자 설정
+				sb.append(column.getName() + " = ? ");
+
+				// 인자 설정 값 넣기
+				paras.add(datas.get(key));
+
+			}
+
+		}
+
+		for (String key : para.keySet()) {
+			column = table.getColumn(key);
+			if (column != null) {
+				if (whereSb.length() == 0) {
+					whereSb.append("\n where ");
+				} else {
+					whereSb.append("\n and ");
+				}
+				whereSb.append(column.getName() + " = ?");
+				paras.add(para.get(key));
+			}
+		}
+
+		if (whereSb.length() == 0) {
+			throw new NoWhereException(table.getName(), "");
+		}
+
+		return new QueryPara(SQL_TYPE.UPDATE, sb.toString() + data.toString() + whereSb.toString(), paras);
+
+	}
+
+	/**
+	 * 
+	 * @param table
+	 * @param updateObj
+	 * @return
+	 * @throws PkValueNullException
+	 * @throws NoWhereException
+	 */
+	public QueryPara getUpdateQueryPk(Table table, Object updateObj) throws PkValueNullException, NoWhereException {
+
+		StringBuffer sb = new StringBuffer();
+		StringBuffer data = new StringBuffer();
+		StringBuffer whereSb = new StringBuffer();
+
+		Object colVal;
+		boolean firstCol = true;
+		List<Object> paras = new ArrayList<>();
+
+		sb.append("update " + table.getName() + " set ");
+
+		// set
+
+		for (Column column : table.getColumns()) {
+
+			// PK인 경우 SET하지 않는다.
+			if (column.isPk() == false) {
+
+				// UPDATE 컬럼이 아니면 SET하지 않는다.
+				if (column.getOperator().isUpdatable() == false) {
+					continue;
+				}
+
+				// NULL인 경우 SET하지 않는다.
+				colVal = getColumnValue(updateObj, column);
+				if (colVal == null) {
+					continue;
+				}
+
+				if (firstCol) {
+					sb.append("\n ");
+					firstCol = false;
+				} else
+					sb.append("\n , ");
+
+				// 인자 설정
+				sb.append(column.getName() + " = ? ");
+				// 인자 설정 값 넣긱
+				paras.add(colVal);
+
+			}
+		}
+
+		// where
+
+		for (Column column : table.getColumns()) {
+
+			if (column.isPk()) {
+
+				colVal = getColumnValue(updateObj, column);
+				if (colVal == null) {
+					throw new PkValueNullException(table.getName(), column.getName());
+				}
+
+				if (whereSb.length() == 0) {
+					whereSb.append("\n where ");
+				} else {
+					whereSb.append("\n and ");
+				}
+
+				whereSb.append(column.getName() + " = ?");
+				paras.add(colVal);
+			}
+		}
+
+		if (whereSb.length() == 0) {
+			throw new NoWhereException(table.getName(), "");
+		}
+
+		return new QueryPara(SQL_TYPE.UPDATE, sb.toString() + data.toString() + whereSb.toString(), paras);
 	}
 
 	public String getUpdateSampleSql(Table table) {
@@ -700,26 +859,9 @@ public class QueryMaker {
 	 */
 	public QueryResult makeQueryResult(QueryColumn queryColumn, Object obj) {
 
-		List<Object> paraList = makeQueryPara(queryColumn, obj);
+		List<Object> paraList = getInsertDatas(queryColumn, obj);
 
 		return new QueryResult(queryColumn.getSql(), paraList);
-	}
-
-	public String getSelectSampleSql(Table table) {
-
-		StringBuffer sb = new StringBuffer();
-		StringBuffer cols = new StringBuffer();
-
-		for (Column column : table.getColumns()) {
-			if (cols.length() > 0) {
-				cols.append("        , ");
-			}
-			cols.append("a.").append(minLen(column.getName())).append("as  ").append(minLen(column.getName()))
-					.append("/* ").append(column.getComments()).append(" */\n");
-		}
-		sb.append("select    ").append(cols).append("from \t").append(table.getName()).append(" a ").append(" /* ")
-				.append(table.getComment()).append(" */\n");
-		return sb.toString();
 	}
 
 	private Object appendWhere(StringBuffer whereSb, String colName, Conditions c, Object paraValue) {
@@ -843,144 +985,41 @@ public class QueryMaker {
 
 	}
 
-	/**
-	 * 삭제 쿼리를 만는다.
-	 * 
-	 * @param table     테이블 정보
-	 * @param incPk     테이블의 PK 정보를 포함 여부
-	 * @param wherePara 조건
-	 * @return
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private QueryColumn getDeleteQueryColumn(Table table, Object delObj) throws PkValueNullException, NoWhereException {
-
-		Object colVal;
-		QueryColumn queryColumn = new QueryColumn(SQL_TYPE.DELETE);
-		StringBuffer sb = new StringBuffer();
-		StringBuffer whereSb = new StringBuffer();
-
-		sb.append("delete ");
-		sb.append("\n from " + table.getName());
-
-		// PK를 포함할 경우
-		for (Column column : table.getColumns()) {
-			if (column.isPk()) {
-
-				colVal = getColumnValue(delObj, column);
-				if (colVal == null) {
-					throw new PkValueNullException(table.getName(), column.getName());
-				}
-
-				if (whereSb.length() == 0)
-					whereSb.append("\n where ");
-				else
-					whereSb.append("\n and ");
-
-				// PK 조건 추가
-				whereSb.append(column.getName() + " = ? ");
-				// PK 컬럼 값 추가
-				queryColumn.addValue(colVal);
-			}
+	private String getColumnVar(Column col) {
+		if (this.varType == VAR_TYPE.Dollar) {
+			return minLen("$" + col.getFieldName());
+		} else if (this.varType == VAR_TYPE.Hash) {
+			return minLen("#{" + col.getFieldName() + "}");
+		} else {
+			return minLen(col.getFieldName());
 		}
-
-		// where 조건절이 없으면 오류를 발생한다.
-		if (whereSb.length() == 0) {
-
-			// 조건이 없으나 MAP인 경우 다른 조건이 있는지 확인한다.
-			if (delObj instanceof Map) {
-				List<Object> valList = fillSqlWhere(whereSb, table, ((Map) delObj));
-				for (Object val : valList) {
-					queryColumn.addValue(val);
-				}
-			}
-
-			if (whereSb.length() == 0) {
-				throw new NoWhereException(table.getName(), "");
-			}
-		}
-
-		queryColumn.setSql(sb.toString() + whereSb.toString());
-
-		return queryColumn;
 	}
 
-	private QueryColumn getUpdateQueryColumn(Table table, Object updateObj)
-			throws PkValueNullException, NoWhereException {
+	/**
+	 * 테이블이 INSERT할 파라메터를 만든다.
+	 * 
+	 * @param sqlCol
+	 * @param o
+	 * @return
+	 */
+	private List<Object> getInsertDatas(QueryColumn sqlCol, Object o) {
 
-		StringBuffer sb = new StringBuffer();
-		StringBuffer data = new StringBuffer();
-		StringBuffer whereSb = new StringBuffer();
+		List<Object> paraList = new ArrayList<Object>();
+		Object val;
 
-		Object colVal;
-		boolean firstCol = true;
-		QueryColumn queryColumn = new QueryColumn(SQL_TYPE.UPDATE);
+		for (Column column : sqlCol.getColumns()) {
 
-		sb.append("update " + table.getName() + " set ");
+			val = getColumnValue(o, column);
 
-		// set
-
-		for (Column column : table.getColumns()) {
-
-			// PK인 경우 SET하지 않는다.
-			if (column.isPk()) {
-				continue;
-			}
-
-			// UPDATE 컬럼이 아니면 SET하지 않는다.
-			if (column.getOperator().isUpdatable() == false) {
-				continue;
-			}
-
-			// NULL인 경우 SET하지 않는다.
-			colVal = getColumnValue(updateObj, column);
-			if (colVal == null) {
-				continue;
-			}
-
-			if (firstCol) {
-				sb.append("\n ");
-				firstCol = false;
-			} else
-				sb.append("\n , ");
-
-			// 인자 설정
-			sb.append(column.getName() + " = ? ");
-
-			// 인자 설정 값 넣긱
-			queryColumn.addValue(colVal);
-
-		}
-
-		// where
-
-		for (Column column : table.getColumns()) {
-
-			if (column.isPk() == false) {
-				continue;
-			}
-
-			colVal = getColumnValue(updateObj, column);
-			if (colVal == null) {
-				throw new PkValueNullException(table.getName(), column.getName());
-			}
-
-			if (whereSb.length() == 0) {
-				whereSb.append("\n where ");
+			if (val == null && column.getDataDefault() != null) {
+				paraList.add(column.getDataDefault());
 			} else {
-				whereSb.append("\n and ");
+				paraList.add(val);
 			}
 
-			whereSb.append(column.getName() + " = ?");
-			queryColumn.addValue(colVal);
 		}
 
-		if (whereSb.length() == 0) {
-			throw new NoWhereException(table.getName(), "");
-		}
-
-		queryColumn.setSql(sb.toString() + data.toString() + whereSb.toString());
-
-		return queryColumn;
+		return paraList;
 	}
 
 	private String getValue(Object value) {
@@ -1039,63 +1078,6 @@ public class QueryMaker {
 		return tmp.toString();
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<Object> makeQueryPara(QueryColumn sqlCol, Object o) {
-
-		List<Object> paraList = new ArrayList<Object>();
-		Object val;
-		Column column;
-
-		if (o instanceof Map) {
-			Map map = (Map) o;
-
-			for (Object value : sqlCol.getParaList()) {
-
-				if (value instanceof Column) {
-					// 인자가 컬럼이면 컬럼에 대응하는 값 찾아 넣기
-					column = (Column) value;
-					val = map.get(column.getFieldName());
-					if (val == null && column.getDataDefault() != null) {
-						paraList.add(column.getDataDefault());
-					} else {
-						paraList.add(val);
-					}
-				} else {
-					// 인자가 값이면 그대로 넣기
-					paraList.add(value);
-				}
-
-			}
-
-		} else if (o != null) {
-
-			for (Object value : sqlCol.getParaList()) {
-
-				if (value instanceof Column) {
-					// 인자가 컬럼에 대응하는 값 찾아 넣기
-					column = (Column) value;
-					val = ObjectUtil.get(o, column.getFieldName());
-					if (val == null && column.getDataDefault() != null) {
-						paraList.add(column.getDataDefault());
-					} else {
-						paraList.add(val);
-					}
-				} else {
-					// 인자가 값이면 그래도 넣기
-					paraList.add(value);
-				}
-			}
-		} else {
-			for (Object value : sqlCol.getParaList()) {
-				if ((value instanceof Column) == false) {
-					paraList.add(value);
-				}
-			}
-		}
-
-		return paraList;
-	}
-
 	private String minLen(String s) {
 		return minLen(s, 24);
 	}
@@ -1135,3 +1117,61 @@ public class QueryMaker {
 	}
 
 }
+
+//
+//
+//private List<Object> makeQueryPara_BAK(QueryPara sqlCol, Object o) {
+//
+//	List<Object> paraList = new ArrayList<Object>();
+//	Object val;
+//	Column column;
+//
+//	if (o instanceof Map) {
+//		Map map = (Map) o;
+//
+//		for (Object value : sqlCol.getParaList()) {
+//
+//			if (value instanceof Column) {
+//				// 인자가 컬럼이면 컬럼에 대응하는 값 찾아 넣기
+//				column = (Column) value;
+//				val = map.get(column.getFieldName());
+//				if (val == null && column.getDataDefault() != null) {
+//					paraList.add(column.getDataDefault());
+//				} else {
+//					paraList.add(val);
+//				}
+//			} else {
+//				// 인자가 값이면 그대로 넣기
+//				paraList.add(value);
+//			}
+//
+//		}
+//
+//	} else if (o != null) {
+//
+//		for (Object value : sqlCol.getParaList()) {
+//
+//			if (value instanceof Column) {
+//				// 인자가 컬럼에 대응하는 값 찾아 넣기
+//				column = (Column) value;
+//				val = ObjectUtil.get(o, column.getFieldName());
+//				if (val == null && column.getDataDefault() != null) {
+//					paraList.add(column.getDataDefault());
+//				} else {
+//					paraList.add(val);
+//				}
+//			} else {
+//				// 인자가 값이면 그래도 넣기
+//				paraList.add(value);
+//			}
+//		}
+//	} else {
+//		for (Object value : sqlCol.getParaList()) {
+//			if ((value instanceof Column) == false) {
+//				paraList.add(value);
+//			}
+//		}
+//	}
+//
+//	return paraList;
+//}

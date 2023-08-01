@@ -26,7 +26,6 @@ import fxms.rule.dbo.all.FX_BR_RULE;
 import fxms.rule.dbo.all.FX_BR_RULE_FLOW;
 import fxms.rule.triger.RunTrigger;
 import fxms.rule.vo.RuleVo;
-import subkjh.bas.BasCfg;
 import subkjh.bas.co.user.User.USER_TYPE_CD;
 import subkjh.dao.ClassDao;
 import subkjh.dao.QidDao;

@@ -6,12 +6,12 @@ import java.util.Map;
 import fxms.bas.api.AlarmApi;
 import fxms.bas.api.FxApiServiceTag;
 import fxms.bas.api.ServiceApi;
+import fxms.bas.co.CoCode.ALARM_RLSE_RSN_CD;
 import fxms.bas.exp.FxServiceNotFoundException;
 import fxms.bas.fxo.service.AlarmService;
 import fxms.bas.fxo.service.FxServiceImpl;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCfg;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
 
@@ -44,9 +44,10 @@ public class AlarmApiService extends AlarmApi implements FxApiServiceTag {
 	}
 
 	@Override
-	public Alarm clearAlarm(AlarmClearEvent event) throws Exception {
+	public Alarm clearAlarm(long alarmNo, long mstime, ALARM_RLSE_RSN_CD cd, String rlseMemo, int userNo)
+			throws Exception {
 
-		Alarm alarm = getAlarmService().clearAlarm(event);
+		Alarm alarm = getAlarmService().clearAlarm(alarmNo, mstime, cd, rlseMemo, userNo);
 
 		setCurAlarm(alarm);
 

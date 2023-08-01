@@ -725,4 +725,13 @@ public class FxTableMaker {
 
 		return tableList;
 	}
+
+	public Table getTable(Class<?> classOfMain) throws Exception {
+		Table table = getTable(classOfMain, classOfMain);
+
+		if (table.getColumns().size() == 0) {
+			throw new ZeroColumnException(table.getName());
+		}
+		return table;
+	}
 }

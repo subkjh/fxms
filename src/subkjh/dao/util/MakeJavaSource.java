@@ -108,15 +108,13 @@ public class MakeJavaSource extends MakeSourceBase {
 		sb.append("\n");
 		sb.append("\n");
 
-		sb.append("@FxTable(");
-		sb.append("name = \"" + table.getName() + "\"");
-		sb.append(", comment = \"" + table.getComment() + "\"");
+		sb.append("@FxTable(name = \"").append(table.getName()).append("\"");
+		sb.append(", comment = \"").append(table.getComment()).append("\"");
 		sb.append(")\n");
 
 		for (Index idx : table.getIndexList()) {
-			sb.append("@FxIndex(");
-			sb.append("name = \"" + idx.getIndexName() + "\"");
-			sb.append(", type = INDEX_TYPE." + idx.getIndexType() + "");
+			sb.append("@FxIndex(name = \"").append(idx.getIndexName()).append("\"");
+			sb.append(", type = INDEX_TYPE.").append(idx.getIndexType());
 			sb.append(", columns = {");
 
 			index = 0;
@@ -130,8 +128,8 @@ public class MakeJavaSource extends MakeSourceBase {
 			sb.append("}");
 
 			if (idx.isFk()) {
-				sb.append(", fkTable = \"" + idx.getFkTable() + "\"");
-				sb.append(", fkColumn = \"" + idx.getFkColumn() + "\"");
+				sb.append(", fkTable = \"").append(idx.getFkTable()).append("\"");
+				sb.append(", fkColumn = \"").append(idx.getFkColumn()).append("\"");
 			}
 
 			sb.append(")\n");
@@ -139,9 +137,10 @@ public class MakeJavaSource extends MakeSourceBase {
 
 		// sb.append("public class " + table.getClassSimpleName() + " implements
 		// Serializable {" + "\n");
-		sb.append("public class " + table.getClassSimpleName() + "  {" + "\n");
+
+		sb.append("public class ").append(table.getClassSimpleName()).append("  {" + "\n");
 		sb.append("\n");
-		sb.append("public " + table.getClassSimpleName() + "() {\n }\n\n");
+		sb.append("public ").append(table.getClassSimpleName()).append("() {\n }\n\n");
 
 		return sb.toString();
 	}

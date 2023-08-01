@@ -621,6 +621,7 @@ public abstract class BaseHandler extends FxHttpHandler {
 			return getResult(HttpStatusCode.OK, null, value);
 
 		} catch (OpDenyException e) {
+			Logger.logger.error(e);			
 			return getResult(HttpStatusCode.Forbidden, e.getMessage(), null);
 		} catch (NotDefineException e) {
 			try {
@@ -631,8 +632,10 @@ public abstract class BaseHandler extends FxHttpHandler {
 				return getResult(HttpStatusCode.InternalServerError, e.getMessage(), null);
 			}
 		} catch (NotFoundException e) {
+			Logger.logger.error(e);
 			return getResult(HttpStatusCode.BadRequest, e.getMessage(), e.getValue());
 		} catch (Exception e) {
+			Logger.logger.error(e);
 			return getResult(HttpStatusCode.InternalServerError, e.getMessage(), null);
 		} finally {
 			he.getResponseHeaders().add("Content-Type", "application/json");

@@ -39,8 +39,8 @@ public class AlCfgCopyDfo implements FxDfo<AlCfgCopyDto, Integer> {
 			Map<String, Object> para = new HashMap<String, Object>();
 			para.put("alarmCfgNo", data.getAlarmCfgNo());
 
-			List<FX_AL_CFG> cfgList = tran.select(FX_AL_CFG.class, para);
-			List<FX_AL_CFG_MEM> memList = tran.select(FX_AL_CFG_MEM.class, para);
+			List<FX_AL_CFG> cfgList = tran.selectDatas(FX_AL_CFG.class, para);
+			List<FX_AL_CFG_MEM> memList = tran.selectDatas(FX_AL_CFG_MEM.class, para);
 
 			FX_AL_CFG item = cfgList.get(0);
 

@@ -16,6 +16,7 @@ import subkjh.dao.def.Table;
 import subkjh.dao.exp.NotFxTableException;
 import subkjh.dao.exp.QidNotFoundException;
 import subkjh.dao.model.QueryColumn;
+import subkjh.dao.model.QueryPara;
 import subkjh.dao.model.QueryResult;
 import subkjh.dao.util.FxTableMaker;
 import subkjh.dao.util.QueryMaker;
@@ -112,13 +113,12 @@ public class ClassDao extends DaoExecutor {
 	public int delete(Table table, Map<String, Object> wherePara) throws Exception {
 
 		QueryMaker maker = new QueryMaker();
-		// Table table = new FxTableMaker().getTable(vo);
-		QueryResult query;
+		QueryPara query;
 		int size;
 
-		query = maker.getDeleteQueryResult(table, wherePara);
+		query = maker.getDeleteQuery(table, wherePara);
 
-		size = executeSql(query.getSql(), query.getParaArray());
+		size = executeSql(query.getSql(), query.getParaList());
 
 		return size;
 	}
@@ -155,16 +155,16 @@ public class ClassDao extends DaoExecutor {
 
 		QueryMaker maker = new QueryMaker();
 		List<Table> tableList = getTableAll(classOfTable);
-		QueryResult query;
+		QueryPara query;
 		int ret = 0;
 		int size;
 
 		// 반대부터 삭제한다.
 		for (int i = tableList.size() - 1; i >= 0; i--) {
 
-			query = maker.getDeleteQueryResultPara(tableList.get(i), para);
+			query = maker.getDeleteQuery(tableList.get(i), para);
 
-			size = executeSql(query.getSql(), query.getParaArray());
+			size = executeSql(query.getSql(), query.getParaList());
 
 			ret += size;
 		}
@@ -185,16 +185,16 @@ public class ClassDao extends DaoExecutor {
 
 		QueryMaker maker = new QueryMaker();
 		List<Table> tableList = getTableAll(classOfTable);
-		QueryResult query;
+		QueryPara query;
 		int ret = 0;
 		int size;
 
 		// 반대부터 삭제한다.
 		for (int i = tableList.size() - 1; i >= 0; i--) {
 
-			query = maker.getDeleteQueryResult(tableList.get(i), delObj);
+			query = maker.getDeleteQueryPk(tableList.get(i), delObj);
 
-			size = executeSql(query.getSql(), query.getParaArray());
+			size = executeSql(query.getSql(), query.getParaList());
 
 			ret += size;
 		}
@@ -211,6 +211,20 @@ public class ClassDao extends DaoExecutor {
 		}
 	}
 
+	public Table getTable(Class<?> classOfMain) throws Exception {
+		if (classOfMain == null) {
+			throw new Exception("Class is null");
+		}
+		return new FxTableMaker().getTable(classOfMain);
+	}
+
+	public List<Table> getTableAll(Class<?> classOfMain) throws Exception {
+		if (classOfMain == null) {
+			throw new Exception("Class is null");
+		}
+		return new FxTableMaker().getTables(classOfMain);
+	}
+
 	public int insert(Table table, Map<String, Object> data) throws Exception {
 
 		if (data == null) {
@@ -222,7 +236,7 @@ public class ClassDao extends DaoExecutor {
 		QueryResult query;
 		QueryMaker maker = new QueryMaker();
 
-		query = maker.getInsertQueryResult(table, data);
+		query = maker.getInsertQuery(table, data);
 		size = executeSql(query.getSql(), query.getParaArray());
 
 		return size;
@@ -262,7 +276,7 @@ public class ClassDao extends DaoExecutor {
 
 				initSeqence(table, data);
 
-				query = maker.getInsertQueryResult(table, data);
+				query = maker.getInsertQuery(table, data);
 				size = executeSql(query.getSql(), query.getParaArray());
 				ret += size;
 			}
@@ -314,7 +328,7 @@ public class ClassDao extends DaoExecutor {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> List<T> select(Class<?> classOfDbo, Object whereObj, Class<T> classOfResult) throws Exception {
+	public <T> List<T> selectDatas(Class<?> classOfDbo, Object whereObj, Class<T> classOfResult) throws Exception {
 		try {
 			return select(classOfDbo, whereObj, Integer.MAX_VALUE, classOfResult);
 		} catch (Exception e) {
@@ -331,7 +345,7 @@ public class ClassDao extends DaoExecutor {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> List<T> select(Class<T> classOfDbo, Object whereObj) throws Exception {
+	public <T> List<T> selectDatas(Class<T> classOfDbo, Object whereObj) throws Exception {
 		return select(classOfDbo, whereObj, Integer.MAX_VALUE, classOfDbo);
 	}
 
@@ -394,6 +408,21 @@ public class ClassDao extends DaoExecutor {
 		return null;
 	}
 
+	public int updateOfClass(Class<?> classOfT, Map<String, Object> para, Map<String, Object> data) throws Exception {
+
+		Table table = getTable(classOfT);
+
+		QueryPara query;
+		QueryMaker maker = new QueryMaker();
+
+		query = maker.getUpdateQuery(table, para, data);
+		if (query != null) {
+			return executeSql(query.getSql(), query.getParaList());
+		}
+
+		return -1;
+	}
+
 	/**
 	 * 테이블클래스 PK에 해당되는 데이터가 updateObj에 존재하면 그 조건으로 데이터를 수정한다.<br>
 	 * PK가 해당 내용이 없다면 오류를 발생한다.
@@ -406,13 +435,13 @@ public class ClassDao extends DaoExecutor {
 	public int updateOfClass(Class<?> classOfT, Object updateObj) throws Exception {
 
 		List<Table> tableList = getTableAll(classOfT);
-		List<QueryResult> eList = new ArrayList<QueryResult>();
+		List<QueryPara> eList = new ArrayList<>();
 
-		QueryResult query;
+		QueryPara query;
 		QueryMaker maker = new QueryMaker();
 
 		for (Table table : tableList) {
-			query = maker.getUpdateQueryResult(table, updateObj);
+			query = maker.getUpdateQueryPk(table, updateObj);
 			if (query != null) {
 				eList.add(query);
 			}
@@ -420,8 +449,8 @@ public class ClassDao extends DaoExecutor {
 
 		int size;
 		int ret = 0;
-		for (QueryResult e : eList) {
-			size = executeSql(e.getSql(), e.getParaArray());
+		for (QueryPara e : eList) {
+			size = executeSql(e.getSql(), e.getParaList());
 			ret += size;
 		}
 
@@ -438,20 +467,13 @@ public class ClassDao extends DaoExecutor {
 	 */
 	protected int update(Table table, Object updateObj) throws QidNotFoundException, Exception {
 
-		QueryResult query;
+		QueryPara query;
 		QueryMaker maker = new QueryMaker();
 
-		query = maker.getUpdateQueryResult(table, updateObj);
+		query = maker.getUpdateQueryPk(table, updateObj);
 
-		return executeSql(query.getSql(), query.getParaArray());
+		return executeSql(query.getSql(), query.getParaList());
 
-	}
-
-	private List<Table> getTableAll(Class<?> classOfMain) throws Exception {
-		if (classOfMain == null) {
-			throw new Exception("Class is null");
-		}
-		return new FxTableMaker().getTables(classOfMain);
 	}
 
 	/**
@@ -494,7 +516,7 @@ public class ClassDao extends DaoExecutor {
 		QueryMaker maker = new QueryMaker();
 
 		for (Table table : tableList) {
-			queryColumn = maker.getInsertQueryColumn(table);
+			queryColumn = maker.getInsertQuery(table);
 			for (Object obj : list) {
 				queryInfo = maker.makeQueryResult(queryColumn, obj);
 				dataList.add(queryInfo.getParaArray());

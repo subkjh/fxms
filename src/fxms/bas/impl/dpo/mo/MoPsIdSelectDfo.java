@@ -36,7 +36,7 @@ public class MoPsIdSelectDfo implements FxDfo<String, List<MappMoPs>> {
 		try {
 			tran.start();
 			List<MappMoPs> ret = new ArrayList<>();
-			List<FX_MAPP_PS> list = tran.select(FX_MAPP_PS.class, para);
+			List<FX_MAPP_PS> list = tran.selectDatas(FX_MAPP_PS.class, para);
 			for (FX_MAPP_PS ps : list) {
 				ret.add(new MappMoPs(ps.getMoNo(), ps.getPsId(), ps.getPsName(), ps.getMappId()));
 			}

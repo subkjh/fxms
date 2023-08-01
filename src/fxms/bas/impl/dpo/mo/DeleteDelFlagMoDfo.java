@@ -42,7 +42,7 @@ public class DeleteDelFlagMoDfo implements FxDfo<Void, Integer> {
 			tran.start();
 			int delCount = 0;
 
-			List<FX_MO> list = tran.select(FX_MO.class, FxApi.makePara("delYn", "Y"));
+			List<FX_MO> list = tran.selectDatas(FX_MO.class, FxApi.makePara("delYn", "Y"));
 			for (FX_MO mo : list) {
 
 				para.put("moNo", mo.getMoNo());

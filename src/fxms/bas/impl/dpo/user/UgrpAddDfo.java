@@ -62,7 +62,7 @@ public class UgrpAddDfo implements FxDfo<Map<String, Object>, Integer> {
 			tran.insertOfClass(FX_UR_UGRP.class, ugrp);
 
 			long regDtm = DateUtil.getDtm();
-			List<FX_CO_OP> opList = tran.select(FX_CO_OP.class, null);
+			List<FX_CO_OP> opList = tran.selectDatas(FX_CO_OP.class, null);
 			List<FX_UR_UGRP_OP> uopList = new ArrayList<FX_UR_UGRP_OP>();
 			FX_UR_UGRP_OP uop;
 

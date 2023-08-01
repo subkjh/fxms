@@ -5,23 +5,23 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.api.AlarmApi;
+import fxms.bas.co.CoCode.ALARM_RLSE_RSN_CD;
 import fxms.bas.impl.dbo.all.FX_AL_ALARM_CUR;
 import fxms.bas.impl.dbo.all.FX_AL_ALARM_HST;
 import fxms.bas.impl.dpo.BroadcastDfo;
-import fxms.bas.impl.dpo.ao.AlarmFireDpo;
+import fxms.bas.impl.dpo.ao.AlCfgSelectDfo;
+import fxms.bas.impl.dpo.ao.AlarmCurSelectDfo;
 import fxms.bas.impl.dpo.ao.AlarmFilterDfo;
+import fxms.bas.impl.dpo.ao.AlarmFireDpo;
+import fxms.bas.impl.dpo.ao.AlarmHstSelectDfo;
 import fxms.bas.impl.dpo.ao.AlarmInsertDfo;
 import fxms.bas.impl.dpo.ao.AlarmMakeDfo;
 import fxms.bas.impl.dpo.ao.AlarmReleaseDfo;
-import fxms.bas.impl.dpo.ao.AlCfgSelectDfo;
-import fxms.bas.impl.dpo.ao.AlcdSelectDfo;
-import fxms.bas.impl.dpo.ao.AlarmCurSelectDfo;
-import fxms.bas.impl.dpo.ao.AlarmHstSelectDfo;
 import fxms.bas.impl.dpo.ao.AlarmUpdateDfo;
+import fxms.bas.impl.dpo.ao.AlcdSelectDfo;
 import fxms.bas.mo.FxMo;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCfg;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
 import fxms.bas.vo.OccurAlarm;
@@ -64,9 +64,10 @@ public class AlarmApiDfo extends AlarmApi {
 	}
 
 	@Override
-	public Alarm clearAlarm(AlarmClearEvent event) throws Exception {
+	public Alarm clearAlarm(long alarmNo, long mstime, ALARM_RLSE_RSN_CD cd, String rlseMemo, int userNo)
+			throws Exception {
 
-		Alarm alarm = new AlarmReleaseDfo().releaseAlarm(event);
+		Alarm alarm = new AlarmReleaseDfo().releaseAlarm(alarmNo, mstime, cd, rlseMemo, userNo);
 
 		if (alarm != null) {
 
@@ -74,9 +75,7 @@ public class AlarmApiDfo extends AlarmApi {
 
 			new AlarmFilterDfo().filter(alarm);
 
-			if (event.isBroadcast()) {
-				new BroadcastDfo().broadcast(alarm);
-			}
+			new BroadcastDfo().broadcast(alarm);
 		}
 
 		return alarm;

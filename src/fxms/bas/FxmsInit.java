@@ -56,12 +56,12 @@ public class FxmsInit {
 		AdapterApiDfo api = new AdapterApiDfo();
 
 		try {
-			api.insert(IqrCron.class);
+//			api.insert(IqrCron.class);
 //				api.insert(CalcTrnsChrgCron.class);
 
-			VarApi.getApi().setTimeUpdated(ReloadType.Adapter, DateUtil.getDtm());
+//			VarApi.getApi().setTimeUpdated(ReloadType.Adapter, DateUtil.getDtm());
 //				VarApi.getApi().setTimeUpdated(ReloadType.AlarmCode, DateUtil.getDtm());
-			return;
+//			return;
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

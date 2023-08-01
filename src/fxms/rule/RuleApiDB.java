@@ -37,10 +37,10 @@ public class RuleApiDB extends RuleApi {
 
 			Map<String, Object> para = RuleApi.makePara("brRuleNo", brRuleNo);
 
-			List<FX_BR_RULE> infoList = tran.select(FX_BR_RULE.class, para, FX_BR_RULE.class);
+			List<FX_BR_RULE> infoList = tran.selectDatas(FX_BR_RULE.class, para, FX_BR_RULE.class);
 			if (infoList.size() > 0) {
 				ret.setRule(infoList.get(0));
-				List<FX_BR_RULE_FLOW> flowList = tran.select(FX_BR_RULE_FLOW.class, para, FX_BR_RULE_FLOW.class);
+				List<FX_BR_RULE_FLOW> flowList = tran.selectDatas(FX_BR_RULE_FLOW.class, para, FX_BR_RULE_FLOW.class);
 				if (flowList.size() > 0) {
 					flowList.sort(new Comparator<FX_BR_RULE_FLOW>() {
 
@@ -86,13 +86,13 @@ public class RuleApiDB extends RuleApi {
 		try {
 			tran.start();
 
-			List<FX_BR_RULE> ruleList = tran.select(FX_BR_RULE.class, makePara("alwaysRunYn", "Y", "useYn", "Y"),
+			List<FX_BR_RULE> ruleList = tran.selectDatas(FX_BR_RULE.class, makePara("alwaysRunYn", "Y", "useYn", "Y"),
 					FX_BR_RULE.class);
 
 			for (FX_BR_RULE rule : ruleList) {
 				RuleVo vo = new RuleVo();
 				vo.setRule(rule);
-				List<FX_BR_RULE_FLOW> flowList = tran.select(FX_BR_RULE_FLOW.class,
+				List<FX_BR_RULE_FLOW> flowList = tran.selectDatas(FX_BR_RULE_FLOW.class,
 						makePara("brRuleNo", rule.getBrRuleNo()), FX_BR_RULE_FLOW.class);
 				if (flowList.size() > 0) {
 					flowList.sort(new Comparator<FX_BR_RULE_FLOW>() {

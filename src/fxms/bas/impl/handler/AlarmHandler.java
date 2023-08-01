@@ -25,7 +25,6 @@ import fxms.bas.impl.handler.dto.SelectAlarmHstListPara;
 import fxms.bas.impl.handler.dto.SelectAlarmPara;
 import fxms.bas.mo.Mo;
 import fxms.bas.vo.Alarm;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import subkjh.bas.BasCfg;
 import subkjh.bas.co.utils.ObjectUtil;
@@ -55,8 +54,8 @@ public class AlarmHandler extends BaseHandler {
 	@MethodDescr(name = "알람해제", description = "발생된 알람을 해제한다.")
 	public Object clearAlarm(SessionVo session, ClearAlarmPara para) throws Exception {
 
-		Alarm alarm = AlarmApi.getApi().clearAlarm(new AlarmClearEvent(para.getAlarmNo(), System.currentTimeMillis(),
-				ALARM_RLSE_RSN_CD.ByUser, para.getRsnMemo(), session.getUserNo()));
+		Alarm alarm = AlarmApi.getApi().clearAlarm(para.getAlarmNo(), System.currentTimeMillis(),
+				ALARM_RLSE_RSN_CD.ByUser, para.getRsnMemo(), session.getUserNo());
 
 		return alarm;
 	}

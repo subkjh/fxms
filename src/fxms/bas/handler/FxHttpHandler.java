@@ -153,12 +153,13 @@ public abstract class FxHttpHandler implements HttpHandler {
 				BufferedReader br = new BufferedReader(isr);
 				StringBuffer tmp = new StringBuffer();
 				String line;
-				while ( true ) {
+				while (true) {
 					line = br.readLine();
-					if ( line == null) break;
+					if (line == null)
+						break;
 					tmp.append(line).append("\n");
 				}
-				body = tmp.toString();	
+				body = tmp.toString();
 				br.close();
 				isr.close();
 			}

@@ -9,6 +9,7 @@ import fxms.bas.api.PsApi;
 import fxms.bas.api.ValueApi;
 import fxms.bas.api.ValueApi.StatFunction;
 import fxms.bas.event.NotiFilter;
+import fxms.bas.exp.NotFoundException;
 import fxms.bas.mo.Mo;
 import fxms.bas.vo.PsKind;
 import fxms.bas.vo.PsValueComp;
@@ -134,19 +135,23 @@ public class ValueServiceImpl extends FxServiceImpl implements ValueService {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
-			long endDtm) throws RemoteException, Exception {
+	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol,
+			long startDtm, long endDtm) throws RemoteException, Exception {
 
 		List<PsValues> list = null;
 		try {
-			list = ValueApi.getApi().getValues(moNo, moInstance,psId, psKindName, psKindCol, startDtm, endDtm);
+			list = ValueApi.getApi().getValues(moNo, moInstance, psId, psKindName, psKindCol, startDtm, endDtm);
 			return list;
+		} catch (NotFoundException e) {
+			logger.fail(e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			logger.error(e);
 			throw e;
 		} finally {
-			logger.info("moNo={}, moInstance={}, psId={}, psKindName={}, psKindCol={}, startDtm={}, endDtm={} --> {}", moNo, moInstance, psId,
-					psKindName, psKindCol, startDtm, endDtm, list == null ? "error" : list.size());
+			logger.info("moNo={}, moInstance={}, psId={}, psKindName={}, psKindCol={}, startDtm={}, endDtm={} --> {}",
+					moNo, moInstance, psId, psKindName, psKindCol, startDtm, endDtm,
+					list == null ? "error" : list.size());
 		}
 
 	}

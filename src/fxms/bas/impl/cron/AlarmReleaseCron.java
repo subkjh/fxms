@@ -9,7 +9,6 @@ import fxms.bas.fxo.FxAttr;
 import fxms.bas.fxo.adapter.FxAdapterInfo;
 import fxms.bas.impl.dpo.ao.AlcdMap;
 import fxms.bas.vo.Alarm;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.user.User;
@@ -66,8 +65,8 @@ public class AlarmReleaseCron extends Crontab {
 
 				if (ocuMsdate + (alarmCode.getAutoClearSec() * 1000L) <= System.currentTimeMillis()) {
 					try {
-						AlarmApi.getApi().clearAlarm(new AlarmClearEvent(alarm.getAlarmNo(), System.currentTimeMillis(),
-								ALARM_RLSE_RSN_CD.TimeOver, "시간경과자동해제", User.USER_NO_SYSTEM));
+						AlarmApi.getApi().clearAlarm(alarm.getAlarmNo(), System.currentTimeMillis(),
+								ALARM_RLSE_RSN_CD.TimeOver, "시간경과자동해제", User.USER_NO_SYSTEM);
 						clearCount++;
 					} catch (Exception e) {
 						Logger.logger.error(e);

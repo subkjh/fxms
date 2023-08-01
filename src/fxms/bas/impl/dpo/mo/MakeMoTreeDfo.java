@@ -19,6 +19,7 @@ import subkjh.bas.co.lang.Lang;
  */
 public class MakeMoTreeDfo implements FxDfo<Void, Tree<TreeData>> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Tree<TreeData> call(FxFact fact, Void data) throws Exception {
 

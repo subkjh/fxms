@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fxms.bas.co.DATA_STATUS;
 import fxms.bas.exp.NotFoundException;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.dbo.all.FX_MO;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.ObjectUtil;
 import subkjh.dao.database.DBManager;
+import subkjh.dao.def.Column;
+import subkjh.dao.def.Table;
 import subkjh.dao.exp.TooManyDatasException;
 import subkjh.dao.util.FxTableMaker;
 
@@ -31,7 +34,7 @@ public class ClassDaoEx {
 	 * @return
 	 * @throws Exception
 	 */
-	public static <T> T getNextVal(String sequence, Class<T> classOfT) throws Exception {
+	public static <T> T GetNextVal(String sequence, Class<T> classOfT) throws Exception {
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 		try {
 			tran.start();
@@ -171,30 +174,29 @@ public class ClassDaoEx {
 	 * @throws Exception
 	 */
 	public static <T> List<T> SelectDatas(Class<?> classOfDbo, Object para, Class<T> classOfResult) throws Exception {
-
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-		try {
-			tran.start();
-			return tran.select(classOfDbo, para, classOfResult);
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			tran.stop();
-		}
+		return SelectDatas(FxCfg.DB_CONFIG, classOfDbo, para, classOfResult);
 	}
 
 	public static <T> List<T> SelectDatas(Class<T> classOfT, Object para) throws Exception {
+		return SelectDatas(FxCfg.DB_CONFIG, classOfT, para, classOfT);
+	}
 
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
+	public static <T> List<T> SelectDatas(String database, Class<T> classOfT, Object para) throws Exception {
+		return SelectDatas(database, classOfT, para, classOfT);
+	}
+
+	public static <T> List<T> SelectDatas(String database, Class<?> classOfDbo, Object para, Class<T> classOfResult)
+			throws Exception {
+
+		ClassDao tran = DBManager.getMgr().getDataBase(database).createClassDao();
 		try {
 			tran.start();
-			return tran.select(classOfT, para);
+			return tran.selectDatas(classOfDbo, para, classOfResult);
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			tran.stop();
 		}
-
 	}
 
 	/**
@@ -223,6 +225,7 @@ public class ClassDaoEx {
 //	private StringBuffer msg = new StringBuffer();
 	private Exception exception = null;
 	private int processedCount; // 최근 처리 건수
+	private DATA_STATUS dataStatus = DATA_STATUS.nothing;
 
 	public ClassDaoEx close() throws Exception {
 		close(exception);
@@ -265,6 +268,29 @@ public class ClassDaoEx {
 		}
 
 		return this;
+	}
+
+	public DATA_STATUS getDataStatus() {
+		return dataStatus;
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param sequence
+	 * @param classOfT
+	 * @return
+	 * @throws Exception
+	 */
+	public <T> T getNextVal(String sequence, Class<T> classOfT) throws Exception {
+
+		try {
+			return tran.getNextVal(sequence, classOfT);
+		} catch (Exception e) {
+			close(e);
+			throw e;
+		}
+
 	}
 
 	/**
@@ -312,7 +338,7 @@ public class ClassDaoEx {
 	 */
 	public <T> T selectData(Class<T> classOfDbo, Object para) throws Exception {
 		try {
-			List<T> list = tran.select(classOfDbo, para);
+			List<T> list = tran.selectDatas(classOfDbo, para);
 			if (list.size() == 1) {
 				return list.get(0);
 			} else if (list.size() > 0) {
@@ -334,22 +360,99 @@ public class ClassDaoEx {
 		}
 	}
 
-	public <T> List<T> selectDatas(Class<T> classOfT, Object para) throws Exception {
+	public <T> List<T> selectDatas(Class<?> classOfT, Object para, Class<T> classOfResult) throws Exception {
 		try {
-			return tran.select(classOfT, para);
+			return tran.selectDatas(classOfT, para, classOfResult);
 		} catch (Exception e) {
 			close(e);
 			throw e;
 		}
 	}
 
-	public <T> List<T> selectDatas(Class<T> classOfT, Object para, Class<T> classOfResult) throws Exception {
+	public <T> List<T> selectDatas(Class<T> classOfT, Object para) throws Exception {
 		try {
-			return tran.select(classOfT, para, classOfResult);
+			return tran.selectDatas(classOfT, para);
 		} catch (Exception e) {
 			close(e);
 			throw e;
 		}
+	}
+
+	/**
+	 * 
+	 * @param sequence
+	 * @param classOfT
+	 * @param data
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public ClassDaoEx setNextVal(String sequence, Class<?> classOfT, Map<String, Object> data, String name)
+			throws Exception {
+
+		try {
+			Object val = tran.getNextVal(sequence, classOfT);
+			data.put(name, val);
+			return this;
+		} catch (Exception e) {
+			close(e);
+			throw e;
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param classOfDbo
+	 * @param list
+	 * @return
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
+	public ClassDaoEx setOfClass(Class<?> classOfDbo, List<Map<String, Object>> list)
+			throws NotFoundException, Exception {
+
+		Table table = tran.getTable(classOfDbo);
+		List<Column> pks = table.getPkColumns();
+		Map<String, Object> para = new HashMap<String, Object>();
+
+		try {
+
+			for (Map<String, Object> data : list) {
+
+				for (Column col : pks) {
+					para.put(col.getName(), data.get(col.getFieldName()));
+				}
+
+				Object obj = selectData(classOfDbo, para);
+
+				if (obj != null) {
+
+					ObjectUtil.toObject(data, obj);
+					FxTableMaker.initRegChg(0, obj);
+					updateOfClass(classOfDbo, obj);
+
+				} else {
+
+					try {
+						obj = FxTableMaker.toObject(data, classOfDbo, true);
+					} catch (Exception e) {
+						close(e);
+						throw e;
+					}
+
+					FxTableMaker.initRegChg(0, obj);
+					insertOfClass(classOfDbo, obj);
+
+				}
+			}
+
+		} catch (Exception e) {
+			this.exception = e;
+			throw e;
+		}
+
+		return this;
 	}
 
 	/**
@@ -372,6 +475,7 @@ public class ClassDaoEx {
 				ObjectUtil.toObject(data, obj);
 				FxTableMaker.initRegChg(0, obj);
 				updateOfClass(classOfDbo, obj);
+				dataStatus = DATA_STATUS.updated;
 
 			} else {
 
@@ -384,6 +488,7 @@ public class ClassDaoEx {
 
 				FxTableMaker.initRegChg(0, obj);
 				insertOfClass(classOfDbo, obj);
+				dataStatus = DATA_STATUS.added;
 
 			}
 
@@ -391,6 +496,22 @@ public class ClassDaoEx {
 			this.exception = e;
 			throw e;
 		}
+
+		return this;
+	}
+
+	public ClassDaoEx updateOfClass(Class<?> classOfDbo, Map<String, Object> para, Map<String, Object> data)
+			throws Exception {
+		try {
+			processedCount = tran.updateOfClass(classOfDbo, para, data);
+		} catch (Exception e) {
+			close(e);
+			throw e;
+		}
+
+//		if (msg.length() > 0)
+//			msg.append(", ");
+//		msg.append("updated ").append(classOfDbo.getSimpleName()).append(" = ").append(processedCount);
 
 		return this;
 	}
@@ -453,4 +574,5 @@ public class ClassDaoEx {
 
 		return this;
 	}
+
 }

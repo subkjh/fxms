@@ -12,8 +12,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import fxms.bas.api.MoApi;
+import fxms.bas.api.PsApi;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.handler.vo.FxResponse;
+import fxms.bas.mo.Mo;
+import fxms.bas.vo.PsItem;
+import fxms.bas.vo.PsKind;
 import subkjh.bas.co.log.Logger;
 
 public class FxHttpClient {
@@ -29,30 +34,22 @@ public class FxHttpClient {
 	}
 
 	public static void main(String[] args) {
-		FxHttpClient c = new FxHttpClient("localhost", 10005);
+		FxHttpClient c = new FxHttpClient("10.0.1.11", 33022);
 
 		FxResponse response;
 		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("alarmCfgNo", 10001);
+		para.put("moNo", 20003);
+		para.put("psKindName", "15M");
+		para.put("psId", "UNDEF");
+		para.put("moInstance", "P0102020045");
+		para.put("startDate", 20230707000000L);
+		para.put("endDate", 20230707235959L);
 
 		try {
-			c.login("subkjh", "1111");
+			c.login("h2", "1111");
 
-			response = c.call("login/update-token", para);
+			response = c.call("ps/get-values", para);
 			System.out.println(response);
-
-			response = c.call("alarmcfg/select-alarm-cfg-mem-list", para);
-			System.out.println(response);
-
-			response = c.call("ps/select-ps-item-list", para);
-			System.out.println(response);
-			
-			para.clear();
-			para.put("moNo", 1000187);
-			para.put("psId", "E01V5");
-			response = c.call("ps/select-ps-value-min-max-avg-list", para);
-			System.out.println(response);
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,7 +70,7 @@ public class FxHttpClient {
 
 	private int port;
 
-	private String jwt;
+	private String accessToken;
 
 	/**
 	 * 
@@ -108,10 +105,10 @@ public class FxHttpClient {
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestProperty("Data-Type", "json");
-			
+
 			// 토큰 추가
-			if (this.jwt != null)
-				conn.setRequestProperty("Authorization", "Bearer " + this.jwt);
+			if (this.accessToken != null)
+				conn.setRequestProperty("Authorization", "Bearer " + this.accessToken);
 
 			// 요청 내역 보내기
 			OutputStream os = conn.getOutputStream();
@@ -240,11 +237,11 @@ public class FxHttpClient {
 
 		FxResponse response = post(getUrl("login"), makeJson(para));
 		System.out.println(FxmsUtil.toJson(response));
-		this.jwt = String.valueOf(response.get("jwt"));
+		this.accessToken = String.valueOf(response.get("accessToken"));
 	}
 
-	public void setJwt(String jwt) {
-		this.jwt = jwt;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 
 }

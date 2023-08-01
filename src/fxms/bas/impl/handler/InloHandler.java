@@ -9,7 +9,6 @@ import fxms.bas.handler.BaseHandler;
 import fxms.bas.handler.MethodDescr;
 import fxms.bas.handler.vo.SessionVo;
 import fxms.bas.impl.dao.InloHandlerQid;
-import fxms.bas.impl.dao.UserHandlerQid;
 import fxms.bas.impl.dbo.all.FX_CF_INLO;
 import fxms.bas.impl.dpo.inlo.MakeInloTreeDfo;
 import fxms.bas.impl.dpo.inlo.SelectInloListDfo;

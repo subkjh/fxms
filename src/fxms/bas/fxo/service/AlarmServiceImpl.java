@@ -6,11 +6,11 @@ import java.util.Map;
 
 import fxms.bas.api.AlarmApi;
 import fxms.bas.api.FxApi;
+import fxms.bas.co.CoCode.ALARM_RLSE_RSN_CD;
 import fxms.bas.event.NotiFilter;
 import fxms.bas.mo.Mo;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.AlarmCfg;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.AlarmCode;
 import fxms.bas.vo.AlarmOccurEvent;
 import fxms.bas.vo.MoStateEvt;
@@ -42,17 +42,18 @@ public class AlarmServiceImpl extends FxServiceImpl implements AlarmService {
 	}
 
 	@Override
-	public Alarm clearAlarm(AlarmClearEvent event) throws RemoteException, Exception {
+	public Alarm clearAlarm(long alarmNo, long mstime, ALARM_RLSE_RSN_CD cd, String rlseMemo, int userNo)
+			throws RemoteException, Exception {
 
 		Alarm clearAlarm = null;
 		try {
-			clearAlarm = AlarmApi.getApi().clearAlarm(event);
+			clearAlarm = AlarmApi.getApi().clearAlarm(alarmNo, mstime, cd, rlseMemo, userNo);
 			return clearAlarm;
 		} catch (Exception e) {
 			Logger.logger.error(e);
 			throw e;
 		} finally {
-			logger.info("{} --> {}", event.getAlarmNo(), clearAlarm == null ? "(error or notfound)" : clearAlarm);
+			logger.info("{} --> {}", alarmNo, clearAlarm == null ? "(error or notfound)" : clearAlarm);
 		}
 
 	}

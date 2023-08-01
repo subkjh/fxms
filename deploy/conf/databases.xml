@@ -17,7 +17,6 @@
 <!ELEMENT isReadOnly (#PCDATA) >
 <!ELEMENT countConnectionMax (#PCDATA) >
 <!ELEMENT isAutoCommit (#PCDATA) >
-<!ELEMENT permitConnectionPoolOver (#PCDATA) >
 <!ELEMENT reconnectTimeout (#PCDATA) >
 <!ELEMENT sqlSelectKeepAlive (#PCDATA) >
 <!ELEMENT const (#PCDATA) >
@@ -27,8 +26,24 @@
 
 <databases>
 
+	<database name="H2DEVDB" java-class="subkjh.dao.database.MySql">
+		<driver>com.mysql.cj.jdbc.Driver</driver>
+		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
+		<url>jdbc:mysql://10.0.1.11:3306/H2_DEV?useUnicode=true&amp;characterEncoding=utf8</url>
+		<user>h2_dev</user>
+		<password>thingspire1945</password>
+		<isReadOnly>false</isReadOnly>
+		<countConnectionMax>5</countConnectionMax>
+		<isAutoCommit>false</isAutoCommit>
+		<reconnectTimeout>5</reconnectTimeout>
+
+		<const id="NVL">ifnull</const>
+		<const id="TRUNC">truncate</const>
+	</database>
+
+
 	<!-- VUP 운용 DB -->
-	<database name="FXMSDB11" java-class="subkjh.dao.database.MySql">
+	<database name="VUPDB" java-class="subkjh.dao.database.MySql">
 		<driver>com.mysql.cj.jdbc.Driver</driver>
 		<!-- <driver>org.mariadb.jdbc.Driver</driver> -->
 		<url>jdbc:mysql://10.0.1.11:3306/vup?useUnicode=true&amp;characterEncoding=utf8</url>
@@ -37,7 +52,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>
@@ -55,7 +69,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>
@@ -75,7 +88,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>
@@ -93,7 +105,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>
@@ -111,7 +122,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>
@@ -130,7 +140,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>
@@ -148,7 +157,6 @@
 		<isReadOnly>false</isReadOnly>
 		<countConnectionMax>5</countConnectionMax>
 		<isAutoCommit>false</isAutoCommit>
-		<permitConnectionPoolOver>false</permitConnectionPoolOver>
 		<reconnectTimeout>5</reconnectTimeout>
 
 		<const id="NVL">ifnull</const>

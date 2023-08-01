@@ -8,26 +8,14 @@ package fxms.bas.vo;
  */
 public class ClearAlarm implements Alarmable {
 
-	// 알람번호
-	private long alarmNo;
-
-// 해제여부
-	private boolean rlseYn = false;
-
-// 해제일시
-	private long rlseDtm;
-
-// 해제사용자번호
-	private int rlseUserNo;
-
-// 알람해제원인코드
-	private String alarmRlseRsnCd;
-
-// 알람해제원인명
-	private String alarmRlseRsnName;
-
-// 해제메모
-	private String rlseMemo;
+	
+	private long alarmNo; // 알람번호
+	private boolean rlseYn = false; // 해제여부
+	private long rlseDtm; // 해제일시
+	private int rlseUserNo; // 해제사용자번호
+	private String alarmRlseRsnCd; // 알람해제원인코드
+	private String alarmRlseRsnName; // 알람해제원인명
+	private String rlseMemo; // 해제메모
 
 	/**
 	 * 알람번호

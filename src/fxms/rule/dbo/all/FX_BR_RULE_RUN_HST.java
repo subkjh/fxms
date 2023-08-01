@@ -1,7 +1,5 @@
 package fxms.rule.dbo.all;
 
-import java.io.Serializable;
-
 import subkjh.dao.def.Column.COLUMN_OP;
 import subkjh.dao.def.FxColumn;
 import subkjh.dao.def.FxIndex;
@@ -20,7 +18,7 @@ import subkjh.dao.def.Index.INDEX_TYPE;
 @FxIndex(name = "FX_BR_RULE_RUN_HST__KEY2", type = INDEX_TYPE.KEY, columns = { "RUN_STRT_DTM" })
 @FxIndex(name = "FX_BR_RULE_RUN_HST__FK1", type = INDEX_TYPE.FK, columns = {
 		"BR_RULE_NO" }, fkTable = "FX_BR_RULE", fkColumn = "BR_RULE_NO")
-public class FX_BR_RULE_RUN_HST implements Serializable {
+public class FX_BR_RULE_RUN_HST {
 
 	public FX_BR_RULE_RUN_HST() {
 	}

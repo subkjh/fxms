@@ -1,6 +1,5 @@
 package fxms.bas.impl.dpo.jwt;
 
-import java.security.Key;
 import java.util.Base64;
 import java.util.Map;
 
@@ -9,12 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import subkjh.bas.co.lang.Lang;
 
 /**
@@ -38,7 +32,7 @@ public class ReadAccessTokenDfo implements FxDfo<String, Map<String, Object>> {
 		ReadAccessTokenDfo dfo = new ReadAccessTokenDfo();
 		try {
 			Map<String, Object> ret = dfo.read(
-					"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmeG1zIiwiZXhwIjoxNjg0MjM2Mjk5LCJhdXRoIjoiUk9MRV9VU0VSIiwidXNlck5vIjoxMDQyLCJ1c2VySWQiOiJ0ZXN0IiwidXNlck5hbWUiOiJ0ZXN0IiwiaW5sb05vIjowLCJ1Z3JwTm8iOjEwMDAsInVzZXJNYWlsIjoidGVzdCIsInNlc3Npb25JZCI6IkZYTVMxMzY0MzAwNjAwMDAxIiwiaG9zdG5hbWUiOiJlYzItMy0zNS0yMzAtMzIuYXAtbm9ydGhlYXN0LTIuY29tcHV0ZS5hbWF6b25hd3MuY29tIn0.chqE2FPPeQ-6iQc7RNRpvqBeSIS9NzAnkMaZ-MnWv8zSqGyqhB6vRuGO8f-IqHfqec5KDAMVazt22fu3aNfg6A");
+					"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmeG1zIiwiZXhwIjoxNjg4NzEwNzY3LCJhdXRoIjoiUk9MRV9VU0VSIiwidXNlck5vIjoxMDAwLCJ1c2VySWQiOiJoMiIsInVzZXJOYW1lIjoi7J2064-Z7ZiV7IiY7IaM66qo65OI6rSA66as7J6QIiwiaW5sb05vIjo5MDAsInVncnBObyI6MTAwMCwidXNlck1haWwiOiJoMiIsInNlc3Npb25JZCI6IkZYTVMxMzY3OTIzNjUwMDA1IiwiaG9zdG5hbWUiOiIxMC4yMTIuMTM0LjIifQ.KFOPAPAHkJQWdASmjR6m-nnhFV3lvn7yLBtW-fb_sc5NpUpZSZucygUy_SfOrF4z2QSuI4xxthCDJaaJtyThSA\"");
 			System.out.println(FxmsUtil.toJson(ret));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -53,12 +47,13 @@ public class ReadAccessTokenDfo implements FxDfo<String, Map<String, Object>> {
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> read(String accessToken) throws Exception {
-		
-		if ( accessToken == null) {
+
+		if (accessToken == null) {
 			throw new Exception(Lang.get("An error occurred while parsing the token."));
 		}
 
 		String[] check = accessToken.split("\\.");
+//		String payload = new String(Decoders.BASE64URL.decode(check[1]));
 		Base64.Decoder decoder = Base64.getDecoder();
 		String payload = new String(decoder.decode(check[1]));
 

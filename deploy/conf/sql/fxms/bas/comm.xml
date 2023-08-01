@@ -2,6 +2,7 @@
 <queries>
 
 	<resultMap id="STRING" javaClass="java.lang.String" />
+	<resultMap id="RESULT_MAP" javaClass="java.util.HashMap" keyCase="java" />
 
 	<select id="select-date-same-dow" resultMap="STRING">
 		<![CDATA[
@@ -11,6 +12,25 @@
 		and		a.YMD < $date
 		order by a.YMD desc
 		limit	0, $count
+		]]>
+	</select>
+	
+	<!-- 관제점 정보를 조회한다. -->
+	<select id="select-ps-point-list" resultMap="RESULT_MAP">
+		<![CDATA[
+		select 	IFNULL(a.ALCD_NO, 0)		as ALCD_NO
+				, a.FAC_TID
+				, a.POINT_ID
+				, a.POINT_TID
+				, a.POINT_NM
+				, b.MO_NO		
+				, b.MO_NAME
+				, b.MO_CLASS
+				, b.MO_TID		
+		from 	FX_PS_POINT 	a
+				, FX_MO			b
+		where	a.MO_TID		= b.MO_TID
+		and		b.DEL_YN		= 'N'
 		]]>
 	</select>
 

@@ -1,7 +1,9 @@
 package fxms.bas.impl.dpo.jwt;
 
 import java.security.Key;
+import java.util.Map;
 
+import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,6 +30,18 @@ import subkjh.bas.co.lang.Lang;
  *
  */
 public class ValidateAccessTokenDfo implements FxDfo<String, Boolean> {
+
+	public static void main(String[] args) {
+		ValidateAccessTokenDfo dfo = new ValidateAccessTokenDfo();
+		try {
+			boolean ret = dfo.validateAccessToken(
+					"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmeG1zIiwiZXhwIjoxNjg4NzA5MzA0LCJhdXRoIjoiUk9MRV9VU0VSIiwidXNlck5vIjoxMDAwLCJ1c2VySWQiOiJoMiIsInVzZXJOYW1lIjoi7J2064-Z7ZiV7IiY7IaM66qo65OI6rSA66as7J6QIiwiaW5sb05vIjo5MDAsInVncnBObyI6MTAwMCwidXNlck1haWwiOiJoMiIsInNlc3Npb25JZCI6IkZYTVMxMzY3OTIzNjUwMDAyIiwiaG9zdG5hbWUiOiIxMC4yMTIuMTM0LjIifQ.RsyLHkOn5m8Ue0aVlcSZjvVtCQjAMXQVG66DeAtZjb1iSgUl0xZvi3dHkVFbup0SoQvd3jm4-i-Ifa9nLcCoZA");
+			System.out.println(FxmsUtil.toJson(ret));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public Boolean call(FxFact fact, String token) throws Exception {

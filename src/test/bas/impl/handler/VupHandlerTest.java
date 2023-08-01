@@ -3,7 +3,6 @@ package test.bas.impl.handler;
 import java.util.HashMap;
 import java.util.Map;
 
-import fxms.bas.vo.PsKind;
 import fxms.bas.ws.handler.client.FxHttpClient;
 import subkjh.bas.co.utils.DateUtil;
 

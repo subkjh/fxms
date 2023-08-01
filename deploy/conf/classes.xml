@@ -94,7 +94,7 @@
 	<class org="fxms.bas.api.AppApi" use="fxms.bas.impl.ext.influxdb.AppApiInfluxDb"
 		service="AppService" enable="false" />
 	<class org="fxms.bas.api.ValueApi" use="fxms.bas.impl.ext.influxdb.ValueApiInfluxDb"
-		service="ValueService">
+		service="ValueService" enable="false" >
 		<para name="use.tsdb.for.select" value="false" descr="Sets whether to retrieve data from TSDB."/>
 	</class>
 

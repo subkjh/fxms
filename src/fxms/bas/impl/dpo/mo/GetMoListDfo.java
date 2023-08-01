@@ -25,10 +25,8 @@ public class GetMoListDfo implements FxDfo<Map<String, Object>, List<Mo>> {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("moNo", 1002176L);
 		GetMoListDfo dpo = new GetMoListDfo();
-		FxFact fact = new FxFact("para", para);
 		try {
-//			System.out.println(FxmsUtil.toJson(dpo.call(fact, "para")));
-//			System.out.println(FxmsUtil.toJson(dpo.selectMoList(para, SensorMo.class)));
+			System.out.println(FxmsUtil.toJson(dpo.selectMoList(para)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,7 +85,7 @@ public class GetMoListDfo implements FxDfo<Map<String, Object>, List<Mo>> {
 		}
 
 		List<Mo> moList = new ArrayList<Mo>();
-		List<? extends Mo> tmpList = tran.select(FX_MO.class, wherePara, FxMo.class);
+		List<? extends Mo> tmpList = tran.selectDatas(FX_MO.class, wherePara, FxMo.class);
 
 		// 기본 관리대상 정보만 조회하면 여기서 리턴
 		if (tmpList.size() == 0) {
@@ -122,7 +120,7 @@ public class GetMoListDfo implements FxDfo<Map<String, Object>, List<Mo>> {
 
 			try {
 				// 상세한 내역으로 다시 조회한다.
-				List<Mo> entry = (List<Mo>) tran.select(classOfDbo, wherePara, classOfMo);
+				List<Mo> entry = (List<Mo>) tran.selectDatas(classOfDbo, wherePara, classOfMo);
 				moList.addAll(entry);
 
 			} catch (TableNotFoundException e) {

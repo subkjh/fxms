@@ -15,6 +15,12 @@ import subkjh.dao.ClassDao;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.util.FxTableMaker;
 
+/**
+ * 환경변수 값을 설정한다.
+ * 
+ * @author subkjh
+ *
+ */
 public class SetVarDfo implements FxDfo<Map<String, Object>, Boolean> {
 
 	public static void main(String[] args) {

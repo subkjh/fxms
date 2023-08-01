@@ -5,8 +5,6 @@ import java.util.Map;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.handler.BaseHandler;
 import fxms.bas.handler.vo.SessionVo;
-import fxms.bas.impl.dao.AlarmHandlerQid;
-import subkjh.bas.BasCfg;
 import subkjh.bas.co.log.Logger;
 import subkjh.dao.QidDao;
 import subkjh.dao.database.DBManager;

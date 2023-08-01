@@ -9,7 +9,6 @@ import subkjh.bas.co.utils.DateUtil;
 import subkjh.bas.co.utils.FileUtil;
 import subkjh.dao.database.DataBase;
 import subkjh.dao.database.MySql;
-import subkjh.dao.database.PostgreSQL;
 import subkjh.dao.def.Column;
 import subkjh.dao.def.Sequence;
 import subkjh.dao.def.Table;
@@ -35,15 +34,14 @@ public class SqlTool {
 //		tool.makeXml2JavaQid("deploy/conf/sql/cron/CheckACron.xml", "fxms.bas.impl.dao.CheckACronQid", "tmp");
 //		tool.makeXml2JavaQid("deploy/conf/sql/vup/Tisp2VupCron.xml", "fems.vup.dao.Tisp2VupCronQid", "tmp");
 
-//		tool.makeInsertSql(new MySql());
 //		tool.printDropSql(new MySql(), "datas/setup/tables.txt");
-//		tool.printCreateSql(new MySql(), "datas/tables.txt");
-		tool.printAddColumnSql(new MySql(), "datas/tables.txt");
+		tool.printCreateSql(new MySql(), "datas/tables.txt");
+//		tool.printAddColumnSql(new MySql(), "datas/tables.txt");
 //		tool.makeSelectSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeInsertSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeUpdateSampleSql(new MySql(), "datas/setup/tables.txt");
 //		tool.makeJavaSource(new File("datas/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
-//		tool.makeJpaSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
+//		tool.makeJpaSource(new File("datas/tables.txt"), "fxms.bas.impl.dbo.all", "tmp");
 //		tool.makeDtoSource(new File("datas/setup/tables.txt"), "fxms.bas.impl.dto", "tmp");
 //		tool.makeDtoSource(FX_UR_UGRP.class, "tmp");
 //		tool.printXml(AlarmCfgVo.class);

@@ -2,7 +2,6 @@ package subkjh.bas.co.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,6 +41,7 @@ public class DateUtil {
 	private static final SimpleDateFormat YYYYMM = new SimpleDateFormat("yyyyMM");
 	private static final SimpleDateFormat TIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 //	private static final SimpleDateFormat TIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	
 
 	public static long addTime(long mstime, int field, int amount) {
 		Calendar c = Calendar.getInstance();
@@ -104,6 +104,23 @@ public class DateUtil {
 
 	public static synchronized int getTime() {
 		return Integer.parseInt(HHMMSS.format(new Date(System.currentTimeMillis())));
+	}
+	
+	public static String getHHmmss(String s) {
+		StringBuffer sb = new StringBuffer();
+		char chs[] = s.toCharArray();
+		for ( char ch : chs) {
+			if ( ch >= '0' && ch <= '9') {
+				sb.append(ch);
+				if ( sb.length() == 6 ) break;
+			}
+		}
+		
+		for ( int i = sb.length(); i < 6; i++) {
+			sb.append("0");
+		}
+		
+		return sb.toString();
 	}
 
 	public static synchronized int getTime(long mstime) {
@@ -171,6 +188,8 @@ public class DateUtil {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println(DateUtil.getHHmmss("10:15:20.123"));
 
 	}
 

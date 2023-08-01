@@ -22,8 +22,8 @@ import subkjh.bas.co.utils.ObjectUtil;
 import subkjh.dao.database.Altibase;
 import subkjh.dao.database.DataBase;
 import subkjh.dao.def.DaoListener;
-import subkjh.dao.model.QueryResult;
 import subkjh.dao.model.DaoResult;
+import subkjh.dao.model.QueryResult;
 import subkjh.dao.model.RetMappVo;
 import subkjh.dao.util.DaoUtil;
 

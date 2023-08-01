@@ -19,22 +19,21 @@ import fxms.bas.vo.mapp.MappMo;
 import fxms.bas.vo.mapp.MappMoPs;
 import subkjh.bas.co.log.Logger;
 import subkjh.dao.ClassDao;
+import subkjh.dao.ClassDaoEx;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.util.FxTableMaker;
 
 public class MappingApiDB extends MappingApi {
 
-	private <T> T selectOne(Class<T> classOfT, Map<String, Object> para) throws Exception {
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-		try {
-			tran.start();
-			return (T) tran.selectOne(classOfT, para);
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
-		}
+	@Override
+	public DATA_STATUS removeMappPs(MappData mappData) throws Exception {
+		return new MoPsIdDeleteDfo().delete(mappData);
+	}
+
+	@Override
+	public DATA_STATUS setMappPs(int userNo, MappData mappData, long moNo, String moName, String psId, String psName)
+			throws Exception {
+		return new MoPsIdSetDfo().set(userNo, mappData, moNo, moName, psId, psName);
 	}
 
 	@Override
@@ -42,7 +41,7 @@ public class MappingApiDB extends MappingApi {
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 		try {
 			tran.start();
-			List<FX_MAPP_MO> list = tran.select(FX_MAPP_MO.class, para);
+			List<FX_MAPP_MO> list = tran.selectDatas(FX_MAPP_MO.class, para);
 			List<MappMo> ret = new ArrayList<MappMo>();
 			for (FX_MAPP_MO mo : list) {
 				ret.add(new MappMo(mo.getMappId(), mo.getMoNo()));
@@ -59,14 +58,14 @@ public class MappingApiDB extends MappingApi {
 
 	@Override
 	protected int doSelectMappAlcdNo(String mngDiv, String mappId) throws Exception {
-		FX_MAPP_AL data = selectOne(FX_MAPP_AL.class, makePara("mngDiv", mngDiv, "mappId", mappId));
+		FX_MAPP_AL data = ClassDaoEx.SelectData(FX_MAPP_AL.class, makePara("mngDiv", mngDiv, "mappId", mappId));
 		return data != null ? data.getAlcdNo() : null;
 
 	}
 
 	@Override
 	protected Object doSelectMappEtc(String mngDiv, Object mappId) throws Exception {
-		FX_MAPP_ETC data = selectOne(FX_MAPP_ETC.class, makePara("mngDiv", mngDiv, "mappId", mappId));
+		FX_MAPP_ETC data = ClassDaoEx.SelectData(FX_MAPP_ETC.class, makePara("mngDiv", mngDiv, "mappId", mappId));
 		return data != null ? data.getObjData() : null;
 	}
 
@@ -128,12 +127,6 @@ public class MappingApiDB extends MappingApi {
 
 	}
 
-	@Override
-	public DATA_STATUS setMappPs(int userNo, MappData mappData, long moNo, String moName, String psId, String psName)
-			throws Exception {
-		return new MoPsIdSetDfo().set(userNo, mappData, moNo, moName, psId, psName);
-	}
-
 	protected void setMapping(ClassDao tran, int userNo, MappData mappData, long moNo, String moName) throws Exception {
 
 		FX_MAPP_MO mapp = new FX_MAPP_MO();
@@ -166,11 +159,6 @@ public class MappingApiDB extends MappingApi {
 			throw e;
 		}
 
-	}
-
-	@Override
-	public DATA_STATUS removeMappPs(MappData mappData) throws Exception {
-		return new MoPsIdDeleteDfo().delete(mappData);
 	}
 
 }

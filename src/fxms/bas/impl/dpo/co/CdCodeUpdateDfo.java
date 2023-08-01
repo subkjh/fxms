@@ -3,7 +3,6 @@ package fxms.bas.impl.dpo.co;
 import java.util.Map;
 
 import fxms.bas.api.FxApi;
-import fxms.bas.exp.CdClNotFoundException;
 import fxms.bas.fxo.FxAttrApi;
 import fxms.bas.impl.dbo.all.FX_CO_CD;
 import fxms.bas.impl.dpo.FxDfo;
@@ -32,7 +31,7 @@ public class CdCodeUpdateDfo implements FxDfo<Map<String, Object>, Boolean> {
 	}
 
 	public boolean udpate(CdCodeDto dto, Map<String, Object> data) throws Exception {
-			int cnt = ClassDaoEx.open().setOfClass(FX_CO_CD.class, dto, data).close().getProcessedCount();
+		int cnt = ClassDaoEx.open().setOfClass(FX_CO_CD.class, dto, data).close().getProcessedCount();
 		return cnt == 1;
 	}
 }

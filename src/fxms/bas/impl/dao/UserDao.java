@@ -169,7 +169,7 @@ public class UserDao extends ClassDao {
 		try {
 			start();
 
-			return select(OpDbo.class, null);
+			return selectDatas(OpDbo.class, null);
 		} catch (Exception e) {
 			Logger.logger.error(e);
 			throw e;

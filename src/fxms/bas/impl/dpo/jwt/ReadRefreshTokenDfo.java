@@ -1,6 +1,5 @@
 package fxms.bas.impl.dpo.jwt;
 
-import java.security.Key;
 import java.util.Base64;
 import java.util.Map;
 
@@ -9,13 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.utils.DateUtil;
 
@@ -78,8 +71,11 @@ public class ReadRefreshTokenDfo implements FxDfo<String, Map<String, Object>> {
 	public Map<String, Object> read(String refreshToken) throws Exception {
 
 		String[] check = refreshToken.split("\\.");
+
 		Base64.Decoder decoder = Base64.getDecoder();
 		String payload = new String(decoder.decode(check[1]));
+
+//		String payload = new String(Decoders.BASE64URL.decode(check[1]));
 
 		ObjectMapper mapper = new ObjectMapper();
 		try {

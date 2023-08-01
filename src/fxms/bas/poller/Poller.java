@@ -142,7 +142,7 @@ public class Poller extends FxThread {
 	protected void polling(long pollMsdate, PollMo pollMo) throws FxTimeoutException, Exception {
 
 		Mo mo = pollMo.getMo();
-		boolean online = true;
+//		boolean online = true;
 
 		List<FxGetValueAdapter> adapterList = AdapterApi.getApi().getAdapters(FxGetValueAdapter.class, mo);
 		PsVoRawList valList = new PsVoRawList("Poller", pollMsdate);
@@ -155,7 +155,7 @@ public class Poller extends FxThread {
 				}
 			} catch (FxNotMatchException e) {
 			} catch (FxTimeoutException e) {
-				online = false;
+//				online = false;
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}

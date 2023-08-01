@@ -46,7 +46,7 @@ public class InloMakeDfo implements FxDfo<Map<String, Object>, FX_CF_INLO> {
 
 		FxTableMaker.initRegChg(userNo, item);
 
-		item.setInloNo(ClassDaoEx.getNextVal(FX_CF_INLO.FX_SEQ_INLONO, Integer.class));
+		item.setInloNo(ClassDaoEx.GetNextVal(FX_CF_INLO.FX_SEQ_INLONO, Integer.class));
 
 		return item;
 	}

@@ -24,7 +24,7 @@ import subkjh.bas.co.log.Logger;
  */
 public class ValueApiInfluxDb extends ValueApiDfo {
 
-	@FxAttr(name = "use.tsdb.for.select", required = true, description = "조회를 TSDB를 사용할져 여부")
+	@FxAttr(name = "use.tsdb.for.select", required = true, description = "조회를 TSDB를 사용할지 여부")
 	private boolean useTsdb;
 
 	@Override

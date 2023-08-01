@@ -7,7 +7,6 @@ import fxms.bas.fxo.FxCfg;
 import fxms.bas.handler.BaseHandler;
 import fxms.bas.handler.MethodDescr;
 import fxms.bas.handler.vo.SessionVo;
-import fxms.bas.impl.dao.InloHandlerQid;
 import fxms.bas.impl.dao.MoHandlerQid;
 import fxms.bas.impl.dpo.mo.GetMoTreeDpo;
 import fxms.bas.impl.handler.dto.mo.MoDto;

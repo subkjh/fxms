@@ -133,7 +133,7 @@ public class FxConfDao {
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 		try {
 			tran.start();
-			return tran.select(classOfT, whereObj, classOfResult);
+			return tran.selectDatas(classOfT, whereObj, classOfResult);
 		} catch (Exception e) {
 			Logger.logger.error(e);
 			throw e;

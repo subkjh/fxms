@@ -23,7 +23,7 @@ import subkjh.bas.co.utils.FileUtil;
 public class ValueWriteFileDfo implements FxDfo<PsVoList, Boolean> {
 
 	public static void main(String[] args) {
-		ValueWriteFileDfo dfo = new ValueWriteFileDfo();
+//		ValueWriteFileDfo dfo = new ValueWriteFileDfo();
 		MoApi.api = new MoApiDfo();
 		ValueApi.api = new ValueApiDfo();
 

@@ -38,7 +38,7 @@ public class SetUseOpDfo implements FxDfo<Void, Boolean> {
 			Map<String, Object> para = new HashMap<String, Object>();
 			para.put("opId", opId);
 
-			List<FX_CO_OP> opList = tran.select(FX_CO_OP.class, para);
+			List<FX_CO_OP> opList = tran.selectDatas(FX_CO_OP.class, para);
 			if (opList.size() == 0) {
 				throw new NotFoundException("opId", opId);
 			}

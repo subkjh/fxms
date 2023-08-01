@@ -9,6 +9,7 @@ import fxms.bas.impl.dpo.FxFact;
 import subkjh.dao.ClassDaoEx;
 
 /**
+ * 운영자가 확인해야 할 내용을 기록한다.
  * 
  * @author subkjh
  *
@@ -31,6 +32,15 @@ public class ToCheckDfo implements FxDfo<Map<String, String>, Boolean> {
 		return toCheck(data.get("eventClass"), data.get("eventKey"), data.get("eventText"));
 	}
 
+	/**
+	 * 운영자가 확인해야 할 내용을 기록한다.
+	 * 
+	 * @param eventClass 이벤트분류
+	 * @param eventKey   이벤트키
+	 * @param eventText  이벤트 내용
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean toCheck(String eventClass, String eventKey, String eventText) throws Exception {
 
 		Map<String, Object> para = FxApi.makePara("eventClass", eventClass, "eventKey", eventKey);

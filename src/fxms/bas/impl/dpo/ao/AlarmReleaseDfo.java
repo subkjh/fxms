@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fxms.bas.api.FxApi;
+import fxms.bas.co.CoCode.ALARM_RLSE_RSN_CD;
 import fxms.bas.event.FxEvent.STATUS;
 import fxms.bas.exp.AlarmNotFoundException;
 import fxms.bas.fxo.FxCfg;
@@ -13,7 +14,6 @@ import fxms.bas.impl.dbo.all.FX_AL_ALARM_HST;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.Alarm;
-import fxms.bas.vo.AlarmClearEvent;
 import fxms.bas.vo.ClearAlarm;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.DateUtil;
@@ -50,15 +50,16 @@ public class AlarmReleaseDfo implements FxDfo<ClearAlarm, Alarm> {
 		return releaseAlarm(data.getAlarmNo(), ObjectUtil.toMap(data));
 	}
 
-	public Alarm releaseAlarm(AlarmClearEvent event) throws Exception {
+	public Alarm releaseAlarm(long alarmNo, long mstime, ALARM_RLSE_RSN_CD cd, String rlseMemo, int userNo)
+			throws Exception {
 		Map<String, Object> datas = new HashMap<>();
-		datas.put("rlseYn", "Y");
-		datas.put("rlseDtm", DateUtil.toHstime(event.getEventMstime()));
-		datas.put("alarmRlseRsnCd", event.getAlarmRlseRsnCd().getCd());
-		datas.put("alarmRlseRsnName", event.getAlarmRlseRsnCd().name());
-		datas.put("rlseMemo", event.getReleaseMemo());
+		datas.put("rlseDtm", DateUtil.toHstime(mstime));
+		datas.put("alarmRlseRsnCd", cd.getCd());
+		datas.put("alarmRlseRsnName", cd.name());
+		datas.put("rlseMemo", rlseMemo);
+		datas.put("rlseUserNo", userNo);
 
-		return releaseAlarm(event.getAlarmNo(), datas);
+		return releaseAlarm(alarmNo, datas);
 	}
 
 	public Alarm releaseAlarm(long alarmNo, Map<String, Object> datas) throws AlarmNotFoundException, Exception {

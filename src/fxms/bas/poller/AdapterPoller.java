@@ -153,7 +153,7 @@ public class AdapterPoller extends FxThread {
 	 */
 	private void polling(PsVoRawList valList, Mo mo) throws FxTimeoutException, Exception {
 
-		boolean online = true;
+//		boolean online = true;
 
 		// adapter가 처리하는 MO인지 확인한다.
 		try {
@@ -163,7 +163,7 @@ public class AdapterPoller extends FxThread {
 			}
 		} catch (FxNotMatchException e) {
 		} catch (FxTimeoutException e) {
-			online = false;
+//			online = false;
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}

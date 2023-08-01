@@ -11,7 +11,6 @@ import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.api.AlarmApiService;
 import fxms.bas.vo.Alarm;
-import fxms.bas.vo.AlarmClearEvent;
 import subkjh.bas.co.log.LOG_LEVEL;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.DateUtil;
@@ -46,8 +45,7 @@ public class AlarmApiTest {
 		System.out.println("get\t" + FxmsUtil.toJson(api.getHstAlarm(alarm.getAlarmNo())));
 		System.out.println("gets\t"
 				+ FxmsUtil.toJson(api.getHstAlarms(startDate, endDate, FxApi.makePara("alarmNo", alarm.getAlarmNo()))));
-		alarm = api.clearAlarm(new AlarmClearEvent(alarm.getAlarmNo(), System.currentTimeMillis(),
-				ALARM_RLSE_RSN_CD.ByUser, "test", 2));
+		alarm = api.clearAlarm(alarm.getAlarmNo(), System.currentTimeMillis(), ALARM_RLSE_RSN_CD.ByUser, "test", 2);
 		System.out.println("clear\t" + FxmsUtil.toJson(alarm));
 
 	}

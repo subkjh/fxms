@@ -30,10 +30,10 @@ public class SystemHandlerTest extends HandlerTest {
 		super("localhost", "system");
 	}
 
-	public void selectVarList() throws Exception {
+	public FxResponse selectVarList() throws Exception {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("varGrpName", "성능조회");
-		call("select-var-list", para);
+		return  call("select-var-list", para);
 	}
 
 	public FxResponse getVarList() throws Exception {

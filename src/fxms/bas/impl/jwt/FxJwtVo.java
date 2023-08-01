@@ -49,7 +49,7 @@ import subkjh.bas.co.lang.Lang;
 public class FxJwtVo {
 
 	public static void main(String[] args) {
-		String jwtSecret = "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK";
+//		String jwtSecret = "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK";
 
 		String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdWJramgiLCJhdXRoIjoiUk9MRV9BRE1JTiIsImV4cCI6MTY3MjIxOTM1MiwidXNlck5vIjoyLCJ1c2VySWQiOiJzdWJramgiLCJ1c2VyTmFtZSI6Iuq5gOyihe2biCIsImlubG9ObyI6MSwidWdycE5vIjoyLCJ1c2VyTWFpbCI6InN1YmtqaEBuYXZlci5jb20ifQ.Z_v0Yz48DlXmI69o_A1Y-Lu60n6rVvDXCFABhmFS5hDB3aSeFErWghbO9XxsVoz8bmWJILrEPnFKq9jNqBxeXA";
 		FxJwtVo vo;

@@ -39,7 +39,7 @@ public class SelectCurValueDfo implements FxDfo<Map<String, Object>, List<PsValu
 
 		try {
 			tran.start();
-			List<FX_V_ACUR> list = tran.select(FX_V_ACUR.class, para);
+			List<FX_V_ACUR> list = tran.selectDatas(FX_V_ACUR.class, para);
 
 			List<PsValueComp> ret = new ArrayList<>();
 			for (FX_V_ACUR value : list) {

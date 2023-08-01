@@ -131,12 +131,12 @@ public class FxTableHandler extends BaseHandler {
 
 		FxTableVo tab = new FxTableVo(tmp.getTblName(), tmp.getTblCmnt());
 
-		List<FX_TBL_COL_DEF> colList = tran.select(FX_TBL_COL_DEF.class, para);
+		List<FX_TBL_COL_DEF> colList = tran.selectDatas(FX_TBL_COL_DEF.class, para);
 		if (colList != null) {
 			tab.getColumns().addAll(colList);
 		}
 
-		List<FX_TBL_IDX_DEF> idxList = tran.select(FX_TBL_IDX_DEF.class, para);
+		List<FX_TBL_IDX_DEF> idxList = tran.selectDatas(FX_TBL_IDX_DEF.class, para);
 		if (idxList != null) {
 			tab.getIndexes().addAll(idxList);
 		}

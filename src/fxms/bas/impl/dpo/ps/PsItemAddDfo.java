@@ -3,13 +3,10 @@ package fxms.bas.impl.dpo.ps;
 import java.util.Map;
 
 import fxms.bas.api.FxApi;
-import fxms.bas.fxo.FxCfg;
 import fxms.bas.impl.dbo.all.FX_PS_ITEM;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
-import subkjh.bas.co.log.Logger;
-import subkjh.dao.ClassDao;
-import subkjh.dao.database.DBManager;
+import subkjh.dao.ClassDaoEx;
 import subkjh.dao.util.FxTableMaker;
 
 /**
@@ -39,19 +36,8 @@ public class PsItemAddDfo implements FxDfo<Void, Boolean> {
 			item.setPsCol(psId.toUpperCase());
 		}
 
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
-
-		try {
-			tran.start();
-			tran.insertOfClass(FX_PS_ITEM.class, item);
-			tran.commit();
-			return true;
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
-		}
+		ClassDaoEx.InsertOfClass(FX_PS_ITEM.class, item);
+		return true;
 
 	}
 

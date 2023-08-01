@@ -9,8 +9,8 @@ import fxms.bas.impl.dbo.all.FX_CF_INLO_MEM;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.Inlo;
-import fxms.bas.vo.InloMem;
 import fxms.bas.vo.InloExt;
+import fxms.bas.vo.InloMem;
 import subkjh.bas.co.log.Logger;
 import subkjh.dao.ClassDao;
 import subkjh.dao.database.DBManager;
@@ -156,7 +156,7 @@ public class InloMemSetDfo implements FxDfo<Void, Integer> {
 
 		// 2. 상위와 자신 매핑
 		if (upperInloNo > 0) {
-			List<FX_CF_INLO_MEM> list = tran.select(FX_CF_INLO_MEM.class, FxApi.makePara("lowerInloNo", upperInloNo));
+			List<FX_CF_INLO_MEM> list = tran.selectDatas(FX_CF_INLO_MEM.class, FxApi.makePara("lowerInloNo", upperInloNo));
 			for (FX_CF_INLO_MEM mem : list) {
 				mem.setLowerInloNo(inloNo);
 				mem.setLowerDepth(mem.getLowerDepth() + 1);

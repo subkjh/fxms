@@ -6,15 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import fxms.bas.api.FxApi;
-import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.FxmsUtil;
 import fxms.bas.impl.dbo.all.FX_CF_VAR;
 import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.FxVarVo;
-import subkjh.bas.co.log.Logger;
-import subkjh.dao.ClassDao;
-import subkjh.dao.database.DBManager;
+import subkjh.dao.ClassDaoEx;
 
 /**
  * 환경변수 값을 조회한다.
@@ -41,55 +38,46 @@ public class SelectVarDfo implements FxDfo<Map<String, Object>, List<FxVarVo>> {
 		return selectVar(data);
 	}
 
+	/**
+	 * 입력된 조건에 맞는 사용중인 환경변수 목록을 조회한다.
+	 * 
+	 * @param para 조건
+	 * @return
+	 * @throws Exception
+	 */
 	public List<FxVarVo> selectVar(Map<String, Object> para) throws Exception {
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
 
-		try {
-			tran.start();
+		if (para == null)
+			para = new HashMap<>();
+		para.put("useYn", "Y");
 
-			if (para == null) {
-				para = new HashMap<>();
-			}
-			para.put("useYn", "Y");
-
-			List<FX_CF_VAR> list = tran.select(FX_CF_VAR.class, para);
-			List<FxVarVo> ret = new ArrayList<FxVarVo>();
-			for (FX_CF_VAR e : list) {
-				ret.add(new FxVarVo(e.getVarName(), e.getVarVal()));
-			}
-			return ret;
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
+		List<FX_CF_VAR> list = ClassDaoEx.SelectDatas(FX_CF_VAR.class, para);
+		List<FxVarVo> ret = new ArrayList<FxVarVo>();
+		for (FX_CF_VAR e : list) {
+			ret.add(new FxVarVo(e.getVarName(), e.getVarVal()));
 		}
+		return ret;
 	}
 
+	/**
+	 * 입력된 조건에 맞는 사용중인 환경변수 목록을 조회한다.
+	 * 
+	 * @param para 조건
+	 * @return
+	 * @throws Exception
+	 */
 	public Map<String, String> selectVarMap(Map<String, Object> para) throws Exception {
-		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
+		if (para == null)
+			para = new HashMap<>();
+		para.put("useYn", "Y");
 
-		try {
-			tran.start();
+		List<FX_CF_VAR> list = ClassDaoEx.SelectDatas(FX_CF_VAR.class, para);
 
-			if (para == null) {
-				para = new HashMap<>();
-			}
-			para.put("useYn", "Y");
-
-			List<FX_CF_VAR> list = tran.select(FX_CF_VAR.class, para);
-			Map<String, String> ret = new HashMap<>();
-			for (FX_CF_VAR e : list) {
-				ret.put(e.getVarName(), e.getVarVal());
-			}
-			return ret;
-
-		} catch (Exception e) {
-			Logger.logger.error(e);
-			throw e;
-		} finally {
-			tran.stop();
+		Map<String, String> ret = new HashMap<>();
+		for (FX_CF_VAR e : list) {
+			ret.put(e.getVarName(), e.getVarVal());
 		}
+		return ret;
+
 	}
 }

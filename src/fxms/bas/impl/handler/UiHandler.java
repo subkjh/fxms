@@ -139,16 +139,16 @@ public class UiHandler extends BaseHandler {
 		try {
 			tran.start();
 
-			List<FX_UI_GRP> groupList = tran.select(FX_UI_GRP.class, wherePara);
+			List<FX_UI_GRP> groupList = tran.selectDatas(FX_UI_GRP.class, wherePara);
 
 			// 자신의 화면이 없으면 공용화면을 제공한다.
 			if (groupList.size() == 0) {
 				wherePara.put("userNo", 0);
-				groupList = tran.select(FX_UI_GRP.class, wherePara);
+				groupList = tran.selectDatas(FX_UI_GRP.class, wherePara);
 			}
 
-			List<FX_UI_GRP_ITEM> itemList = tran.select(FX_UI_GRP_ITEM.class, wherePara);
-			ret.put("attr-list", tran.select(FX_UI_GRP_ITEM_ATTR.class, wherePara));
+			List<FX_UI_GRP_ITEM> itemList = tran.selectDatas(FX_UI_GRP_ITEM.class, wherePara);
+			ret.put("attr-list", tran.selectDatas(FX_UI_GRP_ITEM_ATTR.class, wherePara));
 			ret.put("item-list", itemList);
 			ret.put("group-list", groupList);
 
