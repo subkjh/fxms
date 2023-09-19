@@ -52,7 +52,7 @@ public class ValueServiceTest {
 			if (ret.get(moNo).floatValue() > 0) {
 				System.out.println(moNo + " " + ret.get(moNo));
 				System.out.println(FxmsUtil
-						.toJson(service.getValues(moNo, null, psId, psKind, item.getDefKindCol(), startDtm, endDtm)));
+						.toJson(service.getValues(moNo, psId, psKind, item.getDefKindCol(), startDtm, endDtm)));
 			}
 		}
 	}

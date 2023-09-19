@@ -39,7 +39,6 @@ public class CheckAlarmPsValueAction extends FxRuleActionImpl {
 
 				// 현재값과 새로 수집한 데이터를 비교하여 이벤트를 발생한다.
 				EventApi.getApi().checkValue(e.getMo() //
-						, e.getMoInstance()//
 						, e.getPsItem() //
 						, prevValue //
 						, e.getValue()//

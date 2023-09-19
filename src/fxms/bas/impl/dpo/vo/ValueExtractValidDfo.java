@@ -79,7 +79,8 @@ public class ValueExtractValidDfo implements FxDfo<PsVoRawList, PsVoList> {
 				continue;
 			}
 
-			ret.add(psItem.format(raw.getValue()), mo, psItem, raw.getMoInstance());
+			// 값을 데이터 형식에 맞게 넣어 준다.
+			ret.add(psItem.format(raw.getValue()), mo, psItem);
 
 		}
 

@@ -119,6 +119,7 @@ public class PsKind {
 		this.psDataTag = psDataTag;
 		this.dataStoreDays = dataStoreDays;
 		this.dataRange = dataRange;
+		this.tblPartUnitCd = TBL_PART_UNIT_CD.None;
 
 		Range data = new Range(this.dataRange);
 

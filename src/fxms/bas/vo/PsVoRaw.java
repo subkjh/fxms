@@ -24,33 +24,21 @@ public class PsVoRaw implements Serializable, Cloneable {
 
 	/** 관리대상 */
 	private final long moNo;
-	/** 인스턴스 */
-	private final String moInstance;
 	/** 성능번호 */
 	private final String psId;
 	/** 성능값 */
 	private final Number value;
 
 	public PsVoRaw(long moNo, String psId, Number value) {
-		this(moNo, psId, value, null);
-	}
-
-	public PsVoRaw(long moNo, String psId, Number value, String moInstance) {
 		this.moNo = moNo;
 		this.psId = psId;
 		this.value = value;
-		this.moInstance = moInstance;
 	}
 
 	public PsVoRaw(Mo mo, Enum<?> psId, Number value) {
-		this(mo, psId, value, null);
-	}
-
-	public PsVoRaw(Mo mo, Enum<?> psId, Number value, Object moInstance) {
 		this.moNo = mo.getMoNo();
 		this.psId = psId.name();
 		this.value = value;
-		this.moInstance = moInstance == null ? null : String.valueOf(moInstance);
 	}
 
 	@Override
@@ -60,10 +48,6 @@ public class PsVoRaw implements Serializable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
-	}
-
-	public String getMoInstance() {
-		return moInstance;
 	}
 
 	public long getMoNo() {
@@ -83,8 +67,6 @@ public class PsVoRaw implements Serializable, Cloneable {
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("{moNo=").append(getMoNo());
-		if (moInstance != null && moInstance.length() > 0)
-			sb.append(", moInstance='").append(moInstance).append("'");
 		sb.append(", psId='").append(psId).append("'");
 		sb.append(", value=").append(value).append("}");
 

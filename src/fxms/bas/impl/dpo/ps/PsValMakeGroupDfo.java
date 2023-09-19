@@ -31,7 +31,7 @@ public class PsValMakeGroupDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 		PsVoList datas = new PsVoList("test", System.currentTimeMillis(), null);
 
 		try {
-			datas.add(1, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("MoStatus"), null);
+			datas.add(1, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("MoStatus"));
 			System.out.println(FxmsUtil.toJson(dfo.make(datas)));
 		} catch (Exception e) {
 			e.printStackTrace();

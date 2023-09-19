@@ -31,13 +31,12 @@ public interface ValueService extends FxService {
 	/**
 	 * 
 	 * @param moNo
-	 * @param moInstance
 	 * @param psId
 	 * @return
 	 * @throws RemoteException
 	 * @throws Exception
 	 */
-	public PsValueComp getCurValue(long moNo, String moInstance, String psId) throws RemoteException, Exception;
+	public PsValueComp getCurValue(long moNo, String psId) throws RemoteException, Exception;
 
 	/**
 	 * 수집된 성능 값을 조회한다.
@@ -94,7 +93,7 @@ public interface ValueService extends FxService {
 	 * @throws RemoteException
 	 * @throws Exception
 	 */
-	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws RemoteException, Exception;
 
 	/**

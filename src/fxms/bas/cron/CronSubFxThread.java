@@ -1,6 +1,7 @@
 package fxms.bas.cron;
 
 import fxms.bas.fxo.thread.QueueFxThread;
+import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.log.Logger;
 
 /**
@@ -20,6 +21,17 @@ public class CronSubFxThread extends QueueFxThread<Crontab> {
 	}
 
 	@Override
+	public boolean put(Crontab cron) {
+		
+		if (this.queue.contains(cron)) {
+			Logger.logger.debug("{}", Lang.get("The same Cron job exists."));
+			return false;
+		}
+
+		return super.put(cron);
+	}
+
+	@Override
 	protected void doInit() {
 
 	}
@@ -27,15 +39,15 @@ public class CronSubFxThread extends QueueFxThread<Crontab> {
 	@Override
 	protected void doWork(Crontab e) throws Exception {
 
-		String name = Thread.currentThread().getName();
+		String backupName = Thread.currentThread().getName();
 		if (e.getName() != null) {
-			Thread.currentThread().setName(name + "." + e.getName());
+			Thread.currentThread().setName(backupName + "." + e.getName());
 		}
 
 		long ptime = System.currentTimeMillis();
 
 		long cronRunNo = listener.onStart(e);
-		
+
 		Logger.logger.info("Cron : {}.{}", cronRunNo, e.getName());
 
 		try {
@@ -45,7 +57,7 @@ public class CronSubFxThread extends QueueFxThread<Crontab> {
 			listener.onFinished(cronRunNo, e, e2, (int) (System.currentTimeMillis() - ptime));
 			throw e2;
 		} finally {
-			Thread.currentThread().setName(name);
+			Thread.currentThread().setName(backupName);
 		}
 
 	}

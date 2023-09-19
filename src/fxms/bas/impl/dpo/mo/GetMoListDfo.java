@@ -23,7 +23,7 @@ public class GetMoListDfo implements FxDfo<Map<String, Object>, List<Mo>> {
 
 	public static void main(String[] args) {
 		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("moNo", 1002176L);
+		para.put("moTid", "F010005-FT1205");
 		GetMoListDfo dpo = new GetMoListDfo();
 		try {
 			System.out.println(FxmsUtil.toJson(dpo.selectMoList(para)));
@@ -40,12 +40,15 @@ public class GetMoListDfo implements FxDfo<Map<String, Object>, List<Mo>> {
 	}
 
 	public List<Mo> selectMoList(Map<String, Object> para) throws Exception {
+		
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_CONFIG).createClassDao();
+		
 		if (para == null) {
 			para = FxApi.makePara("delYn", "N");
 		} else {
 			para.put("delYn", "N");
 		}
+		
 		try {
 			tran.start();
 			return (List<Mo>) selectMoList(tran, para, Mo.class);

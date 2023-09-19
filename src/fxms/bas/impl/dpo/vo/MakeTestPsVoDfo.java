@@ -24,9 +24,8 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 
 		Mo mo = (Mo) data.get("mo");
 		PsItem psItem = (PsItem) data.get("psItem");
-		Object moInstance = data.get("moInstance");
 
-		return makeTestValue(mo, moInstance == null ? null : moInstance.toString(), psItem);
+		return makeTestValue(mo, psItem);
 	}
 
 	/**
@@ -35,11 +34,10 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 	 * 성능항목이 현재값이면 이전값에 일정 부분을 더하거 뺀다. 현재값이 없다면 범위 안의 값으로 랜덤 생성한다.<br>
 	 * 
 	 * @param mo         관리대상
-	 * @param moInstance 인스턴스(없으면 null)
 	 * @param psItem     성능항목
 	 * @return
 	 */
-	public PsVoRaw makeTestValue(Mo mo, String moInstance, PsItem psItem) {
+	public PsVoRaw makeTestValue(Mo mo, PsItem psItem) {
 		int value;
 		int min, max;
 
@@ -50,7 +48,7 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 
 		PsValueComp vo = null;
 		try {
-			vo = ValueApi.getApi().getCurValue(mo.getMoNo(), moInstance, psItem.getPsId());
+			vo = ValueApi.getApi().getCurValue(mo.getMoNo(), psItem.getPsId());
 		} catch (Exception e) {
 		}
 
@@ -63,7 +61,7 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 			} else {
 				value2 = 100;
 			}
-			return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), value2, moInstance);
+			return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), value2);
 		}
 
 		min = psItem.getMinVal() == null ? 0 : psItem.getMinVal().intValue();
@@ -92,7 +90,7 @@ public class MakeTestPsVoDfo implements FxDfo<Map<String, Object>, PsVoRaw> {
 			}
 		}
 
-		return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), value, moInstance);
+		return new PsVoRaw(mo.getMoNo(), psItem.getPsId(), value);
 
 	}
 

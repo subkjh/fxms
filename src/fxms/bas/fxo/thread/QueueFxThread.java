@@ -27,14 +27,20 @@ public abstract class QueueFxThread<E> extends FxThread {
 		this.waitSeconds = waitSeconds;
 	}
 
-	public void put(E e) {
+	/**
+	 * 
+	 * @param e
+	 */
+	public boolean put(E e) {
 
 //		Logger.logger.debug("FXEVENT={}", e);
 
 		try {
 			queue.put(e);
+			return true;
 		} catch (InterruptedException e1) {
 			Logger.logger.error(e1);
+			return false;
 		}
 	}
 

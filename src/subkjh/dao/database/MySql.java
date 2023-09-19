@@ -78,6 +78,12 @@ public class MySql extends DataBase {
 
 	public static final int PORT = 3306;
 
+	private static String engine = "InnoDB";
+
+	public static void setEngine(String engine) {
+		MySql.engine = engine;
+	}
+
 	/**
 	 * 시퀀스 제공 여부
 	 */
@@ -94,18 +100,10 @@ public class MySql extends DataBase {
 	}
 
 	@Override
-	public String getSqlSequenceNextVal(String sequence) {
-		if (supportSequence) {
-			return "select nextval(" + sequence + ")";
-		} else {
-			return "select nextval('" + sequence + "')";
-		}
-	}
-
-	@Override
 	public String getDataTypeFull(Column column) {
 
 		String datatype = column.getDataType().toLowerCase();
+		String md = column.getDataLength() + "," + column.getDataScale();
 
 		if (datatype.startsWith("varchar")) {
 			return "varchar(" + column.getDataLength() + ") binary ";
@@ -113,9 +111,12 @@ public class MySql extends DataBase {
 			return column.getDataType() + "(" + column.getDataLength() + ")";
 		} else if (datatype.equals("number")) {
 			if (column.getDataScale() == 0) {
-				return column.getDataLength() > 9 ? "bigint" : "int";
+//				return column.getDataLength() > 9 ? "bigint" : "int";
+				return column.getDataLength() > 9 ? "bigint(" + column.getDataLength() + ")"
+						: "int(" + column.getDataLength() + ")";
 			} else {
-				return column.getDataLength() > 9 ? "double" : "float";
+//				return column.getDataLength() > 9 ? "double" : "float";
+				return column.getDataLength() > 9 ? "double(" + md + ")" : "float(" + md + ")";
 			}
 		} else {
 			return column.getDataType();
@@ -287,27 +288,18 @@ public class MySql extends DataBase {
 		return ret;
 	}
 
-	private static String engine = "InnoDB";
-
-	public static void setEngine(String engine) {
-		MySql.engine = engine;
-	}
-
 	@Override
 	public String getSqlDrop(Sequence seq) {
 		return "delete from SEQ_TAB where SEQ_NAME = '" + seq.getSequenceName() + "'";
 	}
 
 	@Override
-	public void initPreparedStatement(PreparedStatement ps) throws SQLException {
-
-		// 이렇게 설정하면 자료를 미리 가지고 있지 않음 ( 2011-07-13 )
-		ps.setFetchSize(Integer.MIN_VALUE);
-	}
-
-	@Override
-	public String makeUrl(Map<String, Object> para) {
-		return "jdbc:mysql://" + makeUri(para);
+	public String getSqlSequenceNextVal(String sequence) {
+		if (supportSequence) {
+			return "select nextval(" + sequence + ")";
+		} else {
+			return "select nextval('" + sequence + "')";
+		}
 	}
 
 	@Override
@@ -323,6 +315,79 @@ public class MySql extends DataBase {
 		} finally {
 			tran.stop();
 		}
+	}
+
+	@Override
+	public void initPreparedStatement(PreparedStatement ps) throws SQLException {
+
+		// 이렇게 설정하면 자료를 미리 가지고 있지 않음 ( 2011-07-13 )
+		ps.setFetchSize(Integer.MIN_VALUE);
+	}
+
+	@Override
+	public boolean isUseUserPass() {
+		return true;
+	}
+
+	@Override
+	public Exception makeException(Exception e, String sql) {
+
+		StringBuffer msg = new StringBuffer();
+		if (sql != null)
+			msg.append("SQL :").append(sql);
+		msg.append("Exception=").append(e.getMessage());
+		Logger.logger.error(e);
+		Logger.logger.fail((e != null ? e.getClass().getName() + " " : "") + msg);
+
+		String errmsg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
+
+		if (errmsg.contains("duplicate")) {
+			return new DBObjectDupException(e.getMessage());
+		} else if (errmsg.indexOf("already exists") >= 0) {
+			return new DBObjectDupException(e.getMessage());
+		} else if (errmsg.indexOf("doesn't exist") >= 0) {
+			return new TableNotFoundException(e.getMessage());
+		} else if (e instanceof CommunicationsException) {
+			return new IOException(e.getMessage());
+		} else if (e.getClass().getName().indexOf("Connection") >= 0) {
+			return new IOException(e.getMessage());
+		} else if (e instanceof SQLTransientException) {
+			return new IOException(e.getMessage());
+		} else if (e instanceof SQLException) {
+			SQLException sqle = (SQLException) e;
+
+			if (sqle.getErrorCode() == 1062) {
+				return new DBObjectDupException(e.getMessage());
+			}
+			// 필드가 이미 존재할 때 발생
+			else if (sqle.getErrorCode() == 1060) {
+				return new DBObjectDupException(e.getMessage());
+			} else if (sqle.getErrorCode() == 1050 || sqle.getErrorCode() == 1051 || sqle.getErrorCode() == 1146) {
+				return new TableNotFoundException(e.getMessage());
+			} else if (sqle.getErrorCode() == 0) {
+				return new IOException(e.getMessage());
+			}
+
+		}
+
+		return e;
+	}
+
+	@Override
+	public String makeUrl(Map<String, Object> para) {
+		return "jdbc:mysql://" + makeUri(para);
+	}
+
+	@Override
+	public void setUrl(String url) {
+
+		if (url != null) {
+			String ss[] = url.split(PATTERN);
+			String s1[] = ss[ss.length - 1].split("\\?");
+			setDbName(s1[0]);
+		}
+
+		super.setUrl(url);
 	}
 
 	protected String makeUri(Map<String, Object> para) {
@@ -379,67 +444,5 @@ public class MySql extends DataBase {
 			return prevPara + "&" + name + "=" + value;
 		}
 		// }
-	}
-
-	@Override
-	public Exception makeException(Exception e, String sql) {
-
-		String msg = "";
-
-		if (sql != null)
-			msg += "SQL [" + sql + "]";
-		msg += " EXCEPTION=[" + e.getMessage() + "]";
-
-		Logger.logger.error(e);
-		Logger.logger.fail((e != null ? e.getClass().getName() + " " : "") + msg);
-		String errmsg = e.getMessage() == null ? "" : e.getMessage().toLowerCase();
-
-		if (errmsg.contains("duplicate")) {
-			return new DBObjectDupException(e.getMessage());
-		} else if (errmsg.indexOf("already exists") >= 0) {
-			return new DBObjectDupException(e.getMessage());
-		} else if (errmsg.indexOf("doesn't exist") >= 0) {
-			return new TableNotFoundException(e.getMessage());
-		} else if (e instanceof CommunicationsException) {
-			return new IOException(e.getMessage());
-		} else if (e.getClass().getName().indexOf("Connection") >= 0) {
-			return new IOException(e.getMessage());
-		} else if (e instanceof SQLTransientException) {
-			return new IOException(e.getMessage());
-		} else if (e instanceof SQLException) {
-			SQLException sqle = (SQLException) e;
-
-			if (sqle.getErrorCode() == 1062) {
-				return new DBObjectDupException(e.getMessage());
-			}
-			// 필드가 이미 존재할 때 발생
-			else if (sqle.getErrorCode() == 1060) {
-				return new DBObjectDupException(e.getMessage());
-			} else if (sqle.getErrorCode() == 1050 || sqle.getErrorCode() == 1051 || sqle.getErrorCode() == 1146) {
-				return new TableNotFoundException(e.getMessage());
-			} else if (sqle.getErrorCode() == 0) {
-				return new IOException(e.getMessage());
-			}
-
-		}
-
-		return e;
-	}
-
-	@Override
-	public void setUrl(String url) {
-
-		if (url != null) {
-			String ss[] = url.split(PATTERN);
-			String s1[] = ss[ss.length - 1].split("\\?");
-			setDbName(s1[0]);
-		}
-
-		super.setUrl(url);
-	}
-
-	@Override
-	public boolean isUseUserPass() {
-		return true;
 	}
 }

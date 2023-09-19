@@ -85,7 +85,7 @@ public class ValueApiInfluxDb extends ValueApiDfo {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws Exception {
 
 		if (useTsdb) {
@@ -140,6 +140,7 @@ public class ValueApiInfluxDb extends ValueApiDfo {
 
 		return ret;
 	}
+
 	@Override
 	public String getState(LOG_LEVEL level) {
 		StringBuffer sb = new StringBuffer();

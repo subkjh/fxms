@@ -94,8 +94,8 @@ public class PsHandler extends BaseHandler {
 	@MethodDescr(name = "관리대상수집데이터조회", description = "관리대상이 수집한 내용을 보여준다.")
 	public Object getValues(SessionVo session, GetValuesDto dto) throws Exception {
 		PsItem psItem = PsApi.getApi().getPsItem(dto.getPsId());
-		return ValueApi.getApi().getValues(dto.getMoNo(), dto.getMoInstance(), dto.getPsId(), dto.getPsKindName(),
-				psItem.getDefKindCol(), dto.getStartDate(), dto.getEndDate());
+		return ValueApi.getApi().getValues(dto.getMoNo(), dto.getPsId(), dto.getPsKindName(), psItem.getDefKindCol(),
+				dto.getStartDate(), dto.getEndDate());
 	}
 
 	@MethodDescr(name = "수집항목조회", description = "처리되고 있는 수집 항목을 조회한다.")

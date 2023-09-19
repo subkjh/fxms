@@ -503,7 +503,6 @@ public class AbstractDaoExecutor {
 			pstmt = getPrepareStatement(sql);
 			setPreSt(pstmt, para);
 			return pstmt.executeUpdate();
-
 		} catch (Exception e) {
 			throw database.makeException(e, sql);
 		} finally {
@@ -559,7 +558,6 @@ public class AbstractDaoExecutor {
 						(type == ExecuteType.Array ? Arrays.toString((Object[]) obj)
 								: type == ExecuteType.Null ? "null" : "size=" + ((Collection<Object[]>) obj).size()),
 						e.getMessage());
-
 				throw e;
 			}
 

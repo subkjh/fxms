@@ -48,8 +48,8 @@ public class PsVoList extends ArrayList<PsVo> implements Serializable {
 		this.sign = raw.getSign();
 	}
 
-	public void add(Number value, Moable mo, PsItem psItem, String moInstance) {
-		this.add(new PsVo(value, mo, psItem, moInstance));
+	public void add(Number value, Moable mo, PsItem psItem) {
+		this.add(new PsVo(value, mo, psItem));
 	}
 
 	public long getMstime() {

@@ -67,13 +67,11 @@ public class PsStatMakeDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, Intege
 		String srcTable = psKindSrc.getTableName(psTable, psDtm);
 
 		dest.append(PsDpo.MO_NO.getName());
-		dest.append(", ").append(PsDpo.MO_INSTANCE.getName());
 		dest.append(", ").append(PsDpo.PS_DATE.getName());
 		dest.append(", ").append(PsDpo.DATA_COUNT.getName());
 		dest.append(", ").append(PsDpo.INS_DATE.getName());
 
 		src.append(PsDpo.MO_NO.getName());
-		src.append(", ").append(PsDpo.MO_INSTANCE.getName());
 		src.append(", ").append(psKindDst.getHstimeStart(psDtm));
 		src.append(", count(1)");
 		src.append(", ").append(DateUtil.getDtm());
@@ -86,8 +84,9 @@ public class PsStatMakeDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, Intege
 			for (String func : item.getPsKindCols()) {
 				String colName = item.getPsColumn() + "_" + func;
 				dest.append(", ").append(colName);
-				src.append(", ").append(func).append("(").append(psKindSrc.isRaw() ? item.getPsColumn() : colName)
-						.append(")");
+				
+				src.append(", ");
+				src.append(func).append("(").append(psKindSrc.isRaw() ? item.getPsColumn() : colName).append(")");
 			}
 		}
 
@@ -98,7 +97,7 @@ public class PsStatMakeDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, Intege
 				.append(" \n");
 		sql.append("and ").append(PsDpo.PS_DATE.getName()).append(" <= ").append(psKindDst.getHstimeEnd(psDtm))
 				.append(" \n");
-		sql.append("group by ").append(PsDpo.MO_NO.getName()).append(", ").append(PsDpo.MO_INSTANCE.getName());
+		sql.append("group by ").append(PsDpo.MO_NO.getName());
 
 		return sql.toString();
 

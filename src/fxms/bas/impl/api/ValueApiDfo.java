@@ -14,7 +14,6 @@ import fxms.bas.impl.dpo.vo.UpdateCurValueDfo;
 import fxms.bas.impl.dpo.vo.ValueAddDpo;
 import fxms.bas.impl.dpo.vo.ValueCurMap;
 import fxms.bas.impl.dpo.vo.ValueExtractValidDfo;
-import fxms.bas.impl.dpo.vo.ValueWriteFileDfo;
 import fxms.bas.mo.Mo;
 import fxms.bas.vo.PsItem;
 import fxms.bas.vo.PsKind;
@@ -23,6 +22,7 @@ import fxms.bas.vo.PsValueSeries;
 import fxms.bas.vo.PsValues;
 import fxms.bas.vo.PsVoList;
 import fxms.bas.vo.PsVoRawList;
+import subkjh.bas.co.lang.Lang;
 import subkjh.bas.co.log.Logger;
 import subkjh.bas.co.utils.DateUtil;
 
@@ -49,14 +49,15 @@ public class ValueApiDfo extends ValueApi {
 		}
 
 	}
-	
-	public ValueApiDfo()
-	{
-		
+
+	public ValueApiDfo() {
+
 	}
 
 	@Override
 	public int addValue(PsVoRawList rawList, boolean checkAlarm) {
+
+		Logger.logger.debug("rawList={}", rawList.size());
 
 		int ret = 0;
 
@@ -71,13 +72,20 @@ public class ValueApiDfo extends ValueApi {
 			Logger.logger.error(e);
 		}
 
+		// 1분 이내 수집된 데이터인 경우에 한하여 업데이트한다.
+		if (list.getMstime() < System.currentTimeMillis() - PsApi.UPDATE_VALID_TIME) {
+			Logger.logger.debug("{}, psDate={}",
+					Lang.get("Data collected a long time ago does not update current values."), list.getHstime());
+			return ret;
+		}
+
 		// 파일에 별도 보관한다.(테스트용)
 		// TODO : Remove
-		try {
-			new ValueWriteFileDfo().write(list);
-		} catch (Exception e) {
-			Logger.logger.error(e);
-		}
+//		try {
+//			new ValueWriteFileDfo().write(list);
+//		} catch (Exception e) {
+//			Logger.logger.error(e);
+//		}
 
 		// 4. 알람확인
 		if (checkAlarm) {
@@ -112,18 +120,17 @@ public class ValueApiDfo extends ValueApi {
 	}
 
 	@Override
-	public PsValueComp getCurValue(long moNo, String moInstance, String psId) throws Exception {
+	public PsValueComp getCurValue(long moNo, String psId) throws Exception {
 
 		// 캐쉬에 존재하는지 확인
-		PsValueComp ret = curValues.getCurValueInCache(moNo, moInstance, psId);
+		PsValueComp ret = curValues.getCurValueInCache(moNo, psId);
 
 		if (ret != null) {
 			return ret;
 		}
 
 		// 저장소에서 읽어오기
-		List<PsValueComp> list = new SelectCurValueDfo().selectCurValues(
-				makePara("moNo", moNo, "moInstance", moInstance == null ? "*" : moInstance, "psId", psId));
+		List<PsValueComp> list = new SelectCurValueDfo().selectCurValues(makePara("moNo", moNo, "psId", psId));
 		ret = list.size() == 1 ? list.get(0) : null;
 
 		// 캐쉬에 보관하기
@@ -168,7 +175,7 @@ public class ValueApiDfo extends ValueApi {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
+	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws Exception {
 
 		// 성능항목 확인
@@ -178,7 +185,7 @@ public class ValueApiDfo extends ValueApi {
 
 		PsKind psKind = PsApi.getApi().getPsKind(psKindName);
 
-		return new SelectValuesDfo().selectValues(mo, moInstance, item, psKind, psKindCol, startDtm, endDtm);
+		return new SelectValuesDfo().selectValues(mo, item, psKind, psKindCol, startDtm, endDtm);
 	}
 
 	@Override

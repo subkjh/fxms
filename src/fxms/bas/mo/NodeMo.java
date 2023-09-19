@@ -15,32 +15,25 @@ public class NodeMo extends FxMo {
 
 	public static final String MO_CLASS = "NODE";
 
-	/** 노드IP주소 */
-	private String nodeIpAddr;
-
-	/** 통신방식 */
-	private String commProtc;
-
-	/** 통신포트번호 */
-	private Integer commPortNo = 0;
-
-	/** 설치위치메모 */
-	private String inloMemo;
-
-	/** 연락처명 */
-	private String cntcNm;
-
-	/** 연락처전화번호 */
-	private String cntcTelNo;
-
-	/** 설치일자 */
-	private Integer instYmd;
-
-	/** FX서버주소 */
-	private String fxsvrIpAddr;
+	private String nodeIpAddr; // 노드IP주소
+	private String commProtc; // 통신방식
+	private Integer commPortNo = 0; // 통신포트번호
+	private String inloMemo; // 설치위치메모
+	private String cntcNm; // 연락처명
+	private String cntcTelNo; // 연락처전화번호
+	private Integer instYmd; // 설치일자
+	private String fxsvrIpAddr; // FX서버주소
 
 	public NodeMo() {
 		setMoClass(MO_CLASS);
+	}
+
+	public NodeMo(String name, String ip) {
+		setMoName(name);
+		setMoDispName(ip);
+		setMoClass(MO_CLASS);
+		setMoType("NODE");
+		setNodeIpAddr(ip);
 	}
 
 	/**

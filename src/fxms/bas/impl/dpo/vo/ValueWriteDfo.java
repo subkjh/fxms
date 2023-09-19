@@ -18,6 +18,7 @@ import subkjh.bas.co.log.Logger;
 import subkjh.dao.DaoExecutor;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.database.DataBase;
+import subkjh.dao.exp.DBObjectDupException;
 
 /**
  * 수집 데이터를 기록한다.
@@ -26,7 +27,7 @@ import subkjh.dao.database.DataBase;
  *
  */
 public class ValueWriteDfo implements FxDfo<PsVoList, Map<String, Integer>> {
-	
+
 	public static void main(String[] args) {
 
 		MoApi.api = new MoApiDfo();
@@ -35,14 +36,13 @@ public class ValueWriteDfo implements FxDfo<PsVoList, Map<String, Integer>> {
 		PsVoList datas = new PsVoList("test", System.currentTimeMillis(), null);
 
 		try {
-			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePowerFactor"), null);
-			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePower"), null);
+			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePowerFactor"));
+			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePower"));
 			System.out.println(FxmsUtil.toJson(dfo.write(datas)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 
 	@Override
 	public Map<String, Integer> call(FxFact fact, PsVoList data) throws Exception {
@@ -86,6 +86,22 @@ public class ValueWriteDfo implements FxDfo<PsVoList, Map<String, Integer>> {
 				int ret = executeSql(psTable.getSqlInsert(), psTable.getValueArrayList());
 				commit();
 				return ret;
+			} catch (DBObjectDupException e) {
+
+				int count = 0;
+				for (Object[] datas : psTable.getValueArrayList()) {
+					try {
+						int ret = executeSql(psTable.getSqlInsert(), datas);
+						if (ret > 0) {
+							count += ret;
+						}
+					} catch (Exception e2) {
+						Logger.logger.fail(e2.getMessage());
+					}
+				}
+				commit();
+				return count;
+
 			} catch (Exception e) {
 				Logger.logger.fail("SQL={}", psTable.getSqlInsert());
 				Logger.logger.error(e);
@@ -115,6 +131,7 @@ public class ValueWriteDfo implements FxDfo<PsVoList, Map<String, Integer>> {
 
 			List<PsValTable> tableList;
 			int count = 0;
+			long ptime = System.currentTimeMillis();
 			ValueBatchSaver saver;
 			Map<String, Integer> map = new HashMap<String, Integer>();
 
@@ -127,7 +144,8 @@ public class ValueWriteDfo implements FxDfo<PsVoList, Map<String, Integer>> {
 
 					count = saver.executeBatch();
 
-					Logger.logger.info("TABLE({}) DATAS({}) ADDED", psTable.getRealPsTable(), count);
+					Logger.logger.info("table={}, hstime={}, row={}, value={} ADDED. {}(ms)", psTable.getRealPsTable(),
+							datas.getHstime(), count, datas.size(), System.currentTimeMillis() - ptime);
 
 					map.put(psTable.getPsTable(), count);
 

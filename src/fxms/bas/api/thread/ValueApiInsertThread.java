@@ -107,6 +107,7 @@ public class ValueApiInsertThread extends ValueApiBasThread {
 
 	}
 
+	/** key : 테이블+통계+시간 */
 	private final Map<String, PsStatReqVo> statReqMap = new HashMap<String, PsStatReqVo>();
 
 	/**

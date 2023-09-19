@@ -14,17 +14,14 @@ import subkjh.dao.def.Index.INDEX_TYPE;
  */
 
 @FxTable(name = "FX_V_ACUR", comment = "성능수집최신값")
-@FxIndex(name = "FX_V_ACUR__PK", type = INDEX_TYPE.PK, columns = { "MO_NO", "MO_INSTANCE", "PS_ID" })
-public class FX_V_ACUR implements Serializable {
+@FxIndex(name = "FX_V_ACUR__PK", type = INDEX_TYPE.PK, columns = { "MO_NO", "PS_ID" })
+public class FX_V_ACUR  {
 
 	public FX_V_ACUR() {
 	}
 
 	@FxColumn(name = "MO_NO", size = 19, comment = "MO번호")
 	private long moNo;
-
-	@FxColumn(name = "MO_INSTANCE", size = 50, comment = "MO인스턴스")
-	private String moInstance;
 
 	@FxColumn(name = "PS_ID", size = 50, comment = "성능ID")
 	private String psId;
@@ -57,24 +54,6 @@ public class FX_V_ACUR implements Serializable {
 	 */
 	public void setMoNo(long moNo) {
 		this.moNo = moNo;
-	}
-
-	/**
-	 * MO인스턴스
-	 * 
-	 * @return MO인스턴스
-	 */
-	public String getMoInstance() {
-		return moInstance;
-	}
-
-	/**
-	 * MO인스턴스
-	 * 
-	 * @param moInstance MO인스턴스
-	 */
-	public void setMoInstance(String moInstance) {
-		this.moInstance = moInstance;
 	}
 
 	/**

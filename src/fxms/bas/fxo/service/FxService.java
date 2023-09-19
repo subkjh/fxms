@@ -47,10 +47,6 @@ public interface FxService extends Remote {
 	 */
 	public long ping(String who) throws RemoteException, Exception;
 
-	public void runClass(String runnableClassName) throws RemoteException, Exception;
-
-	public void runCron(String name) throws RemoteException, Exception;
-
 	public String setLogLevel(String threadName, String level) throws RemoteException, Exception;
 
 	public void stop(String reason) throws RemoteException, Exception;

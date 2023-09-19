@@ -24,7 +24,6 @@ public class WsPsValueClient {
 
 	class RecvPsVo {
 		long moNo;
-		String moInstance;
 		String psId;
 		Number value;
 		String date;
@@ -33,7 +32,7 @@ public class WsPsValueClient {
 	public static void main(String[] args) throws Exception {
 
 		SystemHandlerTest c = new SystemHandlerTest();
-		List<Map<String, Object>> list = null ; //c.getVarList();
+		List<Map<String, Object>> list = null; // c.getVarList();
 		String host = "10.0.1.11";
 		int port = 63819;
 
@@ -183,7 +182,6 @@ public class WsPsValueClient {
 		req.setAction(action);
 		req.setMoNo(moNo);
 		req.setPsId(psId);
-		req.setMoInstance(null);
 
 		return gson.toJson(req);
 	}

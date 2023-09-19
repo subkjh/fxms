@@ -17,7 +17,7 @@ public class AlarmOccurEvent extends AlarmEvent {
 	/**
 	 * 
 	 * @param moNo      관리대상번호
-	 * @param instance  인스턴서<br>
+	 * @param moInstance  인스턴서<br>
 	 *                  null이거나 공백이면 무시됩니다.
 	 * @param alarmCode 경보코드
 	 * @return 관리대상번호 + _ + [ 인스턴스 + _ ] + 경보코드

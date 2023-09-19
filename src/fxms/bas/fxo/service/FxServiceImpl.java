@@ -439,45 +439,6 @@ public abstract class FxServiceImpl extends UnicastRemoteObject implements FxSer
 		return ret;
 	}
 
-	@Override
-	public void runClass(String runnableClassName) throws RemoteException, Exception {
-
-		try {
-			Object obj = Class.forName(runnableClassName).newInstance();
-			if (obj instanceof Runnable) {
-				Thread t = new Thread((Runnable) obj);
-				t.setName(obj.getClass().getSimpleName());
-				t.start();
-				logger.info(Logger.makeString(t.getName(), "RUNNING"));
-			} else {
-				throw new Exception("NOT Runnable Class");
-			}
-
-		} catch (Exception e) {
-			logger.error(e);
-			logger.fail(Logger.makeString(runnableClassName, "FAIL"));
-			throw e;
-		}
-
-	}
-
-	@Override
-	public void runCron(String name) throws RemoteException, Exception {
-
-		logger.info(name);
-
-		try {
-			cronFxThread.runCron(name);
-			if (cronFxThread == null) {
-				throw new Exception("크론 서비스가 실행중이 아닙니다.");
-			}
-		} catch (Exception e) {
-			logger.error(e);
-			throw e;
-		}
-
-	}
-
 	/**
 	 * 이벤트를 보낸다.
 	 * 

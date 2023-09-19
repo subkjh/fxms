@@ -10,7 +10,6 @@ public class PsValueComp implements Serializable {
 	private static final long serialVersionUID = 2737291211793694904L;
 
 	private final long moNo;
-	private final String moInstance;
 	private final String psId;
 
 	private final Number curValue;
@@ -18,18 +17,16 @@ public class PsValueComp implements Serializable {
 	private final Number prevValue;
 	private final long prevDate;
 
-	public PsValueComp(long moNo, String moInstance, String psId, Number prevDate, Number prevValue, Number curDate, Number curValue) {
+	public PsValueComp(long moNo, String psId, Number prevDate, Number prevValue, Number curDate, Number curValue) {
 		this.moNo = moNo;
-		this.moInstance = moInstance;
 		this.psId = psId;
 		this.prevDate = prevDate != null ? prevDate.longValue() : 0;
 		this.prevValue = prevValue;
 		this.curDate = curDate != null ? curDate.longValue() : 0;
 		this.curValue = curValue;
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("curDate=").append(curDate);
 		sb.append(",curValue=").append(curValue);
@@ -59,11 +56,5 @@ public class PsValueComp implements Serializable {
 	public String getPsId() {
 		return psId;
 	}
-
-	public String getMoInstance() {
-		return moInstance;
-	}
-	
-	
 
 }

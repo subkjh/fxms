@@ -46,8 +46,7 @@ public class UpdateCurValueDfo implements FxDfo<PsVoList, Boolean> {
 		for (PsVo value : voList) {
 			v = new FX_V_ACUR();
 			v.setCurCollDtm(dtm);
-			v.setCurCollVal(Math.round(value.getValue().doubleValue() * 100) / 100D);
-			v.setMoInstance(value.getMoInstance() == null ? "*" : value.getMoInstance());
+			v.setCurCollVal(value.getValue().doubleValue());
 			v.setMoNo(value.getMo().getMoNo());
 			v.setPsId(value.getPsItem().getPsId());
 			updateList.add(v);

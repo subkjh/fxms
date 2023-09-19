@@ -8,7 +8,6 @@
 		insert into FX_V_ACUR                 /* 성능수집최신값 */
 		(
 			  MO_NO                     /* MO번호 */ 
-			, MO_INSTANCE               /* MO인스턴스 */ 
 			, PS_ID                     /* 성능ID */ 
 			, PRE_COLL_VAL              /* 이전수집값 */ 
 			, CUR_COLL_VAL              /* 최근수집값 */ 
@@ -16,7 +15,6 @@
 			, CUR_COLL_DTM              /* 최근수집일시 */ 
 		) values ( 
 			 $getMoNo()
-			, $getMoInstance()
 			, $getPsId()
 			, $getPreCollVal()
 			, $getCurCollVal()

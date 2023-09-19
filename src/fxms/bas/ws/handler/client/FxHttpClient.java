@@ -41,7 +41,6 @@ public class FxHttpClient {
 		para.put("moNo", 20003);
 		para.put("psKindName", "15M");
 		para.put("psId", "UNDEF");
-		para.put("moInstance", "P0102020045");
 		para.put("startDate", 20230707000000L);
 		para.put("endDate", 20230707235959L);
 

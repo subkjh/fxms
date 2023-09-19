@@ -28,7 +28,7 @@ import subkjh.dao.database.DBManager;
 import subkjh.dao.database.DataBase;
 
 /**
- * 함수를 이용하여 통계 생성한다.
+ * InfluxDb를 이용하여 통계를 생성한다.
  * 
  * @author subkjh
  *
@@ -47,16 +47,14 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, 
 
 	public static void main(String[] args) throws Exception {
 		PsStatMakeInfluxDfo dfo = new PsStatMakeInfluxDfo();
-		dfo.generateStatistics("FX_V_MOST", PsKind.PSKIND_5M, 20230530121000L);
+		dfo.generateStatistics("FX_V_EPWR", PsKind.PSKIND_15M, 20230905121000L);
 	}
 
 	private final int IDX_MO = 0;
-
 	private final int IDX_PSDATE = 1;
-
 	private final int IDX_DATA_COUNT = 2;
-
 	private final int IDX_INSDATE = 3;
+	private final String MO_NO = "moNo";
 
 	@Override
 	public Integer call(FxFact fact, FX_PS_STAT_CRE data) throws Exception {
@@ -223,7 +221,7 @@ public class PsStatMakeInfluxDfo extends PsDpo implements FxDfo<FX_PS_STAT_CRE, 
 		}
 		sql.append("from ").append(psTable).append("\n");
 		sql.append("where time >= ").append(startTime).append(" and time < ").append(endTime).append("\n");
-		sql.append("group by time(").append(interval).append("), moNo fill(null)");
+		sql.append("group by time(").append(interval).append("), ").append(MO_NO).append(" fill(null)");
 
 		return sql.toString();
 

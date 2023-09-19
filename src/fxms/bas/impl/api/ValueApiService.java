@@ -71,9 +71,9 @@ public class ValueApiService extends ValueApi implements FxApiServiceTag {
 	}
 
 	@Override
-	public PsValueComp getCurValue(long moNo, String moInstance, String psId) throws Exception {
+	public PsValueComp getCurValue(long moNo, String psId) throws Exception {
 		ValueService svc = getValueService();
-		return svc.getCurValue(moNo, moInstance, psId);
+		return svc.getCurValue(moNo, psId);
 	}
 
 	@Override
@@ -96,10 +96,10 @@ public class ValueApiService extends ValueApi implements FxApiServiceTag {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol,
-			long startDtm, long endDtm) throws Exception {
+	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
+			long endDtm) throws Exception {
 		ValueService svc = getValueService();
-		return svc.getValues(moNo, moInstance, psId, psKindName, psKindCol, startDtm, endDtm);
+		return svc.getValues(moNo, psId, psKindName, psKindCol, startDtm, endDtm);
 
 	}
 

@@ -64,8 +64,8 @@ public class LoginHandler extends BaseHandler {
 
 			} else {
 
-				String userId = getString(map, "userId");
-				String userPwd = getString(map, "userPwd");
+				String userId = getString(map, "userId", "email");
+				String userPwd = getString(map, "userPwd", "password");
 
 				// 로그인 확인
 				session = UserApi.getApi().login(userId, userPwd, hostname, "ui");

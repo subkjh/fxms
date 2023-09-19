@@ -1,8 +1,5 @@
 package fxms.bas.cron;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fxms.bas.fxo.adapter.FxAdapterImpl;
 import subkjh.bas.co.log.RunCntVo;
 
@@ -15,15 +12,10 @@ import subkjh.bas.co.log.RunCntVo;
 public abstract class Crontab extends FxAdapterImpl {
 
 	private Cron cron;
-
 	private final RunCntVo<?> counter;
-	private final Map<String, Object> inPara;
-	private final Map<String, Object> outPara;
 
 	public Crontab() {
 		this.counter = new RunCntVo<>();
-		this.inPara = new HashMap<String, Object>();
-		this.outPara = new HashMap<String, Object>();
 	}
 
 	protected abstract String getSchedule();
@@ -32,19 +24,45 @@ public abstract class Crontab extends FxAdapterImpl {
 		return counter;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Crontab) {
+			Crontab o = (Crontab) obj;
+			if (o.getClass().getName().equals(getClass().getName())) {
+				return true;
+			}
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return 1;
+	}
+
 	public Cron getCron() {
 		return cron;
 	}
 
-	public Map<String, Object> getInPara() {
-		return inPara;
+	/**
+	 * 입력 일자
+	 * 
+	 * @return
+	 */
+	public Object getInPara() {
+		return null;
 	}
 
-	public Map<String, Object> getOutPara() {
-		return outPara;
+	/**
+	 * 출력 내용
+	 * 
+	 * @return
+	 */
+	public Object getOutPara() {
+		return null;
 	}
 
-	public String getGroup() {
+	public String getThreadGroup() {
 		return "single";
 	}
 

@@ -63,18 +63,17 @@ public class ValueServiceImpl extends FxServiceImpl implements ValueService {
 	}
 
 	@Override
-	public PsValueComp getCurValue(long moNo, String moInstance, String psId) throws RemoteException, Exception {
+	public PsValueComp getCurValue(long moNo, String psId) throws RemoteException, Exception {
 
 		PsValueComp ret = null;
 		try {
-			ret = ValueApi.getApi().getCurValue(moNo, moInstance, psId);
+			ret = ValueApi.getApi().getCurValue(moNo, psId);
 			return ret;
 		} catch (Exception e) {
 			logger.error(e);
 			return null;
 		} finally {
-			logger.info("moNo={}, moInstance={}, psId={} --> {}", moNo, moInstance, psId,
-					ret == null ? "error" : ret.toString());
+			logger.info("moNo={}, psId={} --> {}", moNo, psId, ret == null ? "error" : ret.toString());
 		}
 
 	}
@@ -135,12 +134,12 @@ public class ValueServiceImpl extends FxServiceImpl implements ValueService {
 	}
 
 	@Override
-	public List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol,
+	public List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol,
 			long startDtm, long endDtm) throws RemoteException, Exception {
 
 		List<PsValues> list = null;
 		try {
-			list = ValueApi.getApi().getValues(moNo, moInstance, psId, psKindName, psKindCol, startDtm, endDtm);
+			list = ValueApi.getApi().getValues(moNo, psId, psKindName, psKindCol, startDtm, endDtm);
 			return list;
 		} catch (NotFoundException e) {
 			logger.fail(e.getMessage());
@@ -149,8 +148,8 @@ public class ValueServiceImpl extends FxServiceImpl implements ValueService {
 			logger.error(e);
 			throw e;
 		} finally {
-			logger.info("moNo={}, moInstance={}, psId={}, psKindName={}, psKindCol={}, startDtm={}, endDtm={} --> {}",
-					moNo, moInstance, psId, psKindName, psKindCol, startDtm, endDtm,
+			logger.info("moNo={}, psId={}, psKindName={}, psKindCol={}, startDtm={}, endDtm={} --> {}",
+					moNo, psId, psKindName, psKindCol, startDtm, endDtm,
 					list == null ? "error" : list.size());
 		}
 

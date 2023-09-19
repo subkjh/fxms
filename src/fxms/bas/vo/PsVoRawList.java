@@ -54,11 +54,11 @@ public class PsVoRawList extends ArrayList<PsVoRaw> implements Serializable {
 		}
 	}
 
-	public PsVoRaw add(Mo mo, String instance, Enum<?> psId, Number value) {
+	public PsVoRaw add(Mo mo, Enum<?> psId, Number value) {
 		if (mo == null || psId == null || value == null)
 			return null;
 
-		PsVoRaw val = new PsVoRaw(mo, psId, value, instance);
+		PsVoRaw val = new PsVoRaw(mo, psId, value);
 		add(val);
 		return val;
 	}

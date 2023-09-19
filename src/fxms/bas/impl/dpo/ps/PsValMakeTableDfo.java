@@ -34,8 +34,8 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 		PsVoList datas = new PsVoList("test", System.currentTimeMillis(), null);
 
 		try {
-			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePowerFactor"), null);
-			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePower"), null);
+			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePowerFactor"));
+			datas.add(2, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("ePower"));
 			System.out.println(FxmsUtil.toJson(dfo.getTables(datas)));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 
 			// 값을 설정합니다.
 
-			valueArray = psTable.getValue(val.getMo().getMoNo(), val.getMoInstance());
+			valueArray = psTable.getValue(val.getMo().getMoNo());
 			if (valueArray == null) {
 
 				valueArray = new Object[psTable.getColSize()];
@@ -86,13 +86,12 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 				}
 
 				valueArray[0] = val.getMo().getMoNo();
-				valueArray[1] = val.getMoInstance();
-				valueArray[2] = datas.getHstime();
+				valueArray[1] = datas.getHstime();
 
-				psTable.putValue(val.getMo().getMoNo(), val.getMoInstance(), valueArray);
+				psTable.putValue(val.getMo().getMoNo(),  valueArray);
 			}
 
-			valueArray[column] = item.convert(val.getValue());
+			valueArray[column] = val.getValue();
 
 		}
 
@@ -125,7 +124,7 @@ public class PsValMakeTableDfo extends PsDpo implements FxDfo<PsVoList, List<PsV
 			if (psTable == null) {
 				psTable = new PsValTable(tableName, item.getPsTable());
 				psTable.addColumn(null, PsDpo.MO_NO.getName(), ValueSaver.TYPE.Long);
-				psTable.addColumn(null, PsDpo.MO_INSTANCE.getName(), ValueSaver.TYPE.String);
+//				psTable.addColumn(null, PsDpo.MO_INSTANCE.getName(), ValueSaver.TYPE.String);
 				psTable.addColumn(null, PsDpo.PS_DATE.getName(), ValueSaver.TYPE.Long);
 				map.put(tableName, psTable);
 			}

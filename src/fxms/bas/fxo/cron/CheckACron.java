@@ -12,6 +12,7 @@ import fxms.bas.co.CoCode.ALARM_LEVEL;
 import fxms.bas.co.CoCode.ALARM_RLSE_RSN_CD;
 import fxms.bas.co.CoCode.MO_STATUS;
 import fxms.bas.cron.Crontab;
+import fxms.bas.exp.NotFoundException;
 import fxms.bas.fxo.FxAttr;
 import fxms.bas.fxo.FxCfg;
 import fxms.bas.fxo.adapter.FxAdapterInfo;
@@ -55,6 +56,7 @@ public class CheckACron extends Crontab {
 			e.printStackTrace();
 		}
 	}
+
 	@FxAttr(name = "schedule", description = "실행계획", value = "* * * * *")
 	private String schedule;
 
@@ -96,7 +98,7 @@ public class CheckACron extends Crontab {
 	}
 
 	@Override
-	public String getGroup() {
+	public String getThreadGroup() {
 		return "CollectAnalysis";
 	}
 
@@ -142,11 +144,13 @@ public class CheckACron extends Crontab {
 						event.setAlarmCfgNo(vo.getAlarmCfgNo());
 						try {
 							AlarmApi.getApi().fireAlarm(mo.getMoNo(), vo.getAlcdNo(), null);
+						} catch (NotFoundException e) {
+							Logger.logger.debug("fail : {}", e.getMessage());
 						} catch (Exception e) {
 							Logger.logger.error(e);
 						}
 					}
-					
+
 				}
 			}
 		}

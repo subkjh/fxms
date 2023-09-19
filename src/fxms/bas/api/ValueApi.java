@@ -135,12 +135,11 @@ public abstract class ValueApi extends FxApi {
 	/**
 	 * 현재 성능을 조회합니다.
 	 * 
-	 * @param moNo     MO번호
-	 * @param instance 인스턴스
-	 * @param perfNo   성능항목
+	 * @param moNo   MO번호
+	 * @param perfNo 성능항목
 	 * @return 현재값
 	 */
-	public abstract PsValueComp getCurValue(long moNo, String moInstance, String psId) throws Exception;
+	public abstract PsValueComp getCurValue(long moNo, String psId) throws Exception;
 
 	@Override
 	public String getState(LOG_LEVEL level) {
@@ -201,7 +200,7 @@ public abstract class ValueApi extends FxApi {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract List<PsValues> getValues(long moNo, String moInstance, String psId, String psKindName, String psKindCol, long startDtm,
+	public abstract List<PsValues> getValues(long moNo, String psId, String psKindName, String psKindCol, long startDtm,
 			long endDtm) throws Exception;
 
 	/**

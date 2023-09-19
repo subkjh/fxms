@@ -16,16 +16,25 @@ import subkjh.bas.co.utils.DateUtil;
 import subkjh.dao.ClassDao;
 import subkjh.dao.database.DBManager;
 import subkjh.dao.def.Column;
-import subkjh.dao.def.Index;
-import subkjh.dao.def.Index.INDEX_TYPE;
 import subkjh.dao.def.Table;
 
 /**
  * 수집 데이터를 기록한 테이블을 생성한다.
+ * 
  * @author subkjh
  *
  */
-public class PsCreateTableDfo extends PsDpo implements FxDfo<Void, Integer> {
+public class PsTableCreateDfo extends PsDpo implements FxDfo<Void, Integer> {
+
+	public static void main(String[] args) {
+		PsTableCreateDfo dfo = new PsTableCreateDfo();
+		try {
+			dfo.makeTables();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public Integer call(FxFact fact, Void data) throws Exception {
@@ -48,6 +57,7 @@ public class PsCreateTableDfo extends PsDpo implements FxDfo<Void, Integer> {
 			return sb.toString();
 		}
 
+		PsTableGetInfoDfo dfo = new PsTableGetInfoDfo();
 		Map<String, Table> tableMap = new HashMap<String, Table>();
 		Table table;
 		List<String> tableNames = new ArrayList<String>();
@@ -64,7 +74,7 @@ public class PsCreateTableDfo extends PsDpo implements FxDfo<Void, Integer> {
 			for (String tableName : tableNames) {
 				table = tableMap.get(tableName);
 				if (table == null) {
-					table = makeTable(tableName, psItem, psKind);
+					table = dfo.makeTableInfo(tableName, psItem, psKind);
 					tableMap.put(table.getName(), table);
 				}
 				// 컬럼을 추가한다.
@@ -129,45 +139,20 @@ public class PsCreateTableDfo extends PsDpo implements FxDfo<Void, Integer> {
 	private String createTable(PsKind psKind, long hstime) throws Exception {
 
 		StringBuffer sb = new StringBuffer();
-
+		boolean ret;
 		PsItem items[] = PsApi.getApi().getPsItems();
 		if (items == null) {
 			Logger.logger.fail("PS-ITEM NOT DEFINED");
 			return "PS-ITEM NOT DEFINED";
 		}
 
-		Map<String, Table> tableMap = new HashMap<String, Table>();
-		Table table;
-		String tableName;
-		boolean ret;
-
-		for (PsItem item : items) {
-
-			if (item.hasTable() == false) {
-				continue;
-			}
-
-			tableName = psKind.getTableName(item, hstime);
-			table = tableMap.get(tableName);
-
-			if (table == null) {
-				table = this.makeTable(tableName, item, psKind);
-				tableMap.put(table.getName(), table);
-			}
-
-			// 동일 테이블의 여러개의 컬럼을 추가할 수 있다.
-			List<Column> colList = item.makeColumns(psKind);
-			for (Column col : colList) {
-				table.addColumn(col);
-			}
-
-		}
+		List<Table> tables = new PsTableGetInfoDfo().getTableInfo(psKind, hstime);
 
 		ClassDao tran = DBManager.getMgr().getDataBase(FxCfg.DB_PSVALUE).createClassDao();
 
 		try {
 			tran.start();
-			for (Table t : tableMap.values()) {
+			for (Table t : tables) {
 				ret = tran.createTable(t);
 				sb.append(Logger.fill(t.getName(), 32, '.'));
 				sb.append(ret ? " CREATED" : " EXIST");
@@ -182,24 +167,4 @@ public class PsCreateTableDfo extends PsDpo implements FxDfo<Void, Integer> {
 		return sb.toString();
 	}
 
-	private Table makeTable(String tableName, PsItem psItem, PsKind psKind) {
-		Index index;
-
-		Table table = new Table();
-		table.setName(tableName);
-		table.addColumn(MO_NO);
-		table.addColumn(MO_INSTANCE);
-		table.addColumn(PS_DATE);
-
-		if (psKind.isRaw() == false) {
-			table.addColumn(DATA_COUNT);
-			table.addColumn(INS_DATE);
-		}
-
-		index = new Index(table.getName() + "__KEY", INDEX_TYPE.KEY);
-		index.addColumn(PS_DATE.getName());
-		table.addIndex(index);
-
-		return table;
-	}
 }

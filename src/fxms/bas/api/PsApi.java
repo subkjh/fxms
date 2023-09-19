@@ -25,6 +25,9 @@ public abstract class PsApi extends FxApi {
 	public static PsApi api;
 
 	public static final String MO_STATUS_PS_ID = "MoStatus";
+	
+	/** 현재값 업데이트에 적용할 현재 시간 대비 수집시간 확인 값 */
+	public static final long UPDATE_VALID_TIME = 3 * 60000L;
 
 	/**
 	 * 사용할 DBM를 제공합니다.

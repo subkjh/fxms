@@ -43,8 +43,8 @@ public class SelectCurValueDfo implements FxDfo<Map<String, Object>, List<PsValu
 
 			List<PsValueComp> ret = new ArrayList<>();
 			for (FX_V_ACUR value : list) {
-				ret.add(new PsValueComp(value.getMoNo(), null, value.getPsId(), value.getPreCollDtm(),
-						value.getPreCollVal(), value.getCurCollDtm(), value.getCurCollVal()));
+				ret.add(new PsValueComp(value.getMoNo(), value.getPsId(), value.getPreCollDtm(), value.getPreCollVal(),
+						value.getCurCollDtm(), value.getCurCollVal()));
 			}
 
 			return ret;

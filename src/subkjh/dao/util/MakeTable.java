@@ -119,11 +119,25 @@ public class MakeTable {
 		for (Table table : tableList) {
 			for (Column col : table.getColumns()) {
 				ret.append(database.getSqlAdd(col, table.getName()));
-				ret.append(";\n\n");
+				ret.append(";\n");
 			}
 		}
 		return ret.toString();
 	}
+	
+	public String getModifyColumnQuery(List<Table> tableList) throws Exception {
+
+		StringBuffer ret = new StringBuffer();
+
+		for (Table table : tableList) {
+			for (Column col : table.getColumns()) {
+				ret.append(database.getSqlUpdate(col, table.getName()));
+				ret.append(";\n");
+			}
+		}
+		return ret.toString();
+	}
+	
 
 	public String getCreateTableQuery(List<Table> tableList) throws Exception {
 

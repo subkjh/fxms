@@ -7,6 +7,7 @@ import java.util.Map;
 import fxms.bas.api.FxApi;
 import fxms.bas.api.MoApi;
 import fxms.bas.event.NotiFilter;
+import fxms.bas.exp.MoNotFoundException;
 import fxms.bas.mo.Mo;
 import fxms.bas.vo.Alarm;
 import fxms.bas.vo.PsVoRaw;
@@ -86,6 +87,8 @@ public class MoServiceImpl extends FxServiceImpl implements MoService {
 		try {
 			mo = MoApi.getApi().getMo(moNo);
 			return mo;
+		} catch (MoNotFoundException e) {
+			throw e;
 		} catch (Exception e) {
 			logger.error(e);
 			throw e;
@@ -100,6 +103,8 @@ public class MoServiceImpl extends FxServiceImpl implements MoService {
 		try {
 			list = MoApi.getApi().getMoList(para);
 			return list;
+		} catch (MoNotFoundException e) {
+			throw e;
 		} catch (Exception e) {
 			logger.error(e);
 			throw e;

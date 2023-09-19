@@ -11,7 +11,6 @@ import fxms.bas.impl.dpo.FxDfo;
 import fxms.bas.impl.dpo.FxFact;
 import fxms.bas.vo.PsVo;
 import fxms.bas.vo.PsVoList;
-import subkjh.bas.co.utils.DateUtil;
 import subkjh.bas.co.utils.FileUtil;
 
 /**
@@ -59,17 +58,16 @@ public class ValueWriteFileDfo implements FxDfo<PsVoList, Boolean> {
 	 * @return 데이터가 추가된 테이블 목록
 	 * @throws Exception
 	 */
-	public boolean write(PsVoList voList) throws Exception {
+	public boolean write(PsVoList values) throws Exception {
 
-		long hstime = DateUtil.getDtm(voList.getMstime());
-		String month = String.valueOf(hstime).substring(0, 6);
+		String month = String.valueOf(values.getHstime()).substring(0, 6);
 
 		String filename;
 		StringBuffer sb = new StringBuffer();
-		for (PsVo vo : voList) {
+		for (PsVo vo : values) {
 			filename = getValueFile(vo, month);
 			sb = new StringBuffer();
-			sb.append(hstime).append("\t").append(vo.getValue()).append("\n");
+			sb.append(values.getHstime()).append("\t").append(vo.getValue()).append("\n");
 			FileUtil.writeToFile(filename, sb.toString(), true);
 		}
 
@@ -81,9 +79,6 @@ public class ValueWriteFileDfo implements FxDfo<PsVoList, Boolean> {
 		String filename = String.valueOf(vo.getMo().getMoNo());
 		String f1 = filename.substring(filename.length() - 2);
 		String f2 = filename.substring(filename.length() - 4);
-		if (vo.getMoInstance() != null && vo.getMoInstance().length() > 0) {
-			filename = filename + "_" + vo.getMoInstance();
-		}
 
 		File file = new File(
 				FxCfg.getFile(FxCfg.getHomeDatas(), "collected", f1, f2, filename, vo.getPsItem().getPsId()));

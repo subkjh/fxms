@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -330,6 +331,16 @@ public abstract class BaseHandler extends FxHttpHandler {
 		return val.toString();
 	}
 
+	protected String getString(Map<String, Object> parameters, String... names) throws Exception {
+		for (String name : names) {
+			Object val = parameters.get(name);
+			if (val != null)
+				return val.toString();
+		}
+
+		throw new NotDefineException(Arrays.toString(names));
+	}
+
 	/**
 	 * 가능한 메소드 및 파라메티를 제공한다.
 	 * 
@@ -347,13 +358,13 @@ public abstract class BaseHandler extends FxHttpHandler {
 			ret.append("<article>");
 			ret.append("<h4>");
 			if (descr != null) {
-			
+
 				ret.append("API Name : ").append(descr.name()).append("<br>");
 				ret.append("API Description : ").append(descr.description()).append("<br>");
 			}
 			ret.append("API URL : ").append(data.name).append("<br>");
 			ret.append("</h4>");
-			
+
 			ret.append("<h5>Input Parameters</h5>");
 
 			List<Column> list = new ArrayList<Column>();
@@ -382,7 +393,6 @@ public abstract class BaseHandler extends FxHttpHandler {
 				}
 			}
 			ret.append("</article>");
-
 
 			ret.append("</p>\n");
 
@@ -621,7 +631,7 @@ public abstract class BaseHandler extends FxHttpHandler {
 			return getResult(HttpStatusCode.OK, null, value);
 
 		} catch (OpDenyException e) {
-			Logger.logger.error(e);			
+			Logger.logger.error(e);
 			return getResult(HttpStatusCode.Forbidden, e.getMessage(), null);
 		} catch (NotDefineException e) {
 			try {

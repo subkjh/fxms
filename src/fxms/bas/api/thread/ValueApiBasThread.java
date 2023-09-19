@@ -33,10 +33,8 @@ public abstract class ValueApiBasThread extends QueueFxThread<PsVoList> {
 		valPrevMap = Collections.synchronizedMap(new HashMap<String, Number>());
 	}
 
-	private String getKey(long moNo, String instance, String psCode) {
-		if (instance == null || instance.trim().length() == 0)
-			return moNo + "|" + psCode;
-		return moNo + "|" + instance + "|" + psCode;
+	private String getKey(long moNo, String psId) {
+		return moNo + "|" + psId;
 	}
 
 	protected void broadcast(FxEvent event) {
@@ -47,13 +45,13 @@ public abstract class ValueApiBasThread extends QueueFxThread<PsVoList> {
 		}
 	}
 
-	protected Number getPrevValue(long moNo, String instance, String psCode) {
-		String key = getKey(moNo, instance, psCode);
+	protected Number getPrevValue(long moNo, String psId) {
+		String key = getKey(moNo, psId);
 		return valPrevMap.get(key);
 	}
 
 	protected void setPrevValue(PsVo value) {
-		String key = getKey(value.getMo().getMoNo(), value.getMoInstance(), value.getPsItem().getPsId());
+		String key = getKey(value.getMo().getMoNo(), value.getPsItem().getPsId());
 		valPrevMap.put(key, value.getValue());
 	}
 

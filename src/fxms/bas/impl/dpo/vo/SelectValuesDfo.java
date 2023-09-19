@@ -51,8 +51,8 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		PsKind psKind = PsApi.getApi().getPsKind("15M");
 		PsItem psItem = PsApi.getApi().getPsItem("UNDEF");
 
-		System.out.println(FxmsUtil
-				.toJson(dfo.selectValues(mo, "P0102020045", psItem, psKind, "AVG", 20230707000000L, 20230707235959L)));
+		System.out.println(
+				FxmsUtil.toJson(dfo.selectValues(mo, psItem, psKind, "AVG", 20230707000000L, 20230707235959L)));
 
 	}
 
@@ -81,7 +81,6 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 	 *
 	 * @param tran
 	 * @param mo         관리대상
-	 * @param moInstance MO인스턴스
 	 * @param psKind     성능종류
 	 * @param startDtm   시작일시
 	 * @param endDtm     종료일시
@@ -89,10 +88,10 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 	 * @param listener   조회 데이터 받을 리슨너
 	 * @throws Exception
 	 */
-	private void selectValues(ClassDao tran, Mo mo, String moInstance, PsKind psKind, long startDtm, long endDtm,
-			CondGetData conds[], Listener listener) throws Exception {
+	private void selectValues(ClassDao tran, Mo mo, PsKind psKind, long startDtm, long endDtm, CondGetData conds[],
+			Listener listener) throws Exception {
 
-		Logger.logger.trace("mo={}, moInstance={}, psKind={}, date={}~{}", mo, moInstance, psKind, startDtm, endDtm);
+		Logger.logger.trace("mo={}, psKind={}, date={}~{}", mo, psKind, startDtm, endDtm);
 
 		Table table = new Table();
 		String tableName;
@@ -102,9 +101,6 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 		table.addColumn(PsDpo.MO_NO);
 		table.addColumn(PsDpo.PS_DATE);
-		if (moInstance != null) {
-			table.addColumn(PsDpo.MO_INSTANCE);
-		}
 
 		// 조회할 컬럼 추가
 		List<String> valIdList = new ArrayList<>();
@@ -126,10 +122,6 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 		if (mo != null) {
 			para.put(PsDpo.MO_NO.getName(), mo.getMoNo());
-		}
-
-		if (moInstance != null) {
-			para.put(PsDpo.MO_INSTANCE.getName(), moInstance);
 		}
 
 		para.put(PsDpo.PS_DATE.getName() + " >= ", startDtm);
@@ -164,7 +156,7 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 						psMoNo = ((Number) datas[0]).longValue();
 						psDate = ((Number) datas[1]).longValue();
 
-						int valIndex = moInstance == null ? 2 : 3;
+						int valIndex = 2;
 
 						for (int i = valIndex; i < datas.length; i++) {
 							colNames[i - valIndex] = valIdList.get(i - valIndex);
@@ -386,12 +378,11 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 		Mo mo = fact.getObject(Mo.class, "mo");
 		PsItem item = fact.getObject(PsItem.class, "psItem");
 		PsKind psKind = fact.getObject(PsKind.class, "psKind");
-		String moInstance = fact.getString("moInstance");
 		String psKindCol = fact.getString("psKindCol");
 		long startDtm = fact.getLong("startDtm");
 		long endDtm = fact.getLong("endDtm");
 
-		return selectValues(mo, moInstance, item, psKind, psKindCol, startDtm, endDtm);
+		return selectValues(mo, item, psKind, psKindCol, startDtm, endDtm);
 	}
 
 	/**
@@ -419,7 +410,7 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 			Map<Long, PsValueSeries> retMap = new HashMap<>();
 
-			this.selectValues(tran, mo, null, psKind, startDtm, endDtm, conds, new Listener() {
+			this.selectValues(tran, mo, psKind, startDtm, endDtm, conds, new Listener() {
 
 				@Override
 				public void onValue(long moNo, long psDtm, String columnIds[], Number datas[]) {
@@ -465,8 +456,8 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PsValues> selectValues(Mo mo, String moInstance, PsItem item, PsKind psKind, String psKindCol,
-			long startDate, long endDate) throws Exception {
+	public List<PsValues> selectValues(Mo mo, PsItem item, PsKind psKind, String psKindCol, long startDate,
+			long endDate) throws Exception {
 
 		CondGetData conds[] = new CondGetData[1];
 		conds[0] = new CondGetData(item, new String[] { psKindCol });
@@ -479,7 +470,7 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 			Map<Long, PsValues> retMap = new HashMap<>();
 
-			this.selectValues(tran, mo, moInstance, psKind, startDate, endDate, conds, new Listener() {
+			this.selectValues(tran, mo, psKind, startDate, endDate, conds, new Listener() {
 
 				@Override
 				public void onValue(long moNo, long psDtm, String columnIds[], Number values[]) {
@@ -534,7 +525,7 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 				final PsValues values = new PsValues(mo, item);
 				retMap.put(values.getPsItem().getPsId(), values);
-				this.selectValues(tran, mo, null, psKind, startDate, endDate, conds, new Listener() {
+				this.selectValues(tran, mo, psKind, startDate, endDate, conds, new Listener() {
 					@Override
 					public void onValue(long moNo, long psDtm, String columnIds[], Number datas[]) {
 						values.getValues().add(new PsValue(psDtm, datas[0]));
@@ -574,7 +565,7 @@ public class SelectValuesDfo implements FxDfo<Void, List<PsValues>> {
 
 			Map<Long, PsValues> retMap = new HashMap<>();
 
-			this.selectValues(tran, null, null, psKind, startDate, endDate, conds, new Listener() {
+			this.selectValues(tran, null, psKind, startDate, endDate, conds, new Listener() {
 				@Override
 				public void onValue(long moNo, long psDtm, String columnIds[], Number datas[]) {
 

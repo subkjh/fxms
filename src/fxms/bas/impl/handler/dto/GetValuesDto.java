@@ -20,9 +20,6 @@ public class GetValuesDto {
 	@FxAttr(description = "조회종료성능데이터", required = false, example = "20230101235959")
 	private long endDate;
 
-	@FxAttr(description = "MO인스턴스", required = false)
-	private String moInstance;
-
 	public GetValuesDto() {
 		this.startDate = DateUtil.getDtm(System.currentTimeMillis() - 86400000L);
 		this.endDate = DateUtil.getDtm();
@@ -47,10 +44,6 @@ public class GetValuesDto {
 
 	public long getEndDate() {
 		return endDate;
-	}
-
-	public String getMoInstance() {
-		return moInstance;
 	}
 
 }

@@ -74,10 +74,10 @@ public class EventApi extends FxApi {
 	 * @param para        이벤트에 추가할 내용
 	 * @return
 	 */
-	public void checkValue(Moable mo, String moInstance, PsItem psItem, Number psPrevValue, Number psCurValue,
-			long pollMsdate, String msgAdd) {
+	public void checkValue(Moable mo, PsItem psItem, Number psPrevValue, Number psCurValue, long pollMsdate,
+			String msgAdd) {
 
-		Logger.logger.trace("{} {} {} {}", mo, moInstance, psItem.getPsId(), psCurValue);
+		Logger.logger.trace("{} {} {}", mo, psItem.getPsId(), psCurValue);
 
 		checkPsCount++;
 
@@ -88,31 +88,31 @@ public class EventApi extends FxApi {
 
 		try {
 
-			List<AlarmEvent> events = makeEventValue(mo, moInstance, psItem, psPrevValue, psCurValue, pollMsdate);
+			List<AlarmEvent> events = makeEventValue(mo, psItem, psPrevValue, psCurValue, pollMsdate);
 			if (events == null || events.size() == 0) {
 				return;
 			}
 
 			for (AlarmEvent event : events) {
-				
+
 				if (event instanceof AlarmOccurEvent) {
-					
+
 					// 발생
 					AlarmOccurEvent e = (AlarmOccurEvent) event;
 					if (msgAdd != null) {
 						e.setAlarmMsg(e.getAlarmMsg() + " " + msgAdd);
 					}
-					
+
 					AlarmApi.getApi().fireAlarm(e, null);
-					
+
 				} else if (event instanceof AlarmClearEvent) {
-					
+
 					// 해제
 					AlarmClearEvent e = (AlarmClearEvent) event;
-					
+
 					AlarmApi.getApi().clearAlarm(e.getAlarmNo(), e.getEventMstime(), e.getAlarmRlseRsnCd(),
 							e.getReleaseMemo(), e.getUserNo());
-					
+
 				}
 
 			}
@@ -346,7 +346,6 @@ public class EventApi extends FxApi {
 	/**
 	 * 
 	 * @param mo
-	 * @param instance
 	 * @param psItem
 	 * @param psPrevValue
 	 * @param psCurValue
@@ -354,7 +353,7 @@ public class EventApi extends FxApi {
 	 * @return
 	 * @throws Exception
 	 */
-	private List<AlarmEvent> makeEventValue(Moable mo, String instance, PsItem psItem, Number psPrevValue,
+	private List<AlarmEvent> makeEventValue(Moable mo, PsItem psItem, Number psPrevValue,
 			Number psCurValue, long mstimePerf) throws Exception {
 
 		long psDate = DateUtil.getDtm(mstimePerf);
@@ -371,7 +370,7 @@ public class EventApi extends FxApi {
 
 		if (cfg == null || cfg.getMemSize() == 0) {
 			Logger.logger.trace("alarm-cfg={} not found or no conditions", alarmCfgNo);
-			return makeEventClearValue(psItem, mo, instance, psCurValue, ALARM_RLSE_RSN_CD.NotFoundAlarmCfg);
+			return makeEventClearValue(psItem, mo, null, psCurValue, ALARM_RLSE_RSN_CD.NotFoundAlarmCfg);
 		}
 
 		// 성능과 관련된 경보코드가 없을 경우 이미 존재한 경보를 해제합니다.
@@ -379,7 +378,7 @@ public class EventApi extends FxApi {
 
 		if (alcdNos == null || alcdNos.size() == 0) {
 
-			return makeEventClearValue(psItem, mo, instance, psCurValue, ALARM_RLSE_RSN_CD.NotFoundAlarmCfg);
+			return makeEventClearValue(psItem, mo, null, psCurValue, ALARM_RLSE_RSN_CD.NotFoundAlarmCfg);
 
 		} else {
 
@@ -391,7 +390,7 @@ public class EventApi extends FxApi {
 				if (alarmCode == null)
 					continue;
 
-				event = makeEventValue(cfg, mo, instance, alarmCode, psItem, psPrevValue, psCurValue);
+				event = makeEventValue(cfg, mo, null, alarmCode, psItem, psPrevValue, psCurValue);
 				if (event == null)
 					continue;
 

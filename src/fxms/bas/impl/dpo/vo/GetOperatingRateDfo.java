@@ -59,11 +59,11 @@ public class GetOperatingRateDfo implements FxDfo<GetOperatingRateDto, List<Map<
 		PsItem psItem = PsApi.getApi().getPsItem(PsApi.MO_STATUS_PS_ID);
 		PsKind psKind = PsApi.getApi().getPsKind(dto.getPsKindName());
 
-		List<PsValues> list = ValueApi.getApi().getValues(dto.getMoNo(), dto.getMoInstance(), psItem.getPsId(),
-				psKind.getPsKindName(), psItem.getDefKindCol(), dto.getStartDate(), dto.getEndDate());
+		List<PsValues> list = ValueApi.getApi().getValues(dto.getMoNo(), psItem.getPsId(), psKind.getPsKindName(),
+				psItem.getDefKindCol(), dto.getStartDate(), dto.getEndDate());
 
 		for (PsValues value : list) {
-			
+
 			Data data = new Data();
 			data.moNo = value.getMoNo();
 			data.operatingSeconds = 0;

@@ -31,9 +31,9 @@ public class PsValueNotifyThread extends QueueFxThread<PsVoList> {
 		public ValuePeekerMap() {
 		}
 
-		private void addReq(long moNo, String moInstance, String psCode, PsValuePeeker peeker) {
+		private void addReq(long moNo, String psId, PsValuePeeker peeker) {
 
-			String key = makeKey(moNo, moInstance, psCode);
+			String key = makeKey(moNo, psId);
 
 			List<PsValuePeeker> list = get(key);
 			if (list == null) {
@@ -47,29 +47,25 @@ public class PsValueNotifyThread extends QueueFxThread<PsVoList> {
 
 		private List<PsValuePeeker> getPeekerList(PsVo vo) {
 
-			String req = makeKey(vo.getMo().getMoNo(), vo.getMoInstance(), vo.getPsItem().getPsId());
+			String req = makeKey(vo.getMo().getMoNo(), vo.getPsItem().getPsId());
 
 			return get(req);
 		}
 
-		private String makeKey(long moNo, String moInstance, String psCode) {
+		private String makeKey(long moNo, String psId) {
 
 			StringBuffer sb = new StringBuffer();
 
 			sb.append(moNo);
-			if (moInstance != null) {
-				sb.append("/");
-				sb.append(moInstance);
-			}
 			sb.append("/");
-			sb.append(psCode);
+			sb.append(psId);
 
 			return sb.toString();
 		}
 
-		private void removeReq(long moNo, String moInstance, String psCode, PsValuePeeker peeker) {
+		private void removeReq(long moNo, String psId, PsValuePeeker peeker) {
 
-			String key = makeKey(moNo, moInstance, psCode);
+			String key = makeKey(moNo, psId);
 
 			List<PsValuePeeker> list = get(key);
 			if (list != null) {
@@ -173,19 +169,17 @@ public class PsValueNotifyThread extends QueueFxThread<PsVoList> {
 	/**
 	 * 피커를 추가, 삭제한다.
 	 * 
-	 * @param moNo       관리대상번호
-	 * @param moInstance 인스턴스
-	 * @param psId       성능ID
-	 * @param peeker     넘기는 곳
-	 * @param add        추가, 삭제
+	 * @param moNo   관리대상번호
+	 * @param psId   성능ID
+	 * @param peeker 넘기는 곳
+	 * @param add    추가, 삭제
 	 */
-	public void setPeeker(long moNo, String moInstance, String psId, PsValuePeeker peeker, boolean add) {
-		Logger.logger.info("moNo={}, moInstance={}, psId={}, peeker={}, add={}", moNo, moInstance, psId,
-				peeker.getName(), add);
+	public void setPeeker(long moNo, String psId, PsValuePeeker peeker, boolean add) {
+		Logger.logger.info("moNo={}, psId={}, peeker={}, add={}", moNo, psId, peeker.getName(), add);
 		if (add) {
-			peekerMap.addReq(moNo, moInstance, psId, peeker);
+			peekerMap.addReq(moNo, psId, peeker);
 		} else {
-			peekerMap.removeReq(moNo, moInstance, psId, peeker);
+			peekerMap.removeReq(moNo, psId, peeker);
 		}
 	}
 }

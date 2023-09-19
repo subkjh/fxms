@@ -26,12 +26,11 @@ public class ValueCurMap {
 	/**
 	 * 
 	 * @param moNo
-	 * @param moInstance
 	 * @param psId
 	 * @return
 	 * @throws Exception
 	 */
-	public PsValueComp getCurValueInCache(long moNo, String moInstance, String psId) throws Exception {
+	public PsValueComp getCurValueInCache(long moNo, String psId) throws Exception {
 
 		synchronized (this.cacheValMap) {
 
@@ -52,14 +51,14 @@ public class ValueCurMap {
 	 * @param value  값
 	 */
 	public void setCurValueInCache(PsVoList values) {
-		
+
 		long psDtm = values.getHstime();
 
 		for (PsVo value : values) {
-			setCurValueInCache(new PsValueComp(value.getMo().getMoNo(), null, value.getPsItem().getPsId(), null, null,
-					psDtm, value.getValue()));
+			setCurValueInCache(new PsValueComp(value.getMo().getMoNo(), value.getPsItem().getPsId(), null, null, psDtm,
+					value.getValue()));
 		}
-		
+
 	}
 
 	/**
@@ -83,7 +82,7 @@ public class ValueCurMap {
 				if (prev == null) {
 					map.put(value.getPsId(), value);
 				} else {
-					map.put(value.getPsId(), new PsValueComp(value.getMoNo(), null, value.getPsId(), prev.getCurDate(),
+					map.put(value.getPsId(), new PsValueComp(value.getMoNo(), value.getPsId(), prev.getCurDate(),
 							prev.getCurValue(), value.getCurDate(), value.getCurValue()));
 				}
 			}

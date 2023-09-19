@@ -23,8 +23,6 @@ public class PsValueSeries implements Serializable {
 
 	private Mo mo;
 
-	private String moInstance;
-
 	private String psDataCd;
 
 	private String psStatFuncArray[];
@@ -53,8 +51,6 @@ public class PsValueSeries implements Serializable {
 		StringBuffer sb = new StringBuffer();
 		sb.append(Logger.fill('.', 20, String.valueOf(moNo)));
 		sb.append("\n");
-		sb.append(Logger.fill('.', 20, moInstance));
-		sb.append("\n");
 		sb.append(Logger.fill('.', 20, psItem.getPsName()));
 		sb.append("\n");
 
@@ -76,10 +72,6 @@ public class PsValueSeries implements Serializable {
 		return sb.toString();
 	}
 
-	public String getMoInstance() {
-		return moInstance;
-	}
-
 	public long getMoNo() {
 		return moNo;
 	}
@@ -90,10 +82,6 @@ public class PsValueSeries implements Serializable {
 
 	public List<Number[]> getValueList() {
 		return valueList;
-	}
-
-	public void setMoInstance(String moInstance) {
-		this.moInstance = moInstance;
 	}
 
 	public void setMoNo(long moNo) {

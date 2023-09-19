@@ -65,7 +65,14 @@ public abstract class LogApi extends FxApi {
 
 	}
 
-	public void closeCronLog(long cronRunNo, boolean isOk, int spentTime, Map<String, Object> outPara) {
+	/**
+	 * 
+	 * @param cronRunNo 크론실행번호
+	 * @param isOk      성공여부
+	 * @param spentTime 소요시간(milliseconds)
+	 * @param outPara   결과물
+	 */
+	public void closeCronLog(long cronRunNo, boolean isOk, int spentTime, Object outPara) {
 		try {
 			doCloseCronLog(cronRunNo, isOk, spentTime, outPara);
 		} catch (Exception e) {
@@ -78,6 +85,21 @@ public abstract class LogApi extends FxApi {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param userNo
+	 * @param userName
+	 * @param sessionId
+	 * @param opId
+	 * @param inPara
+	 * @param outRet
+	 * @param retNo
+	 * @param retMsg
+	 * @param mstimeStart
+	 * @param opObjType
+	 * @param opObjNo
+	 * @param opObjName
+	 */
 	public abstract void logUserWorkHst(int userNo, String userName, String sessionId, String opId, String inPara,
 			String outRet, int retNo, String retMsg, long mstimeStart, String opObjType, Object opObjNo,
 			String opObjName);
@@ -87,7 +109,13 @@ public abstract class LogApi extends FxApi {
 
 	}
 
-	public long openCronLog(String cronName, Map<String, Object> inPara) {
+	/**
+	 * 
+	 * @param cronName 실행크론명
+	 * @param inPara   입력인자
+	 * @return 크론실행번호
+	 */
+	public long openCronLog(String cronName, Object inPara) {
 		try {
 			return doOpenCronLog(cronName, inPara);
 		} catch (Exception e) {
@@ -101,10 +129,30 @@ public abstract class LogApi extends FxApi {
 
 	}
 
+	/**
+	 * 
+	 * @param para
+	 * @throws Exception
+	 */
 	protected abstract void doAddSystemLog(Map<String, Object> para) throws Exception;
 
-	protected abstract void doCloseCronLog(long cronRunNo, boolean isOk, int spentTime, Map<String, Object> inPara)
+	/**
+	 * 
+	 * @param cronRunNo
+	 * @param isOk
+	 * @param spentTime
+	 * @param outPara
+	 * @throws Exception
+	 */
+	protected abstract void doCloseCronLog(long cronRunNo, boolean isOk, int spentTime, Object outPara)
 			throws Exception;
 
-	protected abstract long doOpenCronLog(String cronName, Map<String, Object> inPara) throws Exception;
+	/**
+	 * 
+	 * @param cronName
+	 * @param inPara
+	 * @return
+	 * @throws Exception
+	 */
+	protected abstract long doOpenCronLog(String cronName, Object inPara) throws Exception;
 }

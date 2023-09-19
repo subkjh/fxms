@@ -27,7 +27,7 @@ public class ValueApiTest {
 
 		ValueApiTest test = new ValueApiTest();
 		try {
-			test.test();
+			test.test2();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,13 +51,13 @@ public class ValueApiTest {
 
 		moNo = 1002263;
 
-		PsValueComp val1 = api.getCurValue(moNo, null, psId);
+		PsValueComp val1 = api.getCurValue(moNo, psId);
 		List<PsValueSeries> val2 = api.getValues(moNo, psId, psKindName, startDtm, endDtm);
-		Map<Long, Number> val3 = api.getStatValue(psId, PsApi.getApi().getPsKind(psKindName), startDtm,
-				endDtm, StatFunction.Count);
+		Map<Long, Number> val3 = api.getStatValue(psId, PsApi.getApi().getPsKind(psKindName), startDtm, endDtm,
+				StatFunction.Count);
 		List<PsValues> val4 = api.getValues(moNo, psKindName, startDtm, endDtm);
 		List<PsValues> val5 = api.getValues(psId, psKindName, psKindCol, startDtm, endDtm);
-		List<PsValues> val6 = api.getValues(moNo, null, psId, psKindName, psKindCol, startDtm, endDtm);
+		List<PsValues> val6 = api.getValues(moNo, psId, psKindName, psKindCol, startDtm, endDtm);
 
 		System.out.println("\n\n\n\n\n");
 
@@ -67,6 +67,16 @@ public class ValueApiTest {
 		System.out.println(FxmsUtil.toJson(val3));
 		System.out.println(FxmsUtil.toJson(val4));
 		System.out.println(FxmsUtil.toJson(val5));
+		System.out.println(FxmsUtil.toJson(val6));
+
+	}
+
+	void test2() throws Exception {
+
+		ValueApi api = new ValueApiDfo();
+
+		List<PsValues> val6 = api.getValues(1000664, "E01V3", "15M", "AVG", 20230809000000L, 20230809235959L);
+
 		System.out.println(FxmsUtil.toJson(val6));
 
 	}

@@ -126,7 +126,16 @@ public abstract class InloApi extends FxApi {
 			}
 			return inlo;
 		}
+	}
 
+	/**
+	 * 
+	 * @param inloClCd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Inlo> getInlos(String inloClCd) throws Exception {
+		return this.selectInlos(makePara("inloClCd", inloClCd));
 	}
 
 	/**

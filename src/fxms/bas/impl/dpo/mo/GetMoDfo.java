@@ -17,7 +17,7 @@ public class GetMoDfo implements FxDfo<Long, Mo> {
 		return selectMo(moNo);
 	}
 
-	public Mo selectMo(Map<String, Object> para) throws Exception {
+	public Mo selectMo(Map<String, Object> para) throws MoNotFoundException, Exception {
 		List<Mo> list = new GetMoListDfo().selectMoList(para);
 		if (list.size() == 1) {
 			return list.get(0);
@@ -28,7 +28,7 @@ public class GetMoDfo implements FxDfo<Long, Mo> {
 		}
 	}
 
-	public Mo selectMo(long moNo) throws Exception {
+	public Mo selectMo(long moNo) throws MoNotFoundException, Exception {
 		return selectMo(FxApi.makePara("moNo", moNo));
 	}
 

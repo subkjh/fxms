@@ -7,7 +7,7 @@ import java.util.Map;
 
 import fxms.bas.api.AppApi;
 import fxms.bas.impl.dpo.DateSelectSameDfo;
-import fxms.bas.impl.dpo.ps.PsCreateTableDfo;
+import fxms.bas.impl.dpo.ps.PsTableCreateDfo;
 import fxms.bas.impl.dpo.ps.PsRemoveExpiredDataDfo;
 import fxms.bas.impl.dpo.ps.PsStatMakeDfo;
 import fxms.bas.impl.dpo.ps.PsStatReqInsertDfo;
@@ -33,7 +33,7 @@ public class AppApiDfo extends AppApi {
 
 		StringBuffer sb = new StringBuffer();
 
-		String result = new PsCreateTableDfo().makeTables();
+		String result = new PsTableCreateDfo().makeTables();
 		sb.append("make=").append(result);
 
 		result = new PsRemoveExpiredDataDfo().removeExpiredDatas();
@@ -44,8 +44,10 @@ public class AppApiDfo extends AppApi {
 
 	@Override
 	public boolean requestMakeStat(List<PsStatReqVo> reqList) throws Exception {
+		
 		// 없는 경우만 추출한다.
 		List<PsStatReqVo> list = new ArrayList<PsStatReqVo>();
+		
 		synchronized (this.cacheReqStatMap) {
 			for (PsStatReqVo vo : reqList) {
 				if (this.cacheReqStatMap.get(vo.getKey()) == null) {
@@ -60,7 +62,7 @@ public class AppApiDfo extends AppApi {
 		if (list.size() > 0) {
 			return new PsStatReqInsertDfo().addStatReq(list) > 0;
 		} else {
-			return false;
+			return true;
 		}
 
 	}

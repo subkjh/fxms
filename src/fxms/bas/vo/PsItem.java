@@ -89,7 +89,7 @@ public class PsItem implements Serializable {
 		this.psGrp = psGrp != null ? psGrp.trim() : null;
 		this.psValType = PS_VAL_TYPE.getValType(psValType);
 
-		if (psKindCols != null) {
+		if (psKindCols != null && psKindCols.trim().length() > 0) {
 			this.psKindCols = psKindCols.split(",");
 			for (int i = 0; i < this.psKindCols.length; i++) {
 				this.psKindCols[i] = this.psKindCols[i].trim().toUpperCase();
@@ -98,29 +98,7 @@ public class PsItem implements Serializable {
 			this.psKindCols = new String[0];
 		}
 
-	}
-
-	private void parsePsFormat() {
-
-		dataScale = 0;
-		dataLength = 19;
-
-		if (getPsFmt() != null) {
-			String ss[] = getPsFmt().split(",");
-			if (ss.length >= 1) {
-				try {
-					dataLength = Integer.parseInt(ss[0]);
-				} catch (Exception e) {
-				}
-			}
-			if (ss.length >= 2) {
-				try {
-					dataScale = Integer.parseInt(ss[1]);
-				} catch (Exception e) {
-				}
-			}
-
-		}
+		parsePsFormat();
 
 	}
 
@@ -142,38 +120,69 @@ public class PsItem implements Serializable {
 		return value;
 	}
 
-	public Number convert(Number value) {
-
-		long v = value.longValue();
-
-		if (psScale == 1)
-			return v;
-
-		return v / psScale;
+	public boolean existKindCol(String statFunc) {
+		for (String s : this.psKindCols) {
+			if (s.equalsIgnoreCase(statFunc)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public String[] getPsKindCols() {
-		return psKindCols;
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public Number format(Number value) {
+
+		try {
+
+			if (dataScale <= 0) {
+				if (this.psScale == 1D) {
+					return value.longValue();
+				} else {
+					return value.longValue() / this.psScale;
+				}
+			}
+
+			double v = value.doubleValue();
+			if (this.psScale != 1) {
+				v = v / this.psScale;
+			}
+
+			String fmt = "%" + this.dataLength + "." + this.dataScale + "f";
+
+			return Double.parseDouble(String.format(fmt, v));
+
+		} catch (Exception e) {
+			return value;
+		}
 	}
 
 	public int getDataLength() {
-		if (dataLength < 0) {
-			parsePsFormat();
-		}
-
 		return dataLength;
 	}
 
 	public int getDataScale() {
-		if (dataScale < 0) {
-			parsePsFormat();
-		}
-
 		return dataScale;
+	}
+
+	/**
+	 * 이 성능항목의 기본 컬럼을 조회한다.
+	 * 
+	 * @return
+	 */
+	public String getDefKindCol() {
+		return this.psKindCols.length > 0 ? this.psKindCols[0] : null;
 	}
 
 	public Number getDftVal() {
 		return dftVal;
+	}
+
+	public String[] getKindCols() {
+		return psKindCols;
 	}
 
 	public Number getMaxVal() {
@@ -225,6 +234,14 @@ public class PsItem implements Serializable {
 		return psId;
 	}
 
+	public String[] getPsKindCols() {
+		return psKindCols;
+	}
+
+	public String getPsMemo() {
+		return psMemo;
+	}
+
 	public String getPsName() {
 		return psName;
 	}
@@ -241,19 +258,6 @@ public class PsItem implements Serializable {
 		return psValType;
 	}
 
-	/**
-	 * 이 성능항목의 기본 컬럼을 조회한다.
-	 * 
-	 * @return
-	 */
-	public String getDefKindCol() {
-		return this.psKindCols.length > 0 ? this.psKindCols[0] : null;
-	}
-
-	public String[] getKindCols() {
-		return psKindCols;
-	}
-
 	public String getUpdateFilter() {
 		return updateFilter;
 	}
@@ -262,13 +266,26 @@ public class PsItem implements Serializable {
 		return this.psTable != null && this.psTable.trim().length() > 0;
 	}
 
-	public boolean existKindCol(String statFunc) {
-		for (String s : this.psKindCols) {
-			if (s.equalsIgnoreCase(statFunc)) {
-				return true;
-			}
+	/**
+	 * 성능항목에 값이 맞는지 확인한다.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public boolean isAcceptable(Number value) {
+
+		if (value == null)
+			return false;
+
+		if (minVal != null && minVal.floatValue() > value.floatValue()) {
+			return false;
 		}
-		return false;
+
+		if (maxVal != null && maxVal.floatValue() < value.floatValue()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -314,6 +331,11 @@ public class PsItem implements Serializable {
 		column.setDataScale(getDataScale());
 		column.setDataType("Number");
 		column.setNullable(true);
+		if (psKindCol == null) {
+			column.setComments(getPsName());
+		} else {
+			column.setComments(getPsName() + " " + psKindCol);
+		}
 
 		return column;
 	}
@@ -367,48 +389,26 @@ public class PsItem implements Serializable {
 		return value + "";
 	}
 
-	public String getPsMemo() {
-		return psMemo;
-	}
+	private void parsePsFormat() {
 
-	/**
-	 * 성능항목에 값이 맞는지 확인한다.
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public boolean isAcceptable(Number value) {
+		dataScale = 0;
+		dataLength = 19;
 
-		if (value == null)
-			return false;
+		if (getPsFmt() != null) {
+			String ss[] = getPsFmt().split(",");
+			if (ss.length >= 1) {
+				try {
+					dataLength = Integer.parseInt(ss[0]);
+				} catch (Exception e) {
+				}
+			}
+			if (ss.length >= 2) {
+				try {
+					dataScale = Integer.parseInt(ss[1]);
+				} catch (Exception e) {
+				}
+			}
 
-		if (minVal != null && minVal.floatValue() > value.floatValue()) {
-			return false;
-		}
-
-		if (maxVal != null && maxVal.floatValue() < value.floatValue()) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * 성능의 자리수에 맞게 값을 정리한다.
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public Number format(Number value) {
-
-		if (this.getDataScale() == 0) {
-			return value.longValue();
-		}
-
-		try {
-			return Float.valueOf(String.format("%." + this.getDataScale() + "f", value.floatValue()));
-		} catch (Exception e) {
-			return value;
 		}
 
 	}

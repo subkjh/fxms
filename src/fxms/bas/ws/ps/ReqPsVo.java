@@ -6,8 +6,6 @@ public class ReqPsVo {
 
 	private String action;
 
-	private String moInstance;
-
 	private long moNo;
 
 	private String psId;
@@ -20,7 +18,6 @@ public class ReqPsVo {
 
 	public ReqPsVo(PsVo vo) {
 		moNo = vo.getMo().getMoNo();
-		moInstance = vo.getMoInstance();
 		psId = vo.getPsItem().getPsId();
 		value = vo.getValue();
 	}
@@ -28,9 +25,6 @@ public class ReqPsVo {
 	public String getKey() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(moNo).append(psId);
-		if (moInstance != null && moInstance.length() > 0) {
-			sb.append("/").append(moInstance);
-		}
 		return sb.toString();
 	}
 
@@ -44,10 +38,8 @@ public class ReqPsVo {
 				return false;
 			if (psId.equals(vo.psId) == false)
 				return false;
-			if (moInstance == null || vo.moInstance == null)
-				return true;
 
-			return String.valueOf(moInstance).equals(String.valueOf(vo.moInstance));
+			return true;
 		}
 
 		return super.equals(obj);
@@ -55,10 +47,6 @@ public class ReqPsVo {
 
 	public String getAction() {
 		return action;
-	}
-
-	public String getMoInstance() {
-		return moInstance;
 	}
 
 	public long getMoNo() {
@@ -80,10 +68,6 @@ public class ReqPsVo {
 
 	public void setAction(String action) {
 		this.action = action;
-	}
-
-	public void setMoInstance(String moInstance) {
-		this.moInstance = moInstance;
 	}
 
 	public void setMoNo(long moNo) {

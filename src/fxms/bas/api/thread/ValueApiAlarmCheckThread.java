@@ -28,9 +28,8 @@ public class ValueApiAlarmCheckThread extends ValueApiBasThread {
 		for (PsVo e : voList) {
 
 			EventApi.getApi().checkValue(e.getMo() //
-					, e.getMoInstance()//
 					, e.getPsItem() //
-					, getPrevValue(e.getMo().getMoNo(), e.getMoInstance(), e.getPsItem().getPsId()) //
+					, getPrevValue(e.getMo().getMoNo(), e.getPsItem().getPsId()) //
 					, e.getValue()//
 					, voList.getMstime() //
 					, null);

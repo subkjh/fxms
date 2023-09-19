@@ -33,7 +33,7 @@ public class PsValTable {
 	private final List<COL> columnList; // DB 테이블 컬럼명들
 	private final String realPsTable; // DB 테이블 명
 	private final String psTable;
-	private final Map<String, Object[]> valueMap; // key=MO_NO + INSTANCE, 값
+	private final Map<Long, Object[]> valueMap; // key=MO_NO + INSTANCE, 값
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class PsValTable {
 		this.realPsTable = realPsTable;
 		this.psTable = psTable;
 		this.columnList = new ArrayList<COL>();
-		this.valueMap = new HashMap<String, Object[]>();
+		this.valueMap = new HashMap<>();
 	}
 
 	/**
@@ -113,11 +113,8 @@ public class PsValTable {
 		return sb.toString();
 	}
 
-	public Object[] getValue(long moNo, String instance) {
-		if (instance == null)
-			return valueMap.get(moNo + "");
-		else
-			return valueMap.get(moNo + "\t" + instance);
+	public Object[] getValue(long moNo) {
+		return valueMap.get(moNo);
 	}
 
 	public List<Object[]> getValueArrayList() {
@@ -130,15 +127,12 @@ public class PsValTable {
 		return valueList;
 	}
 
-	public Map<String, Object[]> getValueMap() {
+	public Map<Long, Object[]> getValueMap() {
 		return valueMap;
 	}
 
-	public void putValue(long moNo, String instance, Object[] valueArray) {
-		if (instance == null)
-			valueMap.put(moNo + "", valueArray);
-		else
-			valueMap.put(moNo + "\t" + instance, valueArray);
+	public void putValue(long moNo, Object[] valueArray) {
+		valueMap.put(moNo, valueArray);
 	}
 
 	private COL getColumn(String psId) {

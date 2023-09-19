@@ -78,24 +78,6 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 		return cronRunNo;
 	}
 
-	/**
-	 * 
-	 * @param name 실행한 크론명
-	 * @throws Exception
-	 */
-	public void runCron(String name) throws Exception {
-
-		for (Crontab ct : getCrontabList()) {
-			if (ct.getClass().getName().equals(name)) {
-				runCron(ct);
-				return;
-			}
-		}
-
-		throw new Exception("CRON(" + name + ") NOT FOUND");
-
-	}
-
 	private List<Crontab> getCrontabList() {
 		return AdapterApi.getApi().getAdapters(Crontab.class);
 	}
@@ -108,9 +90,9 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 	private void runCron(Crontab ct) {
 		try {
 
-			Logger.logger.debug("{}.{}", ct.getGroup(), ct.getClass().getName());
+			Logger.logger.debug("{}.{}", ct.getThreadGroup(), ct.getClass().getName());
 
-			if (ct.getGroup() == null || ct.getGroup().length() == 0) {
+			if (ct.getThreadGroup() == null || ct.getThreadGroup().length() == 0) {
 				new Thread() {
 					public void run() {
 						long cronRunNo = onStart(ct);
@@ -125,10 +107,10 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 					}
 				}.start();
 			} else {
-				CronSubFxThread th = workerMap.get("CRON-" + ct.getGroup());
+				CronSubFxThread th = workerMap.get("CRON-" + ct.getThreadGroup());
 				if (th == null) {
-					th = new CronSubFxThread("CRON-" + ct.getGroup(), this);
-					workerMap.put("CRON-" + ct.getGroup(), th);
+					th = new CronSubFxThread("CRON-" + ct.getThreadGroup(), this);
+					workerMap.put("CRON-" + ct.getThreadGroup(), th);
 					th.start();
 				}
 
@@ -153,17 +135,14 @@ public class CronFxThread extends CycleFxThread implements CronListener {
 
 	@Override
 	protected void doInit() {
-//		for (Crontab tab : getCrontabList()) {
-//			if (tab.isRunInit()) {
-//				runCron(tab);
-//			}
-//		}
+
 	}
 
 	private void clearAlarm(String instance, String message) {
 		try {
-			AlarmApi.getApi().clearAlarm(MoApi.getApi().getProjectMo(), instance, ALARM_CODE.fxms_error_cron.getAlcdNo(),
-					ALARM_RLSE_RSN_CD.Release, message, System.currentTimeMillis(), User.USER_NO_SYSTEM);
+			AlarmApi.getApi().clearAlarm(MoApi.getApi().getProjectMo(), instance,
+					ALARM_CODE.fxms_error_cron.getAlcdNo(), ALARM_RLSE_RSN_CD.Release, message,
+					System.currentTimeMillis(), User.USER_NO_SYSTEM);
 		} catch (Exception e) {
 			Logger.logger.error(e);
 		}

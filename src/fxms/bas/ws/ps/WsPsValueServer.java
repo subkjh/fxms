@@ -79,25 +79,23 @@ public class WsPsValueServer extends FxActorImpl implements Runnable, FxServiceM
 
 		if (req.isAdd()) {
 
-			PsValueNotifyThread.getVoNotifier().setPeeker(req.getMoNo(), req.getMoInstance(), req.getPsId(), this,
-					true);
+			PsValueNotifyThread.getVoNotifier().setPeeker(req.getMoNo(), req.getPsId(), this, true);
 
 			data.reqList.add(req);
 
 			LogApi.getApi().logUserWorkHst(data.session.getUserNo(), data.session.getUserName(),
 					data.session.getSessionId(), "register-ps-val-peek", String.valueOf(req.getMoNo()), "", 0, "",
-					System.currentTimeMillis(), "MO", req.getMoNo(), req.getMoInstance());
+					System.currentTimeMillis(), "MO", req.getMoNo(), null);
 
 		} else {
 
-			PsValueNotifyThread.getVoNotifier().setPeeker(req.getMoNo(), req.getMoInstance(), req.getPsId(), this,
-					false);
+			PsValueNotifyThread.getVoNotifier().setPeeker(req.getMoNo(), req.getPsId(), this, false);
 
 			data.reqList.remove(req);
 
 			LogApi.getApi().logUserWorkHst(data.session.getUserNo(), data.session.getUserName(),
 					data.session.getSessionId(), "unregister-ps-val-peek", String.valueOf(req.getMoNo()), "", 0, "",
-					System.currentTimeMillis(), "MO", req.getMoNo(), req.getMoInstance());
+					System.currentTimeMillis(), "MO", req.getMoNo(), null);
 
 		}
 
@@ -126,8 +124,7 @@ public class WsPsValueServer extends FxActorImpl implements Runnable, FxServiceM
 		}
 
 		for (ReqPsVo req : data.reqList) {
-			PsValueNotifyThread.getVoNotifier().setPeeker(req.getMoNo(), req.getMoInstance(), req.getPsId(), this,
-					false);
+			PsValueNotifyThread.getVoNotifier().setPeeker(req.getMoNo(), req.getPsId(), this, false);
 		}
 
 	}

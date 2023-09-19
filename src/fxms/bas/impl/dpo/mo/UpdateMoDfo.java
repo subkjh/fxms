@@ -55,13 +55,17 @@ public class UpdateMoDfo implements FxDfo<Map<String, Object>, Boolean> {
 			if (classOfT != FX_MO.class) {
 				mo2 = (FX_MO) tran.selectOne(classOfT, wehrePara);
 				if (mo2 != null) {
-					attrMap = ObjectUtil.toObject(attrMap, mo2);
+					attrMap = ObjectUtil.toObject(para, mo2);
 				}
 			}
 
 			// 테이블 컬럼과 매핑되지 않은 경우 JSON 컬럼에 넣는다.
 			try {
-				mo.setMoAddJson(FxmsUtil.toJson(attrMap));
+				if (mo2 != null) {
+					mo2.setMoAddJson(FxmsUtil.toJson(attrMap));
+				} else {
+					mo.setMoAddJson(FxmsUtil.toJson(attrMap));
+				}
 			} catch (Exception e) {
 				Logger.logger.error(e);
 			}

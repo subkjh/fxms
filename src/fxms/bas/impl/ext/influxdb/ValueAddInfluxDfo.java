@@ -40,7 +40,7 @@ public class ValueAddInfluxDfo implements FxDfo<PsVoList, Void> {
 		PsVoList datas = new PsVoList("test", System.currentTimeMillis(), null);
 
 		try {
-			datas.add(1, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("MoStatus"), null);
+			datas.add(1, MoApi.getApi().getMo(1000), PsApi.getApi().getPsItem("MoStatus"));
 			dfo.add(datas);
 		} catch (Exception e) {
 			e.printStackTrace();

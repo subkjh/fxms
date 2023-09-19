@@ -31,19 +31,17 @@ public class ValuePrevMap {
 		this.valPrevMap = new HashMap<>();
 	}
 
-	private String getKey(long moNo, String instance, String psId) {
-		if (instance == null || instance.trim().length() == 0)
-			return moNo + "|" + psId;
-		return moNo + "|" + instance + "|" + psId;
+	private String getKey(long moNo, String psId) {
+		return moNo + "|" + psId;
 	}
 
 	public Number getValue(PsVo value) {
-		String key = getKey(value.getMo().getMoNo(), value.getMoInstance(), value.getPsItem().getPsId());
+		String key = getKey(value.getMo().getMoNo(), value.getPsItem().getPsId());
 		return valPrevMap.get(key);
 	}
 
 	public void setValue(PsVo value) {
-		String key = getKey(value.getMo().getMoNo(), value.getMoInstance(), value.getPsItem().getPsId());
+		String key = getKey(value.getMo().getMoNo(), value.getPsItem().getPsId());
 		valPrevMap.put(key, value.getValue());
 	}
 }
